@@ -35,7 +35,7 @@ class SignUpFrag : Fragment() {
 
         super.onViewCreated(view, savedInstanceState)
         val email:EditText=requireActivity().findViewById(R.id.et_email)
-        val password:EditText=requireActivity().findViewById(R.id.et_password)
+        val password:EditText=requireActivity().findViewById(R.id.password)
         val btn:Button=requireActivity().findViewById(R.id.btn_SignUpFrag)
         val roles = resources.getStringArray(R.array.Roles)
         val spinner:Spinner = requireActivity().findViewById(R.id.spinner_id)

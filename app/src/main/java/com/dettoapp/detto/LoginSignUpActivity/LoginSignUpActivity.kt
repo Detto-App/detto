@@ -14,10 +14,7 @@ class LoginSignUpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login_sign_up)
 
-
-
-
-        Utility.navigateFragment(supportFragmentManager,R.id.loginFragContainer, Splash(),"splash",addToBackStack = false)
+        Utility.navigateFragment(supportFragmentManager,R.id.loginFragContainer, login(),"splash",addToBackStack = false)
 
     }
 }

@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.dettoapp.detto.UtilityClasses.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 class SignUpViewModel :ViewModel(){
     private val _validate=MutableLiveData<Resource<String>>()
@@ -19,6 +18,10 @@ class SignUpViewModel :ViewModel(){
     fun validate(email:String,password:String){
         viewModelScope.launch(Dispatchers.Default) {
             try{
+                val regex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$"
+                if(email.matches(Regex(regex)))
+                else _validate.postValue(Resource.Error(message = "not valid"))
+
                 if((email.isEmpty()  || password.isEmpty()))
                     _validate.postValue(Resource.Error(message = "please fill deatils"))
                 else
