@@ -5,9 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.dettoapp.detto.R
@@ -39,6 +37,13 @@ class SignUpFrag : Fragment() {
         val email:EditText=requireActivity().findViewById(R.id.et_email)
         val password:EditText=requireActivity().findViewById(R.id.et_password)
         val btn:Button=requireActivity().findViewById(R.id.btn_SignUpFrag)
+        val roles = resources.getStringArray(R.array.Roles)
+        val spinner:Spinner = requireActivity().findViewById(R.id.spinner_id)
+        if (spinner != null) {
+            val adapter = ArrayAdapter(requireContext(),
+                    android.R.layout.simple_spinner_item, roles)
+            spinner.adapter = adapter
+        }
 
 
         liveDataObservers()
