@@ -39,12 +39,10 @@ class SignUpFrag : Fragment() {
         val btn:Button=requireActivity().findViewById(R.id.btn_SignUpFrag)
         val roles = resources.getStringArray(R.array.Roles)
         val spinner:Spinner = requireActivity().findViewById(R.id.spinner_id)
-        if (spinner != null) {
-            val adapter = ArrayAdapter(requireContext(),
-                    android.R.layout.simple_spinner_item, roles)
-            spinner.adapter = adapter
-        }
-
+        val adapter = ArrayAdapter(requireContext(),
+                android.R.layout.simple_spinner_item, roles)
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
+        spinner.adapter = adapter
 
         liveDataObservers()
 

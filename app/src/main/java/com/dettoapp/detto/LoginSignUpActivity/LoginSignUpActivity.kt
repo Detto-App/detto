@@ -17,7 +17,7 @@ class LoginSignUpActivity : AppCompatActivity() {
 
 
 
-        Utility.navigateFragment(supportFragmentManager,R.id.loginFragContainer, SignUpFrag(),"splash",addToBackStack = false)
+        Utility.navigateFragment(supportFragmentManager,R.id.loginFragContainer, Splash(),"splash",addToBackStack = false)
 
     }
 }
