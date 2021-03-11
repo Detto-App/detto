@@ -22,7 +22,10 @@ class SignUpViewModel :ViewModel(){
                 if((email.isEmpty()  || password.isEmpty()))
                     _validate.postValue(Resource.Error(message = "please fill deatils"))
                 else
-                    _validate.postValue(Resource.Success(""))
+                    if(email.matches(Regex("[a-zA-Z]+[._A-Za-z0-9]*[@][a-zA-Z]+[.][a-zA-Z]+")))
+                        _validate.postValue((Resource.Success("")))
+                    else
+                        _validate.postValue(Resource.Error(message = "please enter correct email"))
 
             }
             catch (e:Exception){
