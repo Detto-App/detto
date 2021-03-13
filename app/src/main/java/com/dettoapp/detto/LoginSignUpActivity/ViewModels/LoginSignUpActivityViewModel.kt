@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dettoapp.detto.UtilityClasses.Resource
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class LoginSignUpActivityViewModel : ViewModel() {
@@ -39,6 +40,9 @@ class LoginSignUpActivityViewModel : ViewModel() {
             try {
                 if(validate(email,password))
                 {
+                    _loginSignUp.postValue((Resource.Loading()))
+                    delay(1000)
+                    _loginSignUp.postValue((Resource.Success(data="registered")))
 
                 }
                 else
@@ -54,9 +58,9 @@ class LoginSignUpActivityViewModel : ViewModel() {
 
     private fun validate(email: String, password: String): Boolean {
         if (email.isEmpty() || password.isEmpty())
-            return false
-        else if (email.matches(Regex("[a-zA-Z]+[._A-Za-z0-9]*[@][a-zA-Z]+[.][a-zA-Z]+")))
-            return false
+            throw Exception("enter all fields")
+        else if (!email.matches(Regex("[a-zA-Z]+[._A-Za-z0-9]*[@][a-zA-Z]+[.][a-zA-Z]+")))
+            throw Exception("Invalid Email")
 
         return true
     }

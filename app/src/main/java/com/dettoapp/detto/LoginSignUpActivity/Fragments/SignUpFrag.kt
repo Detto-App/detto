@@ -10,7 +10,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.dettoapp.detto.LoginSignUpActivity.ViewModels.LoginSignUpActivityViewModel
 import com.dettoapp.detto.R
+import com.dettoapp.detto.UtilityClasses.BaseActivity
 import com.dettoapp.detto.UtilityClasses.Resource
+import com.dettoapp.detto.UtilityClasses.Utility
 
 
 class SignUpFrag : Fragment() {
@@ -56,12 +58,15 @@ class SignUpFrag : Fragment() {
         viewmodel.loginSignUp.observe(viewLifecycleOwner, Observer{
             when (it) {
                 is Resource.Success -> {
-
+                    (requireActivity() as BaseActivity).hideProgressBar()
+                    (requireActivity() as BaseActivity).showToast(it.data!!)
+                    Utility.navigateFragment((requireActivity() as BaseActivity).supportFragmentManager,R.id.loginFragContainer,LoginFrag(),"register",true,true)
                 }
                 is Resource.Error -> {
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
                 }
-                else -> {
+                is Resource.Loading -> {
+                    (requireActivity() as BaseActivity).showProgressDialog("wait...")
                 }
             }
         })
