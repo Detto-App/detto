@@ -14,6 +14,7 @@ import com.dettoapp.detto.LoginSignUpActivity.ViewModels.LoginSignUpActivityView
 import com.dettoapp.detto.R
 import com.dettoapp.detto.UtilityClasses.BaseActivity
 import com.dettoapp.detto.UtilityClasses.Resource
+import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentLoginBinding
 
 
@@ -54,10 +55,15 @@ class LoginFrag : Fragment() {
         viewModel.loginSignUp.observe(viewLifecycleOwner, Observer{
             when (it) {
                 is Resource.Success -> {
+                    (requireActivity() as BaseActivity).hideProgressBar()
+                    Utility.navigateFragment(requireActivity().supportFragmentManager,R.id.loginFragContainer, SignUpFrag(),"splash",addToBackStack = true)
 
                 }
                 is Resource.Error -> {
                     (requireActivity() as BaseActivity).showErrorSnackMessage(it.message!!)
+                }
+                is Resource.Loading ->{
+                    (requireActivity() as BaseActivity).showProgressDialog("loading...")
                 }
                 else -> {
 
