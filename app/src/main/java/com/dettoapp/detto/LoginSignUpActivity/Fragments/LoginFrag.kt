@@ -1,58 +1,55 @@
 package com.dettoapp.detto.LoginSignUpActivity.Fragments
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import androidx.fragment.app.Fragment
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.dettoapp.detto.LoginSignUpActivity.ViewModels.LoginSignUpActivityViewModel
 import com.dettoapp.detto.R
 import com.dettoapp.detto.UtilityClasses.Resource
+import com.dettoapp.detto.databinding.FragmentLoginBinding
 
 
-class SignUpFrag : Fragment() {
-    private lateinit var viewmodel: LoginSignUpActivityViewModel
+class LoginFrag : Fragment() {
 
+    private lateinit var viewModel: LoginSignUpActivityViewModel
+    private var binding: FragmentLoginBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewmodel = ViewModelProvider(requireActivity()).get(LoginSignUpActivityViewModel::class.java)
-
+        viewModel = ViewModelProvider(requireActivity()).get(LoginSignUpActivityViewModel::class.java)
     }
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sign_up, container, false)
+        binding = FragmentLoginBinding.inflate(inflater, container, false)
+        return binding!!.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         super.onViewCreated(view, savedInstanceState)
-        val email: EditText = requireActivity().findViewById(R.id.et_email)
-        val password: EditText = requireActivity().findViewById(R.id.password)
-        val btn: Button = requireActivity().findViewById(R.id.btn_SignUpFrag)
-        val roles = resources.getStringArray(R.array.Roles)
-        val spinner: Spinner = requireActivity().findViewById(R.id.spinner_id)
-        val adapter = ArrayAdapter(requireContext(),
-                android.R.layout.simple_spinner_item, roles)
-        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
-        spinner.adapter = adapter
 
+        initialise()
         liveDataObservers()
+    }
 
-        btn.setOnClickListener {
-            viewmodel.signUpProcess(email.text.toString(), password.text.toString())
+    private fun initialise()
+    {
+        binding!!.btnLoginFrag.setOnClickListener {
+            viewModel.loginProcess(binding!!.email.text.toString(), binding!!.password.text.toString())
         }
     }
 
     private fun liveDataObservers() {
-        viewmodel.loginSignUp.observe(viewLifecycleOwner, {
+        viewModel.loginSignUp.observe(viewLifecycleOwner, {
             when (it) {
                 is Resource.Success -> {
 
@@ -61,9 +58,14 @@ class SignUpFrag : Fragment() {
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
                 }
                 else -> {
+
                 }
             }
         })
+    }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
     }
 }

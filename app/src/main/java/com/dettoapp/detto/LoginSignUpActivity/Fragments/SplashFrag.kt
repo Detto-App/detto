@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import com.dettoapp.detto.R
 import com.dettoapp.detto.UtilityClasses.Utility
 
-class Splash : Fragment() {
+class SplashFrag : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +26,7 @@ class Splash : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         Handler(Looper.getMainLooper()).postDelayed({
-            Utility.navigateFragment(requireActivity().supportFragmentManager, R.id.loginFragContainer, login(), "login", false, false)
+            Utility.navigateFragment(requireActivity().supportFragmentManager, R.id.loginFragContainer, LoginFrag(), "login", false, false)
         }, 1000)
     }
 }
