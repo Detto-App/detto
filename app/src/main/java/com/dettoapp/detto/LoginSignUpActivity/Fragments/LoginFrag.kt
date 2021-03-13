@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.dettoapp.detto.LoginSignUpActivity.ViewModels.LoginSignUpActivityViewModel
 import com.dettoapp.detto.R
@@ -50,7 +51,7 @@ class LoginFrag : Fragment() {
     }
 
     private fun liveDataObservers() {
-        viewModel.loginSignUp.observe(viewLifecycleOwner, {
+        viewModel.loginSignUp.observe(viewLifecycleOwner, Observer{
             when (it) {
                 is Resource.Success -> {
 
