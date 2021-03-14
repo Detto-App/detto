@@ -6,8 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewTreeLifecycleOwner.set
 import com.dettoapp.detto.LoginSignUpActivity.ViewModels.LoginSignUpActivityViewModel
 import com.dettoapp.detto.R
 import com.dettoapp.detto.UtilityClasses.BaseActivity
@@ -62,13 +65,16 @@ class SignUpFrag : Fragment() {
                 setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
             }
         }
+
         binding.spinnerId.onItemSelectedListener = object:AdapterView.OnItemSelectedListener{
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 if(p2==1){
                     binding.etUsn.visibility=View.VISIBLE
+
                 }
                 else{
                     binding.etUsn.visibility=View.GONE
+
                 }
             }
 
@@ -77,7 +83,10 @@ class SignUpFrag : Fragment() {
         }
 
         binding.btnSignUpFrag.setOnClickListener {
+
+
             viewmodel.signUpProcess(
+                binding.spinnerId.selectedItemPosition,
                 binding.etname2.text.toString(),
                 binding.etUsn.text.toString(),
                 binding.etEmail.text.toString(),
@@ -103,7 +112,8 @@ class SignUpFrag : Fragment() {
                     )
                 }
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
+//                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
+                    (requireActivity() as BaseActivity).hideProgressBar()
                 }
                 is Resource.Loading -> {
                     (requireActivity() as BaseActivity).showProgressDialog("wait...")
