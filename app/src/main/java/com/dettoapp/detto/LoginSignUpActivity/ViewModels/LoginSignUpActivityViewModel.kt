@@ -23,9 +23,9 @@ class LoginSignUpActivityViewModel : ViewModel() {
             try {
                 if(validate(email,password))
                 {
-                    _loginSignUp.postValue(Resource.Loading())
-                    delay(1000)
-                    _loginSignUp.postValue(Resource.Success(data = ""))
+                    //_loginSignUp.postValue(Resource.Loading())
+                    //delay(1000)
+                    //_loginSignUp.postValue(Resource.Success(data = ""))
                 }
                 else
                 {

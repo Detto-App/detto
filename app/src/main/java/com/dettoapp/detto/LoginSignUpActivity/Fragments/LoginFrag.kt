@@ -49,14 +49,20 @@ class LoginFrag : Fragment() {
         binding!!.btnLoginFrag.setOnClickListener {
             viewModel.loginProcess(binding!!.email.text.toString(), binding!!.password.text.toString())
         }
+
+        binding!!.signUpText.setOnClickListener {
+            Utility.navigateFragment(requireActivity().supportFragmentManager,R.id.loginFragContainer, SignUpFrag(),"splash",addToBackStack = true)
+
+            //viewModel.loginProcess(binding!!.email.text.toString(), binding!!.password.text.toString())
+        }
     }
 
     private fun liveDataObservers() {
         viewModel.loginSignUp.observe(viewLifecycleOwner, Observer{
             when (it) {
                 is Resource.Success -> {
-                    (requireActivity() as BaseActivity).hideProgressBar()
-                    Utility.navigateFragment(requireActivity().supportFragmentManager,R.id.loginFragContainer, SignUpFrag(),"splash",addToBackStack = true)
+                //    (requireActivity() as BaseActivity).hideProgressBar()
+                  //  Utility.navigateFragment(requireActivity().supportFragmentManager,R.id.loginFragContainer, SignUpFrag(),"splash",addToBackStack = true)
 
                 }
                 is Resource.Error -> {
