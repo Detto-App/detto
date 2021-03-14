@@ -14,9 +14,13 @@ import com.dettoapp.detto.UtilityClasses.BaseActivity
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentSignUpBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 
 class SignUpFrag : Fragment() {
+
     private lateinit var viewmodel: LoginSignUpActivityViewModel
     private  var _binding: FragmentSignUpBinding? = null
     private val binding
@@ -24,6 +28,7 @@ class SignUpFrag : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         viewmodel =
             ViewModelProvider(requireActivity()).get(LoginSignUpActivityViewModel::class.java)
 
