@@ -69,3 +69,4 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:2.3.0"
     implementation "android.arch.lifecycle:viewmodel:2.3.0"
 }
+apply plugin: 'com.google.gms.google-services'
