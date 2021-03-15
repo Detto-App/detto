@@ -12,7 +12,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
+
+
 
 class LoginSignUpActivityViewModel : ViewModel() {
 
@@ -27,8 +28,9 @@ class LoginSignUpActivityViewModel : ViewModel() {
     fun loginProcess(email: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+
                 _loginSignUp.postValue(Resource.Loading())
-                if(true && validate(email,password))
+                if( validate(email,password))
                 {
 
                     Firebase.auth.signInWithEmailAndPassword(email, password).await()
@@ -41,12 +43,15 @@ class LoginSignUpActivityViewModel : ViewModel() {
         }
     }
 
-    fun signUpProcess(name:String,usn:String,email: String, password: String,re_password:String) {
+    fun signUpProcess(role:Int,name:String,usn:String,email: String, password: String,re_password:String) {
         viewModelScope.launch(Dispatchers.IO) {
+            lateinit var auth: FirebaseAuth
+            auth = Firebase.auth
+
             try {
-                signUpValidate(name,usn,email,password,re_password)
+                signUpValidate(role,name,usn,email,password,re_password)
                 _loginSignUp.postValue((Resource.Loading()))
-                delay(1000)
+                auth.createUserWithEmailAndPassword(email,password).await()
                 _loginSignUp.postValue((Resource.Success(data="registered")))
             } catch (e: Exception) {
                 _loginSignUp.postValue(Resource.Error(message = ""+e.localizedMessage))
@@ -62,12 +67,13 @@ class LoginSignUpActivityViewModel : ViewModel() {
             throw Exception("Invalid Email")
         return true
     }
-    private fun signUpValidate(name: String,usn:String,email: String, password: String,re_password:String) {
-        if (email.isEmpty() || password.isEmpty()||usn.isEmpty()||re_password.isEmpty()||usn.isEmpty()||name.isEmpty())
+    private fun signUpValidate(role:Int,name: String,usn:String,email: String, password: String,re_password:String) {
+        val validation= email.isEmpty() || password.isEmpty()||re_password.isEmpty()||name.isEmpty()
+        if ((role==0 && validation ) || (role==1 &&(validation || usn.isEmpty())))
             throw Exception("Enter all fields")
         else if (!email.matches(Regex("[a-zA-Z]+[._A-Za-z0-9]*[@][a-zA-Z]+[.][a-zA-Z]+")))
             throw Exception("Invalid Email")
-        else if(!usn.matches(Regex("[1][Dd][Ss][1-9][0-9][A-Za-z][A-Za-z][0-9][0-9][0-9]")))
+        else if(role==1 && !usn.matches(Regex("[1][Dd][Ss][1-9][0-9][A-Za-z][A-Za-z][0-9][0-9][0-9]")))
             throw Exception("Invalid USN")
         else if(password!=re_password)
             throw Exception("Passwords must match")
