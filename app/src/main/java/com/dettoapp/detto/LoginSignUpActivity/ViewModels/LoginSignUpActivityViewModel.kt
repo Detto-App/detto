@@ -5,9 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dettoapp.detto.UtilityClasses.Resource
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class LoginSignUpActivityViewModel : ViewModel() {
 
@@ -16,22 +21,21 @@ class LoginSignUpActivityViewModel : ViewModel() {
     val loginSignUp: LiveData<Resource<String>>
         get() = _loginSignUp
 
+    lateinit var auth: FirebaseAuth
 
 
     fun loginProcess(email: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                if(validate(email,password))
-                {
-                    //_loginSignUp.postValue(Resource.Loading())
-                    //delay(1000)
-                    //_loginSignUp.postValue(Resource.Success(data = ""))
-                }
-                else
+                _loginSignUp.postValue(Resource.Loading())
+                if(true && validate(email,password))
                 {
 
+                    Firebase.auth.signInWithEmailAndPassword(email, password).await()
+                    _loginSignUp.postValue(Resource.Success(data = "Login Sucessfull"))
                 }
             } catch (e: Exception) {
+
                 _loginSignUp.postValue(Resource.Error(message = ""+e.localizedMessage))
             }
         }
