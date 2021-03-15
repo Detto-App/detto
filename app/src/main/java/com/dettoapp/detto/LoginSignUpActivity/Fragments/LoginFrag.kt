@@ -47,7 +47,7 @@ class LoginFrag : Fragment() {
     private fun initialise()
     {
         binding!!.btnLoginFrag.setOnClickListener {
-            viewModel.loginProcess(binding!!.email.text.toString(), binding!!.password.text.toString())
+            viewModel.loginProcess(binding!!.emailLogin.text.toString(), binding!!.passwordLogin.text.toString())
         }
 
         binding!!.signUpText.setOnClickListener {
@@ -63,9 +63,11 @@ class LoginFrag : Fragment() {
                 is Resource.Success -> {
                 //    (requireActivity() as BaseActivity).hideProgressBar()
                   //  Utility.navigateFragment(requireActivity().supportFragmentManager,R.id.loginFragContainer, SignUpFrag(),"splash",addToBackStack = true)
-
+                    (requireActivity() as BaseActivity).hideProgressBar()
+                    (requireActivity() as BaseActivity).showToast(it.data!!)
                 }
                 is Resource.Error -> {
+                    (requireActivity() as BaseActivity).hideProgressBar()
                     (requireActivity() as BaseActivity).showErrorSnackMessage(it.message!!)
                 }
                 is Resource.Loading ->{

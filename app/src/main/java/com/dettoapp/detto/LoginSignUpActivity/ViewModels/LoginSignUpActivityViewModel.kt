@@ -13,6 +13,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
+
+
 class LoginSignUpActivityViewModel : ViewModel() {
 
 
@@ -20,22 +22,22 @@ class LoginSignUpActivityViewModel : ViewModel() {
     val loginSignUp: LiveData<Resource<String>>
         get() = _loginSignUp
 
+    lateinit var auth: FirebaseAuth
 
 
     fun loginProcess(email: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                if(validate(email,password))
-                {
-                    _loginSignUp.postValue(Resource.Loading())
-//                    delay(1000)
-                    _loginSignUp.postValue(Resource.Success(data = ""))
-                }
-                else
+
+                _loginSignUp.postValue(Resource.Loading())
+                if( validate(email,password))
                 {
 
+                    Firebase.auth.signInWithEmailAndPassword(email, password).await()
+                    _loginSignUp.postValue(Resource.Success(data = "Login Sucessfull"))
                 }
             } catch (e: Exception) {
+
                 _loginSignUp.postValue(Resource.Error(message = ""+e.localizedMessage))
             }
         }
