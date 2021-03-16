@@ -10,4 +10,5 @@ class GroupInfoDialog (context:Context):Dialog(context){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_groupinfo)
     }
+
 }

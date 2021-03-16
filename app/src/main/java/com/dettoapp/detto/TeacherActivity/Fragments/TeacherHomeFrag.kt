@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.dettoapp.detto.LoginSignUpActivity.ViewModels.LoginSignUpActivityViewModel
 import com.dettoapp.detto.R
+import com.dettoapp.detto.TeacherActivity.Dialog.GroupInfoDialog
 import com.dettoapp.detto.databinding.FragmentLoginBinding
 import com.dettoapp.detto.databinding.FragmentTeacherHomeBinding
 
@@ -34,6 +35,10 @@ class TeacherHomeFrag : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.btnfab.setOnClickListener{
+            val groupInfoDialog=GroupInfoDialog(requireContext())
+            groupInfoDialog.show()
+        }
 
 
 
