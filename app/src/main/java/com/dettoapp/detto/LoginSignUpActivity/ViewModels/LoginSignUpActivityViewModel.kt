@@ -1,10 +1,12 @@
 package com.dettoapp.detto.LoginSignUpActivity.ViewModels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dettoapp.detto.UtilityClasses.Resource
+import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -32,13 +34,14 @@ class LoginSignUpActivityViewModel : ViewModel() {
                 _loginSignUp.postValue(Resource.Loading())
                 if( validate(email,password))
                 {
-
+                    //val response = RetrofitInstance.dettoAPI.getGetUsers()
+                    //Log.d("vvvv",""+response.body()?.toString())
                     Firebase.auth.signInWithEmailAndPassword(email, password).await()
                     _loginSignUp.postValue(Resource.Success(data = "Login Sucessfull"))
 
                 }
             } catch (e: Exception) {
-
+                Log.d("vvvv",""+e.message)
                 _loginSignUp.postValue(Resource.Error(message = ""+e.localizedMessage))
             }
         }
