@@ -1,5 +1,8 @@
 package com.dettoapp.detto.UtilityClasses
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -32,7 +35,6 @@ object Utility {
             transaction.addToBackStack(tag)
 
         transaction.commit()
-
 
     }
 }

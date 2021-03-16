@@ -1,5 +1,6 @@
 package com.dettoapp.detto.LoginSignUpActivity.Fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.dettoapp.detto.LoginSignUpActivity.ViewModels.LoginSignUpActivityViewModel
 import com.dettoapp.detto.R
+import com.dettoapp.detto.TeacherActivity.TeacherActivity
 import com.dettoapp.detto.UtilityClasses.BaseActivity
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
@@ -65,6 +67,9 @@ class LoginFrag : Fragment() {
                   //  Utility.navigateFragment(requireActivity().supportFragmentManager,R.id.loginFragContainer, SignUpFrag(),"splash",addToBackStack = true)
                     (requireActivity() as BaseActivity).hideProgressBar()
                     (requireActivity() as BaseActivity).showToast(it.data!!)
+                    val intent :Intent= Intent(requireActivity(),TeacherActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
                 }
                 is Resource.Error -> {
                     (requireActivity() as BaseActivity).hideProgressBar()
