@@ -14,6 +14,7 @@ class SplashFrag : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -24,7 +25,6 @@ class SplashFrag : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         Handler(Looper.getMainLooper()).postDelayed({
             Utility.navigateFragment(requireActivity().supportFragmentManager, R.id.loginFragContainer, LoginFrag(), "login", false, false)
         }, 1000)
