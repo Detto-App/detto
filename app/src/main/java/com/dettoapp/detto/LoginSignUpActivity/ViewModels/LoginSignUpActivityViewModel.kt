@@ -35,6 +35,7 @@ class LoginSignUpActivityViewModel : ViewModel() {
 
                     Firebase.auth.signInWithEmailAndPassword(email, password).await()
                     _loginSignUp.postValue(Resource.Success(data = "Login Sucessfull"))
+
                 }
             } catch (e: Exception) {
 
@@ -58,7 +59,6 @@ class LoginSignUpActivityViewModel : ViewModel() {
             }
         }
     }
-
 
     private fun validate(email: String, password: String): Boolean {
         if (email.isEmpty() || password.isEmpty())
