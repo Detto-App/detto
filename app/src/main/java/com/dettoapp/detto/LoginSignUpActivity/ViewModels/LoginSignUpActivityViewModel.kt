@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dettoapp.detto.Models.StudentModel
+import com.dettoapp.detto.Models.TeacherModel
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 import com.google.firebase.auth.FirebaseAuth
@@ -53,9 +55,18 @@ class LoginSignUpActivityViewModel : ViewModel() {
             auth = Firebase.auth
 
             try {
-                signUpValidate(role,name,usn,email,password,re_password)
+
                 _loginSignUp.postValue((Resource.Loading()))
-                auth.createUserWithEmailAndPassword(email,password).await()
+                signUpValidate(role,name,usn,email,password,re_password)
+                if(role==0){
+                    val model1:TeacherModel= TeacherModel(name,email,"123")
+                    RetrofitInstance.registrationAPI.sendTeacherData(model1)
+
+                }else {
+                    val model2:StudentModel= StudentModel(name,email,"1234",usn)
+                    RetrofitInstance.registrationAPI.sendStudentData(model2)
+                }
+                //auth.createUserWithEmailAndPassword(email,password).await()
                 _loginSignUp.postValue((Resource.Success(data="registered")))
             } catch (e: Exception) {
                 _loginSignUp.postValue(Resource.Error(message = ""+e.localizedMessage))

@@ -1,3 +1,5 @@
 package com.dettoapp.detto.Models
 
-data class User(val name:String,val type:String,val email: String)
+ open class User(val name:String,val email:String,val uid: String){
+
+}
