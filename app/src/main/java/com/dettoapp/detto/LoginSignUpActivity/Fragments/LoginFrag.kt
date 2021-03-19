@@ -11,7 +11,9 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.dettoapp.detto.LoginSignUpActivity.LoginSignUpRepository
 import com.dettoapp.detto.LoginSignUpActivity.ViewModels.LoginSignUpActivityViewModel
+import com.dettoapp.detto.LoginSignUpActivity.ViewModels.LoginSignUpActivityViewModelFactory
 import com.dettoapp.detto.R
 import com.dettoapp.detto.TeacherActivity.TeacherActivity
 import com.dettoapp.detto.UtilityClasses.BaseActivity
@@ -27,7 +29,8 @@ class LoginFrag : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity()).get(LoginSignUpActivityViewModel::class.java)
+        val factory =LoginSignUpActivityViewModelFactory(LoginSignUpRepository(),requireContext().applicationContext)
+        viewModel = ViewModelProvider(requireActivity(),factory).get(LoginSignUpActivityViewModel::class.java)
     }
 
     override fun onCreateView(
