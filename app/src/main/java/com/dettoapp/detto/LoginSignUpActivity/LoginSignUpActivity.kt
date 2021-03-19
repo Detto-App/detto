@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.dettoapp.detto.LoginSignUpActivity.Fragments.LoginFrag
 import com.dettoapp.detto.LoginSignUpActivity.Fragments.SignUpFrag
 import com.dettoapp.detto.R
+import com.dettoapp.detto.TeacherActivity.Fragments.TeacherHomeFrag
 import com.dettoapp.detto.TeacherActivity.TeacherActivity
 import com.dettoapp.detto.UtilityClasses.BaseActivity
 import com.dettoapp.detto.UtilityClasses.Utility

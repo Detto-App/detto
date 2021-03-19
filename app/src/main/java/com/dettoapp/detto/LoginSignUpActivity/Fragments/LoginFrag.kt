@@ -80,6 +80,7 @@ class LoginFrag : Fragment() {
                 }
                 is Resource.Loading ->{
                     (requireActivity() as BaseActivity).showProgressDialog("loading...")
+                    (requireActivity() as BaseActivity).closeKeyBoard(view)
                 }
                 else -> {
 

@@ -54,12 +54,11 @@ class LoginSignUpActivityViewModel(private val repository: LoginSignUpRepository
 
     fun signUpProcess(role:Int,name:String,usn:String,email: String, password: String,re_password:String) {
         viewModelScope.launch(Dispatchers.IO) {
-            lateinit var auth: FirebaseAuth
-            auth = Firebase.auth
 
             try {
 
                 _loginSignUp.postValue((Resource.Loading()))
+                Firebase.auth.createUserWithEmailAndPassword(email,password).await()
                 signUpValidate(role,name,usn,email,password,re_password)
                 if(role==0){
                     val model1= TeacherModel(name,email,"123")
