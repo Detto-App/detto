@@ -4,11 +4,12 @@ object Constants
 {
     const val BASE_DETTO_URL ="https://detto.uk.to/"
     const val USER_EMAIL_KEY="uEmail"
-    const val USER_DETAILS_FILE="uEmail"
+    const val USER_DETAILS_FILE="uFile"
     const val USER_USN_KEY="usn"
     const val USER_NAME_KEY="name"
     const val TEACHER=0
     const val USER_ROLE_KEY="role"
     const val STUDENT=0
+    const val USER_ID="uid"
 
 }
