@@ -1,10 +1,12 @@
 package com.dettoapp.detto.LoginSignUpActivity.ViewModels
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dettoapp.detto.LoginSignUpActivity.LoginSignUpRepository
 import com.dettoapp.detto.Models.StudentModel
 import com.dettoapp.detto.Models.TeacherModel
 import com.dettoapp.detto.UtilityClasses.Resource
@@ -19,7 +21,7 @@ import kotlinx.coroutines.tasks.await
 
 
 
-class LoginSignUpActivityViewModel : ViewModel() {
+class LoginSignUpActivityViewModel(private val repository: LoginSignUpRepository, private val context: Context) : ViewModel() {
 
 
     private val _loginSignUp = MutableLiveData<Resource<String>>()
@@ -39,6 +41,7 @@ class LoginSignUpActivityViewModel : ViewModel() {
                     //val response = RetrofitInstance.dettoAPI.getGetUsers()
                     //Log.d("vvvv",""+response.body()?.toString())
                     Firebase.auth.signInWithEmailAndPassword(email, password).await()
+                    repository.setEmailInSharedPrefrences(context,email);
                     _loginSignUp.postValue(Resource.Success(data = "Login Sucessfull"))
 
                 }
@@ -58,13 +61,13 @@ class LoginSignUpActivityViewModel : ViewModel() {
                 Firebase.auth.createUserWithEmailAndPassword(email,password).await()
                 signUpValidate(role,name,usn,email,password,re_password)
                 if(role==0){
-                    val model1:TeacherModel= TeacherModel(name,email,"123")
-                    RetrofitInstance.registrationAPI.sendTeacherData(model1)
-
+                    val model1= TeacherModel(name,email,"123")
+                    repository.sendTeacherData(model1)
                 }else {
-                    val model2:StudentModel= StudentModel(name,email,"1234",usn)
-                    RetrofitInstance.registrationAPI.sendStudentData(model2)
+                    val model2= StudentModel(name,email,"1234",usn)
+                    repository.sendStudentData(model2)
                 }
+                repository.setSignUpDataInSharedPrefrences(context,email,role,name,usn);
                 //auth.createUserWithEmailAndPassword(email,password).await()
                 _loginSignUp.postValue((Resource.Success(data="registered")))
             } catch (e: Exception) {
