@@ -49,13 +49,11 @@ class LoginSignUpActivityViewModel : ViewModel() {
 
     fun signUpProcess(role:Int,name:String,usn:String,email: String, password: String,re_password:String) {
         viewModelScope.launch(Dispatchers.IO) {
-            lateinit var auth: FirebaseAuth
-            auth = Firebase.auth
 
             try {
                 signUpValidate(role,name,usn,email,password,re_password)
                 _loginSignUp.postValue((Resource.Loading()))
-                auth.createUserWithEmailAndPassword(email,password).await()
+                Firebase.auth.createUserWithEmailAndPassword(email,password).await()
                 _loginSignUp.postValue((Resource.Success(data="registered")))
             } catch (e: Exception) {
                 _loginSignUp.postValue(Resource.Error(message = ""+e.localizedMessage))

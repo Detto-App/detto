@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.lifecycle.ViewModelProvider
 import com.dettoapp.detto.LoginSignUpActivity.ViewModels.LoginSignUpActivityViewModel
 import com.dettoapp.detto.R
@@ -38,11 +39,24 @@ class TeacherHomeFrag : Fragment() {
         binding.btnfab.setOnClickListener{
             val groupInfoDialog=GroupInfoDialog(requireContext())
             groupInfoDialog.show()
-        }
+
+                }
+            }
 
 
 
-    }
+
+
+//    fun initialise(){
+//        binding.GroupInfo.year.apply {
+//            adapter = ArrayAdapter(
+//                    requireContext(),
+//                    android.R.layout.simple_spinner_item, roles
+//            ).apply {
+//                setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
+//            }
+//        }
+//    }
 
 
 }

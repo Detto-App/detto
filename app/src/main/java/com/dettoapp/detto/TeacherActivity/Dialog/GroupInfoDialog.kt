@@ -3,17 +3,46 @@ package com.dettoapp.detto.TeacherActivity.Dialog
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.Spinner
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.dettoapp.detto.R
 
-class GroupInfoDialog (context:Context):Dialog(context,android.R.style.ThemeOverlay){
+class GroupInfoDialog (private val contextInfo:Context):Dialog(contextInfo,android.R.style.ThemeOverlay){
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.dialog_groupinfo)
+        setContentView(R.layout.dialog_classroomcreate)
+        initialise()
+
         val btn=findViewById<Button>(R.id.btn_createclassroom)
         btn.setOnClickListener {
             dismiss()
         }
+    }
+    private fun initialise(){
+        val semester= findViewById<Spinner>(R.id.year)
+        val section=findViewById<Spinner>(R.id.section)
+        semester.apply {
+            adapter = ArrayAdapter(
+                    contextInfo,
+                    android.R.layout.simple_spinner_item, contextInfo.resources.getStringArray(R.array.sem)
+            ).apply {
+                setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
+            }
+        }
+        section.apply {
+            adapter = ArrayAdapter(
+                    contextInfo,
+                    android.R.layout.simple_spinner_item, contextInfo.resources.getStringArray(R.array.sec)
+            ).apply {
+                setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
+            }
+        }
+
     }
 
 
