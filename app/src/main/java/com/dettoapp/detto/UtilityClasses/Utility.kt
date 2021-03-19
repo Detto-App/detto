@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.transition.Fade
 import androidx.transition.Slide
+import java.util.*
 
 object Utility {
     private fun Fragment.applyTransaction(): Fragment {
@@ -37,4 +38,5 @@ object Utility {
         transaction.commit()
 
     }
+    fun createID()=UUID.randomUUID().toString()
 }

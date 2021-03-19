@@ -13,7 +13,7 @@ import com.dettoapp.detto.TeacherActivity.Dialog.GroupInfoDialog
 import com.dettoapp.detto.databinding.FragmentLoginBinding
 import com.dettoapp.detto.databinding.FragmentTeacherHomeBinding
 
-class TeacherHomeFrag : Fragment() {
+class TeacherHomeFrag : Fragment(),GroupInfoDialog.GroupInfoDialogOnClickListener {
     private lateinit var viewModel: TeacherHomeFragViewModel
     private var _binding: FragmentTeacherHomeBinding? = null
     private val binding
@@ -37,14 +37,17 @@ class TeacherHomeFrag : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.btnfab.setOnClickListener{
-            val groupInfoDialog=GroupInfoDialog(requireContext())
+            val groupInfoDialog=GroupInfoDialog(requireContext(),this)
             groupInfoDialog.show()
 
                 }
             }
 
+    override fun onClassCreated(classroomname:String,sem:String,sec:String) {
+        viewModel.classRoomData(classroomname,sem,sec)
 
 
+    }
 
 
 //    fun initialise(){

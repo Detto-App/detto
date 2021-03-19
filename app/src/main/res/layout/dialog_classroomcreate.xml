@@ -19,7 +19,7 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/ed_classroomname"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -67,7 +67,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/section"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName"
+        app:layout_constraintStart_toStartOf="@+id/ed_classroomname"
         app:layout_constraintTop_toTopOf="@+id/section"
         app:layout_constraintVertical_bias="0.0" />
 
@@ -79,7 +79,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.648"
         app:layout_constraintStart_toEndOf="@+id/year"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName"
+        app:layout_constraintTop_toBottomOf="@+id/ed_classroomname"
         app:layout_constraintVertical_bias="0.22" />
 
     <TextView
@@ -93,7 +93,7 @@
         app:layout_constraintEnd_toEndOf="@+id/year"
         app:layout_constraintHorizontal_bias="0.432"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName"
+        app:layout_constraintTop_toBottomOf="@+id/ed_classroomname"
         app:layout_constraintVertical_bias="1.0" />
 
     <TextView
@@ -107,7 +107,7 @@
         app:layout_constraintEnd_toEndOf="@+id/section"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/section"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName"
+        app:layout_constraintTop_toBottomOf="@+id/ed_classroomname"
         app:layout_constraintVertical_bias="0.982" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
