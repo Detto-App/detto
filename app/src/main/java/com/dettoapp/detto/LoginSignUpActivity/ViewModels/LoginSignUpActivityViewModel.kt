@@ -1,7 +1,6 @@
 package com.dettoapp.detto.LoginSignUpActivity.ViewModels
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,12 +9,10 @@ import com.dettoapp.detto.LoginSignUpActivity.LoginSignUpRepository
 import com.dettoapp.detto.Models.StudentModel
 import com.dettoapp.detto.Models.TeacherModel
 import com.dettoapp.detto.UtilityClasses.Resource
-import com.dettoapp.detto.UtilityClasses.RetrofitInstance
-import com.google.firebase.auth.FirebaseAuth
+import com.dettoapp.detto.UtilityClasses.Utility
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -28,25 +25,18 @@ class LoginSignUpActivityViewModel(private val repository: LoginSignUpRepository
     val loginSignUp: LiveData<Resource<String>>
         get() = _loginSignUp
 
-    lateinit var auth: FirebaseAuth
-
 
     fun loginProcess(email: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-
                 _loginSignUp.postValue(Resource.Loading())
-                if( validate(email,password))
+                if(validate(email,password))
                 {
-                    //val response = RetrofitInstance.dettoAPI.getGetUsers()
-                    //Log.d("vvvv",""+response.body()?.toString())
                     Firebase.auth.signInWithEmailAndPassword(email, password).await()
-                    repository.setEmailInSharedPrefrences(context,email);
-                    _loginSignUp.postValue(Resource.Success(data = "Login Sucessfull"))
-
+                    repository.setLoginData(context,email)
+                    _loginSignUp.postValue(Resource.Success(data = "Login Successful"))
                 }
             } catch (e: Exception) {
-                Log.d("vvvv",""+e.message)
                 _loginSignUp.postValue(Resource.Error(message = ""+e.localizedMessage))
             }
         }
@@ -56,20 +46,19 @@ class LoginSignUpActivityViewModel(private val repository: LoginSignUpRepository
         viewModelScope.launch(Dispatchers.IO) {
 
             try {
-
                 _loginSignUp.postValue((Resource.Loading()))
                 Firebase.auth.createUserWithEmailAndPassword(email,password).await()
                 signUpValidate(role,name,usn,email,password,re_password)
+                val uid = Utility.createID()
                 if(role==0){
-                    val model1= TeacherModel(name,email,"123")
-                    repository.sendTeacherData(model1)
+                    val teacherModel= TeacherModel(name,email,uid)
+                    repository.sendTeacherData(teacherModel)
                 }else {
-                    val model2= StudentModel(name,email,"1234",usn)
-                    repository.sendStudentData(model2)
+                    val studentModel= StudentModel(name,email,uid,usn)
+                    repository.sendStudentData(studentModel)
                 }
-                repository.setSignUpDataInSharedPrefrences(context,email,role,name,usn);
-                //auth.createUserWithEmailAndPassword(email,password).await()
-                _loginSignUp.postValue((Resource.Success(data="registered")))
+                repository.setSignUpData(context,email,role,name,usn,uid)
+                _loginSignUp.postValue((Resource.Success(data="Registered")))
             } catch (e: Exception) {
                 _loginSignUp.postValue(Resource.Error(message = ""+e.localizedMessage))
             }

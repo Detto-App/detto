@@ -9,8 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Detto">
-        <activity android:name=".StudentActivity.StudentActivity"></activity>
-        <activity android:name=".LoginSignUpActivity.StudentActivity" />
+        <activity android:name=".StudentActivity.StudentActivity"/>
         <activity android:name=".TeacherActivity.TeacherActivity" />
         <activity android:name=".UtilityClasses.BaseActivity" />
         <activity android:name=".LoginSignUpActivity.LoginSignUpActivity">

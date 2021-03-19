@@ -21,11 +21,10 @@ class RetrofitInstance {
             URL = Constants.BASE_DETTO_URL
             retrofit.create(DettoAPI::class.java)
         }
-        val CREATECLASSROOM:CreateClassroomAPI by lazy{
+        val createClassroomAPI:CreateClassroomAPI by lazy{
             URL=Constants.BASE_DETTO_URL
             retrofit.create(CreateClassroomAPI::class.java)
         }
-
 
         val registrationAPI:RegistrationAPI by lazy {
             URL=Constants.BASE_DETTO_URL

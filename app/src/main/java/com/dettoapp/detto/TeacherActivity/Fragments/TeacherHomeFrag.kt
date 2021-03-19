@@ -5,12 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.lifecycle.ViewModelProvider
-import com.dettoapp.detto.LoginSignUpActivity.ViewModels.LoginSignUpActivityViewModel
-import com.dettoapp.detto.R
 import com.dettoapp.detto.TeacherActivity.Dialog.GroupInfoDialog
-import com.dettoapp.detto.databinding.FragmentLoginBinding
+import com.dettoapp.detto.TeacherActivity.ViewModels.TeacherHomeFragViewModel
 import com.dettoapp.detto.databinding.FragmentTeacherHomeBinding
 
 class TeacherHomeFrag : Fragment(),GroupInfoDialog.GroupInfoDialogOnClickListener {

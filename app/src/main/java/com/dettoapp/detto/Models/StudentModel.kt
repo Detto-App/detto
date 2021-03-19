@@ -1,4 +1,4 @@
 package com.dettoapp.detto.Models
 
-data class StudentModel(val sName:String,val sEmail:String,val sUid: String,val sUSN:String) :User(sName,sEmail,sUid) {
-}
+data class StudentModel(override val name: String, override val email: String, override val uid: String, val sUSN: String)
+    : User(name, email, uid)
