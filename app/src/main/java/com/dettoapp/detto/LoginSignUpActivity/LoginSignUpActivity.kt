@@ -18,7 +18,7 @@ class LoginSignUpActivity : BaseActivity() {
         setContentView(R.layout.activity_login_sign_up)
 
         if(Firebase.auth.uid==null)
-        Utility.navigateFragment(supportFragmentManager,R.id.loginFragContainer, LoginFrag(),"splash",addToBackStack = false)
+        Utility.navigateFragment(supportFragmentManager,R.id.loginFragContainer, TeacherHomeFrag(),"splash",addToBackStack = false)
         else
         {
             startActivity(Intent(this,TeacherActivity::class.java).apply {
