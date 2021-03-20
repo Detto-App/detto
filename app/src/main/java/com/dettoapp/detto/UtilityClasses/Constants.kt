@@ -12,4 +12,7 @@ object Constants
     const val STUDENT=0
     const val USER_ID="uid"
 
+
+    const val ERROR_FILL_ALL_FIELDS ="Enter All Fields"
+
 }

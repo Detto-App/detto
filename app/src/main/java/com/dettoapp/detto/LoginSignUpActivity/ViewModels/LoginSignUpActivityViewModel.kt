@@ -1,5 +1,6 @@
 package com.dettoapp.detto.LoginSignUpActivity.ViewModels
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.dettoapp.detto.LoginSignUpActivity.LoginSignUpRepository
 import com.dettoapp.detto.Models.StudentModel
 import com.dettoapp.detto.Models.TeacherModel
+import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
 import com.google.firebase.auth.ktx.auth
@@ -17,8 +19,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 
-
-class LoginSignUpActivityViewModel(private val repository: LoginSignUpRepository, private val context: Context) : ViewModel() {
+@SuppressLint("StaticFieldLeak")
+class LoginSignUpActivityViewModel(private val repository: LoginSignUpRepository,  private val context: Context) : ViewModel() {
 
 
     private val _loginSignUp = MutableLiveData<Resource<String>>()
@@ -67,7 +69,7 @@ class LoginSignUpActivityViewModel(private val repository: LoginSignUpRepository
 
     private fun validate(email: String, password: String): Boolean {
         if (email.isEmpty() || password.isEmpty())
-            throw Exception("enter all fields")
+            throw Exception(Constants.ERROR_FILL_ALL_FIELDS)
         else if (!email.matches(Regex("[a-zA-Z]+[._A-Za-z0-9]*[@][a-zA-Z]+[.][a-zA-Z]+")))
             throw Exception("Invalid Email")
         return true
