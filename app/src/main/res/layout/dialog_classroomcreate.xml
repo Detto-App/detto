@@ -18,8 +18,9 @@
         app:layout_constraintTop_toBottomOf="@+id/section"
         app:layout_constraintVertical_bias="1.0" />
 
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/ed_classroomname"
+        style="@style/Detto.TextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -27,18 +28,27 @@
         android:ems="10"
         android:hint="clasroom name"
         android:inputType="textPersonName"
+        android:textColor="@color/cus_black"
+        android:textColorHint="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
-        app:layout_constraintVertical_bias="0.131" />
+        app:layout_constraintVertical_bias="0.131">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColorHint="@android:color/darker_gray" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Classroom Creation"
+        android:textColor="@color/cus_black"
         android:textSize="36dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -88,6 +98,7 @@
         android:layout_height="42dp"
         android:gravity="bottom"
         android:text="Semester"
+        android:textColor="@color/cus_black"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/year"
         app:layout_constraintEnd_toEndOf="@+id/year"
@@ -102,6 +113,7 @@
         android:layout_height="41dp"
         android:gravity="bottom"
         android:text="Section"
+        android:textColor="@color/cus_black"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/section"
         app:layout_constraintEnd_toEndOf="@+id/section"

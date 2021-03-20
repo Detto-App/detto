@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.Spinner
 import androidx.core.content.ContentProviderCompat.requireContext
 import com.dettoapp.detto.R
+import com.google.android.material.textfield.TextInputLayout
 
 class GroupInfoDialog (private val contextInfo:Context,private val groupInfoDialogOnClickListener: GroupInfoDialogOnClickListener):Dialog(contextInfo,android.R.style.ThemeOverlay){
 
@@ -20,12 +21,12 @@ class GroupInfoDialog (private val contextInfo:Context,private val groupInfoDial
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_classroomcreate)
         initialise()
-        val classname=findViewById<EditText>(R.id.ed_classroomname)
+        val classname=findViewById<TextInputLayout>(R.id.ed_classroomname)
         val sem =findViewById<Spinner>(R.id.year)
         val sec =findViewById<Spinner>(R.id.section)
         val btn=findViewById<Button>(R.id.btn_createclassroom)
         btn.setOnClickListener {
-            groupInfoDialogOnClickListener.onClassCreated(classname.text.toString(),sem.selectedItem.toString(),sec.selectedItem.toString())
+            groupInfoDialogOnClickListener.onClassCreated(classname.editText?.text.toString(),sem.selectedItem.toString(),sec.selectedItem.toString())
             dismiss()
         }
     }
