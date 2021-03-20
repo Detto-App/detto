@@ -2,6 +2,7 @@ package com.dettoapp.detto.LoginSignUpActivity.ViewModels
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -39,6 +40,7 @@ class LoginSignUpActivityViewModel(private val repository: LoginSignUpRepository
                     _loginSignUp.postValue(Resource.Success(data = "Login Successful"))
                 }
             } catch (e: Exception) {
+                Log.d("poiu",e.localizedMessage)
                 _loginSignUp.postValue(Resource.Error(message = ""+e.localizedMessage))
             }
         }

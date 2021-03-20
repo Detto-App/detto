@@ -26,6 +26,7 @@ class GroupInfoDialog (private val contextInfo:Context,private val groupInfoDial
         val btn=findViewById<Button>(R.id.btn_createclassroom)
         btn.setOnClickListener {
             groupInfoDialogOnClickListener.onClassCreated(classname.text.toString(),sem.selectedItem.toString(),sec.selectedItem.toString())
+            dismiss()
         }
     }
     private fun initialise(){

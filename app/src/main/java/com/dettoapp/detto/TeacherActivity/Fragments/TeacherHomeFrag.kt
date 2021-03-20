@@ -5,9 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.dettoapp.detto.LoginSignUpActivity.LoginSignUpRepository
+import com.dettoapp.detto.LoginSignUpActivity.ViewModels.LoginSignUpActivityViewModelFactory
 import com.dettoapp.detto.TeacherActivity.Dialog.GroupInfoDialog
+import com.dettoapp.detto.TeacherActivity.TeacherRepository
+import com.dettoapp.detto.TeacherActivity.ViewModels.TeacherHomeFragFactory
 import com.dettoapp.detto.TeacherActivity.ViewModels.TeacherHomeFragViewModel
+import com.dettoapp.detto.UtilityClasses.BaseActivity
+import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.databinding.FragmentTeacherHomeBinding
 
 class TeacherHomeFrag : Fragment(),GroupInfoDialog.GroupInfoDialogOnClickListener {
@@ -19,7 +26,8 @@ class TeacherHomeFrag : Fragment(),GroupInfoDialog.GroupInfoDialogOnClickListene
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity()).get(TeacherHomeFragViewModel::class.java)
+        val factory = TeacherHomeFragFactory(TeacherRepository(),requireContext().applicationContext)
+        viewModel = ViewModelProvider(requireActivity(),factory).get(TeacherHomeFragViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -33,18 +41,44 @@ class TeacherHomeFrag : Fragment(),GroupInfoDialog.GroupInfoDialogOnClickListene
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initialise()
+        liveDataObservers()
+
+    }
+    fun initialise(){
         binding.btnfab.setOnClickListener{
             val groupInfoDialog=GroupInfoDialog(requireContext(),this)
             groupInfoDialog.show()
 
+        }
+    }
+    fun liveDataObservers(){
+        viewModel.teacher.observe(viewLifecycleOwner, Observer {
+            when(it){
+                is Resource.Success ->{
+                    (requireActivity() as BaseActivity).hideProgressBar()
+                    (requireActivity() as BaseActivity).showToast(it.data!!)
+                }
+                is Resource.Error -> {
+                    (requireActivity() as BaseActivity).hideProgressBar()
+                    (requireActivity() as BaseActivity).showErrorSnackMessage(it.message!!)
+                }
+                is Resource.Loading ->{
+                    (requireActivity() as BaseActivity).showProgressDialog("loading...")
+                    (requireActivity() as BaseActivity).closeKeyBoard(view)
+                }
+                else -> {
+
                 }
             }
+        })
+    }
 
     override fun onClassCreated(classroomname:String,sem:String,sec:String) {
         viewModel.classRoomData(classroomname,sem,sec)
-
-
     }
+
+
 
 
 //    fun initialise(){
