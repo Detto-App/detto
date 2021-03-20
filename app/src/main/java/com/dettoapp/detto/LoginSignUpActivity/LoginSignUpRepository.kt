@@ -26,6 +26,7 @@ class LoginSignUpRepository {
 //            storeDataInSharedPreferences(context, email, receivingUserModel.teacher!!.name, Constants.TEACHER, receivingUserModel.teacher.uid)
     }
 
+
     fun setSignUpData(context: Context, email: String, role: Int, name: String, usn: String,userID: String)
     {
         storeDataInSharedPreferences(context,email,name,role,userID,usn)

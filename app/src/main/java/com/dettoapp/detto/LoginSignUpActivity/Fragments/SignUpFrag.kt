@@ -87,11 +87,11 @@ class SignUpFrag : Fragment() {
 
             viewmodel.signUpProcess(
                 binding.spinnerId.selectedItemPosition,
-                binding.etname2.text.toString(),
-                binding.etUsn.text.toString(),
-                binding.etEmail.text.toString(),
-                binding.password.text.toString(),
-                binding.etPassword2.text.toString()
+                binding.etname2.editText?.text.toString(),
+                binding.etUsn.editText?.text.toString(),
+                binding.etEmail.editText?.text.toString(),
+                binding.password.editText?.text.toString(),
+                binding.etPassword2.editText?.text.toString()
             )
         }
     }

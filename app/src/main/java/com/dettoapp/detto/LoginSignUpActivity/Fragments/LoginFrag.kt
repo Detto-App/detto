@@ -2,6 +2,7 @@ package com.dettoapp.detto.LoginSignUpActivity.Fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.method.PasswordTransformationMethod
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -53,8 +54,9 @@ class LoginFrag : Fragment() {
 
     private fun initialise()
     {
+        binding!!.passwordLogin.isPasswordVisibilityToggleEnabled
         binding!!.btnLoginFrag.setOnClickListener {
-            viewModel.loginProcess(binding!!.emailLogin.text.toString(), binding!!.passwordLogin.text.toString())
+            viewModel.loginProcess(binding!!.emailLogin.editText?.text.toString(), binding!!.passwordLogin.editText?.text.toString())
         }
 
         binding!!.signUpText.setOnClickListener {
