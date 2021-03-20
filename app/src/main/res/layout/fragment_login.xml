@@ -9,8 +9,9 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/email_login"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Theme.Detto"
         android:layout_width="0dp"
+        app:boxStrokeColor="@color/cus_black"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
@@ -34,7 +35,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/passwordLogin"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Theme.Detto"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"

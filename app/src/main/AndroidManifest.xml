@@ -9,10 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Detto">
-        <activity android:name=".StudentActivity.StudentActivity"/>
+        <activity android:name=".StudentActivity.StudentActivity" />
         <activity android:name=".TeacherActivity.TeacherActivity" />
         <activity android:name=".UtilityClasses.BaseActivity" />
-        <activity android:name=".LoginSignUpActivity.LoginSignUpActivity">
+        <activity android:name=".LoginSignUpActivity.LoginSignUpActivity" android:theme="@style/Theme.Detto">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
