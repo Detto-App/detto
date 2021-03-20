@@ -19,11 +19,11 @@ class LoginSignUpRepository {
     }
 
     suspend fun setLoginData(context: Context, email: String) {
-        val receivingUserModel = RetrofitInstance.registrationAPI.getDetails(email).body()!!
-        if (receivingUserModel.student != null)
-            storeDataInSharedPreferences(context, email, receivingUserModel.student.name, Constants.STUDENT, receivingUserModel.student.uid)
-        else
-            storeDataInSharedPreferences(context, email, receivingUserModel.teacher!!.name, Constants.TEACHER, receivingUserModel.teacher.uid)
+//        val receivingUserModel = RetrofitInstance.registrationAPI.getDetails(email).body()!!
+//        if (receivingUserModel.student != null)
+//            storeDataInSharedPreferences(context, email, receivingUserModel.student.name, Constants.STUDENT, receivingUserModel.student.uid)
+//        else
+//            storeDataInSharedPreferences(context, email, receivingUserModel.teacher!!.name, Constants.TEACHER, receivingUserModel.teacher.uid)
     }
 
     fun setSignUpData(context: Context, email: String, role: Int, name: String, usn: String,userID: String)

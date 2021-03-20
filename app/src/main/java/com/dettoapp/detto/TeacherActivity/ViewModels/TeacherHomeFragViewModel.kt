@@ -30,7 +30,7 @@ class TeacherHomeFragViewModel(private val repository: TeacherRepository, privat
                 repository.createClassroom(context,classroom)
                 _teacher.postValue(Resource.Success(data = "classroom created successfully"))
             }catch (e:Exception ){
-                Log.d("techermodel",e.localizedMessage)
+                Log.d("teachermodel",e.localizedMessage)
                 _teacher.postValue(Resource.Error(message = e.localizedMessage))
             }
 //            try {

@@ -25,7 +25,9 @@ import com.dettoapp.detto.databinding.FragmentLoginBinding
 class LoginFrag : Fragment() {
 
     private lateinit var viewModel: LoginSignUpActivityViewModel
-    private var binding: FragmentLoginBinding? = null
+    private var _binding: FragmentLoginBinding? = null
+    private val binding
+        get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +40,7 @@ class LoginFrag : Fragment() {
             savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = FragmentLoginBinding.inflate(inflater, container, false)
+        _binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding!!.root
     }
 
@@ -91,6 +93,6 @@ class LoginFrag : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        binding = null
+        _binding = null
     }
 }
