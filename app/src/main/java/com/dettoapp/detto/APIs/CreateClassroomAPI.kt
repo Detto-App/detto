@@ -8,6 +8,6 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface CreateClassroomAPI {
-    @POST("/create")
+    @POST("/createClassroom")
     suspend fun createClassroom(@Body classroom:Classroom)
 }

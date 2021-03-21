@@ -23,7 +23,8 @@ class TeacherHomeFragViewModel(private val repository: TeacherRepository, privat
 
 
     fun classRoomData(classroomName: String, sem: String, sec: String) {
-        val classroom = Classroom(classroomName, sem, sec, Utility.createID())
+        val uid=repository.getUid(context)
+        val classroom = Classroom(classroomName, sem, sec, Utility.createID(),uid)
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _teacher.postValue(Resource.Loading())
