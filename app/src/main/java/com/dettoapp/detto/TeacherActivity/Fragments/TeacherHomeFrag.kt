@@ -7,8 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.dettoapp.detto.LoginSignUpActivity.LoginSignUpRepository
 import com.dettoapp.detto.LoginSignUpActivity.ViewModels.LoginSignUpActivityViewModelFactory
+import com.dettoapp.detto.TeacherActivity.Adapters.ClassroomAdapter
 import com.dettoapp.detto.TeacherActivity.Dialog.GroupInfoDialog
 import com.dettoapp.detto.TeacherActivity.TeacherRepository
 import com.dettoapp.detto.TeacherActivity.ViewModels.TeacherHomeFragFactory
@@ -50,6 +52,10 @@ class TeacherHomeFrag : Fragment(),GroupInfoDialog.GroupInfoDialogOnClickListene
             val groupInfoDialog=GroupInfoDialog(requireContext(),this)
             groupInfoDialog.show()
 
+        }
+        binding.teacherRecyclerView.apply {
+            adapter = ClassroomAdapter()
+            layoutManager = LinearLayoutManager(requireContext())
         }
     }
     fun liveDataObservers(){
