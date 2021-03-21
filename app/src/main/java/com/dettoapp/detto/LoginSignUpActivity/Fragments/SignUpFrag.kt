@@ -1,5 +1,6 @@
 package com.dettoapp.detto.LoginSignUpActivity.Fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,21 +12,22 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewTreeLifecycleOwner.set
-import com.dettoapp.detto.LoginSignUpActivity.ViewModels.LoginSignUpActivityViewModel
 import com.dettoapp.detto.R
 import com.dettoapp.detto.UtilityClasses.BaseActivity
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentSignUpBinding
+import com.dettoapp.detto.loginActivity.ViewModels.LoginSignUpActivityViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import kotlin.system.exitProcess
 
 
 class SignUpFrag : Fragment() {
 
     private lateinit var viewmodel: LoginSignUpActivityViewModel
-    private  var _binding: FragmentSignUpBinding? = null
+    private var _binding: FragmentSignUpBinding? = null
     private val binding
         get() = _binding!!
 
@@ -66,14 +68,13 @@ class SignUpFrag : Fragment() {
             }
         }
 
-        binding.spinnerId.onItemSelectedListener = object:AdapterView.OnItemSelectedListener{
+        binding.spinnerId.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                if(p2==1){
-                    binding.etUsn.visibility=View.VISIBLE
+                if (p2 == 1) {
+                    binding.etUsn.visibility = View.VISIBLE
 
-                }
-                else{
-                    binding.etUsn.visibility=View.GONE
+                } else {
+                    binding.etUsn.visibility = View.GONE
 
                 }
             }
@@ -97,19 +98,21 @@ class SignUpFrag : Fragment() {
     }
 
     private fun liveDataObservers() {
-        viewmodel.loginSignUp.observe(viewLifecycleOwner, Observer {
+        viewmodel.signup.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
                     (requireActivity() as BaseActivity).hideProgressBar()
-                    (requireActivity() as BaseActivity).showToast(it.data!!)
-                    Utility.navigateFragment(
-                        (requireActivity() as BaseActivity).supportFragmentManager,
-                        R.id.loginFragContainer,
-                        LoginFrag(),
-                        "register",
-                        true,
-                        true
-                    )
+                    (requireActivity() as BaseActivity).showToast(it.message!!)
+                    showAlertDialog("Verify Email","come back after verification")
+
+//                    Utility.navigateFragment(
+//                        (requireActivity() as BaseActivity).supportFragmentManager,
+//                        R.id.loginFragContainer,
+//                        LoginFrag(),
+//                        "register",
+//                        true,
+//                        true
+//                    )
                 }
                 is Resource.Error -> {
 //                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
@@ -120,6 +123,28 @@ class SignUpFrag : Fragment() {
                 }
             }
         })
+
+    }
+
+    private  fun showAlertDialog(dialogTitle: String,dialogMessage:String){
+        val builder = AlertDialog.Builder(requireContext())
+        //set title for alert dialog
+        builder.setTitle(dialogTitle)
+        //set message for alert dialog
+        builder.setMessage(dialogMessage)
+        builder.setIcon(android.R.drawable.ic_dialog_alert)
+
+        //performing positive action
+        builder.setPositiveButton("Ok"){dialogInterface, which ->
+            requireActivity().finish();
+            exitProcess(0);
+        }
+
+        // Create the AlertDialog
+        val alertDialog: AlertDialog = builder.create()
+        // Set other dialog properties
+        alertDialog.setCancelable(false)
+        alertDialog.show()
 
     }
 

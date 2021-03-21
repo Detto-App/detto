@@ -7,4 +7,9 @@
     android:layout_height="match_parent"
     tools:context=".StudentActivity.StudentActivity">
 
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="125dp"
+        android:layout_height="53dp"
+        android:text="shaata" />
 </FrameLayout>

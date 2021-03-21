@@ -1,9 +1,14 @@
 package com.dettoapp.detto.LoginSignUpActivity
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
+import android.widget.Toast
+import androidx.appcompat.widget.DialogTitle
 import com.dettoapp.detto.Models.StudentModel
 import com.dettoapp.detto.Models.TeacherModel
+import com.dettoapp.detto.R
+import com.dettoapp.detto.UtilityClasses.BaseActivity
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 import com.dettoapp.detto.UtilityClasses.Utility
@@ -27,7 +32,7 @@ class LoginSignUpRepository {
     }
 
 
-    fun setSignUpData(context: Context, email: String, role: Int, name: String, usn: String,userID: String)
+    fun setSignUpData(context: Context, email: String, role: Int, name: String, usn: String?,userID: String)
     {
         storeDataInSharedPreferences(context,email,name,role,userID,usn)
     }
@@ -46,6 +51,8 @@ class LoginSignUpRepository {
             apply()
         }
     }
+
+
 
     private fun insertIfNotNull(sharedPreference:SharedPreferences.Editor,key:String,value:String?)
     {

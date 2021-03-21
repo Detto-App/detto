@@ -1,4 +1,4 @@
-package com.dettoapp.detto.LoginSignUpActivity.ViewModels
+package com.dettoapp.detto.loginActivity.ViewModels
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -21,50 +21,73 @@ import kotlinx.coroutines.tasks.await
 
 
 @SuppressLint("StaticFieldLeak")
-class LoginSignUpActivityViewModel(private val repository: LoginSignUpRepository,  private val context: Context) : ViewModel() {
+class LoginSignUpActivityViewModel(
+    private val repository: LoginSignUpRepository,
+    private val context: Context
+) : ViewModel() {
 
 
-    private val _loginSignUp = MutableLiveData<Resource<String>>()
-    val loginSignUp: LiveData<Resource<String>>
-        get() = _loginSignUp
+    private val _login = MutableLiveData<Resource<Int>>()
+    val login: LiveData<Resource<Int>>
+        get() = _login
+
+    private val _signup = MutableLiveData<Resource<Int>>()
+    val signup: LiveData<Resource<Int>>
+        get() = _signup
 
 
-    fun loginProcess(email: String, password: String) {
+    fun loginProcess(role: Int, email: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                _loginSignUp.postValue(Resource.Loading())
-                if(validate(email,password))
-                {
+                _login.postValue(Resource.Loading())
+                if (validate(email, password)) {
                     Firebase.auth.signInWithEmailAndPassword(email, password).await()
-                    repository.setLoginData(context,email)
-                    _loginSignUp.postValue(Resource.Success(data = "Login Successful"))
+                    repository.setLoginData(context, email)
+//                     val rle:Int=
+                    if(role==0)
+                        _login.postValue(Resource.Success(data=0,message = "Login Successful"))
+                    else
+                        _login.postValue(Resource.Success(data=1,message = "Login Successful"))
+
                 }
             } catch (e: Exception) {
-                Log.d("poiu",e.localizedMessage)
-                _loginSignUp.postValue(Resource.Error(message = ""+e.localizedMessage))
+                Log.d("poiu", e.localizedMessage)
+                _login.postValue(Resource.Error(message = "" + e.localizedMessage))
             }
         }
     }
 
-    fun signUpProcess(role:Int,name:String,usn:String,email: String, password: String,re_password:String) {
+    fun signUpProcess(
+        role: Int,
+        name: String,
+        usn: String,
+        email: String,
+        password: String,
+        re_password: String
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
 
             try {
-                _loginSignUp.postValue((Resource.Loading()))
-                Firebase.auth.createUserWithEmailAndPassword(email,password).await()
-                signUpValidate(role,name,usn,email,password,re_password)
+                _signup.postValue((Resource.Loading()))
+                signUpValidate(role, name, usn, email, password, re_password)
+                Firebase.auth.createUserWithEmailAndPassword(email, password).await()
+                Firebase.auth.currentUser?.sendEmailVerification()
                 val uid = Utility.createID()
-                if(role==0){
-                    val teacherModel= TeacherModel(name,email,uid)
-                    repository.sendTeacherData(teacherModel)
-                }else {
-                    val studentModel= StudentModel(name,email,uid,usn)
-                    repository.sendStudentData(studentModel)
-                }
-                repository.setSignUpData(context,email,role,name,usn,uid)
-                _loginSignUp.postValue((Resource.Success(data="Registered")))
+//                if (role == 0) {
+//                    val teacherModel = TeacherModel(name, email, uid)
+//                    repository.sendTeacherData(teacherModel)
+//                } else {
+//                    val studentModel = StudentModel(name, email, uid, usn)
+//                    repository.sendStudentData(studentModel)
+//                }
+                if(usn.isNullOrEmpty())
+                    repository.setSignUpData(context, email, role, name, null, uid)
+                else
+                    repository.setSignUpData(context, email, role, name, usn, uid)
+//                repository.showAlertDialog()
+              _signup.postValue((Resource.Success(data =0,message = "Registered")))
             } catch (e: Exception) {
-                _loginSignUp.postValue(Resource.Error(message = ""+e.localizedMessage))
+                _signup.postValue(Resource.Error(message = "" + e.localizedMessage))
             }
         }
     }
@@ -76,15 +99,24 @@ class LoginSignUpActivityViewModel(private val repository: LoginSignUpRepository
             throw Exception("Invalid Email")
         return true
     }
-    private fun signUpValidate(role:Int,name: String,usn:String,email: String, password: String,re_password:String) {
-        val validation= email.isEmpty() || password.isEmpty()||re_password.isEmpty()||name.isEmpty()
-        if ((role==0 && validation ) || (role==1 &&(validation || usn.isEmpty())))
+
+    private fun signUpValidate(
+        role: Int,
+        name: String,
+        usn: String,
+        email: String,
+        password: String,
+        re_password: String
+    ) {
+        val validation =
+            email.isEmpty() || password.isEmpty() || re_password.isEmpty() || name.isEmpty()
+        if ((role == 0 && validation) || (role == 1 && (validation || usn.isEmpty())))
             throw Exception("Enter all fields")
         else if (!email.matches(Regex("[a-zA-Z]+[._A-Za-z0-9]*[@][a-zA-Z]+[.][a-zA-Z]+")))
             throw Exception("Invalid Email")
-        else if(role==1 && !usn.matches(Regex("[1][Dd][Ss][1-9][0-9][A-Za-z][A-Za-z][0-9][0-9][0-9]")))
+        else if (role == 1 && !usn.matches(Regex("[1][Dd][Ss][1-9][0-9][A-Za-z][A-Za-z][0-9][0-9][0-9]")))
             throw Exception("Invalid USN")
-        else if(password!=re_password)
+        else if (password != re_password)
             throw Exception("Passwords must match")
     }
 }
