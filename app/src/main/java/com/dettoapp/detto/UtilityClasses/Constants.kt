@@ -11,6 +11,7 @@ object Constants
     const val USER_ROLE_KEY="role"
     const val STUDENT=0
     const val USER_ID="uid"
+    const val USER_TOKEN_KEY="token"
 
 
     const val ERROR_FILL_ALL_FIELDS ="Enter All Fields"

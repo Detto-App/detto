@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.dettoapp.detto.LoginSignUpActivity.LoginSignUpRepository
 import com.dettoapp.detto.Models.StudentModel
 import com.dettoapp.detto.Models.TeacherModel
+import com.dettoapp.detto.Models.Token
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
@@ -42,28 +43,48 @@ class LoginSignUpActivityViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _login.postValue(Resource.Loading())
+                Log.d("DDDD"," after load")
                 if (validate(email, password)) {
+                    Log.d("DDDD"," inside validate load")
                     Firebase.auth.signInWithEmailAndPassword(email, password).await()
 
                     if (Firebase.auth.currentUser?.isEmailVerified == true) {
-//                        val sharedPreferences: SharedPreferences = getSharedPreferences("Settings", Context.MODE_PRIVATE)
-//                             repository.setLoginData(context,email)
-                        val actualRole = repository.getRole(context)
-                        if (role != actualRole) {
+
+                        Log.d("DDDD"," inside email verified")
+                        var actualRole = repository.getRole(context)
+
+                        Log.d("DDDD",actualRole.toString())
+                        if (actualRole!=-1 && role != actualRole) {
                             _login.postValue(Resource.Error(message = "Please Check Your User Role,Account Not Found"))
                             Firebase.auth.signOut()
                         }
-                        else
-                            _login.postValue(Resource.Success(role, "Login Successful"))
 
+                        Log.d("DDDD",actualRole.toString())
+                        when(actualRole)
+                        {
+                            -1 -> {
+                                _login.postValue(Resource.Error(message = "-1 Error"))
+                            }
+
+                            0 -> {
+                                val teacherToken: Token = repository.sendTeacherData(context)
+                                Log.d("DDDD","After Token Teacher")
+                                repository.saveToken(teacherToken, context)
+                                _login.postValue(Resource.Success(data = role,message = "Registered"))
+                            }
+                            1 -> {
+                                val studentToken: Token = repository.sendStudentData(context)
+                                repository.saveToken(studentToken, context)
+                                _login.postValue(Resource.Success(data = role,message = "Registered"))
+                            }
+                        }
                     } else {
-                        _login.postValue(Resource.Error(message = "please verify your email and login again"))
+                        _login.postValue(Resource.Error(message = "Please verify your email and login again"))
                     }
-
                 }
             } catch (e: Exception) {
-                Log.d("poiu", e.localizedMessage)
-                _login.postValue(Resource.Error(message = "" + e.localizedMessage))
+                Log.d("DDDD", ""+e.localizedMessage)
+                _login.postValue(Resource.Error(message = "gfgfgf" + e.localizedMessage))
             }
         }
     }
@@ -82,6 +103,7 @@ class LoginSignUpActivityViewModel(
                 _signup.postValue((Resource.Loading()))
                 signUpValidate(role, name, usn, email, password, re_password)
                 Firebase.auth.createUserWithEmailAndPassword(email, password).await()
+
                 Firebase.auth.currentUser?.sendEmailVerification()
                 val uid = Utility.createID()
 //                if (role == 0) {
@@ -131,6 +153,7 @@ class LoginSignUpActivityViewModel(
         else if (password != re_password)
             throw Exception("Passwords must match")
     }
-    fun getRole():Int = repository.getRole(context)
+
+    fun getRole(): Int = repository.getRole(context)
 
 }

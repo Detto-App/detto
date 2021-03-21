@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.dettoapp.detto.R
+import com.dettoapp.detto.StudentActivity.StudentRepository
+import com.dettoapp.detto.StudentActivity.ViewModels.StudentHomeFragFactory
 import com.dettoapp.detto.StudentActivity.ViewModels.StudentHomeFragViewModel
 import com.dettoapp.detto.TeacherActivity.TeacherRepository
 import com.dettoapp.detto.TeacherActivity.ViewModels.TeacherHomeFragFactory
@@ -24,7 +26,7 @@ class StudentHomeFrag : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val factory = TeacherHomeFragFactory(TeacherRepository(),requireContext().applicationContext)
+        val factory = StudentHomeFragFactory(StudentRepository(),requireContext().applicationContext)
         viewModel = ViewModelProvider(requireActivity(),factory).get(StudentHomeFragViewModel::class.java)
     }
 

@@ -115,8 +115,9 @@ class SignUpFrag : Fragment() {
 //                    )
                 }
                 is Resource.Error -> {
-//                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
+
                     (requireActivity() as BaseActivity).hideProgressBar()
+                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
                 }
                 is Resource.Loading -> {
                     (requireActivity() as BaseActivity).showProgressDialog("wait...")
