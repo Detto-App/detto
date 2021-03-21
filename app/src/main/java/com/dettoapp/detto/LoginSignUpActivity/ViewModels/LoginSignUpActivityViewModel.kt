@@ -8,11 +8,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dettoapp.detto.LoginSignUpActivity.LoginSignUpRepository
-import com.dettoapp.detto.Models.StudentModel
-import com.dettoapp.detto.Models.TeacherModel
 import com.dettoapp.detto.Models.Token
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
+import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 import com.dettoapp.detto.UtilityClasses.Utility
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -42,53 +41,53 @@ class LoginSignUpActivityViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _login.postValue(Resource.Loading())
-                Log.d("DDDD", " after load")
+
                 if (validate(email, password)) {
-                    Log.d("DDDD", " inside validate load")
+
                     Firebase.auth.signInWithEmailAndPassword(email, password).await()
                     if (Firebase.auth.currentUser?.isEmailVerified == true) {
-
-                        Log.d("DDDD", " inside email verified")
-                        var actualRole = repository.getRole(context)
-
-                        Log.d("DDDD", actualRole.toString())
+                        val actualRole = repository.getRole(context)
                         if (actualRole != -1 && role != actualRole) {
                             _login.postValue(Resource.Error(message = "Please Check Your User Role,Account Not Found"))
-                            Firebase.auth.signOut()
+
                         }
 
-                        Log.d("DDDD", actualRole.toString())
                         when (actualRole) {
-                            -1 -> {
-                                _login.postValue(Resource.Error(message = "-1 Error"))
-                            }
-
-                            0 -> {
-                                val teacherToken: Token = repository.sendTeacherData(context)
-                                Log.d("DDDD", "After Token Teacher")
-                                repository.saveToken(teacherToken, context)
-                                _login.postValue(Resource.Success(data = role, message = "Registered"))
-                            }
-                            1 -> {
-                                val studentToken: Token = repository.sendStudentData(context)
-                                repository.saveToken(studentToken, context)
-                                _login.postValue(Resource.Success(data = role, message = "Registered"))
-                            }
+                            -1 -> getUserDetailsFromServer(email, role)
+//                            0 -> sendTeacherDataToServer()
+//                            1 -> sendStudentDataToServer()
                         }
 
-
+                        _login.postValue(Resource.Success(data = role, message = "Registered"))
                     } else {
                         _login.postValue(Resource.Error(message = "Please verify your email and login again"))
                     }
                 }
             } catch (e: Exception) {
-
-                Log.d("DDDD", "" + e.localizedMessage)
+                Firebase.auth.signOut()
                 _login.postValue(Resource.Error(message = "" + e.localizedMessage))
 
             }
         }
     }
+
+    private suspend fun sendTeacherDataToServer() {
+        val teacherToken: Token = repository.sendTeacherData(context)
+        repository.saveToken(teacherToken, context)
+    }
+
+    private suspend fun sendStudentDataToServer() {
+        val studentToken: Token = repository.sendStudentData(context)
+        repository.saveToken(studentToken, context)
+    }
+
+    private suspend fun getUserDetailsFromServer(email: String, role: Int) {
+
+        val receivingUserModel = RetrofitInstance.registrationAPI.getDetails(email, role.toString()).body()
+                ?: throw Exception("User Not Found,Please SignUp")
+        repository.storeUserAndTokenData(context, receivingUserModel)
+    }
+
 
     fun signUpProcess(
             role: Int,
@@ -108,10 +107,13 @@ class LoginSignUpActivityViewModel(
                 Firebase.auth.currentUser?.sendEmailVerification()
                 val uid = Utility.createID()
 
-                if (usn.isEmpty())
+                if (role == Constants.TEACHER) {
                     repository.setSignUpData(context, email, role, name, null, uid)
-                else
+                    sendTeacherDataToServer()
+                } else {
                     repository.setSignUpData(context, email, role, name, usn, uid)
+                    sendStudentDataToServer()
+                }
 
                 _signUp.postValue((Resource.Success(data = 0, message = "Registered")))
 

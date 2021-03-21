@@ -93,7 +93,7 @@ class SignUpFrag : Fragment() {
             when (it) {
                 is Resource.Success -> {
                     (requireActivity() as BaseActivity).hideProgressBar()
-                    showAlertDialog("Verify Email", "A Verification Email has been sent to your email\nPlease Verify the email and Login Again")
+                    showAlertDialog("Verify Email", "A Verification Email has been sent to your email,Please Verify the email and Login Again")
                 }
                 is Resource.Error -> {
 
