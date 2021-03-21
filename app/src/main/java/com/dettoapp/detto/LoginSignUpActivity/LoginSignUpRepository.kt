@@ -12,35 +12,15 @@ import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 
 @Suppress("SameParameterValue")
 class LoginSignUpRepository {
-    suspend fun sendTeacherData(context: Context): Token {
-        val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
-                ?: throw Exception("Data Storage Exception")
-
-        val name = sharedPreference.getString(Constants.USER_NAME_KEY, "")!!
-        val email = sharedPreference.getString(Constants.USER_EMAIL_KEY, "")!!
-        val uid = sharedPreference.getString(Constants.USER_ID, "")!!
-
-        val teacherModel = TeacherModel(name, email, uid)
-        val x = RetrofitInstance.registrationAPI.sendTeacherData(teacherModel)
-        return x.body()!!
-
+    suspend fun sendTeacherDataToServer(teacherModel: TeacherModel): Token {
+        return RetrofitInstance.registrationAPI.sendTeacherData(teacherModel).body()!!
     }
 
-    suspend fun sendStudentData(context: Context): Token {
-        val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
-                ?: throw Exception("Data Storage Exception")
-        val name = sharedPreference.getString(Constants.USER_NAME_KEY, "")!!
-        val email = sharedPreference.getString(Constants.USER_EMAIL_KEY, "")!!
-        val uid = sharedPreference.getString(Constants.USER_ID, "")!!
-        val usn = sharedPreference.getString(Constants.USER_USN_KEY, "")!!
-        val studentModel = StudentModel(name, email, uid, usn)
-
+    suspend fun sendStudentDataToServer(studentModel: StudentModel): Token {
         return RetrofitInstance.registrationAPI.sendStudentData(studentModel).body()!!
     }
 
-    fun setSignUpData(context: Context, email: String, role: Int, name: String, usn: String?, userID: String) {
-        storeDataInSharedPreferences(context, email, name, role, userID, usn)
-    }
+
 
     private fun storeDataInSharedPreferences(context: Context, email: String, name: String, role: Int, userID: String, usn: String? = null) {
         val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
@@ -62,14 +42,13 @@ class LoginSignUpRepository {
             storeDataInSharedPreferences(context, receivingUserModel.teacher.email, receivingUserModel.teacher.name, Constants.TEACHER, receivingUserModel.teacher.uid)
         } else
             storeDataInSharedPreferences(context, receivingUserModel.student!!.email, receivingUserModel.student.name, Constants.STUDENT, receivingUserModel.student.uid, receivingUserModel.student.susn)
-        saveToken(receivingUserModel.token, context)
+        saveToken(Token(receivingUserModel.token), context)
     }
 
     fun getRole(context: Context): Int {
         val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
                 ?: throw Exception("Data Storage Exception")
-        val role = sharedPreference.getInt("role", -1)
-        return role
+        return sharedPreference.getInt("role", -1)
 
     }
 
@@ -88,16 +67,11 @@ class LoginSignUpRepository {
         }
         Log.d("abcd", token.token)
     }
+}
 
-    private fun saveToken(token: String, context: Context) {
-        val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
-                ?: throw Exception("Data Storage Exception")
-        with(sharedPreference.edit()) {
-            putString(Constants.USER_TOKEN_KEY, token)
-            apply()
-        }
-        Log.d("abcd", token)
-    }
+//    fun setSignUpData(context: Context, email: String, role: Int, name: String, usn: String?, userID: String) {
+//        storeDataInSharedPreferences(context, email, name, role, userID, usn)
+//    }
 
 //    suspend fun setLoginData(context: Context, email: String) {
 //        val receivingUserModel = RetrofitInstance.registrationAPI.getDetails(email,1).body()!!
@@ -106,4 +80,3 @@ class LoginSignUpRepository {
 //        else
 //            storeDataInSharedPreferences(context, email, receivingUserModel.teacher!!.name, Constants.TEACHER, receivingUserModel.teacher.uid)
 //}
-}
