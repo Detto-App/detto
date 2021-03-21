@@ -10,33 +10,33 @@
     <TextView
         android:id="@+id/textView12"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="32dp"
-        android:layout_marginBottom="544dp"
         android:text="Who are you?"
         android:textColor="@color/cus_black"
         android:textColorHint="@color/cus_black"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/spinner_id2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="@+id/spinner_id2"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Spinner
         android:id="@+id/spinner_id2"
         android:layout_width="154dp"
         android:layout_height="39dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="36dp"
         android:dropDownWidth="wrap_content"
         android:dropDownSelector="@color/cus_black"
         android:minWidth="10dp"
         android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="@+id/textView12"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toEndOf="@+id/textView12"
-        app:layout_constraintTop_toTopOf="@+id/textView12"
-        app:layout_constraintVertical_bias="0.434" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordLogin"
+        app:layout_constraintVertical_bias="0.01999998" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/email_login"
@@ -52,7 +52,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7"
-        app:layout_constraintVertical_bias=".2"
+        app:layout_constraintVertical_bias=".1"
         app:startIconDrawable="@drawable/ic_baseline_people_24">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -89,13 +89,13 @@
         android:id="@+id/btnLoginFrag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="Login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias=".5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordLogin"
-        app:layout_constraintVertical_bias=".2" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner_id2"
+        app:layout_constraintVertical_bias=".1" />
 
     <TextView
         android:id="@+id/textView"

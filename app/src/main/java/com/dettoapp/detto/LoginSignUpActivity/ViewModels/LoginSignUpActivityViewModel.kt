@@ -2,15 +2,11 @@ package com.dettoapp.detto.loginActivity.ViewModels
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.SharedPreferences
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dettoapp.detto.LoginSignUpActivity.LoginSignUpRepository
-import com.dettoapp.detto.Models.StudentModel
-import com.dettoapp.detto.Models.TeacherModel
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
@@ -33,9 +29,9 @@ class LoginSignUpActivityViewModel(
         get() = _login
 
 
-    private val _signup = MutableLiveData<Resource<Int>>()
-    val signup: LiveData<Resource<Int>>
-        get() = _signup
+    private val _signUp = MutableLiveData<Resource<Int>>()
+    val signUp: LiveData<Resource<Int>>
+        get() = _signUp
 
 
     fun loginProcess(role: Int, email: String, password: String) {
@@ -44,25 +40,18 @@ class LoginSignUpActivityViewModel(
                 _login.postValue(Resource.Loading())
                 if (validate(email, password)) {
                     Firebase.auth.signInWithEmailAndPassword(email, password).await()
-
                     if (Firebase.auth.currentUser?.isEmailVerified == true) {
-//                        val sharedPreferences: SharedPreferences = getSharedPreferences("Settings", Context.MODE_PRIVATE)
-//                             repository.setLoginData(context,email)
                         val actualRole = repository.getRole(context)
                         if (role != actualRole) {
                             _login.postValue(Resource.Error(message = "Please Check Your User Role,Account Not Found"))
                             Firebase.auth.signOut()
-                        }
-                        else
+                        } else
                             _login.postValue(Resource.Success(role, "Login Successful"))
-
                     } else {
-                        _login.postValue(Resource.Error(message = "please verify your email and login again"))
+                        _login.postValue(Resource.Error(message = "Please verify your email and login again"))
                     }
-
                 }
             } catch (e: Exception) {
-                Log.d("poiu", e.localizedMessage)
                 _login.postValue(Resource.Error(message = "" + e.localizedMessage))
             }
         }
@@ -79,27 +68,21 @@ class LoginSignUpActivityViewModel(
         viewModelScope.launch(Dispatchers.IO) {
 
             try {
-                _signup.postValue((Resource.Loading()))
+                _signUp.postValue((Resource.Loading()))
                 signUpValidate(role, name, usn, email, password, re_password)
                 Firebase.auth.createUserWithEmailAndPassword(email, password).await()
                 Firebase.auth.currentUser?.sendEmailVerification()
                 val uid = Utility.createID()
-//                if (role == 0) {
-//                    val teacherModel = TeacherModel(name, email, uid)
-//                    repository.sendTeacherData(teacherModel)
-//                } else {
-//                    val studentModel = StudentModel(name, email, uid, usn)
-//                    repository.sendStudentData(studentModel)
-//                }
-                if (usn.isNullOrEmpty())
+
+                if (usn.isEmpty())
                     repository.setSignUpData(context, email, role, name, null, uid)
                 else
                     repository.setSignUpData(context, email, role, name, usn, uid)
-//                repository.showAlertDialog()
-                _signup.postValue((Resource.Success(data = 0, message = "Registered")))
+
+                _signUp.postValue((Resource.Success(data = 0, message = "Registered")))
 
             } catch (e: Exception) {
-                _signup.postValue(Resource.Error(message = "" + e.localizedMessage))
+                _signUp.postValue(Resource.Error(message = "" + e.localizedMessage))
             }
         }
     }
@@ -131,6 +114,7 @@ class LoginSignUpActivityViewModel(
         else if (password != re_password)
             throw Exception("Passwords must match")
     }
-    fun getRole():Int = repository.getRole(context)
+
+    fun getRole(): Int = repository.getRole(context)
 
 }
