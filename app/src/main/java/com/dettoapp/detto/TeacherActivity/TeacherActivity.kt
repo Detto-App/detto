@@ -1,6 +1,5 @@
 package com.dettoapp.detto.TeacherActivity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.dettoapp.detto.R
 import com.dettoapp.detto.TeacherActivity.Fragments.TeacherHomeFrag

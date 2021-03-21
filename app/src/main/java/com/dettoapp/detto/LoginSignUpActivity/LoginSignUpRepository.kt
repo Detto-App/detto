@@ -24,13 +24,12 @@ class LoginSignUpRepository {
     }
 
     suspend fun setLoginData(context: Context, email: String) {
-//        val receivingUserModel = RetrofitInstance.registrationAPI.getDetails(email).body()!!
-//        if (receivingUserModel.student != null)
-//            storeDataInSharedPreferences(context, email, receivingUserModel.student.name, Constants.STUDENT, receivingUserModel.student.uid)
-//        else
-//            storeDataInSharedPreferences(context, email, receivingUserModel.teacher!!.name, Constants.TEACHER, receivingUserModel.teacher.uid)
-    }
-
+        val receivingUserModel = RetrofitInstance.registrationAPI.getDetails(email).body()!!
+        if (receivingUserModel.student != null)
+            storeDataInSharedPreferences(context, email, receivingUserModel.student.name, Constants.STUDENT, receivingUserModel.student.uid)
+        else
+            storeDataInSharedPreferences(context, email, receivingUserModel.teacher!!.name, Constants.TEACHER, receivingUserModel.teacher.uid)
+}
 
     fun setSignUpData(context: Context, email: String, role: Int, name: String, usn: String?,userID: String)
     {
@@ -50,6 +49,13 @@ class LoginSignUpRepository {
             insertIfNotNull(this,Constants.USER_USN_KEY,usn)
             apply()
         }
+    }
+    fun getRole(context: Context):Int{
+        val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
+                ?: throw Exception("Data Storage Exception")
+        val role=sharedPreference.getInt("role",-1)
+        return role
+
     }
 
 

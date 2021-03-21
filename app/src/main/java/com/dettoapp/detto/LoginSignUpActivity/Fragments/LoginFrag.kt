@@ -16,6 +16,7 @@ import com.dettoapp.detto.R
 import com.dettoapp.detto.StudentActivity.StudentActivity
 import com.dettoapp.detto.TeacherActivity.TeacherActivity
 import com.dettoapp.detto.UtilityClasses.BaseActivity
+import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentLoginBinding
@@ -31,8 +32,8 @@ class LoginFrag : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val factory =LoginSignUpActivityViewModelFactory(LoginSignUpRepository(),requireContext().applicationContext)
-        viewModel = ViewModelProvider(requireActivity(),factory).get(LoginSignUpActivityViewModel::class.java)
+        val factory = LoginSignUpActivityViewModelFactory(LoginSignUpRepository(), requireContext().applicationContext)
+        viewModel = ViewModelProvider(requireActivity(), factory).get(LoginSignUpActivityViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -51,25 +52,24 @@ class LoginFrag : Fragment() {
         liveDataObservers()
     }
 
-    private fun initialise()
-    {
+    private fun initialise() {
         binding!!.passwordLogin.isPasswordVisibilityToggleEnabled
         binding!!.btnLoginFrag.setOnClickListener {
             viewModel.loginProcess(binding.spinnerId2.selectedItemPosition,
-                binding!!.emailLogin.editText?.text.toString(), binding!!.passwordLogin.editText?.text.toString())
+                    binding!!.emailLogin.editText?.text.toString(), binding!!.passwordLogin.editText?.text.toString())
         }
 
         binding!!.signUpText.setOnClickListener {
             Utility.navigateFragment(requireActivity().supportFragmentManager,
-                R.id.loginFragContainer, SignUpFrag(),"splash",addToBackStack = true)
+                    R.id.loginFragContainer, SignUpFrag(), "splash", addToBackStack = true)
 
             //viewModel.loginProcess(binding!!.email.text.toString(), binding!!.password.text.toString())
         }
         val roles = resources.getStringArray(R.array.Roles)
         binding.spinnerId2.apply {
             adapter = ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_spinner_item, roles
+                    requireContext(),
+                    android.R.layout.simple_spinner_item, roles
             ).apply {
                 setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
             }
@@ -79,24 +79,26 @@ class LoginFrag : Fragment() {
     }
 
     private fun liveDataObservers() {
-        viewModel.login.observe(viewLifecycleOwner, Observer{
+        viewModel.login.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
-                //    (requireActivity() as BaseActivity).hideProgressBar()
-                  //  Utility.navigateFragment(requireActivity().supportFragmentManager,R.id.loginFragContainer, SignUpFrag(),"splash",addToBackStack = true)
+                    //    (requireActivity() as BaseActivity).hideProgressBar()
+                    //  Utility.navigateFragment(requireActivity().supportFragmentManager,R.id.loginFragContainer, SignUpFrag(),"splash",addToBackStack = true)
                     (requireActivity() as BaseActivity).hideProgressBar()
                     (requireActivity() as BaseActivity).showToast(it.message!!)
-                    var intent = Intent(requireActivity(),TeacherActivity::class.java)
-                    if(it.data==1)
-                        intent=Intent(requireActivity(),StudentActivity::class.java)
+                    val intent = if (it.data == Constants.TEACHER)
+                        Intent(requireActivity(), TeacherActivity::class.java)
+                    else
+                        Intent(requireActivity(), StudentActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+
                     startActivity(intent)
                 }
                 is Resource.Error -> {
                     (requireActivity() as BaseActivity).hideProgressBar()
                     (requireActivity() as BaseActivity).showErrorSnackMessage(it.message!!)
                 }
-                is Resource.Loading ->{
+                is Resource.Loading -> {
                     (requireActivity() as BaseActivity).showProgressDialog("loading...")
                     (requireActivity() as BaseActivity).closeKeyBoard(view)
                 }
