@@ -48,76 +48,114 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/et_email"
+        style="@style/Detto.TextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:ems="10"
-        android:hint="Email"
-        style="@style/Detto.TextInputLayout"
+        android:hint="E-mail"
+        android:maxLines="1"
+
         android:inputType="textEmailAddress"
         android:textColor="@color/cus_white"
         android:textColorHint="@android:color/darker_gray"
+        app:endIconMode="clear_text"
         app:layout_constraintEnd_toEndOf="@+id/etname2"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/etname2"
-        app:layout_constraintTop_toBottomOf="@+id/et_usn" >
+        app:layout_constraintTop_toBottomOf="@+id/et_usn"
+        app:startIconDrawable="@drawable/ic_baseline_email_24">
+
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColor="@color/cus_black" />
-
-        </com.google.android.material.textfield.TextInputLayout>
+            android:inputType="textWebEmailAddress"
+            android:textColor="@color/cus_black"
+            android:textColorHint="@android:color/darker_gray" />
+    </com.google.android.material.textfield.TextInputLayout>
 
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/password"
+        style="@style/Detto.TextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:ems="10"
         android:hint="Password"
-        style="@style/Detto.TextInputLayout"
-
-        android:inputType="textPassword"
-        android:textColor="@color/cus_white"
-        android:textColorHint="@android:color/darker_gray"
+        android:maxLines="1"
         app:layout_constraintEnd_toEndOf="@+id/et_email"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/et_email"
-        app:layout_constraintTop_toBottomOf="@+id/et_email" >
+        app:layout_constraintTop_toBottomOf="@+id/et_email"
+        app:startIconDrawable="@drawable/ic_baseline_vpn_key_24"
+        app:endIconMode="password_toggle">
+
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColor="@color/cus_black" />
+            android:inputType="textPassword"
+            android:textColor="@color/cus_black"
+            android:textColorHint="@android:color/darker_gray" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/et_usn"
+        style="@style/Detto.TextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:ems="10"
         android:hint="USN"
-        style="@style/Detto.TextInputLayout"
-
+        android:maxLines="1"
         android:inputType="textPersonName"
         android:textColor="@color/cus_white"
         android:textColorHint="@android:color/darker_gray"
         android:visibility="gone"
+        app:endIconMode="clear_text"
         app:layout_constraintEnd_toEndOf="@+id/etname2"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/etname2"
-        app:layout_constraintTop_toBottomOf="@+id/etname2" >
+        app:layout_constraintTop_toBottomOf="@+id/etname2"
+        app:startIconDrawable="@drawable/ic_baseline_fingerprint_24">
+
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/etname2"
+        style="@style/Detto.TextInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+
+        android:hint="Full Name"
+        android:inputType="textPersonName"
+        android:textColor="@color/cus_black"
+        android:textColorHint="@android:color/darker_gray"
+        android:maxLines="1"
+        app:endIconMode="clear_text"
+        app:layout_constraintEnd_toEndOf="@+id/spinner_id"
+        app:layout_constraintHorizontal_bias="0.554"
+        app:layout_constraintStart_toStartOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:startIconDrawable="@drawable/ic_baseline_people_24">
+
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="@color/cus_black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/et_password2"
+        style="@style/Detto.TextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -125,13 +163,15 @@
         android:hint="Re-enter Password"
         android:inputType="textPassword"
         android:textColor="@color/cus_white"
-        style="@style/Detto.TextInputLayout"
-
+        app:endIconMode="password_toggle"
+        android:maxLines="1"
         android:textColorHint="@android:color/darker_gray"
         app:layout_constraintEnd_toEndOf="@+id/password"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="@+id/password"
-        app:layout_constraintTop_toBottomOf="@+id/password" >
+        app:layout_constraintTop_toBottomOf="@+id/password"
+        app:startIconDrawable="@drawable/ic_baseline_vpn_key_24">
+
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -164,32 +204,12 @@
         android:textColor="@color/cus_black"
         android:textColorHint="@color/cus_black"
         android:textSize="24sp"
+        android:maxLines="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView11"
         app:layout_constraintVertical_bias=".05" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/etname2"
-        style="@style/Detto.TextInputLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:ems="10"
 
-        android:hint="Full Name"
-        android:inputType="textPersonName"
-        android:textColor="@color/cus_black"
-        android:textColorHint="@android:color/darker_gray"
-        app:layout_constraintEnd_toEndOf="@+id/spinner_id"
-        app:layout_constraintHorizontal_bias="0.554"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/textView2">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textColor="@color/cus_black" />
-    </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -35,8 +35,6 @@ class LoginSignUpActivity : BaseActivity() {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
 
             startActivity(intent)
-
-
         }
 
 //        if((Firebase.auth.currentUser?.isEmailVerified == false))
