@@ -39,4 +39,11 @@ object Utility {
 
     }
     fun createID()=UUID.randomUUID().toString()
+
+    fun gettoken(context: Context):String{
+
+        val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
+                ?: throw Exception("Data Storage Exception")
+        return sharedPreference.getString(Constants.USER_TOKEN_KEY,"cc")!!
+    }
 }
