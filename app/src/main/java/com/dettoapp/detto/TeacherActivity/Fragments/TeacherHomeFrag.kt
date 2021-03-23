@@ -8,8 +8,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dettoapp.detto.LoginSignUpActivity.LoginSignUpRepository
-import com.dettoapp.detto.LoginSignUpActivity.ViewModels.LoginSignUpActivityViewModelFactory
 import com.dettoapp.detto.TeacherActivity.Adapters.ClassroomAdapter
 import com.dettoapp.detto.TeacherActivity.Dialog.GroupInfoDialog
 import com.dettoapp.detto.TeacherActivity.TeacherRepository
@@ -17,10 +15,11 @@ import com.dettoapp.detto.TeacherActivity.ViewModels.TeacherHomeFragFactory
 import com.dettoapp.detto.TeacherActivity.ViewModels.TeacherHomeFragViewModel
 import com.dettoapp.detto.TeacherActivity.db.ClassroomDatabase
 import com.dettoapp.detto.UtilityClasses.BaseActivity
+import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.databinding.FragmentTeacherHomeBinding
 
-class TeacherHomeFrag : Fragment(),GroupInfoDialog.GroupInfoDialogOnClickListener {
+class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListener {
     private lateinit var viewModel: TeacherHomeFragViewModel
     private var _binding: FragmentTeacherHomeBinding? = null
     private val binding
@@ -32,26 +31,29 @@ class TeacherHomeFrag : Fragment(),GroupInfoDialog.GroupInfoDialogOnClickListene
 
         val factory = TeacherHomeFragFactory(TeacherRepository(ClassroomDatabase.getInstance(requireContext()).classroomDAO),requireContext().applicationContext)
         viewModel = ViewModelProvider(requireActivity(),factory).get(TeacherHomeFragViewModel::class.java)
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentTeacherHomeBinding.inflate(inflater, container, false)
-        return binding!!.root
+        return binding.root
 
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initialise()
         liveDataObservers()
 
     }
-    fun initialise(){
-        binding.btnfab.setOnClickListener{
-            val groupInfoDialog=GroupInfoDialog(requireContext(),this)
+
+    private fun initialise() {
+        binding.btnfab.setOnClickListener {
+            val groupInfoDialog = GroupInfoDialog(requireContext(), this)
             groupInfoDialog.show()
 
         }
@@ -60,10 +62,11 @@ class TeacherHomeFrag : Fragment(),GroupInfoDialog.GroupInfoDialogOnClickListene
             layoutManager = LinearLayoutManager(requireContext())
         }
     }
-    fun liveDataObservers(){
-        viewModel.teacher.observe(viewLifecycleOwner, Observer {
-            when(it){
-                is Resource.Success ->{
+
+    private fun liveDataObservers() {
+        viewModel.classRoomCreation.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is Resource.Success -> {
                     (requireActivity() as BaseActivity).hideProgressBar()
                     (requireActivity() as BaseActivity).showToast(it.data!!)
                 }
@@ -71,8 +74,8 @@ class TeacherHomeFrag : Fragment(),GroupInfoDialog.GroupInfoDialogOnClickListene
                     (requireActivity() as BaseActivity).hideProgressBar()
                     (requireActivity() as BaseActivity).showErrorSnackMessage(it.message!!)
                 }
-                is Resource.Loading ->{
-                    (requireActivity() as BaseActivity).showProgressDialog("loading...")
+                is Resource.Loading -> {
+                    (requireActivity() as BaseActivity).showProgressDialog(Constants.MESSAGE_LOADING)
                     (requireActivity() as BaseActivity).closeKeyBoard(view)
                 }
                 else -> {
@@ -82,12 +85,10 @@ class TeacherHomeFrag : Fragment(),GroupInfoDialog.GroupInfoDialogOnClickListene
         })
     }
 
-    override fun onClassCreated(classroomname:String,sem:String,sec:String) {
-        viewModel.classRoomData(classroomname,sem,sec)
+    override fun onClassCreated(classname: String, sem: String, sec: String) {
+        viewModel.classRoomData(classname, sem, sec)
     }
-
-
-
+}
 
 //    fun initialise(){
 //        binding.GroupInfo.year.apply {
@@ -99,6 +100,3 @@ class TeacherHomeFrag : Fragment(),GroupInfoDialog.GroupInfoDialogOnClickListene
 //            }
 //        }
 //    }
-
-
-}
