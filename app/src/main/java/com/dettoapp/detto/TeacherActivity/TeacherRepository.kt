@@ -20,7 +20,7 @@ class TeacherRepository(private val dao: ClassroomDAO) {
         return uid
 
     }
-    suspend fun insert(classroom: Classroom){
+    suspend fun insertClassroom(classroom: Classroom){
         dao.insertclassroom(classroom)
     }
 }

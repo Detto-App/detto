@@ -32,6 +32,7 @@ class TeacherHomeFragViewModel(
                 _classRoomCreation.postValue(Resource.Loading())
                 val uid = repository.getUid(context)
                 val classroom = Classroom(classroomName, sem, sec, Utility.createID(), uid)
+                repository.insertClassroom(classroom)
                 repository.createClassroom(context, classroom)
                 _classRoomCreation.postValue(Resource.Success(data = "classroom created successfully"))
             } catch (e: Exception) {
