@@ -58,7 +58,7 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
             groupInfoDialog.show()
 
         }
-        classroomAdapter = ClassroomAdapter()
+        classroomAdapter = ClassroomAdapter(getTeacherName())
         binding.teacherRecyclerView.apply {
             adapter = classroomAdapter
             layoutManager = LinearLayoutManager(requireContext())
@@ -94,6 +94,10 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
     override fun onClassCreated(classname: String, sem: String, sec: String) {
         viewModel.classRoomData(classname, sem, sec)
     }
+    fun getTeacherName():String{
+        return viewModel.getTeacherName()
+    }
+
 }
 
 //    fun initialise(){

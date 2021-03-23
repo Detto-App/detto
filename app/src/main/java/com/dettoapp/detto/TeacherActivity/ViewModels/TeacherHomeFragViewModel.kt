@@ -43,4 +43,7 @@ class TeacherHomeFragViewModel(
             }
         }
     }
+    fun getTeacherName():String{
+        return repository.getTeacherName(context)
+    }
 }

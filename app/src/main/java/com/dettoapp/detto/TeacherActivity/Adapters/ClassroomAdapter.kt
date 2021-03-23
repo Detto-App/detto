@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dettoapp.detto.R
 import com.dettoapp.detto.TeacherActivity.db.Classroom
 
-class ClassroomAdapter : RecyclerView.Adapter<ClassroomAdapter.ClassroomViewHolder>() {
+class ClassroomAdapter(private val tName:String): RecyclerView.Adapter<ClassroomAdapter.ClassroomViewHolder>() {
 
 
     private val diffCallBack = object : DiffUtil.ItemCallback<Classroom>()
@@ -45,12 +45,16 @@ class ClassroomAdapter : RecyclerView.Adapter<ClassroomAdapter.ClassroomViewHold
         holder.bind(differ.currentList[position])
     }
 
-    class ClassroomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ClassroomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(classroom: Classroom)
         {
             val cName = itemView.findViewById<TextView>(R.id.classroomnameview)
             cName.text = classroom.classroomname
+            val teacherName=itemView.findViewById<TextView>(R.id.teachernameview)
+            teacherName.text=tName
+
+
         }
     }
 }

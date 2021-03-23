@@ -20,6 +20,12 @@ class TeacherRepository(private val dao: ClassroomDAO) {
         return uid
 
     }
+    fun getTeacherName(context: Context):String{
+        val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
+            ?: throw Exception("Data Storage Exception")
+        val tName=sharedPreference.getString(Constants.USER_NAME_KEY,"tname")!!
+        return tName
+    }
     suspend fun insertClassroom(classroom: Classroom){
         dao.insertClassroom(classroom)
     }
