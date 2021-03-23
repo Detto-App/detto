@@ -24,6 +24,7 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
     private var _binding: FragmentTeacherHomeBinding? = null
     private val binding
         get() = _binding!!
+    private lateinit var classroomAdapter: ClassroomAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,8 +58,9 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
             groupInfoDialog.show()
 
         }
+        classroomAdapter = ClassroomAdapter()
         binding.teacherRecyclerView.apply {
-            adapter = ClassroomAdapter()
+            adapter = classroomAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
     }
@@ -82,6 +84,10 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
 
                 }
             }
+        })
+
+        viewModel.allClassRooms.observe(viewLifecycleOwner, Observer {
+            classroomAdapter.differ.submitList(it)
         })
     }
 

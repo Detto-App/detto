@@ -5,25 +5,13 @@ import android.content.Context
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.EditText
 import android.widget.Spinner
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStore
-import androidx.lifecycle.get
 import com.dettoapp.detto.R
-import com.dettoapp.detto.TeacherActivity.ViewModels.ClassroomViewModel
-import com.dettoapp.detto.TeacherActivity.ViewModels.ClassroomViewModelFactory
-import com.dettoapp.detto.TeacherActivity.db.Classroom
-import com.dettoapp.detto.TeacherActivity.db.ClassroomDAO
-import com.dettoapp.detto.TeacherActivity.db.ClassroomDatabase
-import com.dettoapp.detto.TeacherActivity.db.ClassroomRepository
 import com.google.android.material.textfield.TextInputLayout
 
 class GroupInfoDialog (private val contextInfo:Context,private val groupInfoDialogOnClickListener: GroupInfoDialogOnClickListener):Dialog(contextInfo,android.R.style.ThemeOverlay){
 
-    private lateinit var classroomViewModel: ClassroomViewModel
+
    interface GroupInfoDialogOnClickListener{
        fun onClassCreated(classname:String,sem:String,sec:String)
    }
@@ -40,11 +28,6 @@ class GroupInfoDialog (private val contextInfo:Context,private val groupInfoDial
             groupInfoDialogOnClickListener.onClassCreated(classname.editText?.text.toString(),sem.selectedItem.toString(),sec.selectedItem.toString())
             dismiss()
         }
-
-        val dao:ClassroomDAO=ClassroomDatabase.getInstance(context).classroomDAO
-        val repository=ClassroomRepository(dao)
-        val factory =ClassroomViewModelFactory(repository)
-//        classroomViewModel=ViewModelProvider(,factory).get()
     }
     private fun initialise(){
         val semester= findViewById<Spinner>(R.id.year)

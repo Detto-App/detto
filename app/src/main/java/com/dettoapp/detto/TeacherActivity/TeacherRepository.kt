@@ -21,6 +21,8 @@ class TeacherRepository(private val dao: ClassroomDAO) {
 
     }
     suspend fun insertClassroom(classroom: Classroom){
-        dao.insertclassroom(classroom)
+        dao.insertClassroom(classroom)
     }
+
+    fun getAllClassRooms() = dao.getAllClassRooms()
 }

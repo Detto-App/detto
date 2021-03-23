@@ -25,6 +25,9 @@ class TeacherHomeFragViewModel(
         get() = _classRoomCreation
 
 
+    val allClassRooms = repository.getAllClassRooms()
+
+
     fun classRoomData(classroomName: String, sem: String, sec: String) {
 
         viewModelScope.launch(Dispatchers.IO) {

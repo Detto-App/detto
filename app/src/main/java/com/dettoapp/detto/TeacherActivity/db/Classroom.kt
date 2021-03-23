@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
-@Entity(tableName = "classroom")
+@Entity(tableName = "classroom_table")
 data class Classroom(
     @ColumnInfo(name="classroom_name")
     val classroomname: String,
