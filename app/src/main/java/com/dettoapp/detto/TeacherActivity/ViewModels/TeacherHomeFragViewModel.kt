@@ -6,10 +6,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dettoapp.detto.Models.Classroom
+import com.dettoapp.detto.TeacherActivity.db.Classroom
 import com.dettoapp.detto.TeacherActivity.TeacherRepository
 import com.dettoapp.detto.UtilityClasses.Resource
-import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 import com.dettoapp.detto.UtilityClasses.Utility
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,7 +23,13 @@ class TeacherHomeFragViewModel(private val repository: TeacherRepository, privat
 
     fun classRoomData(classroomName: String, sem: String, sec: String) {
         val uid=repository.getUid(context)
-        val classroom = Classroom(classroomName, sem, sec, Utility.createID(),uid)
+        val classroom = Classroom(
+            classroomName,
+            sem,
+            sec,
+            Utility.createID(),
+            uid
+        )
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _teacher.postValue(Resource.Loading())

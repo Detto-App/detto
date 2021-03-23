@@ -15,6 +15,7 @@ import com.dettoapp.detto.TeacherActivity.Dialog.GroupInfoDialog
 import com.dettoapp.detto.TeacherActivity.TeacherRepository
 import com.dettoapp.detto.TeacherActivity.ViewModels.TeacherHomeFragFactory
 import com.dettoapp.detto.TeacherActivity.ViewModels.TeacherHomeFragViewModel
+import com.dettoapp.detto.TeacherActivity.db.ClassroomDatabase
 import com.dettoapp.detto.UtilityClasses.BaseActivity
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.databinding.FragmentTeacherHomeBinding
@@ -28,7 +29,8 @@ class TeacherHomeFrag : Fragment(),GroupInfoDialog.GroupInfoDialogOnClickListene
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val factory = TeacherHomeFragFactory(TeacherRepository(),requireContext().applicationContext)
+
+        val factory = TeacherHomeFragFactory(TeacherRepository(ClassroomDatabase.getInstance(requireContext()).classroomDAO),requireContext().applicationContext)
         viewModel = ViewModelProvider(requireActivity(),factory).get(TeacherHomeFragViewModel::class.java)
     }
 
