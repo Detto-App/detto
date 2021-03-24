@@ -80,8 +80,8 @@ class SignUpFrag : Fragment() {
             viewmodel.signUpProcess(
                     binding.spinnerId.selectedItemPosition,
                     binding.etname2.editText?.text.toString(),
-                    binding.etUsn.editText?.text.toString(),
-                    binding.etEmail.editText?.text.toString(),
+                    binding.etUsn.editText?.text.toString().toLowerCase(),
+                    binding.etEmail.editText?.text.toString().toLowerCase(),
                     binding.password.editText?.text.toString(),
                     binding.etPassword2.editText?.text.toString()
             )
