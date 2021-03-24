@@ -53,10 +53,10 @@ class LoginFrag : Fragment() {
     }
 
     private fun initialise() {
-        binding!!.passwordLogin.isPasswordVisibilityToggleEnabled
+//        binding!!.passwordLogin.isPasswordVisibilityToggleEnabled
         binding!!.btnLoginFrag.setOnClickListener {
             viewModel.loginProcess(binding.spinnerId2.selectedItemPosition,
-                    binding!!.emailLogin.editText?.text.toString(), binding!!.passwordLogin.editText?.text.toString())
+                    binding!!.emailLogin.editText?.text.toString().toLowerCase(), binding!!.passwordLogin.editText?.text.toString())
         }
 
         binding!!.signUpText.setOnClickListener {
