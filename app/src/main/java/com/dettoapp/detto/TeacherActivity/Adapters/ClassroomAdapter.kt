@@ -12,8 +12,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.dettoapp.detto.R
-import com.dettoapp.detto.TeacherActivity.db.Classroom
-import com.google.android.material.textfield.TextInputLayout
+import com.dettoapp.detto.Models.Classroom
 
 class ClassroomAdapter(private val tName:String): RecyclerView.Adapter<ClassroomAdapter.ClassroomViewHolder>() {
 

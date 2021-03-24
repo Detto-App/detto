@@ -1,6 +1,6 @@
 package com.dettoapp.detto.APIs
 
-import com.dettoapp.detto.TeacherActivity.db.Classroom
+import com.dettoapp.detto.Models.Classroom
 import retrofit2.http.Body
 import retrofit2.http.Header
 import retrofit2.http.POST
