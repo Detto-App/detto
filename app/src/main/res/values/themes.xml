@@ -23,4 +23,14 @@
         <item name="colorOnSurface">@color/cus_black</item>
         <item name="editTextStyle">@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox</item>
     </style>
+
+    <style name="Detto.ClassLink.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.ClassLink.TextInputLayout</item>
+    </style>
+
+    <style name="ThemeOverlay.App.ClassLink.TextInputLayout" parent="">
+        <item name="colorPrimary">@color/cus_white</item>
+        <item name="colorOnSurface">@color/cus_white</item>
+        <item name="editTextStyle">@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox</item>
+    </style>
 </resources>
