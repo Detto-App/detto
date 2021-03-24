@@ -12,4 +12,5 @@
 
     <color name="cus_white">#FAFAFA</color>
     <color name="cus_black">#212121</color>
+    <color name="cus_light_white">#EEEEEE</color>
 </resources>
