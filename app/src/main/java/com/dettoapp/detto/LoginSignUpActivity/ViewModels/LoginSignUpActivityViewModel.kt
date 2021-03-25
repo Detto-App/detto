@@ -106,7 +106,7 @@ class LoginSignUpActivityViewModel(
                     sendStudentDataToServer(StudentModel(name, email, uid, usn))
 
 
-                _signUp.postValue((Resource.Success(data = 0, message = "Registered")))
+                _signUp.postValue((Resource.Success(data = 0, message = "")))
 
             } catch (e: Exception) {
                 _signUp.postValue(Resource.Error(message = "" + e.localizedMessage))

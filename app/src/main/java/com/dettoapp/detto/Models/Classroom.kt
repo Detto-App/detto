@@ -9,8 +9,8 @@ import androidx.room.PrimaryKey
 data class Classroom(
     @ColumnInfo(name="classroom_name")
     val classroomname: String,
-    @ColumnInfo(name="year")
-    val year: String,
+    @ColumnInfo(name="sem")
+    val sem: String,
     @ColumnInfo(name="section")
     val section: String,
     @PrimaryKey(autoGenerate = false)
@@ -18,6 +18,6 @@ data class Classroom(
     val classroomuid: String,
     @ColumnInfo(name="user_id")
     val userid: String,
-    @ColumnInfo(name="tname")
-    val tname:String
+    @ColumnInfo(name="teacher")
+    val teacher:TeacherModel
 )

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.dettoapp.detto.R
 import com.dettoapp.detto.Models.Classroom
+import com.dettoapp.detto.UtilityClasses.Utility
 
 class StudentClassroomAdapter: RecyclerView.Adapter<StudentClassroomAdapter.ClassroomViewHolder>() {
 
@@ -50,7 +51,7 @@ class StudentClassroomAdapter: RecyclerView.Adapter<StudentClassroomAdapter.Clas
             val cName = itemView.findViewById<TextView>(R.id.studentclassroomname)
             cName.text = classroom.classroomname
             val teacherName = itemView.findViewById<TextView>(R.id.teachername)
-            teacherName.text = classroom.tname
+            teacherName.text = classroom.teacher.name
 
 
         }

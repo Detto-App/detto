@@ -2,6 +2,7 @@ package com.dettoapp.detto.LoginSignUpActivity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.dettoapp.detto.LoginSignUpActivity.Fragments.LoginFrag
 import com.dettoapp.detto.LoginSignUpActivity.Fragments.SignUpFrag
@@ -28,6 +29,7 @@ class LoginSignUpActivity : BaseActivity() {
             Utility.navigateFragment(supportFragmentManager, R.id.loginFragContainer, LoginFrag(), "splash", addToBackStack = false)
         else {
             val role = viewModel.getRole()
+            Log.d("abcdd",""+role)
             val intent = if (role == Constants.TEACHER)
                 Intent(this, TeacherActivity::class.java)
             else
