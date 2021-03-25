@@ -1,9 +1,10 @@
 package com.dettoapp.detto.APIs
 
-import com.dettoapp.detto.Models.ReceivingUserModel
-import com.dettoapp.detto.TeacherActivity.db.Classroom
+import com.dettoapp.detto.Models.Classroom
 import retrofit2.Response
 import retrofit2.http.*
+
+
 
 interface CreateClassroomAPI {
     @POST("/createClassroom")

@@ -13,7 +13,7 @@ import com.dettoapp.detto.TeacherActivity.Dialog.GroupInfoDialog
 import com.dettoapp.detto.TeacherActivity.TeacherRepository
 import com.dettoapp.detto.TeacherActivity.ViewModels.TeacherHomeFragFactory
 import com.dettoapp.detto.TeacherActivity.ViewModels.TeacherHomeFragViewModel
-import com.dettoapp.detto.TeacherActivity.db.ClassroomDatabase
+import com.dettoapp.detto.Db.ClassroomDatabase
 import com.dettoapp.detto.UtilityClasses.BaseActivity
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
@@ -92,7 +92,7 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
     }
 
     override fun onClassCreated(classname: String, sem: String, sec: String) {
-        viewModel.classRoomData(classname, sem, sec)
+        viewModel.classRoomData(classname, sem, sec,getTeacherName())
     }
     fun getTeacherName():String{
         return viewModel.getTeacherName()

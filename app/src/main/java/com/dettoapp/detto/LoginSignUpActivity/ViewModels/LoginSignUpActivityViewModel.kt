@@ -117,7 +117,7 @@ class LoginSignUpActivityViewModel(
     private fun validate(email: String, password: String): Boolean {
         if (email.isEmpty() || password.isEmpty())
             throw Exception(Constants.ERROR_FILL_ALL_FIELDS)
-        else if (!email.matches(Regex("[a-zA-Z]+[._A-Za-z0-9]*[@][a-zA-Z]+[.][a-zA-Z]+")))
+        else if (!email.matches(Regex("[a-zA-Z]+[-._A-Za-z0-9]*[@][a-zA-Z]+[.a-zA-Z]+")))
             throw Exception("Invalid Email")
         return true
     }
@@ -134,7 +134,7 @@ class LoginSignUpActivityViewModel(
                 email.isEmpty() || password.isEmpty() || re_password.isEmpty() || name.isEmpty()
         if ((role == 0 && validation) || (role == 1 && (validation || usn.isEmpty())))
             throw Exception("Enter all fields")
-        else if (!email.matches(Regex("[a-zA-Z]+[._A-Za-z0-9]*[@][a-zA-Z]+[.][a-zA-Z]+")))
+        else if (!email.matches(Regex("[a-zA-Z]+[-._A-Za-z0-9]*[@][a-zA-Z]+[.a-zA-Z]+")))
             throw Exception("Invalid Email")
         else if (role == 1 && !usn.matches(Regex("[1][Dd][Ss][1-9][0-9][A-Za-z][A-Za-z][0-9][0-9][0-9]")))
             throw Exception("Invalid USN")

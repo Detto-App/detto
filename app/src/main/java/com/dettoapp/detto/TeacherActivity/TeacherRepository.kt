@@ -2,8 +2,8 @@ package com.dettoapp.detto.TeacherActivity
 
 import android.content.Context
 import android.util.Log
-import com.dettoapp.detto.TeacherActivity.db.Classroom
-import com.dettoapp.detto.TeacherActivity.db.ClassroomDAO
+import com.dettoapp.detto.Models.Classroom
+import com.dettoapp.detto.Db.ClassroomDAO
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 import com.dettoapp.detto.UtilityClasses.Utility

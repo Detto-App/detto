@@ -11,4 +11,6 @@ class StudentHomeFragViewModel(private val repository: StudentRepository, privat
     private val _student = MutableLiveData<Resource<String>>()
     val student: LiveData<Resource<String>>
         get() = _student
+    val allClassRooms = repository.getAllClassRooms()
+
 }

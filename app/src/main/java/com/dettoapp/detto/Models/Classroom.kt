@@ -1,4 +1,4 @@
-package com.dettoapp.detto.TeacherActivity.db
+package com.dettoapp.detto.Models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -17,5 +17,7 @@ data class Classroom(
     @ColumnInfo(name="classroom_uid")
     val classroomuid: String,
     @ColumnInfo(name="user_id")
-    val userid: String
+    val userid: String,
+    @ColumnInfo(name="tname")
+    val tname:String
 )
