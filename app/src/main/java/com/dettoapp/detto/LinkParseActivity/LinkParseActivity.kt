@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.dettoapp.detto.Db.ClassroomDAO
+import com.dettoapp.detto.Db.ClassroomDatabase
 import com.dettoapp.detto.LoginSignUpActivity.Fragments.LoginFrag
 import com.dettoapp.detto.LoginSignUpActivity.LoginSignUpActivity
 import com.dettoapp.detto.LoginSignUpActivity.LoginSignUpRepository
@@ -30,7 +32,8 @@ class LinkParseActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_link_parse)
-        val factory = LinkParserFactory(LinkParserRepository(), this.applicationContext)
+
+        val factory = LinkParserFactory(LinkParserRepository(ClassroomDatabase.getInstance(this).classroomDAO), this.applicationContext)
         viewModel = ViewModelProvider(this, factory).get(LinkParseViewModel::class.java)
 
 
