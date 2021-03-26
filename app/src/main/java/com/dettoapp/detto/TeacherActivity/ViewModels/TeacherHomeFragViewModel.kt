@@ -40,7 +40,6 @@ class TeacherHomeFragViewModel(
                     sem,
                     sec,
                     Utility.createID(),
-                    uid,
                     repository.getTeacherModel(context)
                 )
                 repository.insertClassroom(classroom)

@@ -16,8 +16,6 @@ data class Classroom(
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name="classroom_uid")
     val classroomuid: String,
-    @ColumnInfo(name="user_id")
-    val userid: String,
     @ColumnInfo(name="teacher")
     val teacher:TeacherModel
 )

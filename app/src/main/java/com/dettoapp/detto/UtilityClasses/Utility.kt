@@ -44,7 +44,7 @@ object Utility {
 
         val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
                 ?: throw Exception("Data Storage Exception")
-        return sharedPreference.getString(Constants.USER_TOKEN_KEY,"cc")!!
+        return "Bearer "+sharedPreference.getString(Constants.USER_TOKEN_KEY,"cc")!!
     }
     fun getTname(context: Context):String{
         val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)

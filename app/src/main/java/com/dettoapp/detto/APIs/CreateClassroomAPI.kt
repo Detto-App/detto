@@ -12,7 +12,4 @@ interface CreateClassroomAPI {
 
     @GET("/getClassroom/{id}")
     suspend fun getClassroom(@Path(value = "id")id:String, @Header("Authorization") token: String): Response<Classroom>
-
-    @GET("/getClassroom/{uid}")
-    suspend fun getC(@Path(value = "uid")uid:String,@Header("Authorization")token: String):Response<Classroom>
 }

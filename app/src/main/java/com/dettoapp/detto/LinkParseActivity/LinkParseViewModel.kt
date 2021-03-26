@@ -38,9 +38,7 @@ class LinkParseViewModel(private val repository: LinkParserRepository,private va
                 val type=getType(data)
                 compute(type,id)
 
-
-
-
+                _linkParse.postValue(Resource.Success(data=""))
             }catch (e:Exception){
                 _linkParse.postValue(Resource.Error(message = e.localizedMessage))
             }
@@ -62,17 +60,9 @@ class LinkParseViewModel(private val repository: LinkParserRepository,private va
         return ""
     }
     private suspend fun getClassroom(id:String){
-        val classroom = RetrofitInstance.createClassroomAPI.getC(id, Utility.gettoken(context))
-
-        if(classroom.isSuccessful)
-            Log.d("DDDD","dat "+Utility.gettoken(context))
-        else
-            Log.d("DDDD","dat"+classroom.errorBody()!!.string())
-
-//            ?: throw Exception("Please Check Your User Role,Account Not Found \n"+id)
-
-        //Log.d("DDDD","dat "+Utility.gettoken(context))
-//        repository.insertClassroom(classroom)
+        val classroom = RetrofitInstance.createClassroomAPI.getClassroom(id, Utility.gettoken(context)).body()?:
+            throw Exception("Unable to Find Classroom")
+       repository.insertClassroom(classroom)
     }
     private suspend fun compute(type:String,id:String){
         when(type){
