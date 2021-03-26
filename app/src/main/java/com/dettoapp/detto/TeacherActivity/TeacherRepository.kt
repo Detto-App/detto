@@ -14,7 +14,7 @@ import com.google.gson.Gson
 class TeacherRepository(private val dao: ClassroomDAO) {
     suspend fun createClassroom(context: Context,classroom: Classroom){
         Log.d("qwsa",Gson().toJson(classroom))
-        RetrofitInstance.createClassroomAPI.createClassroom(classroom,"Bearer "+Utility.gettoken(context))
+        RetrofitInstance.createClassroomAPI.createClassroom(classroom,Utility.gettoken(context))
     }
     fun getUid(context: Context):String{
         val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
