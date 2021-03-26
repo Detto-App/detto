@@ -65,6 +65,10 @@ class LinkParseActivity : BaseActivity() {
             when (it) {
                 is Resource.Success -> {
                     hideProgressBar()
+                    val intent:Intent=Intent(this,StudentActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                    finish()
                 }
                 is Resource.Error -> {
                     hideProgressBar()
