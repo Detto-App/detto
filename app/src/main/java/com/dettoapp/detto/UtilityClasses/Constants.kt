@@ -9,7 +9,7 @@ object Constants
     const val USER_NAME_KEY="name"
     const val TEACHER=0
     const val USER_ROLE_KEY="role"
-    const val STUDENT=0
+    const val STUDENT=1
     const val USER_ID="uid"
     const val USER_TOKEN_KEY="token"
 

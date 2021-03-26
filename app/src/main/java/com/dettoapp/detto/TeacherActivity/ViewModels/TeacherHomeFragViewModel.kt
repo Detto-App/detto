@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dettoapp.detto.Models.Classroom
+import com.dettoapp.detto.Models.TeacherModel
 import com.dettoapp.detto.TeacherActivity.TeacherRepository
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
@@ -40,7 +41,7 @@ class TeacherHomeFragViewModel(
                     sec,
                     Utility.createID(),
                     uid,
-                    tname
+                    repository.getTeacherModel(context)
                 )
                 repository.insertClassroom(classroom)
                 repository.createClassroom(context, classroom)
