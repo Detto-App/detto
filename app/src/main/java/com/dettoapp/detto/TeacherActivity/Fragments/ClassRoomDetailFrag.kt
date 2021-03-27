@@ -5,15 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.dettoapp.detto.R
+import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.TeacherActivity.DataBaseOperations
-import com.dettoapp.detto.TeacherActivity.db.Classroom
 import com.dettoapp.detto.databinding.FragmentClassRoomDetailBinding
-import com.dettoapp.detto.databinding.FragmentTeacherHomeBinding
 
 class ClassRoomDetailFrag(
-    private val classroom: Classroom,
-    private val dataBaseOperations: DataBaseOperations
+        private val classroom: Classroom,
+        private val dataBaseOperations: DataBaseOperations
 ) : Fragment(), ClassRoomDetailModal.ClassRoomDetailModalClickListener {
 
     private var _binding: FragmentClassRoomDetailBinding? = null

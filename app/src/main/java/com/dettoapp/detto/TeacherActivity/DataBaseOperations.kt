@@ -1,6 +1,7 @@
 package com.dettoapp.detto.TeacherActivity
 
-import com.dettoapp.detto.TeacherActivity.db.Classroom
+import com.dettoapp.detto.Models.Classroom
+
 
 interface DataBaseOperations
 {
