@@ -12,4 +12,7 @@ interface CreateClassroomAPI {
 
     @GET("/getClassroom/{id}")
     suspend fun getClassroom(@Path(value = "id")id:String, @Header("Authorization") token: String): Response<Classroom>
+
+    @GET("/deleteClassroom/{cid}")
+    suspend fun deleteClassroom(@Path(value = "cid")cid:String,@Header("Authorization")token: String)
 }

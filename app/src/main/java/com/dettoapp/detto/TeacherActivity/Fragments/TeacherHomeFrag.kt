@@ -90,6 +90,22 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
             }
         })
 
+        viewModel.classRoomDeletion.observe(viewLifecycleOwner, Observer {
+            when(it)
+            {
+                is Resource.Success -> {
+                    (requireActivity() as BaseActivity).hideProgressBar()
+                }
+                is Resource.Error -> {
+                    (requireActivity() as BaseActivity).hideProgressBar()
+                    (requireActivity() as BaseActivity).showErrorSnackMessage(it.message!!)
+                }
+                is Resource.Loading -> {
+                    (requireActivity() as BaseActivity).showProgressDialog(Constants.MESSAGE_LOADING)
+                }
+            }
+        })
+
         viewModel.allClassRooms.observe(viewLifecycleOwner, Observer {
             classroomAdapter.differ.submitList(it)
         })
@@ -108,7 +124,7 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
     }
 
     override fun onClassRoomDelete(classroom: Classroom) {
-
+        viewModel.deleteClassroom(classroom)
     }
 
 }

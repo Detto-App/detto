@@ -2,6 +2,7 @@ package com.dettoapp.detto.Db
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.dettoapp.detto.Models.Classroom
@@ -13,6 +14,9 @@ interface ClassroomDAO {
 
     @Query("SELECT * FROM classroom_table")
     fun getAllClassRooms() : LiveData<List<Classroom>>
+
+    @Delete
+    suspend fun deleteClassroom(classroom: Classroom)
 
     //should write update fun if needeed in future
 

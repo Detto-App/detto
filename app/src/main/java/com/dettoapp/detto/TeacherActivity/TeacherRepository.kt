@@ -43,6 +43,10 @@ class TeacherRepository(private val dao: ClassroomDAO) {
         val teacherModel=TeacherModel(name,email,uid)
         return teacherModel
 
+    }
 
+    suspend fun deleteClassroom(context: Context, classroom: Classroom) {
+        RetrofitInstance.createClassroomAPI.deleteClassroom(classroom.classroomuid,Utility.gettoken(context))
+        dao.deleteClassroom(classroom)
     }
 }
