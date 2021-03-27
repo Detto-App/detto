@@ -99,11 +99,12 @@ class LoginSignUpActivityViewModel(
                 Firebase.auth.currentUser?.sendEmailVerification()
 
                 val uid = Utility.createID()
+                val hashSet=HashSet<String>()
 
                 if (role == Constants.TEACHER)
                     sendTeacherDataToServer(TeacherModel(name, email, uid))
                 else
-                    sendStudentDataToServer(StudentModel(name, email, uid, usn))
+                    sendStudentDataToServer(StudentModel(name, email, uid, usn, hashSet))
 
 
                 _signUp.postValue((Resource.Success(data = 0, message = "")))

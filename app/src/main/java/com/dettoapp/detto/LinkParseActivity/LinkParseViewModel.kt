@@ -63,6 +63,8 @@ class LinkParseViewModel(private val repository: LinkParserRepository,private va
         val classroom = RetrofitInstance.createClassroomAPI.getClassroom(id, Utility.gettoken(context)).body()?:
             throw Exception("Unable to Find Classroom")
        repository.insertClassroom(classroom)
+       repository.getClassId(id)
+
     }
     private suspend fun compute(type:String,id:String){
         when(type){
