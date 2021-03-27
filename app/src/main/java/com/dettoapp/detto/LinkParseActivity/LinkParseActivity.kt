@@ -44,17 +44,20 @@ class LinkParseActivity : BaseActivity() {
                 }
                 is Resource.Error -> {
                     hideProgressBar()
-                    showAlertDialog("Alert",""+it.message)
+                    super.showAlertDialog("Alert",""+it.message)
                 }
                 is Resource.Loading -> {
                     showProgressDialog(Constants.MESSAGE_LOADING)
+                }
+                is Resource.Confirm->{
+                    showConfirmationDialog("Do you want to really join this classroom?",""+it.message)
                 }
                 else -> {
                 }
             }
         })
     }
-    private fun showAlertDialog(dialogTitle: String, dialogMessage: String) {
+    private fun showConfirmationDialog(dialogTitle: String, dialogMessage: String) {
 
         val builder = AlertDialog.Builder(this)
 
@@ -62,7 +65,11 @@ class LinkParseActivity : BaseActivity() {
         {
             setTitle(dialogTitle)
             setMessage(dialogMessage)
-            setPositiveButton("Ok") { _, _ ->
+            setPositiveButton("Yes") { _, _ ->
+                showToast("Succesfully joined the classroom")
+                viewModel.insertClassroom()            }
+            setNegativeButton("No"){_,_->
+                showToast("Request rejected")
                 finish()
             }
         }
@@ -71,4 +78,5 @@ class LinkParseActivity : BaseActivity() {
         }
         alertDialog.show()
     }
+
 }

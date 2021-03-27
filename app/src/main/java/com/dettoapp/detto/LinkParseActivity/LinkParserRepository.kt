@@ -19,7 +19,4 @@ class LinkParserRepository(private val dao: ClassroomDAO) {
 
 
     }
-    fun getClassId(id:String):String{
-        return id
-    }
 }

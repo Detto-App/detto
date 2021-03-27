@@ -9,4 +9,5 @@ sealed class Resource<T>(
     class Error<T>(data: T?=null,message: String) :Resource<T>(data,message)
     class Loading<T> :Resource<T>()
     class NavigateForward<T>(data: T?= null):Resource<T>(data)
+    class Confirm<T>(data:T?=null,message: String):Resource<T>(data,message)
 }

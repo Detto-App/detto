@@ -1,5 +1,6 @@
 package com.dettoapp.detto.UtilityClasses
 
+import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
@@ -55,6 +56,23 @@ open class BaseActivity : AppCompatActivity() {
     fun showToast(message :String)
     {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+    fun showAlertDialog(dialogTitle: String, dialogMessage: String) {
+
+        val builder = AlertDialog.Builder(this)
+
+        with(builder)
+        {
+            setTitle(dialogTitle)
+            setMessage(dialogMessage)
+            setPositiveButton("Ok") { _, _ ->
+                finish()
+            }
+        }
+        val alertDialog: AlertDialog = builder.create().apply {
+            setCancelable(false)
+        }
+        alertDialog.show()
     }
 
 }
