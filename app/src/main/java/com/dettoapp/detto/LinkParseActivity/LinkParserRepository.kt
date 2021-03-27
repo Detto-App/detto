@@ -6,6 +6,8 @@ import com.dettoapp.detto.Db.ClassroomDAO
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.Models.StudentModel
 import com.dettoapp.detto.UtilityClasses.Constants
+import com.dettoapp.detto.UtilityClasses.RetrofitInstance
+import com.dettoapp.detto.UtilityClasses.Utility
 
 class LinkParserRepository(private val dao: ClassroomDAO) {
 
@@ -16,7 +18,10 @@ class LinkParserRepository(private val dao: ClassroomDAO) {
     }
     suspend fun insertClassroom(classroom: Classroom){
         dao.insertClassroom(classroom)
+    }
 
+    suspend fun regStudentToClassroom(context: Context,studentModel: StudentModel,cid:String){
 
+        RetrofitInstance.createClassroomAPI.regStudentToClassroom(studentModel,cid, Utility.gettoken(context))
     }
 }

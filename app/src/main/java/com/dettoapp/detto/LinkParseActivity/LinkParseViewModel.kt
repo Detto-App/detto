@@ -48,6 +48,8 @@ class LinkParseViewModel(private val repository: LinkParserRepository,private va
         }
     }
     private fun getID(data:String) = data.substring(data.length-36)
+
+
     private fun getType(data:String):String{
         if(data.contains("cid/"))
             return Constants.TYPE_CID
@@ -61,10 +63,14 @@ class LinkParseViewModel(private val repository: LinkParserRepository,private va
        tempClassroom=classroom
         _linkParse.postValue(Resource.Confirm(message = classRoomDetails))
     }
+
+
      fun insertClassroom(){
          viewModelScope.launch(Dispatchers.IO) {
              try {
                  repository.insertClassroom(tempClassroom)
+                 val studentModel=Utility.getStudentModel(context)
+                 repository.regStudentToClassroom(context,studentModel,tempClassroom.classroomuid)
                  _linkParse.postValue(Resource.Success(""))
              }
              catch (e:Exception){
