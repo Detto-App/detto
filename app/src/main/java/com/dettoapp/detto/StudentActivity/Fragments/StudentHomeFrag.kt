@@ -5,17 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.dettoapp.detto.R
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.dettoapp.detto.Db.ClassroomDatabase
+import com.dettoapp.detto.StudentActivity.Adapters.StudentClassroomAdapter
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.StudentActivity.ViewModels.StudentHomeFragFactory
 import com.dettoapp.detto.StudentActivity.ViewModels.StudentHomeFragViewModel
-import com.dettoapp.detto.TeacherActivity.TeacherRepository
-import com.dettoapp.detto.TeacherActivity.ViewModels.TeacherHomeFragFactory
-import com.dettoapp.detto.TeacherActivity.ViewModels.TeacherHomeFragViewModel
-import com.dettoapp.detto.databinding.FragmentLoginBinding
+import com.dettoapp.detto.TeacherActivity.Adapters.ClassroomAdapter
 import com.dettoapp.detto.databinding.FragmentStudentHomeBinding
-import com.dettoapp.detto.databinding.FragmentTeacherHomeBinding
 
 
 class StudentHomeFrag : Fragment() {
@@ -23,10 +22,11 @@ class StudentHomeFrag : Fragment() {
     private var _binding:FragmentStudentHomeBinding?=null
     private val binding
         get() = _binding!!
+    private lateinit var studentClassroomAdapter: StudentClassroomAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val factory = StudentHomeFragFactory(StudentRepository(),requireContext().applicationContext)
+        val factory = StudentHomeFragFactory(StudentRepository(ClassroomDatabase.getInstance(requireContext()).classroomDAO),requireContext().applicationContext)
         viewModel = ViewModelProvider(requireActivity(),factory).get(StudentHomeFragViewModel::class.java)
     }
 
@@ -46,10 +46,17 @@ class StudentHomeFrag : Fragment() {
         liveDataObservers()
     }
     private fun initialise(){
-
+        studentClassroomAdapter = StudentClassroomAdapter()
+        binding.studentRecyclerView.apply {
+            adapter = studentClassroomAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
     }
 
     private fun liveDataObservers(){
+        viewModel.allClassRooms.observe(viewLifecycleOwner, Observer {
+            studentClassroomAdapter.differ.submitList(it)
+        })
 
     }
 
@@ -57,4 +64,5 @@ class StudentHomeFrag : Fragment() {
         super.onDestroy()
         _binding=null
     }
+
 }

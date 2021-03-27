@@ -48,7 +48,7 @@ class LoginSignUpRepository {
     fun getRole(context: Context): Int {
         val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
                 ?: throw Exception("Data Storage Exception")
-        return sharedPreference.getInt("role", -1)
+        return sharedPreference.getInt("role", -1)!!
 
     }
 

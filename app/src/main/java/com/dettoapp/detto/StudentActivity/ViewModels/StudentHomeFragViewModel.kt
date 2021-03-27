@@ -8,7 +8,8 @@ import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.UtilityClasses.Resource
 
 class StudentHomeFragViewModel(private val repository: StudentRepository, private val context: Context) : ViewModel() {
-    private val _student = MutableLiveData<Resource<String>>()
-    val student: LiveData<Resource<String>>
-        get() = _student
+
+    val allClassRooms = repository.getAllClassRooms()
+
+
 }

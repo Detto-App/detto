@@ -9,11 +9,11 @@ object Constants
     const val USER_NAME_KEY="name"
     const val TEACHER=0
     const val USER_ROLE_KEY="role"
-    const val STUDENT=0
+    const val STUDENT=1
     const val USER_ID="uid"
     const val USER_TOKEN_KEY="token"
 
-
+    const val TYPE_CID="cid"
     const val MESSAGE_LOADING ="Loading..."
     const val ERROR_FILL_ALL_FIELDS ="Enter All Fields"
 
