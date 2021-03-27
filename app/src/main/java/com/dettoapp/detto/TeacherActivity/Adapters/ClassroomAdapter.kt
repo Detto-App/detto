@@ -14,7 +14,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dettoapp.detto.R
 import com.dettoapp.detto.Models.Classroom
 
-class ClassroomAdapter(private val tName:String): RecyclerView.Adapter<ClassroomAdapter.ClassroomViewHolder>() {
+class ClassroomAdapter(private val tName:String,private val classRoomAdapterClickListener: ClassRoomAdapterClickListener): RecyclerView.Adapter<ClassroomAdapter.ClassroomViewHolder>() {
+
+    interface ClassRoomAdapterClickListener
+    {
+        fun onClassRoomCLicked(classroom: Classroom)
+    }
 
 
     private val diffCallBack = object : DiffUtil.ItemCallback<Classroom>()
@@ -62,6 +67,10 @@ class ClassroomAdapter(private val tName:String): RecyclerView.Adapter<Classroom
             link.setOnClickListener {
                 itemView.context.copyToClipboard("https://detto.uk.to/cid/"+classroom.classroomuid)
                 Toast.makeText(itemView.context, "Copied", Toast.LENGTH_SHORT).show()
+            }
+
+            itemView.setOnClickListener {
+                classRoomAdapterClickListener.onClassRoomCLicked(classroom)
             }
         }
     }
