@@ -50,6 +50,11 @@ class LoginSignUpActivityViewModel(
 
                         getUserDetailsFromServer(email, role)
 
+                        if(role==Constants.STUDENT)
+                        {
+                            repository.getStudentClassroomsAndStore(email,context)
+                        }
+
                         _login.postValue(Resource.Success(data = role, message = "Registered"))
                     } else {
                         _login.postValue(Resource.Error(message = "Please verify your email and login again"))

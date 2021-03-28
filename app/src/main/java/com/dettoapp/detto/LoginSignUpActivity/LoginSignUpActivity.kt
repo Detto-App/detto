@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
+import com.dettoapp.detto.Db.ClassroomDatabase
 import com.dettoapp.detto.LoginSignUpActivity.Fragments.LoginFrag
 import com.dettoapp.detto.LoginSignUpActivity.Fragments.SignUpFrag
 import com.dettoapp.detto.LoginSignUpActivity.ViewModels.LoginSignUpActivityViewModelFactory
@@ -22,14 +23,25 @@ class LoginSignUpActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login_sign_up)
-        val factory = LoginSignUpActivityViewModelFactory(LoginSignUpRepository(), this.applicationContext)
-        val viewModel = ViewModelProvider(this, factory).get(LoginSignUpActivityViewModel::class.java)
+        val factory = LoginSignUpActivityViewModelFactory(
+            LoginSignUpRepository(
+                ClassroomDatabase.getInstance(this).classroomDAO
+            ), this.applicationContext
+        )
+        val viewModel =
+            ViewModelProvider(this, factory).get(LoginSignUpActivityViewModel::class.java)
 
-        if (Firebase.auth.currentUser == null || Firebase.auth.uid == null || Firebase.auth.currentUser?.isEmailVerified==false)
-            Utility.navigateFragment(supportFragmentManager, R.id.loginFragContainer, LoginFrag(), "splash", addToBackStack = false)
+        if (Firebase.auth.currentUser == null || Firebase.auth.uid == null || Firebase.auth.currentUser?.isEmailVerified == false)
+            Utility.navigateFragment(
+                supportFragmentManager,
+                R.id.loginFragContainer,
+                LoginFrag(),
+                "splash",
+                addToBackStack = false
+            )
         else {
             val role = viewModel.getRole()
-            Log.d("abcdd",""+role)
+            Log.d("abcdd", "" + role)
             val intent = if (role == Constants.TEACHER)
                 Intent(this, TeacherActivity::class.java)
             else
@@ -37,14 +49,5 @@ class LoginSignUpActivity : BaseActivity() {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
-
-//        if((Firebase.auth.currentUser?.isEmailVerified == false))
-//
-//        else
-//        {
-//            startActivity(Intent(this,TeacherActivity::class.java).apply {
-//                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-//            })
-//        }
     }
 }

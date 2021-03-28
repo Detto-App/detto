@@ -3,15 +3,15 @@ package com.dettoapp.detto.LoginSignUpActivity
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import com.dettoapp.detto.Models.ReceivingUserModel
-import com.dettoapp.detto.Models.StudentModel
-import com.dettoapp.detto.Models.TeacherModel
-import com.dettoapp.detto.Models.Token
+import com.dettoapp.detto.Db.ClassroomDAO
+import com.dettoapp.detto.Models.*
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.RetrofitInstance
+import com.dettoapp.detto.UtilityClasses.Utility
+import retrofit2.Response
 
 @Suppress("SameParameterValue")
-class LoginSignUpRepository {
+class LoginSignUpRepository (private val dao: ClassroomDAO){
     suspend fun sendTeacherDataToServer(teacherModel: TeacherModel): Token {
         return RetrofitInstance.registrationAPI.sendTeacherData(teacherModel).body()!!
     }
@@ -66,6 +66,16 @@ class LoginSignUpRepository {
             apply()
         }
         Log.d("abcd", token.token)
+    }
+    suspend fun getStudentClassroomsAndStore(email:String, context:Context){
+        val classList = RetrofitInstance.createClassroomAPI.getStudentClassroom(email, Utility.gettoken(context)).body()?:
+            throw Exception("Unable to Find Classrooms for the user")
+
+        //dao.insertClassroom()
+
+    }
+    suspend fun insertClassroom(classroom: Classroom){
+        dao.insertClassroom(classroom)
     }
 }
 
