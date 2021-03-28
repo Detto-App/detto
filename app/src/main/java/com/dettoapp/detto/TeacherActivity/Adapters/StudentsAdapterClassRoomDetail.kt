@@ -45,7 +45,7 @@ class StudentsAdapterClassRoomDetail :
             val sUsn = itemView.findViewById<TextView>(R.id.studentUsnSV)
 
             sName.text = studentModel.name
-            sUsn.text = studentModel.name
+            sUsn.text = studentModel.susn.toUpperCase()
         }
     }
 }

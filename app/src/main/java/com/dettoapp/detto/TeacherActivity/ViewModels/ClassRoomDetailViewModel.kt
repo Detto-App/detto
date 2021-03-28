@@ -33,7 +33,17 @@ class ClassRoomDetailViewModel(
                     classroom.classroomuid,
                     Utility.gettoken(context)
                 )
-                _classroomStudents.postValue(Resource.Success(data = ArrayList(classroomStudents.studentList)))
+
+                val customComparator  = Comparator<StudentModel>{a,b ->
+                    val aUsn :Int =  a.susn.substring(a.susn.length-3).toInt()
+                    val bUsn :Int = b.susn.substring(a.susn.length-3).toInt()
+
+                    return@Comparator aUsn.compareTo(bUsn)
+                }
+                val list = ArrayList(classroomStudents.studentList)
+                list.sortWith(customComparator)
+
+                _classroomStudents.postValue(Resource.Success(data = list))
             } catch (e: Exception) {
                 _classroomStudents.postValue(Resource.Error(message = "" + e.localizedMessage))
             }

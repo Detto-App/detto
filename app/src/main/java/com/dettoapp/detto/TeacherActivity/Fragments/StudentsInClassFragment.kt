@@ -17,7 +17,7 @@ import com.dettoapp.detto.databinding.FragmentStudentsInClassBinding
 
 
 class StudentsInClassFragment(private val classroomDetailOperations: ClassroomDetailOperations) :
-    Fragment() {
+        Fragment() {
 
     private lateinit var viewModel: ClassRoomDetailViewModel
     private var _binding: FragmentStudentsInClassBinding? = null
@@ -32,8 +32,8 @@ class StudentsInClassFragment(private val classroomDetailOperations: ClassroomDe
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentStudentsInClassBinding.inflate(inflater, container, false)
@@ -53,15 +53,16 @@ class StudentsInClassFragment(private val classroomDetailOperations: ClassroomDe
         viewModel.classroomStudents.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
-                    binding.progressBarStudentSV.visibility= View.GONE
+                    binding.progressBarStudentSV.visibility = View.GONE
+                    binding.swipeToRefreshClassroomDetail.isRefreshing = false
                     studentsAdapter.differ.submitList(it.data)
                 }
                 is Resource.Error -> {
-                    (requireActivity() as BaseActivity).hideProgressBar()
+                    binding.progressBarStudentSV.visibility = View.GONE
+                    binding.swipeToRefreshClassroomDetail.isRefreshing = false
                     (requireActivity() as BaseActivity).showErrorSnackMessage(it.message!!)
                 }
                 is Resource.Loading -> {
-                    binding.progressBarStudentSV.visibility= View.GONE
                     (requireActivity() as BaseActivity).showProgressDialog(Constants.MESSAGE_LOADING)
                 }
                 else -> {
@@ -75,6 +76,11 @@ class StudentsInClassFragment(private val classroomDetailOperations: ClassroomDe
         binding.recyclerViewStudentsInClass.apply {
             adapter = studentsAdapter
             layoutManager = LinearLayoutManager(requireContext())
+        }
+
+        binding.swipeToRefreshClassroomDetail.setOnRefreshListener {
+            classroomDetailOperations.getClassroomStudents()
+            binding.swipeToRefreshClassroomDetail.isRefreshing = true
         }
 
         classroomDetailOperations.getClassroomStudents()
