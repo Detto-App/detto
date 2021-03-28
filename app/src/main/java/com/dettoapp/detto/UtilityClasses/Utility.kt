@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.transition.Fade
 import androidx.transition.Slide
+import com.dettoapp.detto.Models.StudentModel
 import java.util.*
 
 object Utility {
@@ -41,7 +42,6 @@ object Utility {
     fun createID()=UUID.randomUUID().toString()
 
     fun gettoken(context: Context):String{
-
         val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
                 ?: throw Exception("Data Storage Exception")
         return "Bearer "+sharedPreference.getString(Constants.USER_TOKEN_KEY,"cc")!!
@@ -50,6 +50,20 @@ object Utility {
         val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
             ?: throw Exception("Data Storage Exception")
         return sharedPreference.getString(Constants.USER_NAME_KEY,"cc")!!
-
+    }
+    fun getStudentModel(context: Context):StudentModel{
+        val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
+            ?: throw Exception("Data Storage Exception")
+        return StudentModel(
+            sharedPreference.getString(Constants.USER_NAME_KEY,"")!!,
+            sharedPreference.getString(Constants.USER_EMAIL_KEY,"")!!,
+            sharedPreference.getString(Constants.USER_ID,"")!!,
+            sharedPreference.getString(Constants.USER_USN_KEY,"")!!,
+            HashSet<String>())
+    }
+    fun getUID(context: Context):String{
+        val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
+            ?: throw Exception("Data Storage Exception")
+        return sharedPreference.getString(Constants.USER_ID,"")!!
     }
 }

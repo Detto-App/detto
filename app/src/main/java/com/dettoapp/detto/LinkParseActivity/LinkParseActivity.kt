@@ -67,7 +67,8 @@ class LinkParseActivity : BaseActivity() {
             setMessage(dialogMessage)
             setPositiveButton("Yes") { _, _ ->
                 showToast("Succesfully joined the classroom")
-                viewModel.insertClassroom()            }
+                viewModel.insertClassroom()
+            }
             setNegativeButton("No"){_,_->
                 showToast("Request rejected")
                 finish()
