@@ -3,15 +3,14 @@ package com.dettoapp.detto.LoginSignUpActivity
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import com.dettoapp.detto.Models.ReceivingUserModel
-import com.dettoapp.detto.Models.StudentModel
-import com.dettoapp.detto.Models.TeacherModel
-import com.dettoapp.detto.Models.Token
+import androidx.room.Dao
+import com.dettoapp.detto.Db.ClassroomDAO
+import com.dettoapp.detto.Models.*
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 
 @Suppress("SameParameterValue")
-class LoginSignUpRepository {
+class LoginSignUpRepository(private val dao:ClassroomDAO) {
     suspend fun sendTeacherDataToServer(teacherModel: TeacherModel): Token {
         return RetrofitInstance.registrationAPI.sendTeacherData(teacherModel).body()!!
     }
@@ -66,6 +65,9 @@ class LoginSignUpRepository {
             apply()
         }
         Log.d("abcd", token.token)
+    }
+    suspend fun insertClassrooms(classroomList:List<Classroom>){
+            dao.insertClassroom(classroomList)
     }
 }
 

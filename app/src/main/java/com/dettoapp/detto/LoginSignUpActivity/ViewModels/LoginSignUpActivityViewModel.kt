@@ -49,6 +49,10 @@ class LoginSignUpActivityViewModel(
                     if (Firebase.auth.currentUser?.isEmailVerified == true) {
 
                         getUserDetailsFromServer(email, role)
+                        if (role == 1) {
+                            getClassRoomDetailsFromServer(email, Utility.gettoken(context))
+                        }
+
 
                         _login.postValue(Resource.Success(data = role, message = "Registered"))
                     } else {
@@ -80,6 +84,13 @@ class LoginSignUpActivityViewModel(
         repository.storeUserAndTokenData(context, receivingUserModel)
     }
 
+    private suspend fun getClassRoomDetailsFromServer(email: String, token: String) {
+        val classroomList = RetrofitInstance.registrationAPI.getTeacherClassrooms(email, token).body()
+                ?: throw Exception("Null Pointer Exception")
+        repository.insertClassrooms(classroomList)
+
+    }
+
 
     fun signUpProcess(
             role: Int,
@@ -99,7 +110,7 @@ class LoginSignUpActivityViewModel(
                 Firebase.auth.currentUser?.sendEmailVerification()
 
                 val uid = Utility.createID()
-                val hashSet=HashSet<String>()
+                val hashSet = HashSet<String>()
 
                 if (role == Constants.TEACHER)
                     sendTeacherDataToServer(TeacherModel(name, email, uid))
@@ -144,5 +155,6 @@ class LoginSignUpActivityViewModel(
     }
 
     fun getRole(): Int = repository.getRole(context)
+
 
 }
