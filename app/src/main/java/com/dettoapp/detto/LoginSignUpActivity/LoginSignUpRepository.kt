@@ -2,16 +2,15 @@ package com.dettoapp.detto.LoginSignUpActivity
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import com.dettoapp.detto.Db.ClassroomDAO
 import com.dettoapp.detto.Models.*
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 import com.dettoapp.detto.UtilityClasses.Utility
-import retrofit2.Response
+
 
 @Suppress("SameParameterValue")
-class LoginSignUpRepository (private val dao: ClassroomDAO){
+class LoginSignUpRepository(private val dao:ClassroomDAO) {
     suspend fun sendTeacherDataToServer(teacherModel: TeacherModel): Token {
         return RetrofitInstance.registrationAPI.sendTeacherData(teacherModel).body()!!
     }
@@ -19,8 +18,6 @@ class LoginSignUpRepository (private val dao: ClassroomDAO){
     suspend fun sendStudentDataToServer(studentModel: StudentModel): Token {
         return RetrofitInstance.registrationAPI.sendStudentData(studentModel).body()!!
     }
-
-
 
     private fun storeDataInSharedPreferences(context: Context, email: String, name: String, role: Int, userID: String, usn: String? = null) {
         val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
@@ -52,7 +49,6 @@ class LoginSignUpRepository (private val dao: ClassroomDAO){
 
     }
 
-
     private fun insertIfNotNull(sharedPreference: SharedPreferences.Editor, key: String, value: String?) {
         if (value != null)
             sharedPreference.putString(key, value)
@@ -65,17 +61,18 @@ class LoginSignUpRepository (private val dao: ClassroomDAO){
             putString(Constants.USER_TOKEN_KEY, token.token)
             apply()
         }
-        Log.d("abcd", token.token)
     }
     suspend fun getStudentClassroomsAndStore(email:String, context:Context){
         val classList = RetrofitInstance.createClassroomAPI.getStudentClassroom(email, Utility.gettoken(context)).body()?:
             throw Exception("Unable to Find Classrooms for the user")
-
-        //dao.insertClassroom()
-
+        dao.insertClassroom(classList)
     }
-    suspend fun insertClassroom(classroom: Classroom){
-        dao.insertClassroom(classroom)
+
+    suspend fun getTeacherClassroomsDetailsAndStore(email: String, token: String) {
+        val classroomList = RetrofitInstance.registrationAPI.getTeacherClassrooms(email, token).body()
+            ?: throw Exception("Null Pointer Exception")
+        dao.insertClassroom(classroomList)
+
     }
 }
 

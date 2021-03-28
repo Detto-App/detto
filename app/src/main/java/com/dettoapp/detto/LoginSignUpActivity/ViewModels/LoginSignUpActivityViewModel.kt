@@ -49,8 +49,10 @@ class LoginSignUpActivityViewModel(
                     if (Firebase.auth.currentUser?.isEmailVerified == true) {
 
                         getUserDetailsFromServer(email, role)
-
-                        if(role==Constants.STUDENT)
+                        if (role == Constants.TEACHER) {
+                            repository.getTeacherClassroomsDetailsAndStore(email,Utility.gettoken(context))
+                        }
+                        else if(role==Constants.STUDENT)
                         {
                             repository.getStudentClassroomsAndStore(email,context)
                         }
@@ -86,6 +88,7 @@ class LoginSignUpActivityViewModel(
     }
 
 
+
     fun signUpProcess(
             role: Int,
             name: String,
@@ -104,7 +107,7 @@ class LoginSignUpActivityViewModel(
                 Firebase.auth.currentUser?.sendEmailVerification()
 
                 val uid = Utility.createID()
-                val hashSet=HashSet<String>()
+                val hashSet = HashSet<String>()
 
                 if (role == Constants.TEACHER)
                     sendTeacherDataToServer(TeacherModel(name, email, uid))
@@ -149,5 +152,6 @@ class LoginSignUpActivityViewModel(
     }
 
     fun getRole(): Int = repository.getRole(context)
+
 
 }

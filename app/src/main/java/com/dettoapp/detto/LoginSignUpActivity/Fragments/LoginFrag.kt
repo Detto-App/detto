@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.dettoapp.detto.Db.ClassroomDAO
 import com.dettoapp.detto.Db.ClassroomDatabase
 import com.dettoapp.detto.LoginSignUpActivity.LoginSignUpRepository
 import com.dettoapp.detto.LoginSignUpActivity.ViewModels.LoginSignUpActivityViewModelFactory
@@ -33,8 +34,7 @@ class LoginFrag : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val factory = LoginSignUpActivityViewModelFactory(LoginSignUpRepository(ClassroomDatabase.
-        getInstance(requireContext()).classroomDAO), requireContext().applicationContext)
+        val factory = LoginSignUpActivityViewModelFactory(LoginSignUpRepository(ClassroomDatabase.getInstance(requireContext()).classroomDAO), requireContext().applicationContext)
         viewModel = ViewModelProvider(requireActivity(), factory).get(LoginSignUpActivityViewModel::class.java)
     }
 
