@@ -29,4 +29,10 @@ interface CreateClassroomAPI {
     @GET("/getStudentClassroom/{semail}")
     suspend fun getStudentClassroom(@Path(value = "semail")semail:String,
                                     @Header("Authorization")token: String): Response<ArrayList<Classroom>>
+
+    @GET("/getClassStudents/{classID}")
+    suspend fun getClassroomStudents(
+        @Path(value = "classID") classID: String,
+        @Header("Authorization") token: String
+    ):Response<ClassRoomStudents>
 }
