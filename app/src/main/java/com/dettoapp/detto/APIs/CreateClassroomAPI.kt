@@ -24,16 +24,9 @@ interface CreateClassroomAPI {
     )
 
     @POST("/regStudentToClassroom/{cid}")
-    suspend fun regStudentToClassroom(
-        @Body studentClassroom: StudentModel,
-        @Path(value = "cid") cid: String,
-        @Header("Authorization") token: String
-    )
+    suspend fun regStudentToClassroom(@Body studentClassroom:StudentModel,@Path(value = "cid")cid:String, @Header("Authorization") token: String)
 
-
-    @GET("/getClassStudents/{classID}")
-    suspend fun getClassroomStudents(
-        @Path(value = "classID") classID: String,
-        @Header("Authorization") token: String
-    ):Response<ClassRoomStudents>
+    @GET("/getStudentClassroom/{semail}")
+    suspend fun getStudentClassroom(@Path(value = "semail")semail:String,
+                                    @Header("Authorization")token: String): Response<ArrayList<Classroom>>
 }
