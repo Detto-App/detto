@@ -93,4 +93,8 @@ class ClassRoomDetailFrag(
     override fun getClassroomStudents() {
         viewModel.getClassStudents(classroom)
     }
+
+    override fun getViewModel(): ClassRoomDetailViewModel {
+        return viewModel
+    }
 }

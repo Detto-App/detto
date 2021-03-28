@@ -28,8 +28,7 @@ class StudentsInClassFragment(private val classroomDetailOperations: ClassroomDe
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel =
-            ViewModelProvider(requireParentFragment()).get(ClassRoomDetailViewModel::class.java)
+        viewModel = classroomDetailOperations.getViewModel()
     }
 
     override fun onCreateView(
@@ -54,7 +53,7 @@ class StudentsInClassFragment(private val classroomDetailOperations: ClassroomDe
         viewModel.classroomStudents.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
-                    (requireActivity() as BaseActivity).hideProgressBar()
+                    binding.progressBarStudentSV.visibility= View.GONE
                     studentsAdapter.differ.submitList(it.data)
                 }
                 is Resource.Error -> {
@@ -62,6 +61,7 @@ class StudentsInClassFragment(private val classroomDetailOperations: ClassroomDe
                     (requireActivity() as BaseActivity).showErrorSnackMessage(it.message!!)
                 }
                 is Resource.Loading -> {
+                    binding.progressBarStudentSV.visibility= View.GONE
                     (requireActivity() as BaseActivity).showProgressDialog(Constants.MESSAGE_LOADING)
                 }
                 else -> {

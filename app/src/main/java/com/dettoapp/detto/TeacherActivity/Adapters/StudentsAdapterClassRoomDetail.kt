@@ -3,6 +3,7 @@ package com.dettoapp.detto.TeacherActivity.Adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -40,7 +41,11 @@ class StudentsAdapterClassRoomDetail :
 
     inner class StudentsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(studentModel: StudentModel) {
+            val sName = itemView.findViewById<TextView>(R.id.studentNameSV)
+            val sUsn = itemView.findViewById<TextView>(R.id.studentUsnSV)
 
+            sName.text = studentModel.name
+            sUsn.text = studentModel.name
         }
     }
 }

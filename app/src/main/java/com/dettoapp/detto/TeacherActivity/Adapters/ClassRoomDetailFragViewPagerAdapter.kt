@@ -17,12 +17,11 @@ class ClassRoomDetailFragViewPagerAdapter(
     override fun getItemCount() = NUM_OF_PAGES
 
     override fun createFragment(position: Int): Fragment {
-
         return when (position) {
-            1 -> OverViewFragment()
-            2 -> StudentsInClassFragment(classroomDetailOperations)
+            0 -> OverViewFragment()
+            1 -> StudentsInClassFragment(classroomDetailOperations)
             else -> {
-                OverViewFragment()
+                StudentsInClassFragment(classroomDetailOperations)
             }
         }
     }

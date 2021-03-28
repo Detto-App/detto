@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="@color/cus_light_white">
 
     <ImageView
         android:id="@+id/imageView"
@@ -13,7 +15,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/studentUsnSV"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/studentNameSV"
-        app:srcCompat="@drawable/ic_baseline_people_24" />
+        app:srcCompat="@drawable/ic_baseline_person_24" />
 
     <TextView
         android:id="@+id/studentNameSV"
