@@ -17,4 +17,5 @@ object Constants
     const val MESSAGE_LOADING ="Loading..."
     const val ERROR_FILL_ALL_FIELDS ="Enter All Fields"
 
+    val classDetailFragTabNames = arrayOf("Overview","Students")
 }
