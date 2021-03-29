@@ -6,6 +6,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.dettoapp.detto.R
 import com.dettoapp.detto.Models.Classroom
+import java.util.*
 
 class ClassroomAdapter(private val tName:String,private val classRoomAdapterClickListener: ClassRoomAdapterClickListener): RecyclerView.Adapter<ClassroomAdapter.ClassroomViewHolder>() {
 
@@ -59,11 +61,11 @@ class ClassroomAdapter(private val tName:String,private val classRoomAdapterClic
         fun bind(classroom: Classroom)
         {
             val cName = itemView.findViewById<TextView>(R.id.classroomnameview)
-            cName.text = classroom.classroomname
+            cName.text = classroom.classroomname.capitalize(Locale.ROOT)
             val teacherName=itemView.findViewById<TextView>(R.id.teachernameview)
-            teacherName.text=tName
+            teacherName.text=tName.capitalize(Locale.ROOT)
 
-            val link = itemView.findViewById<TextView>(R.id.classLink)
+            val link = itemView.findViewById<ImageView>(R.id.classLink)
             link.setOnClickListener {
                 itemView.context.copyToClipboard("https://detto.uk.to/cid/"+classroom.classroomuid)
                 Toast.makeText(itemView.context, "Copied", Toast.LENGTH_SHORT).show()

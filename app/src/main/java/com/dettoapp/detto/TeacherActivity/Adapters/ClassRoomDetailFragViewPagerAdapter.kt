@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.dettoapp.detto.TeacherActivity.Fragments.ClassroomDetailOperations
-import com.dettoapp.detto.TeacherActivity.Fragments.OverViewFragment
+import com.dettoapp.detto.TeacherActivity.Fragments.ClassroomProjectsFragment
 import com.dettoapp.detto.TeacherActivity.Fragments.StudentsInClassFragment
 
 class ClassRoomDetailFragViewPagerAdapter(
@@ -18,7 +18,7 @@ class ClassRoomDetailFragViewPagerAdapter(
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> OverViewFragment()
+            0 -> ClassroomProjectsFragment()
             1 -> StudentsInClassFragment(classroomDetailOperations)
             else -> {
                 StudentsInClassFragment(classroomDetailOperations)
