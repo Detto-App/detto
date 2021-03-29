@@ -5,16 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.dettoapp.detto.LoginSignUpActivity.Fragments.SignUpFrag
 import com.dettoapp.detto.R
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.UtilityClasses.Utility
 
-class StudentClassroomAdapter: RecyclerView.Adapter<StudentClassroomAdapter.ClassroomViewHolder>() {
+class StudentClassroomAdapter(private val adapterAndFrag:StudentClassroomAdapter.AdapterAndFrag): RecyclerView.Adapter<StudentClassroomAdapter.ClassroomViewHolder>() {
 
 
+    interface AdapterAndFrag{
+        fun communicate()
+    }
     private val diffCallBack = object : DiffUtil.ItemCallback<Classroom>() {
         override fun areItemsTheSame(oldItem: Classroom, newItem: Classroom): Boolean {
             return oldItem.classroomuid == newItem.classroomuid
@@ -23,7 +28,6 @@ class StudentClassroomAdapter: RecyclerView.Adapter<StudentClassroomAdapter.Clas
         override fun areContentsTheSame(oldItem: Classroom, newItem: Classroom): Boolean {
             return oldItem == newItem
         }
-
     }
 
     val differ = AsyncListDiffer(this, diffCallBack)
@@ -47,13 +51,17 @@ class StudentClassroomAdapter: RecyclerView.Adapter<StudentClassroomAdapter.Clas
 
     inner class ClassroomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+
         fun bind(classroom: Classroom) {
             val cName = itemView.findViewById<TextView>(R.id.studentclassroomname)
             cName.text = classroom.classroomname
             val teacherName = itemView.findViewById<TextView>(R.id.teachername)
             teacherName.text = classroom.teacher.name
 
-
+            itemView.setOnClickListener{
+                adapterAndFrag.communicate()
+                Toast.makeText(itemView.context,"vikas ainapur", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
