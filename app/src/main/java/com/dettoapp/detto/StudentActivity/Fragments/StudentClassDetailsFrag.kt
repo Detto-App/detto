@@ -11,7 +11,7 @@ import com.dettoapp.detto.databinding.FragmentLoginBinding
 import com.dettoapp.detto.databinding.FragmentStudentClassDetailsBinding
 
 
-class StudentClassDetailsFrag : Fragment() {
+class StudentClassDetailsFrag : Fragment(),ProjectDetailsDialog.ProjectDialogClickListener {
     private var _binding: FragmentStudentClassDetailsBinding? = null
     private val binding
         get() = _binding!!
@@ -32,11 +32,14 @@ class StudentClassDetailsFrag : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding!!.stuClassDetailsbutton.setOnClickListener {
-            val dialog=ProjectDetailsDialog()
+        binding.stuClassDetailsbutton.setOnClickListener {
+            val dialog=ProjectDetailsDialog(this)
             dialog.show(requireActivity().supportFragmentManager,"jdslfj")
         }
         view.setOnClickListener {  }
+    }
+
+    override fun onProjectCreate(title: String, description: String, usnMap: HashMap<Int, String>) {
 
     }
 }
