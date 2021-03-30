@@ -7,7 +7,25 @@
     android:background="@color/cus_light_white"
     tools:context=".TeacherActivity.Fragments.ClassRoomDetailFrag">
 
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayoutClassroomDetailFrag"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"/>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPagerClassroomDetailFrag"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabLayoutClassroomDetailFrag" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/cus_white"
@@ -53,4 +71,5 @@
             app:layout_constraintStart_toStartOf="@+id/classRoomDetailName"
             app:layout_constraintTop_toBottomOf="@+id/classRoomDetailName" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

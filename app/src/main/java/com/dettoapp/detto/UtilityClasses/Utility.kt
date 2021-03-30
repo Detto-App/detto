@@ -66,4 +66,5 @@ object Utility {
             ?: throw Exception("Data Storage Exception")
         return sharedPreference.getString(Constants.USER_ID,"")!!
     }
+
 }

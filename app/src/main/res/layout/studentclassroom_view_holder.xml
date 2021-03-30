@@ -14,7 +14,7 @@
         android:background="#2196f3">
 
         <TextView
-            android:id="@+id/studentclassroomname"
+            android:id="@+id/tcdpv_project_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ClassroomName"
@@ -35,8 +35,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.913"
-            app:layout_constraintStart_toStartOf="@+id/studentclassroomname"
-            app:layout_constraintTop_toBottomOf="@+id/studentclassroomname"
+            app:layout_constraintStart_toStartOf="@+id/tcdpv_project_name"
+            app:layout_constraintTop_toBottomOf="@+id/tcdpv_project_name"
             app:layout_constraintVertical_bias="0.949" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

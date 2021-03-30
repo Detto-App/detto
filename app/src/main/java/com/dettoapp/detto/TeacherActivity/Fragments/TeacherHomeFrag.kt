@@ -14,8 +14,8 @@ import com.dettoapp.detto.R
 import com.dettoapp.detto.TeacherActivity.Adapters.ClassroomAdapter
 import com.dettoapp.detto.TeacherActivity.DataBaseOperations
 import com.dettoapp.detto.TeacherActivity.Dialog.GroupInfoDialog
-import com.dettoapp.detto.TeacherActivity.TeacherRepository
-import com.dettoapp.detto.TeacherActivity.ViewModels.TeacherHomeFragFactory
+import com.dettoapp.detto.TeacherActivity.Repositories.TeacherRepository
+import com.dettoapp.detto.TeacherActivity.ViewModels.TeacherHomeFragViewModelFactory
 import com.dettoapp.detto.TeacherActivity.ViewModels.TeacherHomeFragViewModel
 import com.dettoapp.detto.Db.ClassroomDatabase
 import com.dettoapp.detto.Models.Classroom
@@ -37,7 +37,7 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val factory = TeacherHomeFragFactory(TeacherRepository(ClassroomDatabase.getInstance(requireContext()).classroomDAO),requireContext().applicationContext)
+        val factory = TeacherHomeFragViewModelFactory(TeacherRepository(ClassroomDatabase.getInstance(requireContext()).classroomDAO),requireContext().applicationContext)
         viewModel = ViewModelProvider(requireActivity(),factory).get(TeacherHomeFragViewModel::class.java)
 
     }
@@ -135,4 +135,8 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
         viewModel.deleteClassroom(classroom)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }

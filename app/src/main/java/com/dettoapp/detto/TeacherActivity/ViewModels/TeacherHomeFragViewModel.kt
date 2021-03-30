@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dettoapp.detto.Models.Classroom
-import com.dettoapp.detto.TeacherActivity.TeacherRepository
+import com.dettoapp.detto.TeacherActivity.Repositories.TeacherRepository
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
 import kotlinx.coroutines.Dispatchers
@@ -16,8 +16,8 @@ import kotlin.Exception
 
 @SuppressLint("StaticFieldLeak")
 class TeacherHomeFragViewModel(
-        private val repository: TeacherRepository,
-        private val context: Context
+    private val repository: TeacherRepository,
+    private val context: Context
 ) : ViewModel() {
 
     private val _classRoomCreation = MutableLiveData<Resource<String>>()

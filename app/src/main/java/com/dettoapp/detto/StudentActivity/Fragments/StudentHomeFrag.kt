@@ -9,14 +9,16 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dettoapp.detto.Db.ClassroomDatabase
+import com.dettoapp.detto.R
 import com.dettoapp.detto.StudentActivity.Adapters.StudentClassroomAdapter
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.StudentActivity.ViewModels.StudentHomeFragFactory
 import com.dettoapp.detto.StudentActivity.ViewModels.StudentHomeFragViewModel
+import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentStudentHomeBinding
 
 
-class StudentHomeFrag : Fragment() {
+class StudentHomeFrag : Fragment() , StudentClassroomAdapter.AdapterAndFrag {
     private lateinit var viewModel: StudentHomeFragViewModel
     private var _binding:FragmentStudentHomeBinding?=null
     private val binding
@@ -45,7 +47,7 @@ class StudentHomeFrag : Fragment() {
         liveDataObservers()
     }
     private fun initialise(){
-        studentClassroomAdapter = StudentClassroomAdapter()
+        studentClassroomAdapter = StudentClassroomAdapter(this)
         binding.studentRecyclerView.apply {
             adapter = studentClassroomAdapter
             layoutManager = LinearLayoutManager(requireContext())
@@ -63,5 +65,12 @@ class StudentHomeFrag : Fragment() {
         super.onDestroy()
         _binding=null
     }
+
+    override fun communicate() {
+        Utility.navigateFragment(requireActivity().supportFragmentManager, R.id.StudentFragContainer,
+            StudentClassDetailsFrag(),"abcd",true)
+
+    }
+
 
 }
