@@ -55,16 +55,12 @@ class SignUpFrag : Fragment() {
 
     private fun initialise() {
         val roles = resources.getStringArray(R.array.Roles)
-        binding.spinnerId.apply {
-            adapter = ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_spinner_item, roles
-            ).apply {
-                setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
-            }
-        }
+        val roleSelected=binding.role.text.toString()
+        val roleIndex=roles.indexOf(roleSelected)
+        val  adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, roles)
+        binding.role.setAdapter(adapter)
 
-        binding.spinnerId.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.role.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 if (p2 == 1) {
                     binding.etUsn.visibility = View.VISIBLE
@@ -78,7 +74,7 @@ class SignUpFrag : Fragment() {
 
         binding.btnSignUpFrag.setOnClickListener {
             viewmodel.signUpProcess(
-                    binding.spinnerId.selectedItemPosition,
+                    roleIndex,
                     binding.etname2.editText?.text.toString(),
                     binding.etUsn.editText?.text.toString().toLowerCase(),
                     binding.etEmail.editText?.text.toString().toLowerCase(),

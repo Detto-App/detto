@@ -1,10 +1,12 @@
 package com.dettoapp.detto.TeacherActivity.Fragments
 
+import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,6 +31,7 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
     private val binding
         get() = _binding!!
     private lateinit var classroomAdapter: ClassroomAdapter
+    private lateinit var groupInfoDialog :Dialog
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +61,7 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
 
     private fun initialise() {
         binding.btnfab.setOnClickListener {
-            val groupInfoDialog = GroupInfoDialog(requireContext(), this)
+            groupInfoDialog = GroupInfoDialog(requireContext(), this)
             groupInfoDialog.show()
 
         }
@@ -74,11 +77,13 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
             when (it) {
                 is Resource.Success -> {
                     (requireActivity() as BaseActivity).hideProgressBar()
+                    groupInfoDialog.dismiss()
                     (requireActivity() as BaseActivity).showToast(it.data!!)
                 }
                 is Resource.Error -> {
                     (requireActivity() as BaseActivity).hideProgressBar()
-                    (requireActivity() as BaseActivity).showErrorSnackMessage(it.message!!)
+//                    (requireActivity() as BaseActivity).showErrorSnackMessage(it.message!!,requireContext().applicationContext)
+                        Toast.makeText(requireContext().applicationContext,"Please Select All Fields",Toast.LENGTH_LONG).show()
                 }
                 is Resource.Loading -> {
                     (requireActivity() as BaseActivity).showProgressDialog(Constants.MESSAGE_LOADING)
@@ -111,13 +116,16 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
         })
     }
 
-    override fun onClassCreated(classname: String, sem: String, sec: String) {
-        viewModel.classRoomData(classname, sem, sec,getTeacherName())
+    override fun onClassCreated(classname: String, sem: String, sec: String,teamSize:String,projectType:String) {
+            viewModel.classRoomData(classname, sem, sec,getTeacherName(),teamSize,projectType)
     }
 
     private  fun getTeacherName():String{
         return viewModel.getTeacherName()
     }
+
+
+
 
     override fun onClassRoomCLicked(classroom: Classroom) {
         Utility.navigateFragment(requireActivity().supportFragmentManager, R.id.teacherHomeContainer,ClassRoomDetailFrag(classroom,this),"detailClassRoom")

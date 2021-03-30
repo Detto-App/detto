@@ -2,6 +2,7 @@ package com.dettoapp.detto.LoginSignUpActivity
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import com.dettoapp.detto.Db.ClassroomDAO
 import com.dettoapp.detto.Models.*
 import com.dettoapp.detto.UtilityClasses.Constants
@@ -71,6 +72,8 @@ class LoginSignUpRepository(private val dao:ClassroomDAO) {
     suspend fun getTeacherClassroomsDetailsAndStore(email: String, token: String) {
         val classroomList = RetrofitInstance.registrationAPI.getTeacherClassrooms(email, token).body()
             ?: throw Exception("Null Pointer Exception")
+
+        Log.d("DDDD",classroomList.toString())
         dao.insertClassroom(classroomList)
 
     }

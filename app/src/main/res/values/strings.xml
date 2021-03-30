@@ -25,4 +25,17 @@
         <item>D</item>
 
     </string-array>
+
+    <string-array name="teamSize">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <string-array name="project_type">
+        <item>Mini Project</item>
+        <item>Final Year Project</item>
+    </string-array>
 </resources>
