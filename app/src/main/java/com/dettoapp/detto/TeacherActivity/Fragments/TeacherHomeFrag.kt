@@ -56,14 +56,12 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
         super.onViewCreated(view, savedInstanceState)
         initialise()
         liveDataObservers()
-
     }
 
     private fun initialise() {
         binding.btnfab.setOnClickListener {
             groupInfoDialog = GroupInfoDialog(requireContext(), this)
             groupInfoDialog.show()
-
         }
         classroomAdapter = ClassroomAdapter(getTeacherName(),this)
         binding.teacherRecyclerView.apply {

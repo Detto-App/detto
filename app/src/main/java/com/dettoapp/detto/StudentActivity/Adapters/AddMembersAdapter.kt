@@ -66,6 +66,7 @@ class AddMembersAdapter : RecyclerView.Adapter<AddMembersAdapter.MemberViewHolde
         if (memberHasSet.size > MAX_TEAM_SIZE - 1)
             return
         memberHasSet.add("" + (memberHasSet.size + 1))
+        valueHashMap[(memberHasSet.size-1)] = ""
         differ.submitList(ArrayList(memberHasSet))
     }
 
