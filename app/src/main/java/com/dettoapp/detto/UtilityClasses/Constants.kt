@@ -4,7 +4,9 @@ object Constants
 {
     const val BASE_DETTO_URL ="https://detto.uk.to/"
     const val USER_EMAIL_KEY="uEmail"
+
     const val USER_DETAILS_FILE="uFile"
+    const val PROJECT_CLASS_FILE ="pcFile"
     const val USER_USN_KEY="usn"
     const val USER_NAME_KEY="name"
     const val TEACHER=0
@@ -18,4 +20,7 @@ object Constants
     const val ERROR_FILL_ALL_FIELDS ="Enter All Fields"
 
     val classDetailFragTabNames = arrayOf("Projects","Students")
+
+    const val PROJECT_CREATED = 0
+    const val PROJECT_NOT_CREATED =-1
 }

@@ -12,11 +12,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dettoapp.detto.R
 import com.dettoapp.detto.Models.Classroom
 
-class StudentClassroomAdapter(private val adapterAndFrag:StudentClassroomAdapter.AdapterAndFrag): RecyclerView.Adapter<StudentClassroomAdapter.ClassroomViewHolder>() {
+class StudentClassroomAdapter(private val studentClassroomAdapterCLickListener:StudentClassroomAdapter.StudentClassroomAdapterCLickListener): RecyclerView.Adapter<StudentClassroomAdapter.ClassroomViewHolder>() {
 
 
-    interface AdapterAndFrag{
-        fun communicate()
+    interface StudentClassroomAdapterCLickListener{
+        fun onViewHolderClick(classroom: Classroom)
     }
     private val diffCallBack = object : DiffUtil.ItemCallback<Classroom>() {
         override fun areItemsTheSame(oldItem: Classroom, newItem: Classroom): Boolean {
@@ -57,7 +57,7 @@ class StudentClassroomAdapter(private val adapterAndFrag:StudentClassroomAdapter
             teacherName.text = classroom.teacher.name
 
             itemView.setOnClickListener{
-                adapterAndFrag.communicate()
+                studentClassroomAdapterCLickListener.onViewHolderClick(classroom)
                 Toast.makeText(itemView.context,"vikas ainapur", Toast.LENGTH_SHORT).show()
             }
         }
