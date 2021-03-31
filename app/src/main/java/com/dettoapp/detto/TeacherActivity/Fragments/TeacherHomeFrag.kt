@@ -25,26 +25,26 @@ import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentTeacherHomeBinding
 
-class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListener,ClassroomAdapter.ClassRoomAdapterClickListener,DataBaseOperations {
+class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListener, ClassroomAdapter.ClassRoomAdapterClickListener, DataBaseOperations {
     private lateinit var viewModel: TeacherHomeFragViewModel
     private var _binding: FragmentTeacherHomeBinding? = null
     private val binding
         get() = _binding!!
     private lateinit var classroomAdapter: ClassroomAdapter
-    private lateinit var groupInfoDialog :Dialog
+    private lateinit var groupInfoDialog: GroupInfoDialog
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val factory = TeacherHomeFragViewModelFactory(TeacherRepository(ClassroomDatabase.getInstance(requireContext()).classroomDAO),requireContext().applicationContext)
-        viewModel = ViewModelProvider(requireActivity(),factory).get(TeacherHomeFragViewModel::class.java)
+        val factory = TeacherHomeFragViewModelFactory(TeacherRepository(ClassroomDatabase.getInstance(requireContext()).classroomDAO), requireContext().applicationContext)
+        viewModel = ViewModelProvider(requireActivity(), factory).get(TeacherHomeFragViewModel::class.java)
 
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentTeacherHomeBinding.inflate(inflater, container, false)
@@ -65,7 +65,7 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
             groupInfoDialog.show()
 
         }
-        classroomAdapter = ClassroomAdapter(getTeacherName(),this)
+        classroomAdapter = ClassroomAdapter(getTeacherName(), this)
         binding.teacherRecyclerView.apply {
             adapter = classroomAdapter
             layoutManager = LinearLayoutManager(requireContext())
@@ -82,8 +82,8 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
                 }
                 is Resource.Error -> {
                     (requireActivity() as BaseActivity).hideProgressBar()
-//                    (requireActivity() as BaseActivity).showErrorSnackMessage(it.message!!,requireContext().applicationContext)
-                        Toast.makeText(requireContext().applicationContext,"Please Select All Fields",Toast.LENGTH_LONG).show()
+                    (requireActivity() as BaseActivity).showErrorSnackMessage(it.message!!, groupInfoDialog.getViewDialog())
+                    Toast.makeText(requireContext().applicationContext,"Please Select All Fields",Toast.LENGTH_LONG).show()
                 }
                 is Resource.Loading -> {
                     (requireActivity() as BaseActivity).showProgressDialog(Constants.MESSAGE_LOADING)
@@ -96,8 +96,7 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
         })
 
         viewModel.classRoomDeletion.observe(viewLifecycleOwner, Observer {
-            when(it)
-            {
+            when (it) {
                 is Resource.Success -> {
                     (requireActivity() as BaseActivity).hideProgressBar()
                 }
@@ -116,19 +115,17 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
         })
     }
 
-    override fun onClassCreated(classname: String, sem: String, sec: String,teamSize:String,projectType:String) {
-            viewModel.classRoomData(classname, sem, sec,getTeacherName(),teamSize,projectType)
+    override fun onClassCreated(classname: String, sem: String, sec: String, teamSize: String, projectType: String) {
+        viewModel.classRoomData(classname, sem, sec, getTeacherName(), teamSize, projectType)
     }
 
-    private  fun getTeacherName():String{
+    private fun getTeacherName(): String {
         return viewModel.getTeacherName()
     }
 
 
-
-
     override fun onClassRoomCLicked(classroom: Classroom) {
-        Utility.navigateFragment(requireActivity().supportFragmentManager, R.id.teacherHomeContainer,ClassRoomDetailFrag(classroom,this),"detailClassRoom")
+        Utility.navigateFragment(requireActivity().supportFragmentManager, R.id.teacherHomeContainer, ClassRoomDetailFrag(classroom, this), "detailClassRoom")
     }
 
     override fun onClassRoomDelete(classroom: Classroom) {

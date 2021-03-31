@@ -53,6 +53,13 @@ open class BaseActivity : AppCompatActivity() {
         snackBar.show()
     }
 
+    fun showErrorSnackMessage(message:String,view: View){
+        val snackBar = Snackbar.make(view,message,Snackbar.LENGTH_LONG)
+        val snackBarView = snackBar.view
+        snackBarView.setBackgroundColor(ContextCompat.getColor(this,R.color.redColor))
+        snackBar.show()
+    }
+
     fun showToast(message :String)
     {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()

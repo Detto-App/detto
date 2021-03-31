@@ -3,6 +3,7 @@ package com.dettoapp.detto.TeacherActivity.Dialog
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
@@ -16,13 +17,15 @@ import com.google.android.material.textfield.TextInputLayout
 class GroupInfoDialog (private val contextInfo:Context,private val groupInfoDialogOnClickListener: GroupInfoDialogOnClickListener):Dialog(contextInfo,android.R.style.ThemeOverlay){
 
 
+    private lateinit var view: View
    interface GroupInfoDialogOnClickListener{
        fun onClassCreated(classname:String,sem:String,sec:String,teamSize:String,projectType:String)
    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.dialog_classroomcreate)
+        view = LayoutInflater.from(contextInfo).inflate(R.layout.dialog_classroomcreate,null)
+        setContentView(view)
         initialise()
         val classname=findViewById<TextInputLayout>(R.id.ed_classroomname)
         val sem =findViewById<AutoCompleteTextView>(R.id.semester)
@@ -49,10 +52,7 @@ class GroupInfoDialog (private val contextInfo:Context,private val groupInfoDial
         teamSize.setAdapter(teamSizeAdapter)
         val  projectTypeAdapter = ArrayAdapter(projectType.context, android.R.layout.simple_spinner_dropdown_item, projectType.context.resources.getStringArray(R.array.project_type))
         projectType.setAdapter(projectTypeAdapter)
-
-
     }
 
-
-
+    fun getViewDialog() = findViewById<View>(R.id.rootClassDialog)
 }
