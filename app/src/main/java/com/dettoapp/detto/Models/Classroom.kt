@@ -17,5 +17,7 @@ data class Classroom(
     @ColumnInfo(name="classroom_uid")
     val classroomuid: String,
     @ColumnInfo(name="teacher")
-    val teacher:TeacherModel
+    val teacher:TeacherModel,
+    @ColumnInfo(name="settings")
+    val settingsModel:ClassroomSettingsModel
 )

@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.Db.ClassroomDAO
-import com.dettoapp.detto.Db.RoomConverters
+import com.dettoapp.detto.Models.ClassroomSettingsModel
 import com.dettoapp.detto.Models.TeacherModel
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.RetrofitInstance
@@ -19,15 +19,13 @@ class TeacherRepository(private val dao: ClassroomDAO) {
     fun getUid(context: Context):String{
         val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
                 ?: throw Exception("Data Storage Exception")
-        val uid=sharedPreference.getString(Constants.USER_ID,"id")!!
-        return uid
+        return sharedPreference.getString(Constants.USER_ID,"id")!!
 
     }
     fun getTeacherName(context: Context):String{
         val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
             ?: throw Exception("Data Storage Exception")
-        val tName=sharedPreference.getString(Constants.USER_NAME_KEY,"tname")!!
-        return tName
+        return sharedPreference.getString(Constants.USER_NAME_KEY,"tname")!!
     }
     suspend fun insertClassroom(classroom: Classroom){
         dao.insertClassroom(classroom)
@@ -40,9 +38,11 @@ class TeacherRepository(private val dao: ClassroomDAO) {
         val name=sharedPreference.getString(Constants.USER_NAME_KEY,"")!!
         val email=sharedPreference.getString(Constants.USER_EMAIL_KEY,"")!!
         val uid=sharedPreference.getString(Constants.USER_ID,"")!!
-        val teacherModel=TeacherModel(name,email,uid)
-        return teacherModel
+        return TeacherModel(name,email,uid)
 
+    }
+    fun getClassroomSettingsModel(teamSize:String,projectType:String):ClassroomSettingsModel{
+        return ClassroomSettingsModel(teamSize,projectType)
     }
 
     suspend fun deleteClassroom(context: Context, classroom: Classroom) {

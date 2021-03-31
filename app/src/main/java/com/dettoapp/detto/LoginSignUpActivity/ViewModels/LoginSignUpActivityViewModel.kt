@@ -2,6 +2,7 @@ package com.dettoapp.detto.loginActivity.ViewModels
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -43,7 +44,7 @@ class LoginSignUpActivityViewModel(
             try {
                 _login.postValue(Resource.Loading())
 
-                if (validate(email, password)) {
+                if (validate(email, password,role)) {
 
                     Firebase.auth.signInWithEmailAndPassword(email, password).await()
                     if (Firebase.auth.currentUser?.isEmailVerified == true) {
@@ -64,6 +65,7 @@ class LoginSignUpActivityViewModel(
                 }
             } catch (e: Exception) {
                 Firebase.auth.signOut()
+                Log.d("EEE",e.localizedMessage)
                 _login.postValue(Resource.Error(message = "" + e.localizedMessage))
 
             }
@@ -118,16 +120,19 @@ class LoginSignUpActivityViewModel(
                 _signUp.postValue((Resource.Success(data = 0, message = "")))
 
             } catch (e: Exception) {
+
                 _signUp.postValue(Resource.Error(message = "" + e.localizedMessage))
             }
         }
     }
 
-    private fun validate(email: String, password: String): Boolean {
+    private fun validate(email: String, password: String,role: Int): Boolean {
         if (email.isEmpty() || password.isEmpty())
             throw Exception(Constants.ERROR_FILL_ALL_FIELDS)
         else if (!email.matches(Regex("[a-zA-Z]+[-._A-Za-z0-9]*[@][a-zA-Z]+[.a-zA-Z]+")))
             throw Exception("Invalid Email")
+        else if (role==-1)
+            throw Exception("Please Select User role")
         return true
     }
 

@@ -12,7 +12,7 @@ import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Exception
+import kotlin.Exception
 
 @SuppressLint("StaticFieldLeak")
 class TeacherHomeFragViewModel(
@@ -32,24 +32,29 @@ class TeacherHomeFragViewModel(
     val allClassRooms = repository.getAllClassRooms()
 
 
-    fun classRoomData(classroomName: String, sem: String, sec: String, tname: String) {
+    fun classRoomData(classroomName: String, sem: String, sec: String, tname: String,teamSize:String,projectType:String) {
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _classRoomCreation.postValue(Resource.Loading())
-                val uid = repository.getUid(context)
-                val classroom = Classroom(
-                        classroomName,
-                        sem,
-                        sec,
-                        Utility.createID(),
-                        repository.getTeacherModel(context)
-                )
-                repository.insertClassroom(classroom)
-                repository.createClassroom(context, classroom)
-                _classRoomCreation.postValue(Resource.Success(data = "classroom created successfully"))
+                validate(classroomName, sem, sec, teamSize, projectType)
+
+                    val uid = repository.getUid(context)
+                    val classroom = Classroom(
+                            classroomName,
+                            sem,
+                            sec,
+                            Utility.createID(),
+                            repository.getTeacherModel(context),
+                            repository.getClassroomSettingsModel(teamSize, projectType)
+                    )
+                    repository.insertClassroom(classroom)
+                    repository.createClassroom(context, classroom)
+                    _classRoomCreation.postValue(Resource.Success(data = "classroom created successfully"))
+
+
             } catch (e: Exception) {
-                _classRoomCreation.postValue(Resource.Error(message = "" + e.localizedMessage))
+                _classRoomCreation.postValue(Resource.Error(message = "Please enter all the fields" + e.localizedMessage))
             }
         }
     }
@@ -69,5 +74,9 @@ class TeacherHomeFragViewModel(
 
     fun getTeacherName(): String {
         return repository.getTeacherName(context)
+    }
+    fun validate(classroomName: String,sec: String,sem: String,projectType: String,teamSize: String) {
+        if (classroomName.isEmpty() || sec.isEmpty() || sem.isEmpty() || projectType.isEmpty() || teamSize.isEmpty())
+            throw Exception("Please Enter all Fields")
     }
 }

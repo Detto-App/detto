@@ -40,11 +40,9 @@
         android:layout_height="wrap_content"
         android:text="Signup"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/et_password2"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/et_password2"
-        app:layout_constraintTop_toBottomOf="@+id/et_password2"
-        app:layout_constraintVertical_bias="0.2" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout5" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/et_email"
@@ -126,20 +124,28 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/etname2"
         style="@style/Detto.TextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:ems="10"
+        android:layout_marginStart="32dp"
 
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:ems="10"
         android:hint="Full Name"
         android:inputType="textPersonName"
+        android:maxLines="1"
         android:textColor="@color/cus_black"
         android:textColorHint="@android:color/darker_gray"
-        android:maxLines="1"
         app:endIconMode="clear_text"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView11"
+        app:startIconDrawable="@drawable/ic_baseline_people_24">
         app:layout_constraintEnd_toEndOf="@+id/spinner_id"
         app:layout_constraintHorizontal_bias="0.554"
         app:layout_constraintStart_toStartOf="@+id/textView2"
@@ -179,37 +185,26 @@
             android:textColor="@color/cus_black" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Spinner
-        android:id="@+id/spinner_id"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="32dp"
-        android:dropDownWidth="wrap_content"
-        android:dropDownSelector="@color/cus_black"
-        android:minWidth="10dp"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="@+id/textView2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toTopOf="@+id/textView2"
-        app:layout_constraintVertical_bias="0.47" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:id="@+id/textInputLayout5"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:text="Who are you?"
-        android:textColor="@color/cus_black"
-        android:textColorHint="@color/cus_black"
-        android:textSize="24sp"
-        android:maxLines="1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11"
-        app:layout_constraintVertical_bias=".05" />
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintEnd_toEndOf="@+id/et_password2"
+        app:layout_constraintStart_toStartOf="@+id/et_password2"
+        app:layout_constraintTop_toBottomOf="@+id/et_password2">
 
+        <AutoCompleteTextView
+            android:id="@+id/role"
+            android:inputType="none"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:hint="Select Your Role" />
+    </com.google.android.material.textfield.TextInputLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

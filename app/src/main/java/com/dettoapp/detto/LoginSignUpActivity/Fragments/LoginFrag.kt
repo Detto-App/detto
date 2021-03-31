@@ -3,6 +3,7 @@ package com.dettoapp.detto.LoginSignUpActivity.Fragments
 import android.content.Intent
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -55,10 +56,17 @@ class LoginFrag : Fragment() {
     }
 
     private fun initialise() {
-//        binding!!.passwordLogin.isPasswordVisibilityToggleEnabled
-        binding!!.btnLoginFrag.setOnClickListener {
-            viewModel.loginProcess(binding.spinnerId2.selectedItemPosition,
-                    binding!!.emailLogin.editText?.text.toString().toLowerCase(), binding!!.passwordLogin.editText?.text.toString())
+
+        val roles = resources.getStringArray(R.array.Roles)
+
+        binding.btnLoginFrag.setOnClickListener {
+
+            val roleSelected=binding.role.text.toString()
+            val role=roles.indexOf(roleSelected)
+            Log.d("AAA",role.toString())
+
+            viewModel.loginProcess(role,
+                    binding.emailLogin.editText?.text.toString().toLowerCase(), binding.passwordLogin.editText?.text.toString())
         }
 
         binding!!.signUpText.setOnClickListener {
@@ -67,15 +75,10 @@ class LoginFrag : Fragment() {
 
             //viewModel.loginProcess(binding!!.email.text.toString(), binding!!.password.text.toString())
         }
-        val roles = resources.getStringArray(R.array.Roles)
-        binding.spinnerId2.apply {
-            adapter = ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_spinner_item, roles
-            ).apply {
-                setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
-            }
-        }
+
+        val  adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, roles)
+        binding.role.setAdapter(adapter)
+
 
 
     }

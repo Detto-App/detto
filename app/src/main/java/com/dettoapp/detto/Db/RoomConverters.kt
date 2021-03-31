@@ -1,10 +1,10 @@
 package com.dettoapp.detto.Db
 
 import androidx.room.TypeConverter
+import com.dettoapp.detto.Models.ClassroomSettingsModel
 import com.dettoapp.detto.Models.TeacherModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.util.*
 
 //import com.google.gson.reflect.TypeToken
 
@@ -18,6 +18,16 @@ class RoomConverters {
       val type = object: TypeToken<TeacherModel>(){}.type
       return Gson().fromJson(teacherString,type)
   }
+    @TypeConverter
+    fun fromClassroomSettingsModel(classroomSettingsModel: ClassroomSettingsModel):String{
+        return Gson().toJson(classroomSettingsModel)
+    }
+    @TypeConverter
+    fun fromClassroomSettingsString(classroomSettingsString:String):ClassroomSettingsModel{
+        val type=object :TypeToken<ClassroomSettingsModel>(){}.type
+        return Gson().fromJson(classroomSettingsString,type)
+
+    }
 
 
 }
