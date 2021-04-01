@@ -2,7 +2,6 @@ package com.dettoapp.detto.LoginSignUpActivity.Fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,8 +10,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.dettoapp.detto.Db.ClassroomDAO
-import com.dettoapp.detto.Db.ClassroomDatabase
+import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.LoginSignUpActivity.LoginSignUpRepository
 import com.dettoapp.detto.LoginSignUpActivity.ViewModels.LoginSignUpActivityViewModelFactory
 import com.dettoapp.detto.R
@@ -35,7 +33,7 @@ class LoginFrag : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val factory = LoginSignUpActivityViewModelFactory(LoginSignUpRepository(ClassroomDatabase.getInstance(requireContext()).classroomDAO), requireContext().applicationContext)
+        val factory = LoginSignUpActivityViewModelFactory(LoginSignUpRepository(DatabaseDetto.getInstance(requireContext()).classroomDAO), requireContext().applicationContext)
         viewModel = ViewModelProvider(requireActivity(), factory).get(LoginSignUpActivityViewModel::class.java)
     }
 

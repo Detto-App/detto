@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.dettoapp.detto.Db.ClassroomDatabase
+import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.StudentActivity.Dialog.ProjectDetailsDialog
 import com.dettoapp.detto.StudentActivity.StudentRepository
@@ -31,7 +31,8 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : Fragment(), Pr
     private val viewModel: StudentClassDetailViewModel by viewModels(factoryProducer =
     {
         StudentClassDetailViewModelFactory(
-            StudentRepository(ClassroomDatabase.getInstance(requireContext().applicationContext).classroomDAO),
+            StudentRepository(DatabaseDetto.getInstance(requireContext().applicationContext).classroomDAO,
+                DatabaseDetto.getInstance(requireContext().applicationContext).projectDAO),
             requireContext().applicationContext
         )
     })

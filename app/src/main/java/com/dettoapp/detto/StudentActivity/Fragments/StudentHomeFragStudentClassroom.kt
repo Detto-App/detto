@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dettoapp.detto.Db.ClassroomDatabase
+import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.R
 import com.dettoapp.detto.StudentActivity.Adapters.StudentClassroomAdapter
@@ -28,7 +28,9 @@ class StudentHomeFragStudentClassroom : Fragment(), StudentClassroomAdapter.Stud
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val factory = StudentHomeFragFactory(StudentRepository(ClassroomDatabase.getInstance(requireContext()).classroomDAO), requireContext().applicationContext)
+        val factory = StudentHomeFragFactory(StudentRepository(DatabaseDetto.getInstance(requireContext()).classroomDAO,
+            DatabaseDetto.getInstance(requireContext()).projectDAO
+        ), requireContext().applicationContext)
         viewModel = ViewModelProvider(requireActivity(), factory).get(StudentHomeFragViewModel::class.java)
     }
 

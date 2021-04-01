@@ -6,16 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import com.dettoapp.detto.Db.ClassroomDatabase
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.TeacherActivity.Adapters.ClassRoomDetailFragViewPagerAdapter
 import com.dettoapp.detto.TeacherActivity.DataBaseOperations
 import com.dettoapp.detto.TeacherActivity.Repositories.ClassroomDetailRepository
-import com.dettoapp.detto.TeacherActivity.Repositories.TeacherRepository
 import com.dettoapp.detto.TeacherActivity.ViewModels.ClassRoomDetailViewModel
 import com.dettoapp.detto.TeacherActivity.ViewModels.ClassroomDetailViewModelFactory
-import com.dettoapp.detto.TeacherActivity.ViewModels.TeacherHomeFragViewModel
-import com.dettoapp.detto.TeacherActivity.ViewModels.TeacherHomeFragViewModelFactory
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.databinding.FragmentClassRoomDetailBinding
 import com.google.android.material.tabs.TabLayoutMediator

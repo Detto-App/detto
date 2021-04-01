@@ -23,4 +23,8 @@ object Constants
 
     const val PROJECT_CREATED = 0
     const val PROJECT_NOT_CREATED =-1
+
+    const val PROJECT_PENDING="pending"
+    const val PROJECT_ACCEPTED="accepted"
+    const val PROJECT_REJECTED="rejected"
 }

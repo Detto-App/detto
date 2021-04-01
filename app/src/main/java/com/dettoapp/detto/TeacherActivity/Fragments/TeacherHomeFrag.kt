@@ -1,6 +1,5 @@
 package com.dettoapp.detto.TeacherActivity.Fragments
 
-import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,7 +16,7 @@ import com.dettoapp.detto.TeacherActivity.Dialog.GroupInfoDialog
 import com.dettoapp.detto.TeacherActivity.Repositories.TeacherRepository
 import com.dettoapp.detto.TeacherActivity.ViewModels.TeacherHomeFragViewModelFactory
 import com.dettoapp.detto.TeacherActivity.ViewModels.TeacherHomeFragViewModel
-import com.dettoapp.detto.Db.ClassroomDatabase
+import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.UtilityClasses.BaseActivity
 import com.dettoapp.detto.UtilityClasses.Constants
@@ -37,7 +36,7 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val factory = TeacherHomeFragViewModelFactory(TeacherRepository(ClassroomDatabase.getInstance(requireContext()).classroomDAO), requireContext().applicationContext)
+        val factory = TeacherHomeFragViewModelFactory(TeacherRepository(DatabaseDetto.getInstance(requireContext()).classroomDAO), requireContext().applicationContext)
         viewModel = ViewModelProvider(requireActivity(), factory).get(TeacherHomeFragViewModel::class.java)
 
     }
