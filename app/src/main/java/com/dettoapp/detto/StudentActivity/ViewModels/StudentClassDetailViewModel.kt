@@ -8,9 +8,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dettoapp.detto.Models.Classroom
+import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.Models.TeacherModel
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.UtilityClasses.Resource
+import com.dettoapp.detto.UtilityClasses.Utility
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -26,7 +28,8 @@ class StudentClassDetailViewModel(private val repository: StudentRepository, pri
             try {
                 Log.d("asdf",usnMap.toString())
                 validate(title,description,usnMap)
-//                val teacherModel=TeacherModel("",title,description,usnMap)
+                val projectModel= ProjectModel(Utility.createID(),title,description,usnMap,classroom.teacher.uid,classroom.classroomuid)
+                repository.insertProject(projectModel)
                 //repository.storeProjectInSharedPref(classroom.classroomuid, context)
             } catch (e: Exception) {
                 _stuViewModel.postValue(Resource.Error(message = ""+e.localizedMessage))

@@ -6,23 +6,25 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.dettoapp.detto.Models.Classroom
+import com.dettoapp.detto.Models.ProjectModel
 
-@Database(entities = [Classroom::class],version = 1)
+@Database(entities = [Classroom::class,ProjectModel::class],version = 1)
 @TypeConverters(RoomConverters::class)
-abstract class ClassroomDatabase:RoomDatabase() {
+abstract class DatabaseDetto:RoomDatabase() {
 
     abstract val classroomDAO : ClassroomDAO
+    abstract val projectDAO :ProjectDAO
 
     companion object{
-        private var INSTANCE : ClassroomDatabase?=null
-        fun getInstance(context: Context): ClassroomDatabase {
+        private var INSTANCE : DatabaseDetto?=null
+        fun getInstance(context: Context): DatabaseDetto {
             synchronized(this){
-                var instance: ClassroomDatabase?=
+                var instance: DatabaseDetto?=
                     INSTANCE
                 if(instance==null){
                     instance= Room.databaseBuilder(
                         context.applicationContext,
-                        ClassroomDatabase::class.java,
+                        DatabaseDetto::class.java,
                         "classroom_data_database"
                     ).build()
                 }

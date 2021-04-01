@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.dettoapp.detto.Db.ClassroomDatabase
+import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.R
 import com.dettoapp.detto.StudentActivity.StudentActivity
 import com.dettoapp.detto.UtilityClasses.BaseActivity
@@ -19,7 +19,7 @@ class LinkParseActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_link_parse)
 
-        val factory = LinkParserFactory(LinkParserRepository(ClassroomDatabase.getInstance(this).classroomDAO), this.applicationContext)
+        val factory = LinkParserFactory(LinkParserRepository(DatabaseDetto.getInstance(this).classroomDAO), this.applicationContext)
         viewModel = ViewModelProvider(this, factory).get(LinkParseViewModel::class.java)
 
         val incomingIntent = intent

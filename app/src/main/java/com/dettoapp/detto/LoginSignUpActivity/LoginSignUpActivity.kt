@@ -4,13 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
-import com.dettoapp.detto.Db.ClassroomDatabase
+import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.LoginSignUpActivity.Fragments.LoginFrag
-import com.dettoapp.detto.LoginSignUpActivity.Fragments.SignUpFrag
 import com.dettoapp.detto.LoginSignUpActivity.ViewModels.LoginSignUpActivityViewModelFactory
 import com.dettoapp.detto.R
 import com.dettoapp.detto.StudentActivity.StudentActivity
-import com.dettoapp.detto.TeacherActivity.Fragments.TeacherHomeFrag
 import com.dettoapp.detto.TeacherActivity.TeacherActivity
 import com.dettoapp.detto.UtilityClasses.BaseActivity
 import com.dettoapp.detto.UtilityClasses.Constants
@@ -25,7 +23,7 @@ class LoginSignUpActivity : BaseActivity() {
         setContentView(R.layout.activity_login_sign_up)
         val factory = LoginSignUpActivityViewModelFactory(
             LoginSignUpRepository(
-                ClassroomDatabase.getInstance(this).classroomDAO
+                DatabaseDetto.getInstance(this).classroomDAO
             ), this.applicationContext
         )
         val viewModel =

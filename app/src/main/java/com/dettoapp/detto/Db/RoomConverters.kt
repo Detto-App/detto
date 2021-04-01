@@ -26,8 +26,16 @@ class RoomConverters {
     fun fromClassroomSettingsString(classroomSettingsString:String):ClassroomSettingsModel{
         val type=object :TypeToken<ClassroomSettingsModel>(){}.type
         return Gson().fromJson(classroomSettingsString,type)
-
+    }
+    @TypeConverter
+    fun fromHashMap(map:HashMap<Int,String>):String{
+        return  Gson().toJson(map)
     }
 
-
+    @TypeConverter
+    fun fromHashMapString(mapString:String):HashMap<Int,String>
+    {
+        val type=object :TypeToken<Map<Int,String>>(){}.type
+        return Gson().fromJson(mapString,type)
+    }
 }
