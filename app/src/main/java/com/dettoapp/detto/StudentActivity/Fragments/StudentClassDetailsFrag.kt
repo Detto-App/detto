@@ -24,19 +24,19 @@ import com.dettoapp.detto.databinding.FragmentStudentClassDetailsBinding
 
 
 class StudentClassDetailsFrag(private val classroom: Classroom) : Fragment(),
-        ProjectDetailsDialog.ProjectDialogClickListener {
+    ProjectDetailsDialog.ProjectDialogClickListener {
 
     private val binding: FragmentStudentClassDetailsBinding by viewBinding()
-    private lateinit var projectModel:ProjectModel
+    private lateinit var projectModel: ProjectModel
 
     private val viewModel: StudentClassDetailViewModel by viewModels(factoryProducer =
     {
         StudentClassDetailViewModelFactory(
-                StudentRepository(
-                        DatabaseDetto.getInstance(requireContext().applicationContext).classroomDAO,
-                        DatabaseDetto.getInstance(requireContext().applicationContext).projectDAO
-                ),
-                requireContext().applicationContext
+            StudentRepository(
+                DatabaseDetto.getInstance(requireContext().applicationContext).classroomDAO,
+                DatabaseDetto.getInstance(requireContext().applicationContext).projectDAO
+            ),
+            requireContext().applicationContext
         )
     })
 
@@ -46,8 +46,8 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : Fragment(),
     private lateinit var pDialog: ProjectDetailsDialog
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_student_class_details, container, false)
     }
@@ -85,7 +85,7 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : Fragment(),
                     baseActivity.hideProgressBar()
                     pDialog.dismiss()
                     showHideProjectContent(true)
-                    setUpProjectDetails()
+                    viewModel.getProject(classroom.classroomuid)
                     viewModel.stuProjectCreation.removeObservers(viewLifecycleOwner)
                 }
                 is Resource.Error -> {
@@ -101,8 +101,7 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : Fragment(),
         })
 
         viewModel.project.observe(viewLifecycleOwner, Observer {
-            when(it)
-            {
+            when (it) {
                 is Resource.Success -> {
                     showHideProjectContent(isShowingProjectContent = true)
                     projectModel = it.data!!
@@ -124,18 +123,17 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : Fragment(),
         }
     }
 
-    private fun setUpProjectDetails()
-    {
+    private fun setUpProjectDetails() {
         binding.pNameStudentClass.text = projectModel.title
         binding.pDescStudentClass.text = projectModel.desc
 
-        val shareLink = "https://detto.uk.to/pid/"+projectModel.pid
+        val shareLink = "https://detto.uk.to/pid/" + projectModel.pid
 
         binding.shareProjectLink.setOnClickListener {
             ShareCompat.IntentBuilder.from(requireActivity())
-                    .setText(shareLink).setType("text/plain")
-                    .setChooserTitle("Game Details")
-                    .startChooser()
+                .setText(shareLink).setType("text/plain")
+                .setChooserTitle("Game Details")
+                .startChooser()
         }
     }
 }
