@@ -57,4 +57,6 @@ class ProjectDetailsDialog(private val projectDialogClickListener: ProjectDialog
     override fun getTheme(): Int {
         return R.style.ThemeOverlay_MaterialComponents
     }
+
+    fun getViewDialog() = binding.root
 }

@@ -6,28 +6,29 @@ import com.dettoapp.detto.Db.ProjectDAO
 import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.UtilityClasses.Constants
 
-class StudentRepository(private val dao:ClassroomDAO,private val projectDao :ProjectDAO) {
+class StudentRepository(private val dao: ClassroomDAO, private val projectDao: ProjectDAO) {
     fun getAllClassRooms() = dao.getAllClassRooms()
 
-    fun storeProjectInSharedPref(classID:String,context:Context)
-    {
+    fun storeProjectInSharedPref(classID: String, context: Context) {
         val sharedPreference = context.getSharedPreferences(Constants.PROJECT_CLASS_FILE, Context.MODE_PRIVATE)
                 ?: throw Exception("Data Storage Exception")
 
         with(sharedPreference.edit())
         {
-            putInt(classID,Constants.PROJECT_CREATED)
+            putInt(classID, Constants.PROJECT_CREATED)
             apply()
         }
     }
 
-    fun getProjectFromSharedPref(classID: String,context: Context):Int
-    {
+    fun getProjectFromSharedPref(classID: String, context: Context): Int {
         val sharedPreference = context.getSharedPreferences(Constants.PROJECT_CLASS_FILE, Context.MODE_PRIVATE)
                 ?: throw Exception("Data Storage Exception")
-        return sharedPreference.getInt(classID,Constants.PROJECT_NOT_CREATED)
+        return sharedPreference.getInt(classID, Constants.PROJECT_NOT_CREATED)
     }
-    suspend fun insertProject(projectModel:ProjectModel){
+
+    suspend fun insertProject(projectModel: ProjectModel) {
         projectDao.insertProject(projectModel)
     }
+
+    suspend fun getProject(cid: String) = projectDao.getProject(cid)
 }
