@@ -7,15 +7,16 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.R
 import com.google.android.material.textfield.TextInputLayout
 
 @Suppress("PrivatePropertyName")
-class AddMembersAdapter : RecyclerView.Adapter<AddMembersAdapter.MemberViewHolder>() {
+class AddMembersAdapter(classroom: Classroom) : RecyclerView.Adapter<AddMembersAdapter.MemberViewHolder>() {
 
     private val memberHasSet = ArrayList<String>()
     private val valueHashMap = HashMap<Int, String>()
-    private var MAX_TEAM_SIZE = 4
+    private var MAX_TEAM_SIZE = classroom.settingsModel.teamSize.toInt()
 
     interface AddMembersAdapterClickListener {
         fun onClicked(usnMAP: HashMap<Int, String>)

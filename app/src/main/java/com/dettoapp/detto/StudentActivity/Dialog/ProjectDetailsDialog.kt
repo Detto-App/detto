@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.viewbinding.library.fragment.viewBinding
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.R
 import com.dettoapp.detto.StudentActivity.Adapters.AddMembersAdapter
 import com.dettoapp.detto.databinding.DialogProjectDetailsBinding
@@ -16,6 +17,7 @@ class ProjectDetailsDialog(private val projectDialogClickListener: ProjectDialog
 
     interface ProjectDialogClickListener {
         fun onProjectCreate(title: String, description: String, usnMap: HashMap<Int, String>)
+        fun getClassroom(): Classroom
     }
 
     private val binding: DialogProjectDetailsBinding by viewBinding()
@@ -31,7 +33,7 @@ class ProjectDetailsDialog(private val projectDialogClickListener: ProjectDialog
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapterLocal = AddMembersAdapter()
+        val adapterLocal = AddMembersAdapter(projectDialogClickListener.getClassroom())
         binding.projectGrpRecyclerVIew.apply {
             adapter = adapterLocal
             layoutManager = LinearLayoutManager(view.context)
