@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import com.dettoapp.detto.Db.ClassroomDAO
 import com.dettoapp.detto.Models.*
+import com.dettoapp.detto.UtilityClasses.BaseRepository
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 import com.dettoapp.detto.UtilityClasses.Utility
@@ -12,7 +13,7 @@ import com.google.gson.Gson
 
 
 @Suppress("SameParameterValue")
-class LoginSignUpRepository(private val dao: ClassroomDAO) {
+class LoginSignUpRepository(private val dao: ClassroomDAO) :BaseRepository(){
     suspend fun sendTeacherDataToServer(teacherModel: TeacherModel): Token {
         return RetrofitInstance.registrationAPI.sendTeacherData(teacherModel).body()!!
     }

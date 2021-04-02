@@ -4,12 +4,13 @@ import android.content.Context
 import com.dettoapp.detto.Db.ClassroomDAO
 import com.dettoapp.detto.Db.ProjectDAO
 import com.dettoapp.detto.Models.ProjectModel
+import com.dettoapp.detto.UtilityClasses.BaseRepository
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 import com.dettoapp.detto.UtilityClasses.Utility
 import java.util.*
 
-class StudentRepository(private val dao: ClassroomDAO, private val projectDao: ProjectDAO) {
+class StudentRepository(private val dao: ClassroomDAO, private val projectDao: ProjectDAO) : BaseRepository() {
     fun getAllClassRooms() = dao.getAllClassRooms()
 
     fun getProjectFromSharedPref(classID: String, context: Context): Int {

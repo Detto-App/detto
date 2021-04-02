@@ -12,8 +12,12 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
+import com.dettoapp.detto.Db.DatabaseDetto
+import com.dettoapp.detto.LoginSignUpActivity.LoginSignUpRepository
 import com.dettoapp.detto.R
 import com.dettoapp.detto.UtilityClasses.BaseActivity
+import com.dettoapp.detto.UtilityClasses.BaseFragment
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.databinding.FragmentSignUpBinding
@@ -22,30 +26,7 @@ import java.util.*
 
 
 @Suppress("SameParameterValue")
-class SignUpFrag : Fragment() {
-
-    private lateinit var viewmodel: LoginSignUpActivityViewModel
-    private var _binding: FragmentSignUpBinding? = null
-    private val binding
-        get() = _binding!!
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        viewmodel =
-                ViewModelProvider(requireActivity()).get(LoginSignUpActivityViewModel::class.java)
-
-    }
-
-    override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View {
-        // Inflate the layout for this fragment
-        _binding = FragmentSignUpBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
+class SignUpFrag : BaseFragment<LoginSignUpActivityViewModel, FragmentSignUpBinding, LoginSignUpRepository>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -74,7 +55,7 @@ class SignUpFrag : Fragment() {
         binding.btnSignUpFrag.setOnClickListener {
             val roleSelected = binding.role.text.toString()
             val roleIndex = roles.indexOf(roleSelected)
-            viewmodel.signUpProcess(
+            viewModel.signUpProcess(
                     roleIndex,
                     binding.etname2.editText?.text.toString(),
                     binding.etUsn.editText?.text.toString().toLowerCase(Locale.ROOT),
@@ -86,19 +67,18 @@ class SignUpFrag : Fragment() {
     }
 
     private fun liveDataObservers() {
-        viewmodel.signUp.observe(viewLifecycleOwner, Observer {
+        viewModel.signUp.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
-                    (requireActivity() as BaseActivity).hideProgressBar()
+                    baseActivity.hideProgressBar()
                     showAlertDialog("Verify Email", "A Verification Email has been sent to your email,Please Verify the email and Login Again")
                 }
                 is Resource.Error -> {
-
-                    (requireActivity() as BaseActivity).hideProgressBar()
-                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
+                    baseActivity.hideProgressBar()
+                    baseActivity.showToast(it.message!!)
                 }
                 is Resource.Loading -> {
-                    (requireActivity() as BaseActivity).showProgressDialog(Constants.MESSAGE_LOADING)
+                    baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
                 }
                 else -> {
                 }
@@ -127,8 +107,11 @@ class SignUpFrag : Fragment() {
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
+    override fun getViewModelClass(): Class<LoginSignUpActivityViewModel> = LoginSignUpActivityViewModel::class.java
+
+    override fun getFragmentBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSignUpBinding = FragmentSignUpBinding.inflate(inflater, container, false)
+
+    override fun getRepository(): LoginSignUpRepository = LoginSignUpRepository(DatabaseDetto.getInstance(requireContext()).classroomDAO)
+
+    override fun getBaseViewModelOwner(): ViewModelStoreOwner = requireActivity()
 }

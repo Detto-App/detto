@@ -111,7 +111,6 @@ class LoginSignUpActivityViewModel(
                 else
                     sendStudentDataToServer(StudentModel(name, email, uid, usn, hashSet))
 
-
                 _signUp.postValue((Resource.Success(data = 0, message = "")))
 
             } catch (e: Exception) {
@@ -152,6 +151,4 @@ class LoginSignUpActivityViewModel(
     }
 
     fun getRole(): Int = repository.getRole(context)
-
-
 }
