@@ -33,8 +33,13 @@ class StudentRepository(private val dao:ClassroomDAO,private val projectDao :Pro
         projectDao.insertProject(projectModel)
     }
 
+    fun getSusn(context: Context):String{
+        val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
+            ?: throw Exception("Data Storage Exception")
+        return sharedPreference.getString(Constants.USER_USN_KEY,"")!!
+    }
     suspend fun insertProjectToServer(projectModel:ProjectModel,context: Context){
-        RetrofitInstance.projectAPI.createProject(projectModel, Utility.gettoken(context))
+        RetrofitInstance.projectAPI.createProject(projectModel, getSusn(context),Utility.gettoken(context))
 
     }
 }
