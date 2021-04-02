@@ -63,11 +63,8 @@ class StudentClassDetailViewModel(
                         classroom.classroomuid
                 )
                 repository.insertProject(projectModel)
-<<<<<<< HEAD
                 repository.insertProjectToServer(projectModel,context)
-=======
                 _stuProjectCreation.postValue(Resource.Success(data = ""))
->>>>>>> d8e8e2d12ca0f98375fd23036c11e2b86bb2e854
                 //repository.storeProjectInSharedPref(classroom.classroomuid, context)
             } catch (e: Exception) {
                 _stuProjectCreation.postValue(Resource.Error(message = "" + e.localizedMessage))
