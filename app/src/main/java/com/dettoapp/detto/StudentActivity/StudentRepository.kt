@@ -7,20 +7,10 @@ import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 import com.dettoapp.detto.UtilityClasses.Utility
+import java.util.*
 
 class StudentRepository(private val dao: ClassroomDAO, private val projectDao: ProjectDAO) {
     fun getAllClassRooms() = dao.getAllClassRooms()
-
-    fun storeProjectInSharedPref(classID: String, context: Context) {
-        val sharedPreference = context.getSharedPreferences(Constants.PROJECT_CLASS_FILE, Context.MODE_PRIVATE)
-                ?: throw Exception("Data Storage Exception")
-
-        with(sharedPreference.edit())
-        {
-            putInt(classID, Constants.PROJECT_CREATED)
-            apply()
-        }
-    }
 
     fun getProjectFromSharedPref(classID: String, context: Context): Int {
         val sharedPreference = context.getSharedPreferences(Constants.PROJECT_CLASS_FILE, Context.MODE_PRIVATE)
@@ -32,14 +22,11 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
         projectDao.insertProject(projectModel)
     }
 
-    fun getSusn(context: Context):String{
-        val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
-            ?: throw Exception("Data Storage Exception")
-        return sharedPreference.getString(Constants.USER_USN_KEY,"")!!
-    }
-    suspend fun insertProjectToServer(projectModel:ProjectModel,context: Context){
-        RetrofitInstance.projectAPI.createProject(projectModel, getSusn(context),Utility.gettoken(context))
+    private fun getSUsn() = Utility.STUDENT.susn.toLowerCase(Locale.ROOT)
 
+    suspend fun insertProjectToServer(projectModel: ProjectModel) {
+        RetrofitInstance.projectAPI.createProject(projectModel, getSUsn(), Utility.TOKEN)
     }
+
     suspend fun getProject(cid: String) = projectDao.getProject(cid)
 }

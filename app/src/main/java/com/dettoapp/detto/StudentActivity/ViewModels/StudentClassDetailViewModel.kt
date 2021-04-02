@@ -63,9 +63,8 @@ class StudentClassDetailViewModel(
                         classroom.classroomuid
                 )
                 repository.insertProject(projectModel)
-                repository.insertProjectToServer(projectModel,context)
+                repository.insertProjectToServer(projectModel)
                 _stuProjectCreation.postValue(Resource.Success(data = ""))
-                //repository.storeProjectInSharedPref(classroom.classroomuid, context)
             } catch (e: Exception) {
                 _stuProjectCreation.postValue(Resource.Error(message = "" + e.localizedMessage))
             }
@@ -73,7 +72,6 @@ class StudentClassDetailViewModel(
     }
 
     private fun validate(title: String, description: String, usnMap: HashMap<Int, String>) {
-
         if (title.isEmpty() || description.isEmpty() || usnMapIsEmpty(usnMap))
             throw Exception("not valid")
 

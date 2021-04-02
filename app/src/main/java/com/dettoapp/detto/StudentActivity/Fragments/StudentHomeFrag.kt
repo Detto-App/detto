@@ -1,6 +1,7 @@
 package com.dettoapp.detto.StudentActivity.Fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +20,7 @@ import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentStudentHomeBinding
 
 
-class StudentHomeFragStudentClassroom : Fragment(), StudentClassroomAdapter.StudentClassroomAdapterCLickListener {
+class StudentHomeFrag : Fragment(), StudentClassroomAdapter.StudentClassroomAdapterCLickListener {
     private lateinit var viewModel: StudentHomeFragViewModel
     private var _binding: FragmentStudentHomeBinding? = null
     private val binding
@@ -45,7 +46,6 @@ class StudentHomeFragStudentClassroom : Fragment(), StudentClassroomAdapter.Stud
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initialise()
         liveDataObservers()
     }

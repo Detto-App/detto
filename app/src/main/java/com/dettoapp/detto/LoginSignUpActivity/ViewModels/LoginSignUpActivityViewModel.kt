@@ -44,18 +44,16 @@ class LoginSignUpActivityViewModel(
             try {
                 _login.postValue(Resource.Loading())
 
-                if (validate(email, password,role)) {
+                if (validate(email, password, role)) {
 
                     Firebase.auth.signInWithEmailAndPassword(email, password).await()
                     if (Firebase.auth.currentUser?.isEmailVerified == true) {
 
                         getUserDetailsFromServer(email, role)
                         if (role == Constants.TEACHER) {
-                            repository.getTeacherClassroomsDetailsAndStore(email,Utility.gettoken(context))
-                        }
-                        else if(role==Constants.STUDENT)
-                        {
-                            repository.getStudentClassroomsAndStore(email,context)
+                            repository.getTeacherClassroomsDetailsAndStore(email)
+                        } else if (role == Constants.STUDENT) {
+                            repository.getStudentClassroomsAndStore(email)
                         }
 
                         _login.postValue(Resource.Success(data = role, message = "Registered"))
@@ -65,7 +63,6 @@ class LoginSignUpActivityViewModel(
                 }
             } catch (e: Exception) {
                 Firebase.auth.signOut()
-                Log.d("EEE",e.localizedMessage)
                 _login.postValue(Resource.Error(message = "" + e.localizedMessage))
 
             }
@@ -83,12 +80,10 @@ class LoginSignUpActivityViewModel(
     }
 
     private suspend fun getUserDetailsFromServer(email: String, role: Int) {
-
         val receivingUserModel = RetrofitInstance.registrationAPI.getDetails(email, role.toString()).body()
                 ?: throw Exception("Please Check Your User Role,Account Not Found")
         repository.storeUserAndTokenData(context, receivingUserModel)
     }
-
 
 
     fun signUpProcess(
@@ -126,12 +121,12 @@ class LoginSignUpActivityViewModel(
         }
     }
 
-    private fun validate(email: String, password: String,role: Int): Boolean {
+    private fun validate(email: String, password: String, role: Int): Boolean {
         if (email.isEmpty() || password.isEmpty())
             throw Exception(Constants.ERROR_FILL_ALL_FIELDS)
         else if (!email.matches(Regex("[a-zA-Z]+[-._A-Za-z0-9]*[@][a-zA-Z]+[.a-zA-Z]+")))
             throw Exception("Invalid Email")
-        else if (role==-1)
+        else if (role == -1)
             throw Exception("Please Select User role")
         return true
     }

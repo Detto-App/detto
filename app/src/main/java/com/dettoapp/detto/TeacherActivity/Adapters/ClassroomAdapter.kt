@@ -67,7 +67,6 @@ class ClassroomAdapter(
             val shareCLassLink = itemView.findViewById<ImageView>(R.id.shareClassLinkTeacherClass)
 
             cName.text = classroom.classroomname.capitalize(Locale.ROOT)
-
             teacherName.text = tName.capitalize(Locale.ROOT)
 
 

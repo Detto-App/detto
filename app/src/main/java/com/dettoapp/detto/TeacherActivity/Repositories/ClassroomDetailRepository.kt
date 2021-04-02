@@ -1,13 +1,13 @@
 package com.dettoapp.detto.TeacherActivity.Repositories
 
-import android.content.Context
 import com.dettoapp.detto.Models.ClassRoomStudents
 import com.dettoapp.detto.UtilityClasses.RetrofitInstance
+import com.dettoapp.detto.UtilityClasses.Utility
 
 class ClassroomDetailRepository {
 
-    suspend fun getClassroomStudents(classID: String, token: String): ClassRoomStudents {
-        return RetrofitInstance.createClassroomAPI.getClassroomStudents(classID, token).body()
-            ?: throw Exception("Unable to Fetch Exception")
+    suspend fun getClassroomStudents(classID: String): ClassRoomStudents {
+        return RetrofitInstance.createClassroomAPI.getClassroomStudents(classID, Utility.TOKEN).body()
+                ?: throw Exception("Unable to Fetch Exception")
     }
 }

@@ -8,10 +8,11 @@ import com.dettoapp.detto.Models.*
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 import com.dettoapp.detto.UtilityClasses.Utility
+import com.google.gson.Gson
 
 
 @Suppress("SameParameterValue")
-class LoginSignUpRepository(private val dao:ClassroomDAO) {
+class LoginSignUpRepository(private val dao: ClassroomDAO) {
     suspend fun sendTeacherDataToServer(teacherModel: TeacherModel): Token {
         return RetrofitInstance.registrationAPI.sendTeacherData(teacherModel).body()!!
     }
@@ -38,15 +39,40 @@ class LoginSignUpRepository(private val dao:ClassroomDAO) {
     fun storeUserAndTokenData(context: Context, receivingUserModel: ReceivingUserModel) {
         if (receivingUserModel.teacher != null) {
             storeDataInSharedPreferences(context, receivingUserModel.teacher.email, receivingUserModel.teacher.name, Constants.TEACHER, receivingUserModel.teacher.uid)
-        } else
+            storeDataAsJson(context, receivingUserModel.teacher)
+        } else {
             storeDataInSharedPreferences(context, receivingUserModel.student!!.email, receivingUserModel.student.name, Constants.STUDENT, receivingUserModel.student.uid, receivingUserModel.student.susn)
+            storeDataAsJson(context, receivingUserModel.student)
+        }
         saveToken(Token(receivingUserModel.token), context)
+    }
+
+    private fun storeDataAsJson(context: Context, teacher: TeacherModel) {
+        val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
+                ?: throw Exception("Data Storage Exception")
+
+        with(sharedPreference.edit())
+        {
+            putString(Constants.ENTIRE_MODEL_KEY, Gson().toJson(teacher))
+            apply()
+        }
+    }
+
+    private fun storeDataAsJson(context: Context, student: StudentModel) {
+        val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
+                ?: throw Exception("Data Storage Exception")
+
+        with(sharedPreference.edit())
+        {
+            putString(Constants.ENTIRE_MODEL_KEY, Gson().toJson(student))
+            apply()
+        }
     }
 
     fun getRole(context: Context): Int {
         val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
                 ?: throw Exception("Data Storage Exception")
-        return sharedPreference.getInt("role", -1)!!
+        return sharedPreference.getInt("role", -1)
 
     }
 
@@ -62,31 +88,18 @@ class LoginSignUpRepository(private val dao:ClassroomDAO) {
             putString(Constants.USER_TOKEN_KEY, token.token)
             apply()
         }
+        Utility.initialiseToken(token.token)
     }
-    suspend fun getStudentClassroomsAndStore(email:String, context:Context){
-        val classList = RetrofitInstance.createClassroomAPI.getStudentClassroom(email, Utility.gettoken(context)).body()?:
-            throw Exception("Unable to Find Classrooms for the user")
+
+    suspend fun getStudentClassroomsAndStore(email: String) {
+        val classList = RetrofitInstance.createClassroomAPI.getStudentClassroom(email, Utility.TOKEN).body()
+                ?: throw Exception("Unable to Find Classrooms for the user")
         dao.insertClassroom(classList)
     }
 
-    suspend fun getTeacherClassroomsDetailsAndStore(email: String, token: String) {
-        val classroomList = RetrofitInstance.registrationAPI.getTeacherClassrooms(email, token).body()
-            ?: throw Exception("Null Pointer Exception")
-
-        Log.d("DDDD",classroomList.toString())
+    suspend fun getTeacherClassroomsDetailsAndStore(email: String) {
+        val classroomList = RetrofitInstance.registrationAPI.getTeacherClassrooms(email, Utility.TOKEN).body()
+                ?: throw Exception("Null Pointer Exception")
         dao.insertClassroom(classroomList)
-
     }
 }
-
-//    fun setSignUpData(context: Context, email: String, role: Int, name: String, usn: String?, userID: String) {
-//        storeDataInSharedPreferences(context, email, name, role, userID, usn)
-//    }
-
-//    suspend fun setLoginData(context: Context, email: String) {
-//        val receivingUserModel = RetrofitInstance.registrationAPI.getDetails(email,1).body()!!
-//        if (receivingUserModel.student != null)
-//            storeDataInSharedPreferences(context, email, receivingUserModel.student.name, Constants.STUDENT, receivingUserModel.student.uid)
-//        else
-//            storeDataInSharedPreferences(context, email, receivingUserModel.teacher!!.name, Constants.TEACHER, receivingUserModel.teacher.uid)
-//}

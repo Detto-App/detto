@@ -39,6 +39,7 @@ class LoginSignUpActivity : BaseActivity() {
             )
         else {
             val role = viewModel.getRole()
+            Utility.initialiseData(role,this.applicationContext)
             Log.d("abcdd", "" + role)
             val intent = if (role == Constants.TEACHER)
                 Intent(this, TeacherActivity::class.java)

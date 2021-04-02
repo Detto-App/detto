@@ -1,22 +1,21 @@
 package com.dettoapp.detto.LinkParseActivity
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dettoapp.detto.Models.Classroom
-//import com.dettoapp.detto.TeacherActivity.db.Classroom
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 import com.dettoapp.detto.UtilityClasses.Utility
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.Exception
 
-class LinkParseViewModel(private val repository: LinkParserRepository,private val context: Context):ViewModel() {
+@SuppressLint("StaticFieldLeak")
+class LinkParseViewModel(private val repository: LinkParserRepository,  private val context: Context):ViewModel() {
     private lateinit var tempClassroom: Classroom
     private val _linkParse = MutableLiveData<Resource<String>>()
     val linkParse: LiveData<Resource<String>>
@@ -30,13 +29,16 @@ class LinkParseViewModel(private val repository: LinkParserRepository,private va
                 val role = repository.getRole(context)
                 authenticate(role)
 
+                Utility.initialiseToken(context = context)
                 val id:String= getID(data)
                 val type=getType(data)
+
+
 
                 compute(type,id)
 
             }catch (e:Exception){
-                _linkParse.postValue(Resource.Error(message = e.localizedMessage))
+                _linkParse.postValue(Resource.Error(message = ""+e.localizedMessage))
             }
         }
     }
@@ -57,7 +59,7 @@ class LinkParseViewModel(private val repository: LinkParserRepository,private va
     }
 
     private suspend fun getClassroom(id:String){
-        val classroom = RetrofitInstance.createClassroomAPI.getClassroom(id, Utility.gettoken(context)).body()?:
+        val classroom = RetrofitInstance.createClassroomAPI.getClassroom(id, Utility.TOKEN).body()?:
             throw Exception("Unable to Find Classroom")
         val classRoomDetails="Classroom Name: "+classroom.classroomname+"\nCreated by: "+classroom.teacher.name+"\nSection: "+classroom.section+"\nSem: "+classroom.sem
        tempClassroom=classroom
@@ -70,7 +72,7 @@ class LinkParseViewModel(private val repository: LinkParserRepository,private va
              try {
                  repository.insertClassroom(tempClassroom)
                  val studentModel=Utility.getStudentModel(context)
-                 repository.regStudentToClassroom(context,studentModel,tempClassroom.classroomuid)
+                 repository.regStudentToClassroom(studentModel,tempClassroom.classroomuid)
                  _linkParse.postValue(Resource.Success(""))
              }
              catch (e:Exception){

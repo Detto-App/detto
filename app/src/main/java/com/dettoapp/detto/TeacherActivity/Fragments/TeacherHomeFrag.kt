@@ -1,6 +1,7 @@
 package com.dettoapp.detto.TeacherActivity.Fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -63,7 +64,7 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
             groupInfoDialog = GroupInfoDialog(requireContext(), this)
             groupInfoDialog.show()
         }
-        classroomAdapter = ClassroomAdapter(getTeacherName(), this)
+        classroomAdapter = ClassroomAdapter(viewModel.getTeacherName(), this)
         binding.teacherRecyclerView.apply {
             adapter = classroomAdapter
             layoutManager = LinearLayoutManager(requireContext())
@@ -81,7 +82,7 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
                 is Resource.Error -> {
                     (requireActivity() as BaseActivity).hideProgressBar()
                     (requireActivity() as BaseActivity).showErrorSnackMessage(it.message!!, groupInfoDialog.getViewDialog())
-                    Toast.makeText(requireContext().applicationContext,"Please Select All Fields",Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext().applicationContext, "Please Select All Fields", Toast.LENGTH_LONG).show()
                 }
                 is Resource.Loading -> {
                     (requireActivity() as BaseActivity).showProgressDialog(Constants.MESSAGE_LOADING)
@@ -114,12 +115,12 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
     }
 
     override fun onClassCreated(classname: String, sem: String, sec: String, teamSize: String, projectType: String) {
-        viewModel.classRoomData(classname, sem, sec, getTeacherName(), teamSize, projectType)
+        viewModel.classRoomData(classname, sem, sec, teamSize, projectType)
     }
 
-    private fun getTeacherName(): String {
-        return viewModel.getTeacherName()
-    }
+//    private fun getTeacherName(): String {
+//        return viewModel.getTeacherName()
+//    }
 
 
     override fun onClassRoomCLicked(classroom: Classroom) {
@@ -128,10 +129,10 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
 
     override fun onClassLinkShare(link: String) {
         ShareCompat.IntentBuilder.from(requireActivity())
-            .setText(link)
-            .setType("text/plain")
-            .setChooserTitle("Game Details")
-            .startChooser()
+                .setText(link)
+                .setType("text/plain")
+                .setChooserTitle("Game Details")
+                .startChooser()
     }
 
     override fun onClassRoomDelete(classroom: Classroom) {

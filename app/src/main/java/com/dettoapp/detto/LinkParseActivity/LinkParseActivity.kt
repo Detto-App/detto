@@ -37,26 +37,28 @@ class LinkParseActivity : BaseActivity() {
             when (it) {
                 is Resource.Success -> {
                     hideProgressBar()
-                    val intent=Intent(this,StudentActivity::class.java)
+                    val intent = Intent(this, StudentActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
                     finish()
                 }
                 is Resource.Error -> {
                     hideProgressBar()
-                    super.showAlertDialog("Alert",""+it.message)
+                    super.showAlertDialog("Alert", "" + it.message)
                 }
                 is Resource.Loading -> {
                     showProgressDialog(Constants.MESSAGE_LOADING)
                 }
-                is Resource.Confirm->{
-                    showConfirmationDialog("Do you want to really join this classroom?",""+it.message)
+                is Resource.Confirm -> {
+                    hideProgressBar()
+                    showConfirmationDialog("Do you want to really join this classroom?", "" + it.message)
                 }
                 else -> {
                 }
             }
         })
     }
+
     private fun showConfirmationDialog(dialogTitle: String, dialogMessage: String) {
 
         val builder = AlertDialog.Builder(this)
@@ -66,10 +68,11 @@ class LinkParseActivity : BaseActivity() {
             setTitle(dialogTitle)
             setMessage(dialogMessage)
             setPositiveButton("Yes") { _, _ ->
-                showToast("Succesfully joined the classroom")
+                showToast("Successfully joined the classroom")
                 viewModel.insertClassroom()
             }
-            setNegativeButton("No"){_,_->
+            setNegativeButton("No") { _, _ ->
+
                 showToast("Request rejected")
                 finish()
             }

@@ -17,8 +17,8 @@ import java.lang.Exception
 
 @SuppressLint("StaticFieldLeak")
 class ClassRoomDetailViewModel(
-    private val repository: ClassroomDetailRepository,
-    private val context: Context
+        private val repository: ClassroomDetailRepository,
+        private val context: Context
 ) : ViewModel() {
 
 
@@ -29,17 +29,14 @@ class ClassRoomDetailViewModel(
     fun getClassStudents(classroom: Classroom) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val classroomStudents = repository.getClassroomStudents(
-                    classroom.classroomuid,
-                    Utility.gettoken(context)
-                )
+                val classroomStudents = repository.getClassroomStudents(classroom.classroomuid)
 
-                val customComparator  = Comparator<StudentModel>{a,b ->
-                    val aUsn :Int =  a.susn.substring(a.susn.length-3).toInt()
-                    val bUsn :Int = b.susn.substring(a.susn.length-3).toInt()
-
+                val customComparator = Comparator<StudentModel> { a, b ->
+                    val aUsn: Int = a.susn.substring(a.susn.length - 3).toInt()
+                    val bUsn: Int = b.susn.substring(a.susn.length - 3).toInt()
                     return@Comparator aUsn.compareTo(bUsn)
                 }
+
                 val list = ArrayList(classroomStudents.studentList)
                 list.sortWith(customComparator)
 

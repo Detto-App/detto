@@ -16,8 +16,8 @@ import kotlin.Exception
 
 @SuppressLint("StaticFieldLeak")
 class TeacherHomeFragViewModel(
-    private val repository: TeacherRepository,
-    private val context: Context
+        private val repository: TeacherRepository,
+        private val context: Context
 ) : ViewModel() {
 
     private val _classRoomCreation = MutableLiveData<Resource<String>>()
@@ -32,25 +32,23 @@ class TeacherHomeFragViewModel(
     val allClassRooms = repository.getAllClassRooms()
 
 
-    fun classRoomData(classroomName: String, sem: String, sec: String, tname: String,teamSize:String,projectType:String) {
-
+    fun classRoomData(classroomName: String, sem: String, sec: String, teamSize: String, projectType: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _classRoomCreation.postValue(Resource.Loading())
                 validate(classroomName, sem, sec, teamSize, projectType)
 
-                    val uid = repository.getUid(context)
-                    val classroom = Classroom(
-                            classroomName,
-                            sem,
-                            sec,
-                            Utility.createID(),
-                            repository.getTeacherModel(context),
-                            repository.getClassroomSettingsModel(teamSize, projectType)
-                    )
-                    repository.insertClassroom(classroom)
-                    repository.createClassroom(context, classroom)
-                    _classRoomCreation.postValue(Resource.Success(data = "classroom created successfully"))
+                val classroom = Classroom(
+                        classroomName,
+                        sem,
+                        sec,
+                        Utility.createID(),
+                        repository.getTeacherModel(),
+                        repository.getClassroomSettingsModel(teamSize, projectType)
+                )
+                repository.insertClassroom(classroom)
+                repository.createClassroom(classroom)
+                _classRoomCreation.postValue(Resource.Success(data = "Classroom created successfully"))
 
 
             } catch (e: Exception) {
@@ -64,18 +62,15 @@ class TeacherHomeFragViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _classRoomDeletion.postValue(Resource.Loading())
-                repository.deleteClassroom(context, classroom)
+                repository.deleteClassroom(classroom)
                 _classRoomDeletion.postValue(Resource.Success(data = ""))
             } catch (e: Exception) {
                 _classRoomDeletion.postValue(Resource.Error(message = "" + e.localizedMessage))
             }
         }
     }
-
-    fun getTeacherName(): String {
-        return repository.getTeacherName(context)
-    }
-    fun validate(classroomName: String,sec: String,sem: String,projectType: String,teamSize: String) {
+    fun getTeacherName() = repository.getTeacherName()
+    private fun validate(classroomName: String, sec: String, sem: String, projectType: String, teamSize: String) {
         if (classroomName.isEmpty() || sec.isEmpty() || sem.isEmpty() || projectType.isEmpty() || teamSize.isEmpty())
             throw Exception("Please Enter all Fields")
     }

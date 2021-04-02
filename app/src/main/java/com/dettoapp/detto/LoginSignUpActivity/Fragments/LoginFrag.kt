@@ -22,6 +22,7 @@ import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentLoginBinding
 import com.dettoapp.detto.loginActivity.ViewModels.LoginSignUpActivityViewModel
+import java.util.*
 
 
 class LoginFrag : Fragment() {
@@ -59,24 +60,23 @@ class LoginFrag : Fragment() {
 
         binding.btnLoginFrag.setOnClickListener {
 
-            val roleSelected=binding.role.text.toString()
-            val role=roles.indexOf(roleSelected)
-            Log.d("AAA",role.toString())
+            val roleSelected = binding.role.text.toString()
+            val role = roles.indexOf(roleSelected)
+            Log.d("AAA", role.toString())
 
             viewModel.loginProcess(role,
-                    binding.emailLogin.editText?.text.toString().toLowerCase(), binding.passwordLogin.editText?.text.toString())
+                    binding.emailLogin.editText?.text.toString().toLowerCase(Locale.ROOT), binding.passwordLogin.editText?.text.toString())
         }
 
-        binding!!.signUpText.setOnClickListener {
+        binding.signUpText.setOnClickListener {
             Utility.navigateFragment(requireActivity().supportFragmentManager,
                     R.id.loginFragContainer, SignUpFrag(), "splash", addToBackStack = true)
 
             //viewModel.loginProcess(binding!!.email.text.toString(), binding!!.password.text.toString())
         }
 
-        val  adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, roles)
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, roles)
         binding.role.setAdapter(adapter)
-
 
 
     }
@@ -94,7 +94,7 @@ class LoginFrag : Fragment() {
                     else
                         Intent(requireActivity(), StudentActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-
+                    Utility.initialiseData(it.data!!, requireContext().applicationContext)
                     startActivity(intent)
                 }
                 is Resource.Error -> {
