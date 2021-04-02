@@ -78,6 +78,10 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : Fragment(),
         viewModel.storeProject(title, description, usnMap, classroom)
     }
 
+    override fun getClassroom(): Classroom {
+        return classroom
+    }
+
     private fun liveDataObservers() {
         viewModel.stuProjectCreation.observe(viewLifecycleOwner, Observer {
             when (it) {
