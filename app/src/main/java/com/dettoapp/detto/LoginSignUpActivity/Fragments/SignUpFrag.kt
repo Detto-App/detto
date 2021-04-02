@@ -2,6 +2,7 @@ package com.dettoapp.detto.LoginSignUpActivity.Fragments
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.databinding.FragmentSignUpBinding
 import com.dettoapp.detto.loginActivity.ViewModels.LoginSignUpActivityViewModel
+import java.util.*
 
 
 @Suppress("SameParameterValue")
@@ -55,29 +57,28 @@ class SignUpFrag : Fragment() {
 
     private fun initialise() {
         val roles = resources.getStringArray(R.array.Roles)
-        val roleSelected=binding.role.text.toString()
-        val roleIndex=roles.indexOf(roleSelected)
-        val  adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, roles)
-        binding.role.setAdapter(adapter)
 
-        binding.role.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                if (p2 == 1) {
-                    binding.etUsn.visibility = View.VISIBLE
-                } else {
-                    binding.etUsn.visibility = View.GONE
-                }
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, roles)
+
+        binding.role.setOnItemClickListener { _, _, position, _ ->
+            if (position == Constants.STUDENT) {
+                binding.etUsn.visibility = View.VISIBLE
+            } else {
+                binding.etUsn.visibility = View.GONE
             }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {}
         }
 
+
+        binding.role.setAdapter(adapter)
+
         binding.btnSignUpFrag.setOnClickListener {
+            val roleSelected = binding.role.text.toString()
+            val roleIndex = roles.indexOf(roleSelected)
             viewmodel.signUpProcess(
                     roleIndex,
                     binding.etname2.editText?.text.toString(),
-                    binding.etUsn.editText?.text.toString().toLowerCase(),
-                    binding.etEmail.editText?.text.toString().toLowerCase(),
+                    binding.etUsn.editText?.text.toString().toLowerCase(Locale.ROOT),
+                    binding.etEmail.editText?.text.toString().toLowerCase(Locale.ROOT),
                     binding.password.editText?.text.toString(),
                     binding.etPassword2.editText?.text.toString()
             )
