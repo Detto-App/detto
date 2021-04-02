@@ -30,6 +30,7 @@ class StudentClassDetailViewModel(private val repository: StudentRepository, pri
                 validate(title,description,usnMap)
                 val projectModel= ProjectModel(Utility.createID(),title,description,usnMap,classroom.teacher.uid,classroom.classroomuid)
                 repository.insertProject(projectModel)
+                repository.insertProjectToServer(projectModel,context)
                 //repository.storeProjectInSharedPref(classroom.classroomuid, context)
             } catch (e: Exception) {
                 _stuViewModel.postValue(Resource.Error(message = ""+e.localizedMessage))

@@ -1,0 +1,56 @@
+{
+  "msg": "Logs Of : /health : response time : 77 status : 200",
+  "memory_info": {
+    "heap_used": 35,
+    "non_heap_Init": 0,
+    "non_heap_used": 15,
+    "non_heap_used_diff": 904064,
+    "non_heap_max": 2199023255551,
+    "heap_max": 435,
+    "heap_used_diff": 8455552,
+    "heap_Init": 30
+  },
+  "request": "",
+  "headers": "{\"postman-token\":[\"da7c9bb5-b001-4aaf-a332-4027faa26f0d\"],\"host\":[\"localhost:8799\"],\"connection\":[\"keep-alive\"],\"accept-encoding\":[\"gzip, deflate, br\"],\"user-agent\":[\"PostmanRuntime/7.26.8\"],\"accept\":[\"*/*\"]}",
+  "method": "GET",
+  "response_status": 200,
+  "level": "INFO",
+  "logger": "com.paytm.logger.interceptor.requestresponselogger",
+  "logger_function": "org.apache.logging.slf4j.Log4jLogger",
+  "time_taken_ms": 77,
+  "thread": "http-nio-8799-exec-1",
+  "log_time": 1617359808982,
+  "path": "/health",
+  "response_length": 288,
+  "response_headers": "{\"x-resp-id\":[\"916D6976-DF15-492B-A5FD-5F78109C6DDE\"]}",
+  "os_info": {
+    "cpu_arch": "amd64",
+    "cpu_load_diff": 0.0,
+    "os_version": "5.8.0-45-generic",
+    "os_name": "Linux",
+    "cpu_processors": 8,
+    "cpu_load": 3.81
+  },
+  "response": "{\"programName\":\"catalog-apiplus\",\"version\":\"1.0.0\",\"release\":\"73b19ad04d72e44388d3220a2388614a9a952ddf\",\"springActiveProfile\":\"dev\",\"datetime\":1617359808948,\"status\":\"successfull\",\"code\":200,\"message\":\"ok\",\"dependentService\":null,\"data\":{\"duration\":0.0,\"message\":\"My service is healthy\"}}",
+  "thread_info": {
+    "threads_started_diff": 0,
+    "daemon_threads_live_diff": 0,
+    "threads_live": 82,
+    "threads_live_diff": 0,
+    "daemon_threads_live": 38,
+    "threads_peak": 84,
+    "threads_started": 90
+  },
+  "log_source": {
+    "declaringClass": "com.paytm.logger.interceptor.RequestResponseLogger",
+    "methodName": "logResponse",
+    "fileName": "RequestResponseLogger.java",
+    "lineNumber": 107
+  },
+  "time": 1617359808982,
+  "contextMap": {
+    "threshold": 1,
+    "immutable": true
+  },
+  "request_id": "916D6976-DF15-492B-A5FD-5F78109C6DDE"
+}

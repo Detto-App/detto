@@ -2,6 +2,7 @@ package com.dettoapp.detto.UtilityClasses
 
 import com.dettoapp.detto.APIs.CreateClassroomAPI
 import com.dettoapp.detto.APIs.DettoAPI
+import com.dettoapp.detto.APIs.ProjectAPI
 import com.dettoapp.detto.APIs.RegistrationAPI
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -29,6 +30,11 @@ class RetrofitInstance {
         val registrationAPI:RegistrationAPI by lazy {
             URL=Constants.BASE_DETTO_URL
             retrofit.create(RegistrationAPI::class.java)
+        }
+
+        val projectAPI: ProjectAPI by lazy {
+            URL=Constants.BASE_DETTO_URL
+            retrofit.create(ProjectAPI::class.java)
         }
 
     }

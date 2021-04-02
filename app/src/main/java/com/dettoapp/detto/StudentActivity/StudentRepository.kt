@@ -5,6 +5,8 @@ import com.dettoapp.detto.Db.ClassroomDAO
 import com.dettoapp.detto.Db.ProjectDAO
 import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.UtilityClasses.Constants
+import com.dettoapp.detto.UtilityClasses.RetrofitInstance
+import com.dettoapp.detto.UtilityClasses.Utility
 
 class StudentRepository(private val dao:ClassroomDAO,private val projectDao :ProjectDAO) {
     fun getAllClassRooms() = dao.getAllClassRooms()
@@ -29,5 +31,10 @@ class StudentRepository(private val dao:ClassroomDAO,private val projectDao :Pro
     }
     suspend fun insertProject(projectModel:ProjectModel){
         projectDao.insertProject(projectModel)
+    }
+
+    suspend fun insertProjectToServer(projectModel:ProjectModel,context: Context){
+        RetrofitInstance.projectAPI.createProject(projectModel, Utility.gettoken(context))
+
     }
 }
