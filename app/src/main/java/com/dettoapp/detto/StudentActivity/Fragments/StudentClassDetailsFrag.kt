@@ -46,9 +46,10 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<S
             binding.yesProjectContent.visibility = View.VISIBLE
     }
 
-    override fun onProjectCreate(title: String, description: String, usnMap: HashMap<Int, String>) {
-        viewModel.storeProject(title, description, usnMap, classroom)
+    override fun onProjectCreate(title: String, description: String, usnMap: HashMap<Int, String>, arrayList: ArrayList<String>) {
+        viewModel.storeProject(title, description, usnMap, classroom,arrayList)
     }
+
 
     override fun getClassroom(): Classroom {
         return classroom

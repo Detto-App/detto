@@ -13,19 +13,19 @@ import com.dettoapp.detto.StudentActivity.Adapters.AddMembersAdapter
 import com.dettoapp.detto.databinding.DialogProjectDetailsBinding
 
 class ProjectDetailsDialog(private val projectDialogClickListener: ProjectDialogClickListener) :
-    DialogFragment() {
+        DialogFragment() {
 
     interface ProjectDialogClickListener {
-        fun onProjectCreate(title: String, description: String, usnMap: HashMap<Int, String>)
+        fun onProjectCreate(title: String, description: String, usnMap: HashMap<Int, String>, arrayList: ArrayList<String>)
         fun getClassroom(): Classroom
     }
 
     private val binding: DialogProjectDetailsBinding by viewBinding()
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.dialog_project_details, container, false)
     }
@@ -49,9 +49,10 @@ class ProjectDetailsDialog(private val projectDialogClickListener: ProjectDialog
 
         binding.doneProjectStudent.setOnClickListener {
             projectDialogClickListener.onProjectCreate(
-                binding.projectTitlePC.editText?.text.toString(),
-                binding.projectDescriptionPC.editText?.text.toString(),
-                adapterLocal.getUsnMap()
+                    binding.projectTitlePC.editText?.text.toString(),
+                    binding.projectDescriptionPC.editText?.text.toString(),
+                    adapterLocal.getUsnMap(),
+                    adapterLocal.getArrayList()
             )
         }
     }
