@@ -15,6 +15,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.collections.HashMap
+import kotlin.collections.HashSet
 
 object Utility {
 
@@ -111,4 +113,14 @@ object Utility {
     fun String.toLowerAndTrim() = this.trim().toLowerCase(Locale.ROOT)
 
     fun Editable?.toStringLowerTrim() = this.toString().toLowerAndTrim()
+
+    fun HashMap<Int, String>.toHashSet(): HashSet<String> {
+        val hashSet = HashSet<String>()
+
+        for ((k, v) in this) {
+            hashSet.add(v.toLowerAndTrim())
+        }
+
+        return hashSet
+    }
 }

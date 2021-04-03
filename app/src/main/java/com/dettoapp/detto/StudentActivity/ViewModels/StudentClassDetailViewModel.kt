@@ -11,6 +11,8 @@ import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
+import com.dettoapp.detto.UtilityClasses.Utility.toHashSet
+import com.dettoapp.detto.UtilityClasses.Utility.toLowerAndTrim
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -38,7 +40,7 @@ class StudentClassDetailViewModel(
                 else
                     _project.postValue(Resource.Success(data = projectModel))
             } catch (e: Exception) {
-                _project.postValue(Resource.Error(message = ""+e.localizedMessage))
+                _project.postValue(Resource.Error(message = "" + e.localizedMessage))
 
             }
         }
@@ -56,9 +58,9 @@ class StudentClassDetailViewModel(
                 validate(title, description, usnMap)
                 val projectModel = ProjectModel(
                         Utility.createID(),
-                        title,
-                        description,
-                        usnMap,
+                        title.toLowerAndTrim(),
+                        description.toLowerAndTrim(),
+                        usnMap.toHashSet(),
                         classroom.teacher.uid,
                         classroom.classroomuid
                 )
@@ -72,7 +74,7 @@ class StudentClassDetailViewModel(
     }
 
     private fun validate(title: String, description: String, usnMap: HashMap<Int, String>) {
-        if (title.isEmpty() || description.isEmpty() || usnMapIsEmpty(usnMap))
+        if (title.trim().isEmpty() || description.trim().isEmpty() || usnMapIsEmpty(usnMap))
             throw Exception("not valid")
 
     }
