@@ -4,10 +4,11 @@ import com.dettoapp.detto.Db.ClassroomDAO
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.Models.ClassroomSettingsModel
 import com.dettoapp.detto.Models.TeacherModel
+import com.dettoapp.detto.UtilityClasses.BaseRepository
 import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 import com.dettoapp.detto.UtilityClasses.Utility
 
-class TeacherRepository(private val dao: ClassroomDAO) {
+class TeacherRepository(private val dao: ClassroomDAO):BaseRepository() {
     suspend fun createClassroom(classroom: Classroom) {
         RetrofitInstance.createClassroomAPI.createClassroom(classroom, Utility.TOKEN)
     }

@@ -11,6 +11,7 @@ import androidx.core.app.ShareCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dettoapp.detto.Db.ClassroomDAO
 import com.dettoapp.detto.R
 import com.dettoapp.detto.TeacherActivity.Adapters.ClassroomAdapter
 import com.dettoapp.detto.TeacherActivity.DataBaseOperations
@@ -20,38 +21,14 @@ import com.dettoapp.detto.TeacherActivity.ViewModels.TeacherHomeFragViewModelFac
 import com.dettoapp.detto.TeacherActivity.ViewModels.TeacherHomeFragViewModel
 import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.Models.Classroom
-import com.dettoapp.detto.UtilityClasses.BaseActivity
-import com.dettoapp.detto.UtilityClasses.Constants
-import com.dettoapp.detto.UtilityClasses.Resource
-import com.dettoapp.detto.UtilityClasses.Utility
+import com.dettoapp.detto.UtilityClasses.*
 import com.dettoapp.detto.databinding.FragmentTeacherHomeBinding
 
-class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListener, ClassroomAdapter.ClassRoomAdapterClickListener, DataBaseOperations {
-    private lateinit var viewModel: TeacherHomeFragViewModel
-    private var _binding: FragmentTeacherHomeBinding? = null
-    private val binding
-        get() = _binding!!
+class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel,FragmentTeacherHomeBinding,TeacherRepository>(), GroupInfoDialog.GroupInfoDialogOnClickListener, ClassroomAdapter.ClassRoomAdapterClickListener, DataBaseOperations {
+    
     private lateinit var classroomAdapter: ClassroomAdapter
     private lateinit var groupInfoDialog: GroupInfoDialog
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val factory = TeacherHomeFragViewModelFactory(TeacherRepository(DatabaseDetto.getInstance(requireContext()).classroomDAO), requireContext().applicationContext)
-        viewModel = ViewModelProvider(requireActivity(), factory).get(TeacherHomeFragViewModel::class.java)
-
-    }
-
-    override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View {
-        // Inflate the layout for this fragment
-        _binding = FragmentTeacherHomeBinding.inflate(inflater, container, false)
-        return binding.root
-
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -75,18 +52,18 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
         viewModel.classRoomCreation.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
-                    (requireActivity() as BaseActivity).hideProgressBar()
+                    baseActivity.hideProgressBar()
                     groupInfoDialog.dismiss()
-                    (requireActivity() as BaseActivity).showToast(it.data!!)
+                   baseActivity.showToast(it.data!!)
                 }
                 is Resource.Error -> {
-                    (requireActivity() as BaseActivity).hideProgressBar()
-                    (requireActivity() as BaseActivity).showErrorSnackMessage(it.message!!, groupInfoDialog.getViewDialog())
+                  baseActivity.hideProgressBar()
+                  baseActivity.showErrorSnackMessage(it.message!!, groupInfoDialog.getViewDialog())
                     Toast.makeText(requireContext().applicationContext, "Please Select All Fields", Toast.LENGTH_LONG).show()
                 }
                 is Resource.Loading -> {
-                    (requireActivity() as BaseActivity).showProgressDialog(Constants.MESSAGE_LOADING)
-                    (requireActivity() as BaseActivity).closeKeyBoard(view)
+                  baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
+                  baseActivity.closeKeyBoard(view)
                 }
                 else -> {
 
@@ -97,14 +74,14 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
         viewModel.classRoomDeletion.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
-                    (requireActivity() as BaseActivity).hideProgressBar()
+                    baseActivity.hideProgressBar()
                 }
                 is Resource.Error -> {
-                    (requireActivity() as BaseActivity).hideProgressBar()
-                    (requireActivity() as BaseActivity).showErrorSnackMessage(it.message!!)
+                  baseActivity.hideProgressBar()
+                  baseActivity.showErrorSnackMessage(it.message!!)
                 }
                 is Resource.Loading -> {
-                    (requireActivity() as BaseActivity).showProgressDialog(Constants.MESSAGE_LOADING)
+                  baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
                 }
             }
         })
@@ -139,8 +116,14 @@ class TeacherHomeFrag : Fragment(), GroupInfoDialog.GroupInfoDialogOnClickListen
         viewModel.deleteClassroom(classroom)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
+    
+
+    override fun getViewModelClass(): Class<TeacherHomeFragViewModel> = TeacherHomeFragViewModel::class.java
+
+    override fun getFragmentBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentTeacherHomeBinding = FragmentTeacherHomeBinding.inflate(inflater,container,false)
+
+    override fun getRepository(): TeacherRepository = TeacherRepository(DatabaseDetto.getInstance(requireContext().applicationContext).classroomDAO)
 }
