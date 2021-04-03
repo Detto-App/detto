@@ -7,5 +7,4 @@ data class StudentModel(
     val susn: String,
     val classrooms:HashSet<String>,
     val projects:HashSet<String> = HashSet()
-
 )

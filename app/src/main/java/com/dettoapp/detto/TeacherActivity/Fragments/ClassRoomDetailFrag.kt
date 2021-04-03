@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.TeacherActivity.Adapters.ClassRoomDetailFragViewPagerAdapter
 import com.dettoapp.detto.TeacherActivity.DataBaseOperations
 import com.dettoapp.detto.TeacherActivity.Repositories.ClassroomDetailRepository
 import com.dettoapp.detto.TeacherActivity.ViewModels.ClassRoomDetailViewModel
 import com.dettoapp.detto.TeacherActivity.ViewModels.ClassroomDetailViewModelFactory
+import com.dettoapp.detto.UtilityClasses.BaseFragment
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.databinding.FragmentClassRoomDetailBinding
 import com.google.android.material.tabs.TabLayoutMediator
@@ -19,32 +21,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 class ClassRoomDetailFrag(
     private val classroom: Classroom,
     private val dataBaseOperations: DataBaseOperations
-) : Fragment(), ClassRoomDetailModal.ClassRoomDetailModalClickListener, ClassroomDetailOperations {
+) : BaseFragment<ClassRoomDetailViewModel,FragmentClassRoomDetailBinding,ClassroomDetailRepository>(), ClassRoomDetailModal.ClassRoomDetailModalClickListener, ClassroomDetailOperations {
 
-    private lateinit var viewModel: ClassRoomDetailViewModel
-    private var _binding: FragmentClassRoomDetailBinding? = null
-    private val binding
-        get() = _binding!!
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val factory = ClassroomDetailViewModelFactory(
-            ClassroomDetailRepository(),
-            requireContext().applicationContext
-        )
-        viewModel = ViewModelProvider(this, factory).get(ClassRoomDetailViewModel::class.java)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        // Inflate the layout for this fragment
-        _binding = FragmentClassRoomDetailBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -93,4 +71,20 @@ class ClassRoomDetailFrag(
     override fun getViewModel(): ClassRoomDetailViewModel {
         return viewModel
     }
+
+    override fun getViewModelClass(): Class<ClassRoomDetailViewModel> {
+        return ClassRoomDetailViewModel::class.java
+    }
+
+    override fun getFragmentBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentClassRoomDetailBinding {
+        return FragmentClassRoomDetailBinding.inflate(inflater,container,false)
+    }
+
+    override fun getRepository(): ClassroomDetailRepository {
+        return ClassroomDetailRepository()
+    }
+
 }
