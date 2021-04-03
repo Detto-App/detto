@@ -21,5 +21,10 @@ data class ProjectModel(
         @ColumnInfo(name = "cid")
         val cid: String,
         @ColumnInfo(name = "status")
-        val status: String = PROJECT_PENDING
+        val status: String = PROJECT_PENDING,
+        @ColumnInfo(name = "studentNameList")
+        val studentNameList:ArrayList<String> = ArrayList()
+
+
+
 )

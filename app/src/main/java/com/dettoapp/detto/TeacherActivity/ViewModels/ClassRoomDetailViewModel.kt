@@ -55,8 +55,9 @@ class ClassRoomDetailViewModel(
     fun getProjects(cid: String){
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val projectList=repository.getProjects(cid)
-                _projectList.postValue(Resource.Success(data = projectList))
+                val project=repository.getProjects(cid)
+
+                _projectList.postValue(Resource.Success(data = project))
             }catch (e:Exception){
                 _projectList.postValue(Resource.Error(message = ""+e.localizedMessage))
             }

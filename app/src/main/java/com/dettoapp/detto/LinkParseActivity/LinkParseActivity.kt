@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.dettoapp.detto.Db.DatabaseDetto
+import com.dettoapp.detto.Db.ProjectDAO
 import com.dettoapp.detto.R
 import com.dettoapp.detto.StudentActivity.StudentActivity
 import com.dettoapp.detto.UtilityClasses.BaseActivity
@@ -19,7 +20,7 @@ class LinkParseActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_link_parse)
 
-        val factory = LinkParserFactory(LinkParserRepository(DatabaseDetto.getInstance(this).classroomDAO), this.applicationContext)
+        val factory = LinkParserFactory(LinkParserRepository(DatabaseDetto.getInstance(this).classroomDAO,DatabaseDetto.getInstance(this).projectDAO), this.applicationContext)
         viewModel = ViewModelProvider(this, factory).get(LinkParseViewModel::class.java)
 
         val incomingIntent = intent
@@ -50,8 +51,9 @@ class LinkParseActivity : BaseActivity() {
                     showProgressDialog(Constants.MESSAGE_LOADING)
                 }
                 is Resource.Confirm -> {
+
                     hideProgressDialog()
-                    showConfirmationDialog("Do you want to really join this classroom?", "" + it.message)
+                    showConfirmationDialog(it.data!!,"Do you want to really join?", "" + it.message)
                 }
                 else -> {
                 }
@@ -59,7 +61,7 @@ class LinkParseActivity : BaseActivity() {
         })
     }
 
-    private fun showConfirmationDialog(dialogTitle: String, dialogMessage: String) {
+    private fun showConfirmationDialog(type:String,dialogTitle: String, dialogMessage: String) {
 
         val builder = AlertDialog.Builder(this)
 
@@ -69,7 +71,10 @@ class LinkParseActivity : BaseActivity() {
             setMessage(dialogMessage)
             setPositiveButton("Yes") { _, _ ->
                 showToast("Successfully joined the classroom")
-                viewModel.insertClassroom()
+                if(type==Constants.TYPE_CID)
+                    viewModel.insertClassroom()
+                else if(type == Constants.TYPE_PID)
+                    viewModel.insertProject()
             }
             setNegativeButton("No") { _, _ ->
 

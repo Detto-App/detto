@@ -38,4 +38,15 @@ class RoomConverters {
         val type=object :TypeToken<Set<String>>(){}.type
         return Gson().fromJson(setString,type)
     }
+    @TypeConverter
+    fun fromArrayList(list:ArrayList<String>):String{
+        return Gson().toJson(list)
+    }
+
+    @TypeConverter
+    fun fromArrayListString(listString:String):ArrayList<String>
+    {
+        val type = object :TypeToken<ArrayList<String>>(){}.type
+        return Gson().fromJson(listString,type)
+    }
 }
