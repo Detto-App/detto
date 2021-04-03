@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import com.dettoapp.detto.Models.Classroom
+import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.TeacherActivity.Adapters.ClassRoomDetailFragViewPagerAdapter
 import com.dettoapp.detto.TeacherActivity.DataBaseOperations
 import com.dettoapp.detto.TeacherActivity.Repositories.ClassroomDetailRepository
@@ -67,6 +68,12 @@ class ClassRoomDetailFrag(
     override fun getClassroomStudents() {
         viewModel.getClassStudents(classroom)
     }
+
+
+    override fun getProjects() {
+        viewModel.getProjects(classroom.classroomuid)
+    }
+
 
     override fun getViewModel(): ClassRoomDetailViewModel {
         return viewModel

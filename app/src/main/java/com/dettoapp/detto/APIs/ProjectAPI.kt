@@ -1,10 +1,8 @@
 package com.dettoapp.detto.APIs
 
 import com.dettoapp.detto.Models.ProjectModel
-import retrofit2.http.Body
-import retrofit2.http.Header
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.Response
+import retrofit2.http.*
 
 interface ProjectAPI {
     @POST("/registerProject/{susn}")
@@ -13,5 +11,9 @@ interface ProjectAPI {
         @Path(value = "susn") susn: String,
         @Header("Authorization") token: String
     )
-
+    @GET("/getProjects/{cid}")
+    suspend fun getProjects(
+        @Path(value = "cid") cid: String,
+        @Header("Authorization") token: String
+    ): Response<List<ProjectModel>>
 }

@@ -6,13 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.viewbinding.library.fragment.viewBinding
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dettoapp.detto.R
 import com.dettoapp.detto.TeacherActivity.Adapters.ClassroomAdapter
 import com.dettoapp.detto.TeacherActivity.Adapters.ProjectAdapterClassroomDetail
+import com.dettoapp.detto.UtilityClasses.BaseActivity
+import com.dettoapp.detto.UtilityClasses.Constants
+import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.databinding.FragmentClassroomProjectsBinding
 
-class ClassroomProjectsFragment : Fragment() {
+class ClassroomProjectsFragment(private val operations: ClassroomDetailOperations) : Fragment() {
     private lateinit var projectAdapterClassroomDetail: ProjectAdapterClassroomDetail
 
     private val binding:FragmentClassroomProjectsBinding by viewBinding()
@@ -38,5 +43,27 @@ class ClassroomProjectsFragment : Fragment() {
             adapter = projectAdapterClassroomDetail
             layoutManager = LinearLayoutManager(requireContext())
         }
+        operations.getProjects()
+        liveDataObservers()
+    }
+
+    fun liveDataObservers(){
+        operations.getViewModel().projectList.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is Resource.Success -> {
+                    binding.progressBarInProject.visibility = View.GONE
+                    projectAdapterClassroomDetail.differ.submitList(it.data)
+                }
+                is Resource.Error -> {
+                    binding.progressBarInProject.visibility = View.GONE
+                    (requireActivity() as BaseActivity).showErrorSnackMessage(it.message!!)
+                }
+                is Resource.Loading -> {
+                    (requireActivity() as BaseActivity).showProgressDialog(Constants.MESSAGE_LOADING)
+                }
+                else -> {
+                }
+            }
+        })
     }
 }

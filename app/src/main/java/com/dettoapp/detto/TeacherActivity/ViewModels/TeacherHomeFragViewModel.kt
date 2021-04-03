@@ -10,6 +10,7 @@ import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.TeacherActivity.Repositories.TeacherRepository
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
+import com.dettoapp.detto.UtilityClasses.Utility.toLowerAndTrim
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.Exception
@@ -39,12 +40,12 @@ class TeacherHomeFragViewModel(
                 validate(classroomName, sem, sec, teamSize, projectType)
 
                 val classroom = Classroom(
-                        classroomName,
-                        sem,
-                        sec,
+                        classroomName.toLowerAndTrim(),
+                        sem.toLowerAndTrim(),
+                        sec.toLowerAndTrim(),
                         Utility.createID(),
                         repository.getTeacherModel(),
-                        repository.getClassroomSettingsModel(teamSize, projectType)
+                        repository.getClassroomSettingsModel(teamSize.toLowerAndTrim(), projectType.toLowerAndTrim())
                 )
                 repository.insertClassroom(classroom)
                 repository.createClassroom(classroom)
@@ -69,6 +70,7 @@ class TeacherHomeFragViewModel(
             }
         }
     }
+
     fun getTeacherName() = repository.getTeacherName()
     private fun validate(classroomName: String, sec: String, sem: String, projectType: String, teamSize: String) {
         if (classroomName.isEmpty() || sec.isEmpty() || sem.isEmpty() || projectType.isEmpty() || teamSize.isEmpty())

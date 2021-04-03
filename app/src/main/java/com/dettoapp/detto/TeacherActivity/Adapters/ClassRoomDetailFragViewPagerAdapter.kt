@@ -10,6 +10,7 @@ import com.dettoapp.detto.TeacherActivity.Fragments.StudentsInClassFragment
 class ClassRoomDetailFragViewPagerAdapter(
     fa: FragmentActivity,
     private val classroomDetailOperations: ClassroomDetailOperations
+
 ) : FragmentStateAdapter(fa) {
 
     @Suppress("PrivatePropertyName")
@@ -18,7 +19,7 @@ class ClassRoomDetailFragViewPagerAdapter(
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> ClassroomProjectsFragment()
+            0 -> ClassroomProjectsFragment(classroomDetailOperations)
             1 -> StudentsInClassFragment(classroomDetailOperations)
             else -> {
                 StudentsInClassFragment(classroomDetailOperations)

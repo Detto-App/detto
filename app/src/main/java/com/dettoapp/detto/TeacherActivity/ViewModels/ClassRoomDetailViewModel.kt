@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dettoapp.detto.Models.Classroom
+import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.Models.StudentModel
 import com.dettoapp.detto.TeacherActivity.Repositories.ClassroomDetailRepository
 import com.dettoapp.detto.UtilityClasses.Resource
@@ -26,6 +27,10 @@ class ClassRoomDetailViewModel(
     val classroomStudents: LiveData<Resource<List<StudentModel>>>
         get() = _classroomStudents
 
+    private val _projectList = MutableLiveData<Resource<List<ProjectModel>>>()
+    val projectList: LiveData<Resource<List<ProjectModel>>>
+        get() = _projectList
+
     fun getClassStudents(classroom: Classroom) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -44,6 +49,18 @@ class ClassRoomDetailViewModel(
             } catch (e: Exception) {
                 _classroomStudents.postValue(Resource.Error(message = "" + e.localizedMessage))
             }
+        }
+    }
+
+    fun getProjects(cid: String){
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val projectList=repository.getProjects(cid)
+                _projectList.postValue(Resource.Success(data = projectList))
+            }catch (e:Exception){
+                _projectList.postValue(Resource.Error(message = ""+e.localizedMessage))
+            }
+
         }
     }
 }

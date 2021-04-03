@@ -1,6 +1,7 @@
 package com.dettoapp.detto.UtilityClasses
 
 import android.content.Context
+import android.text.Editable
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -8,7 +9,6 @@ import androidx.transition.Fade
 import androidx.transition.Slide
 import com.dettoapp.detto.Models.StudentModel
 import com.dettoapp.detto.Models.TeacherModel
-import com.dettoapp.detto.Models.Token
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
@@ -107,4 +107,8 @@ object Utility {
                 ?: throw Exception("Data Storage Exception")
         return sharedPreference.getString(Constants.USER_ID, "")!!
     }
+
+    fun String.toLowerAndTrim() = this.trim().toLowerCase(Locale.ROOT)
+
+    fun Editable?.toStringLowerTrim() = this.toString().toLowerAndTrim()
 }
