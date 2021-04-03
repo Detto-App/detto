@@ -4,53 +4,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.viewbinding.library.fragment.viewBinding
 import androidx.core.app.ShareCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.Models.ProjectModel
-import com.dettoapp.detto.R
 import com.dettoapp.detto.StudentActivity.Dialog.ProjectDetailsDialog
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.StudentActivity.ViewModels.StudentClassDetailViewModel
-import com.dettoapp.detto.StudentActivity.ViewModels.StudentClassDetailViewModelFactory
-import com.dettoapp.detto.UtilityClasses.BaseActivity
+import com.dettoapp.detto.UtilityClasses.BaseFragment
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.databinding.FragmentStudentClassDetailsBinding
 
 
-class StudentClassDetailsFrag(private val classroom: Classroom) : Fragment(),
-    ProjectDetailsDialog.ProjectDialogClickListener {
+class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<StudentClassDetailViewModel, FragmentStudentClassDetailsBinding, StudentRepository>(),
+        ProjectDetailsDialog.ProjectDialogClickListener {
 
-    private val binding: FragmentStudentClassDetailsBinding by viewBinding()
     private lateinit var projectModel: ProjectModel
-
-    private val viewModel: StudentClassDetailViewModel by viewModels(factoryProducer =
-    {
-        StudentClassDetailViewModelFactory(
-            StudentRepository(
-                DatabaseDetto.getInstance(requireContext().applicationContext).classroomDAO,
-                DatabaseDetto.getInstance(requireContext().applicationContext).projectDAO
-            ),
-            requireContext().applicationContext
-        )
-    })
-
-    private val baseActivity: BaseActivity by lazy {
-        (requireActivity() as BaseActivity)
-    }
     private lateinit var pDialog: ProjectDetailsDialog
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_student_class_details, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -88,8 +60,7 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : Fragment(),
                 is Resource.Success -> {
                     baseActivity.hideProgressDialog()
                     pDialog.dismiss()
-                    showHideProjectContent(true)
-                    viewModel.getProject(classroom.classroomuid)
+                    setUpProjectDisplayContent(it.data!!)
                     viewModel.stuProjectCreation.removeObservers(viewLifecycleOwner)
                 }
                 is Resource.Error -> {
@@ -107,14 +78,19 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : Fragment(),
         viewModel.project.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
-                    showHideProjectContent(isShowingProjectContent = true)
-                    projectModel = it.data!!
-                    setUpProjectDetails()
+                    setUpProjectDisplayContent(it.data!!)
                 }
                 is Resource.Error -> showHideProjectContent()
+                else -> {
+                }
             }
-            viewModel.project.removeObservers(viewLifecycleOwner)
         })
+    }
+
+    private fun setUpProjectDisplayContent(projectModelLocal: ProjectModel) {
+        showHideProjectContent(isShowingProjectContent = true)
+        projectModel = projectModelLocal
+        setUpProjectDetails()
     }
 
     private fun showHideProjectContent(isShowingProjectContent: Boolean = false) {
@@ -135,9 +111,19 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : Fragment(),
 
         binding.shareProjectLink.setOnClickListener {
             ShareCompat.IntentBuilder.from(requireActivity())
-                .setText(shareLink).setType("text/plain")
-                .setChooserTitle("Game Details")
-                .startChooser()
+                    .setText(shareLink).setType("text/plain")
+                    .setChooserTitle("Game Details")
+                    .startChooser()
         }
     }
+
+    override fun getViewModelClass(): Class<StudentClassDetailViewModel> = StudentClassDetailViewModel::class.java
+    override fun getFragmentBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentStudentClassDetailsBinding {
+        return FragmentStudentClassDetailsBinding.inflate(inflater, container, false)
+    }
+
+    override fun getRepository(): StudentRepository = StudentRepository(
+            DatabaseDetto.getInstance(requireContext().applicationContext).classroomDAO,
+            DatabaseDetto.getInstance(requireContext().applicationContext).projectDAO
+    )
 }

@@ -22,8 +22,8 @@ class StudentClassDetailViewModel(
         private val context: Context
 ) : ViewModel() {
 
-    private val _stuProjectCreation = MutableLiveData<Resource<String>>()
-    val stuProjectCreation: LiveData<Resource<String>>
+    private val _stuProjectCreation = MutableLiveData<Resource<ProjectModel>>()
+    val stuProjectCreation: LiveData<Resource<ProjectModel>>
         get() = _stuProjectCreation
 
     private val _project = MutableLiveData<Resource<ProjectModel>>()
@@ -41,7 +41,6 @@ class StudentClassDetailViewModel(
                     _project.postValue(Resource.Success(data = projectModel))
             } catch (e: Exception) {
                 _project.postValue(Resource.Error(message = "" + e.localizedMessage))
-
             }
         }
     }
@@ -66,7 +65,7 @@ class StudentClassDetailViewModel(
                 )
                 repository.insertProject(projectModel)
                 repository.insertProjectToServer(projectModel)
-                _stuProjectCreation.postValue(Resource.Success(data = ""))
+                _stuProjectCreation.postValue(Resource.Success(data = projectModel))
             } catch (e: Exception) {
                 _stuProjectCreation.postValue(Resource.Error(message = "" + e.localizedMessage))
             }

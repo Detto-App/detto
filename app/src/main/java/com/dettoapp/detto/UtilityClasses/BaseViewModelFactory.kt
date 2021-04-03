@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.dettoapp.detto.LoginSignUpActivity.LoginSignUpRepository
 import com.dettoapp.detto.StudentActivity.StudentRepository
+import com.dettoapp.detto.StudentActivity.ViewModels.StudentClassDetailViewModel
 import com.dettoapp.detto.StudentActivity.ViewModels.StudentHomeFragViewModel
 import com.dettoapp.detto.TeacherActivity.Repositories.ClassroomDetailRepository
 import com.dettoapp.detto.TeacherActivity.Repositories.TeacherRepository
@@ -20,6 +21,7 @@ class BaseViewModelFactory(private val repository: BaseRepository, private val c
             modelClass.isAssignableFrom(StudentHomeFragViewModel::class.java) -> StudentHomeFragViewModel((repository as StudentRepository), context) as T
             modelClass.isAssignableFrom(TeacherHomeFragViewModel::class.java) -> TeacherHomeFragViewModel((repository as TeacherRepository), context) as T
             modelClass.isAssignableFrom(ClassRoomDetailViewModel::class.java) -> ClassRoomDetailViewModel((repository as ClassroomDetailRepository), context) as T
+            modelClass.isAssignableFrom(StudentClassDetailViewModel::class.java) -> StudentClassDetailViewModel((repository as StudentRepository), context) as T
             else -> throw IllegalStateException("Cant Create ViewModel,No option Base Factory")
         }
     }
