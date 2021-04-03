@@ -75,6 +75,8 @@ class LinkParseActivity : BaseActivity() {
                     viewModel.insertClassroom()
                 else if(type == Constants.TYPE_PID)
                     viewModel.insertProject()
+
+                finish()
             }
             setNegativeButton("No") { _, _ ->
 

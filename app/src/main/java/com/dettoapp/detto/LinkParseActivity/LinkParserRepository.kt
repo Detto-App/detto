@@ -12,9 +12,10 @@ import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 import com.dettoapp.detto.UtilityClasses.Utility
 import java.util.*
 
-class LinkParserRepository(private val dao: ClassroomDAO,private val projectDAO: ProjectDAO) {
+class LinkParserRepository(private val dao: ClassroomDAO, private val projectDAO: ProjectDAO) {
     fun getRole(context: Context): Int {
-        val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
+        val sharedPreference =
+            context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
                 ?: throw Exception("Data Storage Exception")
         return sharedPreference.getInt(Constants.USER_ROLE_KEY, -1)
     }
@@ -22,17 +23,24 @@ class LinkParserRepository(private val dao: ClassroomDAO,private val projectDAO:
     suspend fun insertClassroom(classroom: Classroom) {
         dao.insertClassroom(classroom)
     }
-    suspend fun insertProject(projectModel:ProjectModel){
+
+    suspend fun insertProject(projectModel: ProjectModel) {
         projectDAO.insertProject(projectModel)
     }
 
     suspend fun regStudentToClassroom(studentModel: StudentModel, cid: String) {
         RetrofitInstance.createClassroomAPI.regStudentToClassroom(studentModel, cid, Utility.TOKEN)
     }
-    suspend fun regStudentToProject(pid:String){
-        RetrofitInstance.projectAPI.regStudentToProject(pid,getSname(),Utility.TOKEN)
+
+    suspend fun regStudentToProject(pid: String) {
+        RetrofitInstance.projectAPI.regStudentToProject(pid, getSname(),getSusn(), Utility.TOKEN)
     }
-     fun getSusn()=Utility.STUDENT.susn.toLowerCase(Locale.ROOT)
-     fun getSname()=Utility.STUDENT.name.toLowerCase(Locale.ROOT)
-    suspend fun getProject(pid: String) = RetrofitInstance.projectAPI.getProject(pid,Utility.TOKEN)
+
+    fun getSusn() = Utility.STUDENT.susn.toLowerCase(Locale.ROOT)
+    fun getSname() = Utility.STUDENT.name.toLowerCase(Locale.ROOT)
+    suspend fun getSingleProjectDetails(pid: String) =
+        RetrofitInstance.projectAPI.getSingleProjectDetails(
+            pid,
+            Utility.TOKEN
+        )
 }

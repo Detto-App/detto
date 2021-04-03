@@ -62,7 +62,8 @@ class StudentClassDetailViewModel(
                         description.toLowerAndTrim(),
                         usnMap.toHashSet(),
                         classroom.teacher.uid,
-                        classroom.classroomuid
+                        classroom.classroomuid,
+                    studentNameList = arrayListOf(Utility.STUDENT.name)
                 )
                 repository.insertProject(projectModel)
                 repository.insertProjectToServer(projectModel)

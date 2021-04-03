@@ -72,7 +72,7 @@ class LinkParseViewModel(private val repository: LinkParserRepository,  private 
         _linkParse.postValue(Resource.Confirm(type, classRoomDetails))
     }
     private suspend fun getProject(type:String,id:String){
-        val project=repository.getProject(id).body()?:
+        val project=repository.getSingleProjectDetails(id).body()?:
                 throw Exception("Unable to Find This Project room")
         val susn=repository.getSusn()
         if(susn in project.studentList ){

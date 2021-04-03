@@ -13,14 +13,14 @@ interface ProjectAPI {
         @Header("Authorization") token: String
     )
 
-    @GET("/getProjectDetails/{cid}")
+    @GET("/getProjects/{cid}")
     suspend fun getProjects(
         @Path(value = "cid")cid:String,
         @Header("Authorization")token: String
     ):Response<List<ProjectModel>>
 
-    @GET("/getProject/{pid}")
-    suspend fun getProject(
+    @GET("/getProjectDetails/{pid}")
+    suspend fun getSingleProjectDetails(
         @Path(value="pid")pid:String,
         @Header("Authorization")token: String
 
@@ -28,10 +28,11 @@ interface ProjectAPI {
 
 
 
-    @POST("/regStudentToProject/{pid}/{name}")
+    @POST("/regStudentToProject/{pid}/{name}/{susn}")
     suspend fun regStudentToProject(
         @Path(value = "pid")pid: String,
         @Path(value = "name")name: String,
+        @Path(value = "susn")susn:String,
         @Header("Authorization")token: String
     )
 
