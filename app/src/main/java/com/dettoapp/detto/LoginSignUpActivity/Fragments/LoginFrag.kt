@@ -69,7 +69,7 @@ class LoginFrag : BaseFragment<LoginSignUpActivityViewModel, FragmentLoginBindin
         viewModel.login.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
-                    baseActivity.hideProgressBar()
+                    baseActivity.hideProgressDialog()
                     baseActivity.showToast(it.message!!)
                     val intent = if (it.data == Constants.TEACHER)
                         Intent(requireActivity(), TeacherActivity::class.java)
@@ -80,7 +80,7 @@ class LoginFrag : BaseFragment<LoginSignUpActivityViewModel, FragmentLoginBindin
                     startActivity(intent)
                 }
                 is Resource.Error -> {
-                    baseActivity.hideProgressBar()
+                    baseActivity.hideProgressDialog()
                     baseActivity.showErrorSnackMessage(it.message!!)
                 }
                 is Resource.Loading -> {

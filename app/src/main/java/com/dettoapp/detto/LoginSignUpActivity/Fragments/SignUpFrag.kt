@@ -2,21 +2,15 @@ package com.dettoapp.detto.LoginSignUpActivity.Fragments
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.LoginSignUpActivity.LoginSignUpRepository
 import com.dettoapp.detto.R
-import com.dettoapp.detto.UtilityClasses.BaseActivity
 import com.dettoapp.detto.UtilityClasses.BaseFragment
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
@@ -70,11 +64,11 @@ class SignUpFrag : BaseFragment<LoginSignUpActivityViewModel, FragmentSignUpBind
         viewModel.signUp.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
-                    baseActivity.hideProgressBar()
+                    baseActivity.hideProgressDialog()
                     showAlertDialog("Verify Email", "A Verification Email has been sent to your email,Please Verify the email and Login Again")
                 }
                 is Resource.Error -> {
-                    baseActivity.hideProgressBar()
+                    baseActivity.hideProgressDialog()
                     baseActivity.showToast(it.message!!)
                 }
                 is Resource.Loading -> {

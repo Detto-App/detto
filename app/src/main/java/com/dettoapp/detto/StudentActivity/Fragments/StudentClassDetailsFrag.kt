@@ -86,14 +86,14 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : Fragment(),
         viewModel.stuProjectCreation.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
-                    baseActivity.hideProgressBar()
+                    baseActivity.hideProgressDialog()
                     pDialog.dismiss()
                     showHideProjectContent(true)
                     viewModel.getProject(classroom.classroomuid)
                     viewModel.stuProjectCreation.removeObservers(viewLifecycleOwner)
                 }
                 is Resource.Error -> {
-                    baseActivity.hideProgressBar()
+                    baseActivity.hideProgressDialog()
                     baseActivity.showErrorSnackMessage(it.message!!, pDialog.getViewDialog())
                 }
                 is Resource.Loading -> {

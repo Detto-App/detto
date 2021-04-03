@@ -31,7 +31,7 @@ open class BaseActivity : AppCompatActivity() {
         progressbarDialog.show()
     }
 
-    fun hideProgressBar()
+    fun hideProgressDialog()
     {
         progressbarDialog.dismiss()
     }
@@ -73,7 +73,7 @@ open class BaseActivity : AppCompatActivity() {
             setTitle(dialogTitle)
             setMessage(dialogMessage)
             setPositiveButton("Ok") { _, _ ->
-                finish()
+
             }
         }
         val alertDialog: AlertDialog = builder.create().apply {

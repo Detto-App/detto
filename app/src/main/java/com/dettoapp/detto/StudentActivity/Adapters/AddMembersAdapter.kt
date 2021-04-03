@@ -9,18 +9,18 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.R
+import com.dettoapp.detto.UtilityClasses.Utility.toLowerAndTrim
 import com.google.android.material.textfield.TextInputLayout
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 @Suppress("PrivatePropertyName")
 class AddMembersAdapter(classroom: Classroom) : RecyclerView.Adapter<AddMembersAdapter.MemberViewHolder>() {
 
-    private val memberHasSet = ArrayList<String>()
+    private val memberList = ArrayList<String>()
     private val valueHashMap = HashMap<Int, String>()
     private var MAX_TEAM_SIZE = classroom.settingsModel.teamSize.toInt()
-
-    interface AddMembersAdapterClickListener {
-        fun onClicked(usnMAP: HashMap<Int, String>)
-    }
 
     private val diffUtil = object : DiffUtil.ItemCallback<String>() {
         override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
@@ -37,8 +37,8 @@ class AddMembersAdapter(classroom: Classroom) : RecyclerView.Adapter<AddMembersA
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemberViewHolder {
         return MemberViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.student_prject_details_view_holder, parent, false)
+                LayoutInflater.from(parent.context)
+                        .inflate(R.layout.student_prject_details_view_holder, parent, false)
         )
     }
 
@@ -54,29 +54,28 @@ class AddMembersAdapter(classroom: Classroom) : RecyclerView.Adapter<AddMembersA
     inner class MemberViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(value: String, position: Int) {
             val usn = itemView.findViewById<TextInputLayout>(R.id.usnStudentProject)
-            usn.hint = "USN Of Member " + value
+            usn.hint = "USN Of Member $value"
             usn.editText?.setText("")
             usn.editText?.doAfterTextChanged {
-                valueHashMap[position] = usn.editText?.text.toString().trim().toLowerCase()
+                valueHashMap[position] = usn.editText?.text.toString().toLowerAndTrim()
             }
-
         }
     }
 
     fun addOption() {
-        if (memberHasSet.size > MAX_TEAM_SIZE - 1)
+        if (memberList.size > MAX_TEAM_SIZE - 1)
             return
-        memberHasSet.add("" + (memberHasSet.size + 1))
-        valueHashMap[(memberHasSet.size-1)] = ""
-        differ.submitList(ArrayList(memberHasSet))
+        memberList.add("" + (memberList.size + 1))
+        valueHashMap[(memberList.size - 1)] = ""
+        differ.submitList(ArrayList(memberList))
     }
 
     fun minusOption() {
-        if (memberHasSet.size == 0)
+        if (memberList.size == 0)
             return
-        valueHashMap.remove(memberHasSet.size - 1)
-        memberHasSet.removeAt(memberHasSet.size - 1)
-        differ.submitList(ArrayList(memberHasSet))
+        valueHashMap.remove(memberList.size - 1)
+        memberList.removeAt(memberList.size - 1)
+        differ.submitList(ArrayList(memberList))
     }
 
     fun getUsnMap() = valueHashMap

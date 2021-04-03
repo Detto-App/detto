@@ -36,21 +36,21 @@ class LinkParseActivity : BaseActivity() {
         viewModel.linkParse.observe(this, Observer {
             when (it) {
                 is Resource.Success -> {
-                    hideProgressBar()
+                    hideProgressDialog()
                     val intent = Intent(this, StudentActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
                     finish()
                 }
                 is Resource.Error -> {
-                    hideProgressBar()
+                    hideProgressDialog()
                     super.showAlertDialog("Alert", "" + it.message)
                 }
                 is Resource.Loading -> {
                     showProgressDialog(Constants.MESSAGE_LOADING)
                 }
                 is Resource.Confirm -> {
-                    hideProgressBar()
+                    hideProgressDialog()
                     showConfirmationDialog("Do you want to really join this classroom?", "" + it.message)
                 }
                 else -> {
