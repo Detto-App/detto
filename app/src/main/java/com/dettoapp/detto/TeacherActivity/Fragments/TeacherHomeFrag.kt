@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.core.app.ShareCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.R
@@ -21,6 +22,7 @@ import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentTeacherHomeBinding
+
 
 class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHomeBinding, TeacherRepository>(), GroupInfoDialog.GroupInfoDialogOnClickListener, ClassroomAdapter.ClassRoomAdapterClickListener, DataBaseOperations {
 
@@ -43,6 +45,12 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
             adapter = classroomAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
+
+        binding.teacherRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy > 20) binding.btnfab.hide() else if (dy < 20) binding.btnfab.show()
+            }
+        })
     }
 
     private fun liveDataObservers() {
