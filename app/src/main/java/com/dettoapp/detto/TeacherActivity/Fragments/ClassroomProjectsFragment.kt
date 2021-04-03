@@ -8,29 +8,23 @@ import android.view.ViewGroup
 import android.viewbinding.library.fragment.viewBinding
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dettoapp.detto.R
 import com.dettoapp.detto.TeacherActivity.Adapters.ClassroomAdapter
 import com.dettoapp.detto.TeacherActivity.Adapters.ProjectAdapterClassroomDetail
+import com.dettoapp.detto.TeacherActivity.Repositories.ClassroomDetailRepository
+import com.dettoapp.detto.TeacherActivity.ViewModels.ClassRoomDetailViewModel
 import com.dettoapp.detto.UtilityClasses.BaseActivity
+import com.dettoapp.detto.UtilityClasses.BaseFragment
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.databinding.FragmentClassroomProjectsBinding
 
-class ClassroomProjectsFragment(private val operations: ClassroomDetailOperations) : Fragment() {
+class ClassroomProjectsFragment(private val operations: ClassroomDetailOperations) :
+    BaseFragment<ClassRoomDetailViewModel,FragmentClassroomProjectsBinding, ClassroomDetailRepository>() {
     private lateinit var projectAdapterClassroomDetail: ProjectAdapterClassroomDetail
 
-    private val binding:FragmentClassroomProjectsBinding by viewBinding()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_classroom_projects, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,14 +50,33 @@ class ClassroomProjectsFragment(private val operations: ClassroomDetailOperation
                 }
                 is Resource.Error -> {
                     binding.progressBarInProject.visibility = View.GONE
-                    (requireActivity() as BaseActivity).showErrorSnackMessage(it.message!!)
+                   baseActivity.showErrorSnackMessage(it.message!!)
                 }
                 is Resource.Loading -> {
-                    (requireActivity() as BaseActivity).showProgressDialog(Constants.MESSAGE_LOADING)
+                    baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
                 }
                 else -> {
                 }
             }
         })
+    }
+
+    override fun getViewModelClass(): Class<ClassRoomDetailViewModel> {
+        return ClassRoomDetailViewModel::class.java
+    }
+
+    override fun getFragmentBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentClassroomProjectsBinding {
+        return FragmentClassroomProjectsBinding.inflate(inflater,container,false)
+    }
+
+    override fun getRepository(): ClassroomDetailRepository {
+        return ClassroomDetailRepository()
+    }
+
+    override fun getBaseViewModelOwner(): ViewModelStoreOwner {
+        return operations.getViewModelStoreOwner()
     }
 }

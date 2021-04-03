@@ -79,6 +79,10 @@ class ClassRoomDetailFrag(
         return viewModel
     }
 
+    override fun getViewModelStoreOwner(): ViewModelStoreOwner {
+        return this
+    }
+
     override fun getViewModelClass(): Class<ClassRoomDetailViewModel> {
         return ClassRoomDetailViewModel::class.java
     }

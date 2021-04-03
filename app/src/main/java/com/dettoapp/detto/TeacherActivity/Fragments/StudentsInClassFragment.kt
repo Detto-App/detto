@@ -7,43 +7,28 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dettoapp.detto.TeacherActivity.Adapters.StudentsAdapterClassRoomDetail
+import com.dettoapp.detto.TeacherActivity.Repositories.ClassroomDetailRepository
 import com.dettoapp.detto.TeacherActivity.ViewModels.ClassRoomDetailViewModel
 import com.dettoapp.detto.UtilityClasses.BaseActivity
+import com.dettoapp.detto.UtilityClasses.BaseFragment
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
+import com.dettoapp.detto.databinding.FragmentClassroomProjectsBinding
 import com.dettoapp.detto.databinding.FragmentStudentsInClassBinding
 
 
 class StudentsInClassFragment(private val classroomDetailOperations: ClassroomDetailOperations) :
-        Fragment() {
+        BaseFragment<ClassRoomDetailViewModel, FragmentStudentsInClassBinding, ClassroomDetailRepository>() {
 
-    private lateinit var viewModel: ClassRoomDetailViewModel
-    private var _binding: FragmentStudentsInClassBinding? = null
-    private val binding
-        get() = _binding!!
 
     private lateinit var studentsAdapter: StudentsAdapterClassRoomDetail
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = classroomDetailOperations.getViewModel()
-    }
-
-    override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View {
-        // Inflate the layout for this fragment
-        _binding = FragmentStudentsInClassBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
         initialise()
         setUpLiveDataObservers()
 
@@ -60,10 +45,10 @@ class StudentsInClassFragment(private val classroomDetailOperations: ClassroomDe
                 is Resource.Error -> {
                     binding.progressBarStudentSV.visibility = View.GONE
                     binding.swipeToRefreshClassroomDetail.isRefreshing = false
-                    (requireActivity() as BaseActivity).showErrorSnackMessage(it.message!!)
+                  baseActivity.showErrorSnackMessage(it.message!!)
                 }
                 is Resource.Loading -> {
-                    (requireActivity() as BaseActivity).showProgressDialog(Constants.MESSAGE_LOADING)
+                    baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
                 }
                 else -> {
                 }
@@ -87,10 +72,24 @@ class StudentsInClassFragment(private val classroomDetailOperations: ClassroomDe
 
         classroomDetailOperations.getClassroomStudents()
     }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
+    override fun getViewModelClass(): Class<ClassRoomDetailViewModel> {
+        return ClassRoomDetailViewModel::class.java
     }
+
+    override fun getFragmentBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentStudentsInClassBinding {
+        return FragmentStudentsInClassBinding.inflate(inflater,container,false)
+    }
+
+    override fun getRepository(): ClassroomDetailRepository {
+        return ClassroomDetailRepository()
+    }
+
+    override fun getBaseViewModelOwner(): ViewModelStoreOwner {
+        return classroomDetailOperations.getViewModelStoreOwner()
+    }
+
+
 }

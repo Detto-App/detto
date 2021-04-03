@@ -28,14 +28,14 @@ class RoomConverters {
         return Gson().fromJson(classroomSettingsString,type)
     }
     @TypeConverter
-    fun fromHashMap(map:HashMap<Int,String>):String{
-        return  Gson().toJson(map)
+    fun fromHashSet(set:HashSet<String>):String{
+        return  Gson().toJson(set)
     }
 
     @TypeConverter
-    fun fromHashMapString(mapString:String):HashMap<Int,String>
+    fun fromHashSetString(setString:String):HashSet<String>
     {
-        val type=object :TypeToken<Map<Int,String>>(){}.type
-        return Gson().fromJson(mapString,type)
+        val type=object :TypeToken<Set<String>>(){}.type
+        return Gson().fromJson(setString,type)
     }
 }
