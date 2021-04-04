@@ -65,9 +65,9 @@ object Utility {
         return this
     }
 
-    fun navigateFragment(fragManager: FragmentManager, containerID: Int, fragment: Fragment, tag: String, addToBackStack: Boolean = true, replaceOrAdd: Boolean = true) {
+    fun navigateFragment(fragManager: FragmentManager, containerID: Int, fragment: Fragment, tag: String, addToBackStack: Boolean = true, isAdding: Boolean = true) {
 
-        val transaction = if (replaceOrAdd)
+        val transaction = if (isAdding)
             fragManager.beginTransaction().add(containerID, fragment.applyTransaction())
         else
             fragManager.beginTransaction().replace(containerID, fragment.applyTransaction())
