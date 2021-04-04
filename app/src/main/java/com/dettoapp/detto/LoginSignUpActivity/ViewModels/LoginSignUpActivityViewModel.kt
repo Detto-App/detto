@@ -15,6 +15,7 @@ import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 import com.dettoapp.detto.UtilityClasses.Utility
+import com.dettoapp.detto.UtilityClasses.Utility.toLowerAndTrim
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
@@ -42,18 +43,19 @@ class LoginSignUpActivityViewModel(
     fun loginProcess(role: Int, email: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                val emailLocal = email.toLowerAndTrim()
                 _login.postValue(Resource.Loading())
 
-                if (validate(email, password, role)) {
+                if (validate(emailLocal, password, role)) {
 
-                    Firebase.auth.signInWithEmailAndPassword(email, password).await()
+                    Firebase.auth.signInWithEmailAndPassword(emailLocal, password).await()
                     if (Firebase.auth.currentUser?.isEmailVerified == true) {
 
-                        getUserDetailsFromServer(email, role)
+                        getUserDetailsFromServer(emailLocal, role)
                         if (role == Constants.TEACHER) {
-                            repository.getTeacherClassroomsDetailsAndStore(email)
+                            repository.getTeacherClassroomsDetailsAndStore(emailLocal)
                         } else if (role == Constants.STUDENT) {
-                            repository.getStudentClassroomsAndStore(email)
+                            repository.getStudentClassroomsAndStore(emailLocal)
                         }
 
                         _login.postValue(Resource.Success(data = role, message = "Registered"))

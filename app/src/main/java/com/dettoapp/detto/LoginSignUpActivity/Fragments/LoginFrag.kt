@@ -1,8 +1,6 @@
 package com.dettoapp.detto.LoginSignUpActivity.Fragments
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +18,6 @@ import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentLoginBinding
 import com.dettoapp.detto.loginActivity.ViewModels.LoginSignUpActivityViewModel
-import java.util.*
 
 
 class LoginFrag : BaseFragment<LoginSignUpActivityViewModel, FragmentLoginBinding, LoginSignUpRepository>() {
@@ -40,11 +37,10 @@ class LoginFrag : BaseFragment<LoginSignUpActivityViewModel, FragmentLoginBindin
 
             val roleSelected = binding.role.text.toString()
             val role = roles.indexOf(roleSelected)
-            Log.d("AAA", role.toString())
 
             viewModel.loginProcess(
                     role,
-                    binding.emailLogin.editText?.text.toString().toLowerCase(Locale.ROOT),
+                    binding.emailLogin.editText?.text.toString(),
                     binding.passwordLogin.editText?.text.toString()
             )
         }
@@ -54,8 +50,6 @@ class LoginFrag : BaseFragment<LoginSignUpActivityViewModel, FragmentLoginBindin
                     requireActivity().supportFragmentManager,
                     R.id.loginFragContainer, SignUpFrag(), "splash", addToBackStack = true
             )
-
-            //viewModel.loginProcess(binding!!.email.text.toString(), binding!!.password.text.toString())
         }
 
         val adapter =
@@ -65,19 +59,20 @@ class LoginFrag : BaseFragment<LoginSignUpActivityViewModel, FragmentLoginBindin
 
     }
 
+    @Suppress("RedundantSamConstructor")
     private fun liveDataObservers() {
         viewModel.login.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
                     baseActivity.hideProgressDialog()
                     baseActivity.showToast(it.message!!)
-                    val intent = if (it.data == Constants.TEACHER)
-                        Intent(requireActivity(), TeacherActivity::class.java)
-                    else
-                        Intent(requireActivity(), StudentActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+
                     Utility.initialiseData(it.data!!, requireContext().applicationContext)
-                    startActivity(intent)
+                    if (it.data == Constants.TEACHER)
+                        Utility.navigateActivity(requireContext(), TeacherActivity::class.java)
+                    else
+                        Utility.navigateActivity(requireActivity(), StudentActivity::class.java)
+
                 }
                 is Resource.Error -> {
                     baseActivity.hideProgressDialog()

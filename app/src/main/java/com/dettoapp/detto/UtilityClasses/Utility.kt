@@ -1,14 +1,17 @@
 package com.dettoapp.detto.UtilityClasses
 
 import android.content.Context
+import android.content.Intent
 import android.text.Editable
 import android.view.Gravity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.transition.Fade
 import androidx.transition.Slide
 import com.dettoapp.detto.Models.StudentModel
 import com.dettoapp.detto.Models.TeacherModel
+import com.dettoapp.detto.TeacherActivity.TeacherActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
@@ -122,5 +125,12 @@ object Utility {
         }
 
         return hashSet
+    }
+
+    fun <T> navigateActivity(context: Context,toActivityClass:Class<T>)
+    {
+        val intent = Intent(context, toActivityClass)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
     }
 }
