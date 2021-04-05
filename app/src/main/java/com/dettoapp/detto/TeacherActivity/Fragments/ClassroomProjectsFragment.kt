@@ -22,7 +22,8 @@ import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.databinding.FragmentClassroomProjectsBinding
 
 class ClassroomProjectsFragment(private val operations: ClassroomDetailOperations) :
-    BaseFragment<ClassRoomDetailViewModel,FragmentClassroomProjectsBinding, ClassroomDetailRepository>() {
+    BaseFragment<ClassRoomDetailViewModel,FragmentClassroomProjectsBinding, ClassroomDetailRepository>() ,
+    ProjectAdapterClassroomDetail.ClassroomProjectOperation{
     private lateinit var projectAdapterClassroomDetail: ProjectAdapterClassroomDetail
 
 
@@ -32,7 +33,7 @@ class ClassroomProjectsFragment(private val operations: ClassroomDetailOperation
     }
 
     private fun initialise() {
-        projectAdapterClassroomDetail = ProjectAdapterClassroomDetail()
+        projectAdapterClassroomDetail = ProjectAdapterClassroomDetail(this)
         binding.tClassroomProjectRecyclerview.apply {
             adapter = projectAdapterClassroomDetail
             layoutManager = LinearLayoutManager(requireContext())
@@ -42,7 +43,7 @@ class ClassroomProjectsFragment(private val operations: ClassroomDetailOperation
     }
 
     fun liveDataObservers(){
-        operations.getViewModel().projectList.observe(viewLifecycleOwner, Observer {
+        viewModel.projectList.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
                     binding.progressBarInProject.visibility = View.GONE
@@ -54,6 +55,9 @@ class ClassroomProjectsFragment(private val operations: ClassroomDetailOperation
                 }
                 is Resource.Loading -> {
                     baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
+                }
+                is Resource.Confirm ->{
+                    baseActivity.hideProgressDialog()
                 }
                 else -> {
                 }
@@ -79,4 +83,11 @@ class ClassroomProjectsFragment(private val operations: ClassroomDetailOperation
     override fun getBaseViewModelOwner(): ViewModelStoreOwner {
         return operations.getViewModelStoreOwner()
     }
+
+    override fun changeStatus(pid:String,status:String) {
+
+        viewModel.changeStatus(pid,status)
+    }
+
+
 }

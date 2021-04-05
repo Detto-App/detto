@@ -8,12 +8,12 @@ import android.widget.Toast
 import androidx.core.app.ShareCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.R
 import com.dettoapp.detto.TeacherActivity.Adapters.ClassroomAdapter
 import com.dettoapp.detto.TeacherActivity.DataBaseOperations
-import com.dettoapp.detto.TeacherActivity.Dialog.GroupInfoDialog
 import com.dettoapp.detto.TeacherActivity.Repositories.TeacherRepository
 import com.dettoapp.detto.TeacherActivity.ViewModels.TeacherHomeFragViewModel
 import com.dettoapp.detto.UtilityClasses.BaseFragment
@@ -22,10 +22,11 @@ import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentTeacherHomeBinding
 
-class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHomeBinding, TeacherRepository>(), GroupInfoDialog.GroupInfoDialogOnClickListener, ClassroomAdapter.ClassRoomAdapterClickListener, DataBaseOperations {
+
+class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHomeBinding, TeacherRepository>(), ClassroomCreateFragment.ClassroomCreateFragmentOnClickListener, ClassroomAdapter.ClassRoomAdapterClickListener, DataBaseOperations {
 
     private lateinit var classroomAdapter: ClassroomAdapter
-    private lateinit var groupInfoDialog: GroupInfoDialog
+    private lateinit var classroomCreateFragment: ClassroomCreateFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,14 +36,19 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
 
     private fun initialise() {
         binding.btnfab.setOnClickListener {
-            groupInfoDialog = GroupInfoDialog(requireContext(), this)
-            groupInfoDialog.show()
+            Utility.navigateFragment(requireActivity().supportFragmentManager, R.id.teacherHomeContainer, ClassroomCreateFragment(this), "ddd")
         }
         classroomAdapter = ClassroomAdapter(viewModel.getTeacherName(), this)
         binding.teacherRecyclerView.apply {
             adapter = classroomAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
+
+        binding.teacherRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy > 20) binding.btnfab.hide() else if (dy < 20) binding.btnfab.show()
+            }
+        })
     }
 
     private fun liveDataObservers() {
@@ -50,13 +56,13 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
             when (it) {
                 is Resource.Success -> {
                     baseActivity.hideProgressDialog()
-                    groupInfoDialog.dismiss()
+                    //groupInfoDialog.dismiss()
                     baseActivity.showToast(it.data!!)
                 }
                 is Resource.Error -> {
 
                     baseActivity.hideProgressDialog()
-                    baseActivity.showErrorSnackMessage(it.message!!, groupInfoDialog.getViewDialog())
+                    baseActivity.showErrorSnackMessage(it.message!!, classroomCreateFragment.getViewDialog())
                     Toast.makeText(requireContext().applicationContext, "Please Select All Fields", Toast.LENGTH_LONG).show()
                 }
                 is Resource.Loading -> {

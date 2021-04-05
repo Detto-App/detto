@@ -56,12 +56,21 @@ class ClassRoomDetailViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val project=repository.getProjects(cid)
-
                 _projectList.postValue(Resource.Success(data = project))
             }catch (e:Exception){
                 _projectList.postValue(Resource.Error(message = ""+e.localizedMessage))
             }
 
+        }
+    }
+
+    fun changeStatus(pid:String,status:String){
+        viewModelScope.launch(Dispatchers.IO) {
+            try{
+                _projectList.postValue(Resource.Loading())
+                repository.changeStatus(pid,status)
+                _projectList.postValue((Resource.Confirm(message = "")))
+            }catch (e:Exception){_projectList.postValue(Resource.Error(message = ""+e.localizedMessage))}
         }
     }
 }

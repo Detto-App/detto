@@ -14,6 +14,7 @@ import com.google.android.material.textfield.TextInputLayout
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+import kotlin.collections.LinkedHashSet
 
 @Suppress("PrivatePropertyName")
 class AddMembersAdapter(classroom: Classroom) : RecyclerView.Adapter<AddMembersAdapter.MemberViewHolder>() {
@@ -79,4 +80,6 @@ class AddMembersAdapter(classroom: Classroom) : RecyclerView.Adapter<AddMembersA
     }
 
     fun getUsnMap() = valueHashMap
+
+    fun getArrayList() = memberList
 }

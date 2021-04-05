@@ -1,6 +1,7 @@
 package com.dettoapp.detto.APIs
 
 import com.dettoapp.detto.Models.ProjectModel
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -26,8 +27,6 @@ interface ProjectAPI {
 
     ):Response<ProjectModel>
 
-
-
     @POST("/regStudentToProject/{pid}/{name}/{susn}")
     suspend fun regStudentToProject(
         @Path(value = "pid")pid: String,
@@ -35,5 +34,12 @@ interface ProjectAPI {
         @Path(value = "susn")susn:String,
         @Header("Authorization")token: String
     )
+
+    @GET("/changeStatus/{pid}/{status}")
+    suspend fun changeStatus(
+        @Path(value="pid")pid:String,
+        @Path(value="status")status:String,
+        @Header("Authorization")token: String
+    ):Response<ResponseBody>
 
 }

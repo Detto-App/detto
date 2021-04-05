@@ -2,11 +2,14 @@ package com.dettoapp.detto.TeacherActivity.Adapters
 
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.graphics.Color
+import android.provider.SyncStateContract
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -14,11 +17,14 @@ import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.Models.StudentModel
 import com.dettoapp.detto.R
+import com.dettoapp.detto.UtilityClasses.Constants
 
-class ProjectAdapterClassroomDetail() :
+class ProjectAdapterClassroomDetail(private val classroomProjectOperation:ClassroomProjectOperation) :
         RecyclerView.Adapter<ProjectAdapterClassroomDetail.ProjectViewHolder>() {
 
-
+interface ClassroomProjectOperation{
+    fun changeStatus(pid:String,status:String)
+}
 
     private val diffCallBack = object : DiffUtil.ItemCallback<ProjectModel>() {
         override fun areItemsTheSame(oldItem: ProjectModel, newItem: ProjectModel): Boolean {
@@ -46,6 +52,10 @@ class ProjectAdapterClassroomDetail() :
     }
 
     inner class ProjectViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val statusAccepted=itemView.findViewById<TextView>(R.id.acceptProjectClassroom)
+        val statusRejected=itemView.findViewById<TextView>(R.id.rejectProjectClassroom)
+        val statusDisplay=itemView.findViewById<TextView>(R.id.statusDisplay)
+
         fun bind(projectModel: ProjectModel) {
 
             initialise(projectModel)
@@ -56,22 +66,36 @@ class ProjectAdapterClassroomDetail() :
             val reject = itemView.findViewById<TextView>(R.id.rejectProjectClassroom)
             val projectName=itemView.findViewById<TextView>(R.id.tcdpv_project_name)
             val projectDesc=itemView.findViewById<TextView>(R.id.tcdpv_project_desc)
-
             projectName.text=projectModel.title
             projectDesc.text=projectModel.desc
 
+            if(projectModel.status==Constants.PROJECT_REJECTED)
+                changeViewOnClick(Constants.PROJECT_REJECTED,Color.RED)
+            else if(projectModel.status==Constants.PROJECT_ACCEPTED)
+                changeViewOnClick(Constants.PROJECT_ACCEPTED,Color.GREEN)
+
+
             accept.setOnClickListener {
                 showAlertDialog("Accept", "") {
-                    //Log.d("DDDD", "Yess")
+                    changeViewOnClick(Constants.PROJECT_ACCEPTED,Color.GREEN)
+                    classroomProjectOperation.changeStatus(projectModel.pid,Constants.PROJECT_ACCEPTED)
                 }
             }
 
             reject.setOnClickListener {
                 showAlertDialog("Reject", "") {
-                    // Log.d("DDDD", "No")
+                    changeViewOnClick(Constants.PROJECT_REJECTED,Color.RED)
+                    classroomProjectOperation.changeStatus(projectModel.pid,Constants.PROJECT_REJECTED)
                 }
             }
 
+        }
+
+        private fun changeViewOnClick(status: String,color: Int){
+            statusDisplay.text="Status: ${status}"
+            statusDisplay.setBackgroundColor(color)
+            statusAccepted.visibility=View.GONE
+            statusRejected.visibility=View.GONE
         }
 
         private fun showAlertDialog(title: String, message: String, onClickButton: () -> Unit) {
