@@ -37,4 +37,9 @@
         <item>Mini Project</item>
         <item>Final Year Project</item>
     </string-array>
+
+    <string-array name="group_type">
+        <item>Manual</item>
+        <item>Auto</item>
+    </string-array>
 </resources>

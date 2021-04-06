@@ -27,8 +27,8 @@ class TeacherRepository(private val dao: ClassroomDAO):BaseRepository() {
         return Utility.TEACHER
     }
 
-    fun getClassroomSettingsModel(teamSize: String, projectType: String): ClassroomSettingsModel {
-        return ClassroomSettingsModel(teamSize, projectType)
+    fun getClassroomSettingsModel(teamSize: String, projectType: String,groupType:String): ClassroomSettingsModel {
+        return ClassroomSettingsModel(teamSize, projectType,groupType)
     }
 
     suspend fun deleteClassroom(classroom: Classroom) {
