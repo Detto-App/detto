@@ -24,6 +24,7 @@ import com.dettoapp.detto.databinding.FragmentStudentClassDetailsBinding
 class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<StudentClassDetailViewModel, FragmentStudentClassDetailsBinding, StudentRepository>(),
         ProjectDetailsDialog.ProjectDialogClickListener,ProjectEditDialog.ProjectEditDialogClickListner{
 
+
     private lateinit var projectModel: ProjectModel
     private lateinit var pDialog: ProjectDetailsDialog
     private lateinit var projectEditDialog:ProjectEditDialog
@@ -54,6 +55,7 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<S
             projectEditDialog= ProjectEditDialog(this)
             projectEditDialog.show(requireActivity().supportFragmentManager,"pEdit")
         }
+
     }
 
     override fun onProjectCreate(title: String, description: String, usnMap: HashMap<Int, String>, arrayList: ArrayList<String>) {

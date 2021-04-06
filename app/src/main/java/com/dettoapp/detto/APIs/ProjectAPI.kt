@@ -48,5 +48,10 @@ interface ProjectAPI {
         @Path(value = "pid") pid: String,
         @Header("Authorization") token: String
     )
+    @POST("/getManyProjectDetails")
+    suspend fun getManyProjectDetails(
+        @Body set: HashSet<String>,
+        @Header("Authorization") token: String
+    ):Response<ArrayList<ProjectModel>>
 
 }

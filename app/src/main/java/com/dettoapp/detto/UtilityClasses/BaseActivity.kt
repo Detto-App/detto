@@ -14,7 +14,7 @@ import com.dettoapp.detto.R
 
 open class BaseActivity : AppCompatActivity() {
 
-    private lateinit var  progressbarDialog : ProgressDialog
+    private lateinit var progressbarDialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,8 +22,7 @@ open class BaseActivity : AppCompatActivity() {
         progressbarDialog = ProgressDialog(this)
     }
 
-    fun showProgressDialog(message:String)
-    {
+    fun showProgressDialog(message: String) {
 
         progressbarDialog.setMessage(message)
         progressbarDialog.setCanceledOnTouchOutside(false)
@@ -31,49 +30,57 @@ open class BaseActivity : AppCompatActivity() {
         progressbarDialog.show()
     }
 
-    fun hideProgressDialog()
-    {
+    fun hideProgressDialog() {
         progressbarDialog.dismiss()
     }
 
-    fun closeKeyBoard(view : View?)
-    {
-        if(view!=null)
-        {
-            val imm : InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(view.windowToken,0)
+    fun closeKeyBoard(view: View?) {
+        if (view != null) {
+            val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
 
     }
 
-    fun showErrorSnackMessage(message:String){
-        val snackBar = Snackbar.make(findViewById(android.R.id.content),message,Snackbar.LENGTH_LONG)
+    fun showErrorSnackMessage(message: String) {
+        val snackBar = Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG)
         val snackBarView = snackBar.view
-        snackBarView.setBackgroundColor(ContextCompat.getColor(this,R.color.redColor))
+        snackBarView.setBackgroundColor(ContextCompat.getColor(this, R.color.redColor))
         snackBar.show()
     }
 
-    fun showErrorSnackMessage(message:String,view: View){
-        val snackBar = Snackbar.make(view,message,Snackbar.LENGTH_LONG)
+    fun showErrorSnackMessage(message: String, view: View) {
+        val snackBar = Snackbar.make(view, message, Snackbar.LENGTH_LONG)
         val snackBarView = snackBar.view
-        snackBarView.setBackgroundColor(ContextCompat.getColor(this,R.color.redColor))
+        snackBarView.setBackgroundColor(ContextCompat.getColor(this, R.color.redColor))
         snackBar.show()
     }
 
-    fun showToast(message :String)
-    {
+    fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
-    fun showAlertDialog(dialogTitle: String, dialogMessage: String) {
+
+    fun showAlertDialog(dialogTitle: String, dialogMessage: String,
+                        yesString: String = "Ok",
+                        yesFunction: (() -> Unit)? = null,
+                        noString: String = "Cancel",
+                        noFunction: (() -> Unit)? = null) {
 
         val builder = AlertDialog.Builder(this)
+
 
         with(builder)
         {
             setTitle(dialogTitle)
             setMessage(dialogMessage)
-            setPositiveButton("Ok") { _, _ ->
-
+            setPositiveButton(yesString) { _, _ ->
+                if (yesFunction != null)
+                    yesFunction()
+            }
+            setNegativeButton(noString)
+            { _, _ ->
+                if (noFunction != null)
+                    noFunction()
             }
         }
         val alertDialog: AlertDialog = builder.create().apply {

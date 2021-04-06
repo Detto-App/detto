@@ -1,9 +1,11 @@
 package com.dettoapp.detto.StudentActivity.Fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dettoapp.detto.Db.DatabaseDetto
@@ -13,6 +15,8 @@ import com.dettoapp.detto.StudentActivity.Adapters.StudentClassroomAdapter
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.StudentActivity.ViewModels.StudentHomeFragViewModel
 import com.dettoapp.detto.UtilityClasses.BaseFragment
+import com.dettoapp.detto.UtilityClasses.Constants
+import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentStudentHomeBinding
 
@@ -39,8 +43,30 @@ class StudentHomeFrag : BaseFragment<StudentHomeFragViewModel, FragmentStudentHo
         viewModel.allClassRooms.observe(viewLifecycleOwner, Observer {
             studentClassroomAdapter.differ.submitList(it)
         })
-
+        viewModel.project1.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is Resource.Loading -> {
+                    baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
+                }
+                is Resource.Confirm -> {
+                    baseActivity.showAlertDialog("Old Projects",
+                            "Old projects found  \n press \"Yes\" to fetch", yesString = "Yes", yesFunction = {
+                        viewModel.download()
+                    }, noFunction = {
+                        requireActivity().finish()
+                    })
+                }
+                is Resource.Success -> {
+                    baseActivity.hideProgressDialog()
+                    baseActivity.showToast("Successfully fetched all data")
+                }
+                is Resource.Error -> {
+                    baseActivity.showErrorSnackMessage(it.message!!)
+                }
+            }
+        })
     }
+
 
     override fun onViewHolderClick(classroom: Classroom) {
         Utility.navigateFragment(requireActivity().supportFragmentManager, R.id.StudentFragContainer,

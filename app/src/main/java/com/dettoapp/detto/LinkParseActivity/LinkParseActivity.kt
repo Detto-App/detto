@@ -3,6 +3,7 @@ package com.dettoapp.detto.LinkParseActivity
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -45,7 +46,7 @@ class LinkParseActivity : BaseActivity() {
                 }
                 is Resource.Error -> {
                     hideProgressDialog()
-                    super.showAlertDialog("Alert", "" + it.message)
+                    showAlertDialog("Alert", "" + it.message)
                 }
                 is Resource.Loading -> {
                     showProgressDialog(Constants.MESSAGE_LOADING)
@@ -82,6 +83,8 @@ class LinkParseActivity : BaseActivity() {
                 finish()
             }
         }
+
+
         val alertDialog: AlertDialog = builder.create().apply {
             setCancelable(false)
         }
