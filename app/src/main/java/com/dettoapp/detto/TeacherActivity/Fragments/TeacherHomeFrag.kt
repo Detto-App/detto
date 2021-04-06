@@ -95,8 +95,8 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
         })
     }
 
-    override fun onClassCreated(classname: String, sem: String, sec: String, teamSize: String, projectType: String) {
-        viewModel.classRoomData(classname, sem, sec, teamSize, projectType)
+    override fun onClassCreated(classname: String, sem: String, sec: String, teamSize: String, projectType: String,groupType:String) {
+        viewModel.classRoomData(classname, sem, sec, teamSize, projectType,groupType)
     }
 
     override fun onClassRoomCLicked(classroom: Classroom) {

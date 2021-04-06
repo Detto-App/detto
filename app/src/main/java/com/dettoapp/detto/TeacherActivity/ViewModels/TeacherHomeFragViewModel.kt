@@ -66,28 +66,29 @@ class TeacherHomeFragViewModel(
     val allClassRooms = repository.getAllClassRooms()
 
 
+
     fun classRoomData(
         classroomName: String,
         sem: String,
         sec: String,
         teamSize: String,
-        projectType: String
+        projectType: String,
+        groupType:String
     ) {
+
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _classRoomCreation.postValue(Resource.Loading())
-                validate(classroomName, sem, sec, teamSize, projectType)
+                validate(classroomName, sem, sec, teamSize, projectType,groupType)
 
                 val classroom = Classroom(
-                    classroomName.toLowerAndTrim(),
-                    sem.toLowerAndTrim(),
-                    sec.toLowerAndTrim(),
-                    Utility.createID(),
-                    repository.getTeacherModel(),
-                    repository.getClassroomSettingsModel(
-                        teamSize.toLowerAndTrim(),
-                        projectType.toLowerAndTrim()
-                    )
+
+                        classroomName.toLowerAndTrim(),
+                        sem.toLowerAndTrim(),
+                        sec.toLowerAndTrim(),
+                        Utility.createID(),
+                        repository.getTeacherModel(),
+                        repository.getClassroomSettingsModel(teamSize.toLowerAndTrim(), projectType.toLowerAndTrim(),groupType.toLowerAndTrim())
                 )
                 repository.insertClassroom(classroom)
                 repository.createClassroom(classroom)
@@ -114,13 +115,8 @@ class TeacherHomeFragViewModel(
     }
 
     fun getTeacherName() = repository.getTeacherName()
-    private fun validate(
-        classroomName: String,
-        sec: String,
-        sem: String,
-        projectType: String,
-        teamSize: String
-    ) {
+
+    private fun validate(classroomName: String, sec: String, sem: String, projectType: String, teamSize: String,groupType: String) {
         if (classroomName.isEmpty() || sec.isEmpty() || sem.isEmpty() || projectType.isEmpty() || teamSize.isEmpty())
             throw Exception("Please Enter all Fields")
     }
