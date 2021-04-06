@@ -42,4 +42,10 @@ interface ProjectAPI {
         @Header("Authorization")token: String
     ):Response<ResponseBody>
 
+    @POST("/getManyProjectDetails")
+    suspend fun getManyProjectDetails(
+        @Body set: HashSet<String>,
+        @Header("Authorization") token: String
+    ):Response<ArrayList<ProjectModel>>
+
 }

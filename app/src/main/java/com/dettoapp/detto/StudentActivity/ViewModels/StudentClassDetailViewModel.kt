@@ -98,6 +98,6 @@ class StudentClassDetailViewModel(
     }
 
 
-    fun getProjectFromSharedPref(classroom: Classroom) =
-            repository.getProjectFromSharedPref(classroom.classroomuid, context)
+//    fun getProjectFromSharedPref(classroom: Classroom) =
+//            repository.getProjectFromSharedPref(classroom.classroomuid, context)
 }

@@ -28,4 +28,6 @@ object Constants {
     const val PROJECT_ACCEPTED = "accepted"
     const val PROJECT_REJECTED = "rejected"
     const val ENTIRE_MODEL_KEY = "model"
+
+    const val SHOULD_FETCH="should_fetch"
 }

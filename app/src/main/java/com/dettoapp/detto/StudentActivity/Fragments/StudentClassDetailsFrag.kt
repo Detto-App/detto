@@ -18,8 +18,9 @@ import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.databinding.FragmentStudentClassDetailsBinding
 
 
-class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<StudentClassDetailViewModel, FragmentStudentClassDetailsBinding, StudentRepository>(),
-        ProjectDetailsDialog.ProjectDialogClickListener {
+class StudentClassDetailsFrag(private val classroom: Classroom) :
+    BaseFragment<StudentClassDetailViewModel, FragmentStudentClassDetailsBinding, StudentRepository>(),
+    ProjectDetailsDialog.ProjectDialogClickListener {
 
     private lateinit var projectModel: ProjectModel
     private lateinit var pDialog: ProjectDetailsDialog
@@ -38,11 +39,11 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<S
             pDialog.show(requireActivity().supportFragmentManager, "pCreate")
         }
         view.setOnClickListener { }
-
-        if (viewModel.getProjectFromSharedPref(classroom) == Constants.PROJECT_NOT_CREATED)
-            binding.noProjectContent.visibility = View.VISIBLE
-        else
-            binding.yesProjectContent.visibility = View.VISIBLE
+//
+//        if (viewModel.getProjectFromSharedPref(classroom) == Constants.PROJECT_NOT_CREATED)
+//            binding.noProjectContent.visibility = View.VISIBLE
+//        else
+//            binding.yesProjectContent.visibility = View.VISIBLE
     }
 
     override fun onProjectCreate(title: String, description: String, usnMap: HashMap<Int, String>, arrayList: ArrayList<String>) {
