@@ -14,11 +14,10 @@ import kotlin.collections.ArrayList
 class StudentRepository(private val dao: ClassroomDAO, private val projectDao: ProjectDAO) : BaseRepository() {
     fun getAllClassRooms() = dao.getAllClassRooms()
 
-//    fun getProjectFromSharedPref(classID: String, context: Context): Int {
-//        val sharedPreference = context.getSharedPreferences(Constants.PROJECT_CLASS_FILE, Context.MODE_PRIVATE)
-//                ?: throw Exception("Data Storage Exception")
-//        return sharedPreference.getInt(classID, Constants.PROJECT_NOT_CREATED)
-//    }
+
+    suspend fun insertProject(listOfProjectModel: List<ProjectModel>) {
+        projectDao.insertProject(listOfProjectModel)
+    }
 
     suspend fun insertProject(projectModel: ProjectModel) {
         projectDao.insertProject(projectModel)
@@ -32,30 +31,31 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
 
     suspend fun getProject(cid: String) = projectDao.getProject(cid)
 
-    suspend fun getManyProjectDetails():ArrayList<ProjectModel>{
-        return RetrofitInstance.projectAPI.getManyProjectDetails(Utility.STUDENT.projects, Utility.TOKEN).body()!!
+    private suspend fun getManyProjectDetails(): ArrayList<ProjectModel> {
+        return RetrofitInstance.projectAPI.getManyProjectDetails(Utility.STUDENT.projects, Utility.TOKEN).body()
+                ?: throw Exception("Unable to Fetch Projects")
     }
 
-    suspend fun shouldFetch(context:Context){
+    suspend fun shouldFetch(context: Context) {
         val sharedPreference =
-            context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
-                ?: throw Exception("Data Storage Exception")
+                context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
+                        ?: throw Exception("Data Storage Exception")
 
-            val listOfProjects=getManyProjectDetails()
-            for(i in listOfProjects)
-                insertProject(i)
+        val listOfProjects = getManyProjectDetails()
+
+        insertProject(listOfProjects)
 
         with(sharedPreference.edit())
         {
-            putBoolean(Constants.SHOULD_FETCH,false)
+            putBoolean(Constants.SHOULD_FETCH, false)
             apply()
         }
     }
 
-    suspend fun getShouldFetch(context:Context):Boolean{
+    fun getShouldFetch(context: Context): Boolean {
         val sharedPreference =
-            context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
-                ?: throw Exception("Data Storage Exception")
+                context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
+                        ?: throw Exception("Data Storage Exception")
         return sharedPreference.getBoolean(Constants.SHOULD_FETCH, true)
     }
 }

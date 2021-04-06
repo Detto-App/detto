@@ -46,7 +46,7 @@ class LinkParseActivity : BaseActivity() {
                 }
                 is Resource.Error -> {
                     hideProgressDialog()
-                    super.showAlertDialog("Alert", "" + it.message)
+                    showAlertDialog("Alert", "" + it.message)
                 }
                 is Resource.Loading -> {
                     showProgressDialog(Constants.MESSAGE_LOADING)

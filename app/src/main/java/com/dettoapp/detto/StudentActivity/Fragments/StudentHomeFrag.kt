@@ -44,45 +44,27 @@ class StudentHomeFrag : BaseFragment<StudentHomeFragViewModel, FragmentStudentHo
             studentClassroomAdapter.differ.submitList(it)
         })
         viewModel.project1.observe(viewLifecycleOwner, Observer {
-            when(it){
+            when (it) {
                 is Resource.Loading -> {
                     baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
                 }
-                is Resource.Confirm ->{
-                    showConfirmationDialog( "old projects found  \n press \"Yes\" to fetch")
+                is Resource.Confirm -> {
+                    baseActivity.showAlertDialog("Old Projects",
+                            "Old projects found  \n press \"Yes\" to fetch", yesString = "Yes", yesFunction = {
+                        viewModel.download()
+                    }, noFunction = {
+                        requireActivity().finish()
+                    })
                 }
-                is Resource.Success ->{
+                is Resource.Success -> {
                     baseActivity.hideProgressDialog()
-                    showToast("Successfully fetched all data")
+                    baseActivity.showToast("Successfully fetched all data")
+                }
+                is Resource.Error -> {
+                    baseActivity.showErrorSnackMessage(it.message!!)
                 }
             }
         })
-    }
-
-    private fun showConfirmationDialog( dialogMessage: String) {
-
-        val builder = AlertDialog.Builder(requireActivity())
-
-        with(builder)
-        {
-            setTitle("Alert")
-            setMessage(dialogMessage)
-            setPositiveButton("Yes") { _, _ ->
-                viewModel.download()
-            }
-            setNegativeButton("Cancel") { _, _ ->
-                requireActivity().finish()
-            }
-        }
-        val alertDialog: AlertDialog = builder.create().apply {
-            setCancelable(false)
-        }
-        alertDialog.show()
-    }
-
-    fun showToast(message :String)
-    {
-        Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
     }
 
 

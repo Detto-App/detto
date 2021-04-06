@@ -10,6 +10,9 @@ interface ProjectDAO {
     @Insert
     suspend fun insertProject(projectModel : ProjectModel)
 
+    @Insert
+    suspend fun insertProject(listOfProjectModel: List<ProjectModel>)
+
     @Query("SELECT * FROM project_table WHERE cid = :cid")
     suspend fun getProject(cid:String) : ProjectModel?
 }
