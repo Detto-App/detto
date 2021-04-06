@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.dettoapp.detto.UtilityClasses.Constants.PROJECT_PENDING
+import com.dettoapp.detto.UtilityClasses.Constants.PROJECT_REJECTED
 
 @Entity(tableName = "project_table")
 data class ProjectModel(

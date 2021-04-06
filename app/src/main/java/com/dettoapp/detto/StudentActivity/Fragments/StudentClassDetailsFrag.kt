@@ -1,15 +1,18 @@
 package com.dettoapp.detto.StudentActivity.Fragments
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.core.app.ShareCompat
 import androidx.lifecycle.Observer
 import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.StudentActivity.Dialog.ProjectDetailsDialog
+import com.dettoapp.detto.StudentActivity.Dialog.ProjectEditDialog
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.StudentActivity.ViewModels.StudentClassDetailViewModel
 import com.dettoapp.detto.UtilityClasses.BaseFragment
@@ -19,10 +22,11 @@ import com.dettoapp.detto.databinding.FragmentStudentClassDetailsBinding
 
 
 class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<StudentClassDetailViewModel, FragmentStudentClassDetailsBinding, StudentRepository>(),
-        ProjectDetailsDialog.ProjectDialogClickListener {
+        ProjectDetailsDialog.ProjectDialogClickListener,ProjectEditDialog.ProjectEditDialogClickListner{
 
     private lateinit var projectModel: ProjectModel
     private lateinit var pDialog: ProjectDetailsDialog
+    private lateinit var projectEditDialog:ProjectEditDialog
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,10 +47,21 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<S
             binding.noProjectContent.visibility = View.VISIBLE
         else
             binding.yesProjectContent.visibility = View.VISIBLE
+        binding.checkStatus.setOnClickListener {
+            viewModel.checkProjectStatus(projectModel.pid)
+        }
+        binding.edit.setOnClickListener {
+            projectEditDialog= ProjectEditDialog(this)
+            projectEditDialog.show(requireActivity().supportFragmentManager,"pEdit")
+        }
     }
 
     override fun onProjectCreate(title: String, description: String, usnMap: HashMap<Int, String>, arrayList: ArrayList<String>) {
         viewModel.storeProject(title, description, usnMap, classroom,arrayList)
+    }
+
+    override fun onProjectEdit(title: String, description: String) {
+        viewModel.storeEditedProject(classroom.classroomuid,title,description)
     }
 
 
@@ -79,6 +94,24 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<S
             when (it) {
                 is Resource.Success -> {
                     setUpProjectDisplayContent(it.data!!)
+                    if(it.data.status==Constants.PROJECT_ACCEPTED){
+                        binding.statusDisplay1.setBackgroundColor(Color.GREEN)
+                        binding.statusDisplay1.setText(Constants.PROJECT_ACCEPTED)
+                        binding.checkStatus.visibility=View.GONE
+                        binding.edit.visibility=View.GONE
+
+                    }
+                    else if(it.data.status==Constants.PROJECT_REJECTED){
+                        binding.statusDisplay1.setBackgroundColor(Color.RED)
+                        binding.statusDisplay1.setText(Constants.PROJECT_REJECTED)
+                        binding.checkStatus.visibility=View.GONE
+                        binding.edit.visibility=View.VISIBLE
+                    }
+                    else{
+                        binding.edit.visibility=View.GONE
+                    }
+//                    if(projectEditDialog.isAdded())
+//                        projectEditDialog.dismiss()
                 }
                 is Resource.Error -> showHideProjectContent()
                 else -> {

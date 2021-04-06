@@ -58,7 +58,7 @@ class StudentClassroomAdapter(private val studentClassroomAdapterCLickListener:S
 
             itemView.setOnClickListener{
                 studentClassroomAdapterCLickListener.onViewHolderClick(classroom)
-                Toast.makeText(itemView.context,"vikas ainapur", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(itemView.context,"", Toast.LENGTH_SHORT).show()
             }
         }
     }

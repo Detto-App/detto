@@ -42,4 +42,11 @@ interface ProjectAPI {
         @Header("Authorization")token: String
     ):Response<ResponseBody>
 
+    @POST("/updateProject/{pid}")
+    suspend fun updateProject(
+        @Body projectModel: ProjectModel,
+        @Path(value = "pid") pid: String,
+        @Header("Authorization") token: String
+    )
+
 }
