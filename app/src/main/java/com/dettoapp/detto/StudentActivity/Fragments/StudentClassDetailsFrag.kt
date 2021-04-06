@@ -29,7 +29,6 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<S
 
         initialise(view)
         liveDataObservers()
-
     }
 
     private fun initialise(view: View) {
