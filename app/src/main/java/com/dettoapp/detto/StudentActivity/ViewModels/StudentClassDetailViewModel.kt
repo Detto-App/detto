@@ -4,11 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.StudentActivity.StudentRepository
+import com.dettoapp.detto.UtilityClasses.BaseViewModel
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.UtilityClasses.Utility.toHashSet
@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 class StudentClassDetailViewModel(
         private val repository: StudentRepository,
         private val context: Context
-) : ViewModel() {
+) : BaseViewModel() {
 
     private val _stuProjectCreation = MutableLiveData<Resource<ProjectModel>>()
     val stuProjectCreation: LiveData<Resource<ProjectModel>>
@@ -32,17 +32,13 @@ class StudentClassDetailViewModel(
 
 
     fun getProject(cid: String) {
-        viewModelScope.launch {
-            try {
-                val projectModel = repository.getProject(cid)
-                if (projectModel == null)
-                    _project.postValue(Resource.Error(message = "Not Found"))
-                else
-                    _project.postValue(Resource.Success(data = projectModel))
-            } catch (e: Exception) {
-                _project.postValue(Resource.Error(message = "" + e.localizedMessage))
-            }
-        }
+        operateWithLiveData(_project, mainFunction = {
+            val projectModel = repository.getProject(cid)
+            if (projectModel == null)
+                it.postValue(Resource.Error(message = "Not Found"))
+            else
+                it.postValue(Resource.Success(data = projectModel))
+        })
     }
 
     fun storeProject(
@@ -64,7 +60,7 @@ class StudentClassDetailViewModel(
                         usnMapSet,
                         classroom.teacher.uid,
                         classroom.classroomuid,
-                    studentNameList = arrayListOf(Utility.STUDENT.name)
+                        studentNameList = arrayListOf(Utility.STUDENT.name)
                 )
                 repository.insertProject(projectModel)
                 repository.insertProjectToServer(projectModel)
@@ -100,4 +96,15 @@ class StudentClassDetailViewModel(
 
 //    fun getProjectFromSharedPref(classroom: Classroom) =
 //            repository.getProjectFromSharedPref(classroom.classroomuid, context)
+    //        viewModelScope.launch {
+//            try {
+//                val projectModel = repository.getProject(cid)
+//                if (projectModel == null)
+//                    _project.postValue(Resource.Error(message = "Not Found"))
+//                else
+//                    _project.postValue(Resource.Success(data = projectModel))
+//            } catch (e: Exception) {
+//                _project.postValue(Resource.Error(message = "" + e.localizedMessage))
+//            }
+//        }
 }

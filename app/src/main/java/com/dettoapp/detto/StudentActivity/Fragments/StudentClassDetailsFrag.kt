@@ -56,24 +56,17 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
     }
 
     private fun liveDataObservers() {
-        viewModel.stuProjectCreation.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is Resource.Success -> {
-                    baseActivity.hideProgressDialog()
-                    pDialog.dismiss()
-                    setUpProjectDisplayContent(it.data!!)
-                    viewModel.stuProjectCreation.removeObservers(viewLifecycleOwner)
-                }
-                is Resource.Error -> {
-                    baseActivity.hideProgressDialog()
-                    baseActivity.showErrorSnackMessage(it.message!!, pDialog.getViewDialog())
-                }
-                is Resource.Loading -> {
-                    baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
-                }
-                else -> {
-                }
-            }
+
+        observeWithLiveData(viewModel.stuProjectCreation,onSuccess = {
+            baseActivity.hideProgressDialog()
+            pDialog.dismiss()
+            setUpProjectDisplayContent(it)
+            viewModel.stuProjectCreation.removeObservers(viewLifecycleOwner)
+        },onError = {
+            baseActivity.hideProgressDialog()
+            baseActivity.showErrorSnackMessage(it, pDialog.getViewDialog())
+        },onLoading = {
+            baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
         })
 
         viewModel.project.observe(viewLifecycleOwner, Observer {
