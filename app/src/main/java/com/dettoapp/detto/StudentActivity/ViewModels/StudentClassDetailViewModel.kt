@@ -10,6 +10,7 @@ import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.UtilityClasses.BaseViewModel
 import com.dettoapp.detto.UtilityClasses.Resource
+import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.UtilityClasses.Utility.toHashSet
 import com.dettoapp.detto.UtilityClasses.Utility.toLowerAndTrim
@@ -93,18 +94,38 @@ class StudentClassDetailViewModel(
         return false
     }
 
+    fun checkProjectStatus(pid: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val projectModel = repository.checkProjectStatus(pid)
+                _project.postValue(Resource.Success(projectModel))
 
-//    fun getProjectFromSharedPref(classroom: Classroom) =
-//            repository.getProjectFromSharedPref(classroom.classroomuid, context)
-    //        viewModelScope.launch {
-//            try {
-//                val projectModel = repository.getProject(cid)
-//                if (projectModel == null)
-//                    _project.postValue(Resource.Error(message = "Not Found"))
-//                else
-//                    _project.postValue(Resource.Success(data = projectModel))
-//            } catch (e: Exception) {
-//                _project.postValue(Resource.Error(message = "" + e.localizedMessage))
-//            }
-//        }
+
+            } catch (e: Exception) {
+                _project.postValue(Resource.Error(message = "" + e.localizedMessage))
+            }
+
+        }
+    }
+
+    fun storeEditedProject(cid: String, title: String, description: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val projectModel = repository.storeEditedProject(cid, title, description)
+                _project.postValue(Resource.Success(projectModel))
+
+
+            } catch (e: Exception) {
+                _project.postValue(Resource.Error(message = "" + e.localizedMessage))
+            }
+
+        }
+
+    }
+
+
+    fun getProjectFromSharedPref(classroom: Classroom) =
+            repository.getProjectFromSharedPref(classroom.classroomuid, context)
+
 }
+
