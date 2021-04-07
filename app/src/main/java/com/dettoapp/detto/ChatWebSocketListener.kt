@@ -1,6 +1,6 @@
 package com.dettoapp.detto
 
-import com.dettoapp.detto.WebServicesProvider.Companion.NORMAL_CLOSURE_STATUS
+import com.dettoapp.detto.ChatServiceProvider.Companion.NORMAL_CLOSURE_STATUS
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
