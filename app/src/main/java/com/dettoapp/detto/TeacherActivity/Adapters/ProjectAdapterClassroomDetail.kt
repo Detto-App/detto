@@ -3,19 +3,14 @@ package com.dettoapp.detto.TeacherActivity.Adapters
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.graphics.Color
-import android.provider.SyncStateContract
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.Models.ProjectModel
-import com.dettoapp.detto.Models.StudentModel
 import com.dettoapp.detto.R
 import com.dettoapp.detto.UtilityClasses.Constants
 
@@ -64,7 +59,7 @@ interface ClassroomProjectOperation{
         fun initialise(projectModel: ProjectModel) {
             val accept = itemView.findViewById<TextView>(R.id.acceptProjectClassroom)
             val reject = itemView.findViewById<TextView>(R.id.rejectProjectClassroom)
-            val projectName=itemView.findViewById<TextView>(R.id.tcdpv_project_name)
+            val projectName=itemView.findViewById<TextView>(R.id.message)
             val projectDesc=itemView.findViewById<TextView>(R.id.tcdpv_project_desc)
             projectName.text=projectModel.title
             projectDesc.text=projectModel.desc

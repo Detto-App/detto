@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -51,7 +50,7 @@ class StudentClassroomAdapter(private val studentClassroomAdapterCLickListener:S
 
 
         fun bind(classroom: Classroom) {
-            val cName = itemView.findViewById<TextView>(R.id.tcdpv_project_name)
+            val cName = itemView.findViewById<TextView>(R.id.message)
             cName.text = classroom.classroomname
             val teacherName = itemView.findViewById<TextView>(R.id.teachername)
             teacherName.text = classroom.teacher.name

@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/studentclassroomview"
+    android:id="@+id/chatviewholder"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
@@ -14,7 +14,7 @@
         android:background="#29b6fc">
 
         <TextView
-            android:id="@+id/tcdpv_project_name"
+            android:id="@+id/message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
@@ -37,9 +37,9 @@
             android:layout_marginTop="8dp"
             android:text="Project Description"
             android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="@+id/tcdpv_project_name"
-            app:layout_constraintStart_toStartOf="@+id/tcdpv_project_name"
-            app:layout_constraintTop_toBottomOf="@+id/tcdpv_project_name" />
+            app:layout_constraintEnd_toEndOf="@+id/message"
+            app:layout_constraintStart_toStartOf="@+id/message"
+            app:layout_constraintTop_toBottomOf="@+id/message" />
 
         <TextView
             android:id="@+id/tcdpv_members"
@@ -48,9 +48,9 @@
             android:layout_marginTop="8dp"
             android:text="Members"
             android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="@+id/tcdpv_project_name"
+            app:layout_constraintEnd_toEndOf="@+id/message"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/tcdpv_project_name"
+            app:layout_constraintStart_toStartOf="@+id/message"
             app:layout_constraintTop_toBottomOf="@+id/tcdpv_project_desc" />
 
         <TextView

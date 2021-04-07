@@ -23,8 +23,12 @@ class StudentHomeFragViewModel(private val repository: StudentRepository, privat
 
     private fun initialize() {
         viewModelScope.launch(Dispatchers.IO) {
-            if (repository.getShouldFetch(context)) {
-                _project1.postValue(Resource.Confirm(message = ""))
+            try {
+                if (repository.getShouldFetch(context)) {
+                    _project1.postValue(Resource.Confirm(message = ""))
+                }
+            } catch (e: Exception) {
+                _project1.postValue(Resource.Error(message = "" + e.localizedMessage))
             }
         }
     }

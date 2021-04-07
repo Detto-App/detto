@@ -136,6 +136,18 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/statusDisplay1"
             app:layout_constraintTop_toBottomOf="@+id/checkStatus" />
+
+        <Button
+            android:id="@+id/chat"
+            android:layout_width="109dp"
+            android:layout_height="52dp"
+            android:text="chat"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/statusDisplay1"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/statusDisplay1"
+            app:layout_constraintTop_toBottomOf="@+id/statusDisplay1"
+            app:layout_constraintVertical_bias="0.145" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.Group
