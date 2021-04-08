@@ -51,18 +51,18 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
 
     }
     suspend  fun storeEditedProject(cid:String,title:String,description:String):ProjectModel {
-        val projectModelFromSharedPreferences =
+        val projectModelFromDatabase =
             projectDao.getProject(cid) ?: throw Exception("No class FOund")
         val projectModel = ProjectModel(
-            projectModelFromSharedPreferences.pid,
+            projectModelFromDatabase.pid,
             title,
             description,
-            projectModelFromSharedPreferences.studentList,
-            projectModelFromSharedPreferences.tid,
-            projectModelFromSharedPreferences.cid,
+            projectModelFromDatabase.studentList,
+            projectModelFromDatabase.tid,
+            projectModelFromDatabase.cid,
             Constants.PROJECT_PENDING,
-            projectModelFromSharedPreferences.studentNameList
-        )!!
+            projectModelFromDatabase.studentNameList
+        )
         updateProject(projectModel)
         RetrofitInstance.projectAPI.updateProject(projectModel, projectModel.pid, Utility.TOKEN)
         return projectModel

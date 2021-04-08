@@ -48,6 +48,7 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<S
             binding.noProjectContent.visibility = View.VISIBLE
         else
             binding.yesProjectContent.visibility = View.VISIBLE
+
         binding.checkStatus.setOnClickListener {
             viewModel.checkProjectStatus(projectModel.pid)
         }
@@ -64,6 +65,7 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<S
 
     override fun onProjectEdit(title: String, description: String) {
         viewModel.storeEditedProject(classroom.classroomuid,title,description)
+        projectEditDialog.dismiss()
     }
 
 
@@ -102,11 +104,13 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<S
                         binding.checkStatus.visibility=View.GONE
                         binding.edit.visibility=View.VISIBLE
                     }
-                    else{
+                    else if (it.data.status == Constants.PROJECT_PENDING)
+                    {
+                        binding.statusDisplay1.setBackgroundColor(Color.YELLOW)
+                        binding.statusDisplay1.setText(Constants.PROJECT_PENDING)
+                        binding.checkStatus.visibility=View.GONE
                         binding.edit.visibility=View.GONE
                     }
-//                    if(projectEditDialog.isAdded())
-//                        projectEditDialog.dismiss()
                 }
                 is Resource.Error -> showHideProjectContent()
                 else -> {

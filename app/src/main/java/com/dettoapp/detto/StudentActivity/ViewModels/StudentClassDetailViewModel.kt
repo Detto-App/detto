@@ -113,8 +113,6 @@ class StudentClassDetailViewModel(
             try {
                 val projectModel = repository.storeEditedProject(cid, title, description)
                 _project.postValue(Resource.Success(projectModel))
-
-
             } catch (e: Exception) {
                 _project.postValue(Resource.Error(message = "" + e.localizedMessage))
             }
