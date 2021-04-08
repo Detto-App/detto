@@ -43,27 +43,23 @@ class StudentHomeFrag : BaseFragment<StudentHomeFragViewModel, FragmentStudentHo
         viewModel.allClassRooms.observe(viewLifecycleOwner, Observer {
             studentClassroomAdapter.differ.submitList(it)
         })
-        viewModel.project1.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is Resource.Loading -> {
-                    baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
-                }
-                is Resource.Confirm -> {
-                    baseActivity.showAlertDialog("Old Projects",
-                            "Old projects found  \n press \"Yes\" to fetch", yesString = "Yes", yesFunction = {
-                        viewModel.download()
-                    }, noFunction = {
-                        requireActivity().finish()
-                    })
-                }
-                is Resource.Success -> {
-                    baseActivity.hideProgressDialog()
-                    baseActivity.showToast("Successfully fetched all data")
-                }
-                is Resource.Error -> {
-                    baseActivity.showErrorSnackMessage(it.message!!)
-                }
-            }
+
+
+
+        observeWithLiveData(viewModel.project1, onLoading = {
+            baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
+        }, onConfirm = {
+            baseActivity.showAlertDialog("Old Projects",
+                    "Old projects found  \n press \"Yes\" to fetch", yesString = "Yes", yesFunction = {
+                viewModel.download()
+            }, noFunction = {
+                requireActivity().finish()
+            })
+        }, onSuccess = {
+            baseActivity.hideProgressDialog()
+            baseActivity.showToast("Successfully fetched all data")
+        }, onError = {
+            baseActivity.showErrorSnackMessage(it)
         })
     }
 
@@ -82,3 +78,20 @@ class StudentHomeFrag : BaseFragment<StudentHomeFragViewModel, FragmentStudentHo
             DatabaseDetto.getInstance(requireContext()).classroomDAO,
             DatabaseDetto.getInstance(requireContext()).projectDAO)
 }
+
+//        viewModel.project1.observe(viewLifecycleOwner, Observer {
+//            when (it) {
+//                is Resource.Loading -> {
+//
+//                }
+//                is Resource.Confirm -> {
+//
+//                }
+//                is Resource.Success -> {
+//
+//                }
+//                is Resource.Error -> {
+//
+//                }
+//            }
+//        })

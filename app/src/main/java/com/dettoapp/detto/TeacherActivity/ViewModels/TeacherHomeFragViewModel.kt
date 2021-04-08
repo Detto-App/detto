@@ -12,13 +12,10 @@ import com.dettoapp.detto.TeacherActivity.Repositories.TeacherRepository
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.UtilityClasses.Utility.toLowerAndTrim
-import com.dettoapp.detto.WebServicesProvider
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.consumeEach
+import com.dettoapp.detto.ChatServiceProvider
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import kotlin.Exception
 
 @ExperimentalCoroutinesApi
@@ -28,11 +25,19 @@ class TeacherHomeFragViewModel(
     private val context: Context
 ) : ViewModel() {
 
-    val webServicesProvider = WebServicesProvider()
+    val webServicesProvider = ChatServiceProvider()
 
     init {
 
         subscribeToSocketEvents()
+        sendMessage()
+    }
+
+    private fun sendMessage() {
+        GlobalScope.launch(Dispatchers.IO) {
+            delay(3000L)
+            webServicesProvider.send("Hey From Android")
+        }
     }
 
     @ExperimentalCoroutinesApi
