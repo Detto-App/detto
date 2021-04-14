@@ -108,7 +108,7 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<S
                     {
                         binding.statusDisplay1.setBackgroundColor(Color.YELLOW)
                         binding.statusDisplay1.setText(Constants.PROJECT_PENDING)
-                        binding.checkStatus.visibility=View.GONE
+                        binding.checkStatus.visibility=View.VISIBLE
                         binding.edit.visibility=View.GONE
                     }
                 }
