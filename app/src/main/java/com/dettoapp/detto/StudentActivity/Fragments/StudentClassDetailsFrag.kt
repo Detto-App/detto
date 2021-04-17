@@ -1,5 +1,6 @@
 package com.dettoapp.detto.StudentActivity.Fragments
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import androidx.lifecycle.Observer
 import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.Models.ProjectModel
+import com.dettoapp.detto.R
 import com.dettoapp.detto.StudentActivity.Dialog.ProjectDetailsDialog
 import com.dettoapp.detto.StudentActivity.Dialog.ProjectEditDialog
 import com.dettoapp.detto.StudentActivity.StudentRepository
@@ -93,26 +95,26 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<S
                     setUpProjectDisplayContent(it.data!!)
                     if(it.data.status==Constants.PROJECT_ACCEPTED){
                         binding.statusDisplay1.setBackgroundColor(Color.GREEN)
-                        binding.statusDisplay1.setText(Constants.PROJECT_ACCEPTED)
+                        binding.statusDisplay1.text = Constants.PROJECT_ACCEPTED
                         binding.checkStatus.visibility=View.GONE
                         binding.edit.visibility=View.GONE
 
                     }
                     else if(it.data.status==Constants.PROJECT_REJECTED){
                         binding.statusDisplay1.setBackgroundColor(Color.RED)
-                        binding.statusDisplay1.setText(Constants.PROJECT_REJECTED)
+                        binding.statusDisplay1.text = Constants.PROJECT_REJECTED
                         binding.checkStatus.visibility=View.GONE
                         binding.edit.visibility=View.VISIBLE
                     }
                     else if (it.data.status == Constants.PROJECT_PENDING)
                     {
                         binding.statusDisplay1.setBackgroundColor(Color.YELLOW)
-                        binding.statusDisplay1.setText(Constants.PROJECT_PENDING)
+                        binding.statusDisplay1.text = Constants.PROJECT_PENDING
                         binding.checkStatus.visibility=View.VISIBLE
                         binding.edit.visibility=View.GONE
                     }
                 }
-                is Resource.Error -> showHideProjectContent()
+                is Resource.Error -> showHideProjectContent(classroom.settingsModel.groupType)
                 else -> {
                 }
             }
@@ -120,18 +122,31 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<S
     }
 
     private fun setUpProjectDisplayContent(projectModelLocal: ProjectModel) {
-        showHideProjectContent(isShowingProjectContent = true)
+        showHideProjectContent(classroom.settingsModel.groupType,isShowingProjectContent = true,)
         projectModel = projectModelLocal
         setUpProjectDetails()
     }
 
-    private fun showHideProjectContent(isShowingProjectContent: Boolean = false) {
+    @SuppressLint("SetTextI18n")
+    private fun showHideProjectContent(projectType:String, isShowingProjectContent: Boolean = false) {
         if (isShowingProjectContent) {
             binding.noProjectContent.visibility = View.GONE
             binding.yesProjectContent.visibility = View.VISIBLE
-        } else {
+            binding.stuClassDetailsbutton.visibility=View.GONE
+
+        } else if(projectType==Constants.MANUAL) {
             binding.noProjectContent.visibility = View.VISIBLE
             binding.yesProjectContent.visibility = View.GONE
+            binding.stuClassDetailsbutton.visibility=View.VISIBLE
+
+        }
+        else{
+            binding.noProjectContent.visibility=View.VISIBLE
+            binding.yesProjectContent.visibility = View.GONE
+            binding.stuClassDetailsbutton.visibility=View.GONE
+            binding.details.text = "Please Wait For Teacher To Allot You To A Project Group"
+
+
         }
     }
 

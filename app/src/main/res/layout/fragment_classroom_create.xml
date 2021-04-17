@@ -112,7 +112,7 @@
             app:layout_constraintTop_toBottomOf="@id/textInputLayout3" />
 
         <TextView
-            android:id="@+id/textView13"
+            android:id="@+id/details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -137,7 +137,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
             app:layout_constraintStart_toStartOf="@+id/textInputLayout"
-            app:layout_constraintTop_toBottomOf="@+id/textView13"
+            app:layout_constraintTop_toBottomOf="@+id/details"
             app:layout_constraintVertical_bias="0.0">
 
             <AutoCompleteTextView

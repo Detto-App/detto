@@ -85,7 +85,6 @@ class TeacherHomeFragViewModel(
             try {
                 _classRoomCreation.postValue(Resource.Loading())
                 validate(classroomName, sem, sec, teamSize, projectType,groupType)
-
                 val classroom = Classroom(
 
                         classroomName.toLowerAndTrim(),

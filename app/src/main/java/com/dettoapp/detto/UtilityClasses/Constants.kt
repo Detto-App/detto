@@ -30,4 +30,6 @@ object Constants {
     const val ENTIRE_MODEL_KEY = "model"
 
     const val SHOULD_FETCH="should_fetch"
+    const val MANUAL="Manual"
+    const val AUTO="Auto"
 }
