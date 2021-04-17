@@ -40,7 +40,7 @@ class TeacherHomeFragViewModel(
         }
     }
 
-    @ExperimentalCoroutinesApi
+
     private fun subscribeToSocketEvents() {
         viewModelScope.launch(Dispatchers.IO) {
             try {

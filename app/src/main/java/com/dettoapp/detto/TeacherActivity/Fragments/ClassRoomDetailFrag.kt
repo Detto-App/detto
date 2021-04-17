@@ -14,12 +14,15 @@ import com.dettoapp.detto.UtilityClasses.BaseFragment
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.databinding.FragmentClassRoomDetailBinding
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import java.util.*
 
 class ClassRoomDetailFrag(
-        private val classroom: Classroom,
-        private val dataBaseOperations: DataBaseOperations
-) : BaseFragment<ClassRoomDetailViewModel, FragmentClassRoomDetailBinding, ClassroomDetailRepository>(), ClassRoomDetailModal.ClassRoomDetailModalClickListener, ClassroomDetailOperations {
+    private val classroom: Classroom,
+    private val dataBaseOperations: DataBaseOperations
+) : BaseFragment<ClassRoomDetailViewModel, FragmentClassRoomDetailBinding, ClassroomDetailRepository>(),
+    ClassRoomDetailModal.ClassRoomDetailModalClickListener, ClassroomDetailOperations {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -29,8 +32,13 @@ class ClassRoomDetailFrag(
     }
 
     private fun initialise(view: View) {
+
+        FirebaseMessaging.getInstance().subscribeToTopic(classroom.classroomuid)
+
+
         binding.classRoomDetailName.text = classroom.classroomname.capitalize(Locale.ROOT)
-        binding.classRoomDetailTeacherName.text = "By -"+classroom.teacher.name.capitalize(Locale.ROOT)
+        binding.classRoomDetailTeacherName.text =
+            "By -" + classroom.teacher.name.capitalize(Locale.ROOT)
 
         binding.classRoomDetailMenu.setOnClickListener {
             showBottomDialog()
@@ -40,12 +48,16 @@ class ClassRoomDetailFrag(
 
         }
 
+        binding.sendNotification.setOnClickListener {
+            viewModel.sendNotification(classroom)
+        }
+
         val viewPagerAdapter = ClassRoomDetailFragViewPagerAdapter(requireActivity(), this)
         binding.viewPagerClassroomDetailFrag.adapter = viewPagerAdapter
 
         TabLayoutMediator(
-                binding.tabLayoutClassroomDetailFrag,
-                binding.viewPagerClassroomDetailFrag
+            binding.tabLayoutClassroomDetailFrag,
+            binding.viewPagerClassroomDetailFrag
         ) { tab, position ->
             tab.text = Constants.classDetailFragTabNames[position]
             binding.viewPagerClassroomDetailFrag.setCurrentItem(tab.position, true)
@@ -85,8 +97,8 @@ class ClassRoomDetailFrag(
     }
 
     override fun getFragmentBinding(
-            inflater: LayoutInflater,
-            container: ViewGroup?
+        inflater: LayoutInflater,
+        container: ViewGroup?
     ): FragmentClassRoomDetailBinding {
         return FragmentClassRoomDetailBinding.inflate(inflater, container, false)
     }

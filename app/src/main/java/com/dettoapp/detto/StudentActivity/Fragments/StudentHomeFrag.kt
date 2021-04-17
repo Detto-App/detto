@@ -40,9 +40,14 @@ class StudentHomeFrag : BaseFragment<StudentHomeFragViewModel, FragmentStudentHo
     }
 
     private fun liveDataObservers() {
-        viewModel.allClassRooms.observe(viewLifecycleOwner, Observer {
+
+        observeWithLiveData(viewModel.allClassRooms,onSuccess = {
             studentClassroomAdapter.differ.submitList(it)
         })
+
+//        viewModel.allClassRooms.observe(viewLifecycleOwner, Observer {
+//
+//        })
 
 
 

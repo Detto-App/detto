@@ -15,7 +15,7 @@ object Constants {
     const val USER_TOKEN_KEY = "token"
 
     const val TYPE_CID = "cid"
-    const val TYPE_PID ="pid"
+    const val TYPE_PID = "pid"
     const val MESSAGE_LOADING = "Loading..."
     const val ERROR_FILL_ALL_FIELDS = "Enter All Fields"
 
@@ -29,5 +29,10 @@ object Constants {
     const val PROJECT_REJECTED = "rejected"
     const val ENTIRE_MODEL_KEY = "model"
 
-    const val SHOULD_FETCH="should_fetch"
+    const val SHOULD_FETCH = "should_fetch"
+
+
+    const val BASE_URL_FCM = "https://fcm.googleapis.com/"
+    const val SERVER_KEY_FCM = "AAAAb6g6I2A:APA91bFnVgQMRH9SUoJcF_MHmi5LaQdqmLK5KWCyeQzX_SJMAEDwjdE7BSINkendBSHQvbZFJNo9LXe-WJHfRHeer1e3-2n23SPPAmtf4WmZ9ZY9VGruzgS4Cdt0o-M6VrqQs7DMvqp5"
+    const val CONTENT_TYPE_FCM = "application/json"
 }

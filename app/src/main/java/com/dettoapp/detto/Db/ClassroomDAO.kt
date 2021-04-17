@@ -15,6 +15,8 @@ interface ClassroomDAO {
     @Query("SELECT * FROM classroom_table")
     fun getAllClassRooms() : LiveData<List<Classroom>>
 
+    @Query("SELECT * FROM classroom_table")
+    suspend fun getAllClassRoomList() : List<Classroom>
 
     @Insert
     suspend fun insertClassroom(classroomList : List<Classroom>)

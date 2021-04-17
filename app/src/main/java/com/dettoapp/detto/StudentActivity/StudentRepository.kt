@@ -12,13 +12,13 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class StudentRepository(private val dao: ClassroomDAO, private val projectDao: ProjectDAO) :
-    BaseRepository() {
+        BaseRepository() {
     fun getAllClassRooms() = dao.getAllClassRooms()
 
     fun getProjectFromSharedPref(classID: String, context: Context): Int {
         val sharedPreference =
-            context.getSharedPreferences(Constants.PROJECT_CLASS_FILE, Context.MODE_PRIVATE)
-                ?: throw Exception("Data Storage Exception")
+                context.getSharedPreferences(Constants.PROJECT_CLASS_FILE, Context.MODE_PRIVATE)
+                        ?: throw Exception("Data Storage Exception")
         return sharedPreference.getInt(classID, Constants.PROJECT_NOT_CREATED)
     }
 
@@ -40,28 +40,30 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
 
     suspend fun checkProjectStatus(pid: String): ProjectModel {
         val projectModel =
-            RetrofitInstance.projectAPI.getSingleProjectDetails(pid, Utility.TOKEN).body()
-                ?: throw Exception("Unable to Find Classroom")
+                RetrofitInstance.projectAPI.getSingleProjectDetails(pid, Utility.TOKEN).body()
+                        ?: throw Exception("Unable to Find Classroom")
         updateProject(projectModel)
         return projectModel
     }
-    suspend fun updateProject(projectModel: ProjectModel){
+
+    suspend fun updateProject(projectModel: ProjectModel) {
         projectDao.updateProject(projectModel)
 
 
     }
-    suspend  fun storeEditedProject(cid:String,title:String,description:String):ProjectModel {
+
+    suspend fun storeEditedProject(cid: String, title: String, description: String): ProjectModel {
         val projectModelFromDatabase =
-            projectDao.getProject(cid) ?: throw Exception("No class FOund")
+                projectDao.getProject(cid) ?: throw Exception("No class FOund")
         val projectModel = ProjectModel(
-            projectModelFromDatabase.pid,
-            title,
-            description,
-            projectModelFromDatabase.studentList,
-            projectModelFromDatabase.tid,
-            projectModelFromDatabase.cid,
-            Constants.PROJECT_PENDING,
-            projectModelFromDatabase.studentNameList
+                projectModelFromDatabase.pid,
+                title,
+                description,
+                projectModelFromDatabase.studentList,
+                projectModelFromDatabase.tid,
+                projectModelFromDatabase.cid,
+                Constants.PROJECT_PENDING,
+                projectModelFromDatabase.studentNameList
         )
         updateProject(projectModel)
         RetrofitInstance.projectAPI.updateProject(projectModel, projectModel.pid, Utility.TOKEN)
@@ -95,4 +97,7 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
                         ?: throw Exception("Data Storage Exception")
         return sharedPreference.getBoolean(Constants.SHOULD_FETCH, true)
     }
+
+    suspend fun getClassRoomList() = dao.getAllClassRoomList()
+
 }
