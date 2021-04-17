@@ -19,7 +19,7 @@ object Constants {
     const val MESSAGE_LOADING = "Loading..."
     const val ERROR_FILL_ALL_FIELDS = "Enter All Fields"
 
-    val classDetailFragTabNames = arrayOf("Projects", "Students")
+    val classDetailFragTabNames = arrayOf("Projects", "Students","Deadlines")
 
     const val PROJECT_CREATED = 0
     const val PROJECT_NOT_CREATED = -1
