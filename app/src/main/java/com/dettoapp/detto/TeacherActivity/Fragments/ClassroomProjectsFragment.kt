@@ -85,7 +85,6 @@ class ClassroomProjectsFragment(private val operations: ClassroomDetailOperation
     }
 
     override fun changeStatus(pid:String,status:String) {
-
         viewModel.changeStatus(pid,status)
     }
 

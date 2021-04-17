@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.dettoapp.detto.TeacherActivity.Fragments.ClassroomDetailOperations
 import com.dettoapp.detto.TeacherActivity.Fragments.ClassroomProjectsFragment
+import com.dettoapp.detto.TeacherActivity.Fragments.DeadlineFragment
 import com.dettoapp.detto.TeacherActivity.Fragments.StudentsInClassFragment
 
 class ClassRoomDetailFragViewPagerAdapter(
@@ -14,13 +15,14 @@ class ClassRoomDetailFragViewPagerAdapter(
 ) : FragmentStateAdapter(fa) {
 
     @Suppress("PrivatePropertyName")
-    private val NUM_OF_PAGES = 2
+    private val NUM_OF_PAGES = 3
     override fun getItemCount() = NUM_OF_PAGES
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> ClassroomProjectsFragment(classroomDetailOperations)
             1 -> StudentsInClassFragment(classroomDetailOperations)
+            2 -> DeadlineFragment(classroomDetailOperations)
             else -> {
                 StudentsInClassFragment(classroomDetailOperations)
             }
