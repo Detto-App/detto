@@ -3,6 +3,8 @@ package com.dettoapp.detto.UtilityClasses
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.dettoapp.detto.Chat.ChatRepository
+import com.dettoapp.detto.Chat.ChatViewModel
 import com.dettoapp.detto.LoginSignUpActivity.LoginSignUpRepository
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.StudentActivity.ViewModels.StudentClassDetailViewModel
@@ -22,6 +24,7 @@ class BaseViewModelFactory(private val repository: BaseRepository, private val c
             modelClass.isAssignableFrom(TeacherHomeFragViewModel::class.java) -> TeacherHomeFragViewModel((repository as TeacherRepository), context) as T
             modelClass.isAssignableFrom(ClassRoomDetailViewModel::class.java) -> ClassRoomDetailViewModel((repository as ClassroomDetailRepository), context) as T
             modelClass.isAssignableFrom(StudentClassDetailViewModel::class.java) -> StudentClassDetailViewModel((repository as StudentRepository), context) as T
+            modelClass.isAssignableFrom(ChatViewModel::class.java) ->  ChatViewModel((repository as ChatRepository)) as T
             else -> throw IllegalStateException("Cant Create ViewModel,No option Base Factory")
         }
     }

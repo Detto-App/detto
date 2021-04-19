@@ -1,6 +1,6 @@
-package com.dettoapp.detto
+package com.dettoapp.detto.Chat
 
-import com.dettoapp.detto.ChatServiceProvider.Companion.NORMAL_CLOSURE_STATUS
+import com.dettoapp.detto.Chat.ChatServiceProvider.Companion.NORMAL_CLOSURE_STATUS
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
@@ -22,6 +22,7 @@ class ChatWebSocketListener : WebSocketListener() {
     }
 
     override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
+
         webSocket.close(NORMAL_CLOSURE_STATUS, null)
     }
 

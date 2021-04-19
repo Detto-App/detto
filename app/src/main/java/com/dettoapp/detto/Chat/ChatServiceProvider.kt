@@ -1,4 +1,4 @@
-package com.dettoapp.detto
+package com.dettoapp.detto.Chat
 
 
 import kotlinx.coroutines.Dispatchers

@@ -69,7 +69,13 @@ abstract class BaseFragment<VM : ViewModel, B : ViewBinding, R : BaseRepository>
     protected open fun getBaseViewModelOwner(): ViewModelStoreOwner = this
 
     override fun onDestroy() {
-        super.onDestroy()
         _binding = null
+        onBaseDestroy()
+        super.onDestroy()
+    }
+
+    protected open fun onBaseDestroy()
+    {
+
     }
 }
