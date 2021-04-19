@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.util.Pair
+import androidx.lifecycle.ViewModelStoreOwner
+import com.dettoapp.detto.StudentActivity.Dialog.ProjectDetailsDialog
+import com.dettoapp.detto.TeacherActivity.Dialog.DeadlineDialog
 import com.dettoapp.detto.TeacherActivity.Repositories.ClassroomDetailRepository
 import com.dettoapp.detto.TeacherActivity.ViewModels.ClassRoomDetailViewModel
 import com.dettoapp.detto.UtilityClasses.BaseFragment
@@ -13,30 +16,44 @@ import com.dettoapp.detto.databinding.FragmentDeadlineBinding
 import com.google.android.material.datepicker.MaterialDatePicker
 
 class DeadlineFragment(private val operations: ClassroomDetailOperations) :
-    BaseFragment<ClassRoomDetailViewModel,FragmentDeadlineBinding, ClassroomDetailRepository>() {
+    BaseFragment<ClassRoomDetailViewModel,FragmentDeadlineBinding, ClassroomDetailRepository>() ,
+    DeadlineDialog.DeadlineDialogListener{
+
+    private lateinit var dDialog: DeadlineDialog
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initilize()
     }
 
+
     private fun initilize(){
+
+
         binding.datePicker.setOnClickListener {
-            val dateRangePicker =
-                MaterialDatePicker.Builder.dateRangePicker()
-                    .setTitleText("Select dates")
-                    .setSelection(
-                        Pair(
-                            MaterialDatePicker.thisMonthInUtcMilliseconds(),
-                            MaterialDatePicker.todayInUtcMilliseconds()
-                        )
-                    )
-                    .build()
-            dateRangePicker.show(requireActivity().supportFragmentManager," ")
-            dateRangePicker.addOnPositiveButtonClickListener {
-                Log.d("12343",""+dateRangePicker.selection!!)
-            }
+            dDialog=DeadlineDialog(this)
+            dDialog.show(requireActivity().supportFragmentManager,"dhsa")
+//            val dateRangePicker =
+//                MaterialDatePicker.Builder.dateRangePicker()
+//                    .setTitleText("Select dates")
+//                    .setSelection(
+//                        Pair(
+//                            MaterialDatePicker.thisMonthInUtcMilliseconds(),
+//                            MaterialDatePicker.todayInUtcMilliseconds()
+//                        )
+//                    )
+//                    .build()
+//            dateRangePicker.show(requireActivity().supportFragmentManager," ")
+//            dateRangePicker.addOnPositiveButtonClickListener {
+//                Log.d("12343",""+dateRangePicker.selection!!)
+//            }
         }
+    }
+
+
+    override fun getDeadline(dateRangePicker: MaterialDatePicker<Pair<Long, Long>>,reason :String) {
+        Log.d("12343",""+dateRangePicker.selection!!)
+        dDialog.dismiss()
     }
 
 
@@ -53,5 +70,8 @@ class DeadlineFragment(private val operations: ClassroomDetailOperations) :
 
     override fun getRepository(): ClassroomDetailRepository {
         return ClassroomDetailRepository()
+    }
+    override fun getBaseViewModelOwner(): ViewModelStoreOwner {
+        return operations.getViewModelStoreOwner()
     }
 }
