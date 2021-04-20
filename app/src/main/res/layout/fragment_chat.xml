@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:windowSoftInputMode="adjustResize"
     android:layout_height="match_parent"
     android:background="@color/cus_light_white">
 
@@ -12,13 +13,13 @@
         android:id="@+id/chatRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/editTextTextPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/sendMessageField"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/sendMessageField"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -27,11 +28,11 @@
         android:inputType="textPersonName"
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button"
+        app:layout_constraintEnd_toStartOf="@+id/sendChatButton"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/button"
+        android:id="@+id/sendChatButton"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:background="@color/purple_700"
@@ -42,7 +43,7 @@
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName"
+        app:layout_constraintTop_toTopOf="@+id/sendMessageField"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView

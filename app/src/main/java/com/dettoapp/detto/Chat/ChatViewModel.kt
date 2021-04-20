@@ -62,10 +62,16 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
 //        }
     }
 
-    private suspend fun addToChatMessagesList(message: String) {
+    private  fun addToChatMessagesList(message: String,sending :Boolean = false) {
+
+        val senderId = if(!sending)
+            Utility.createID()
+        else
+            Utility.STUDENT.uid
+
         val chatMessage = ChatMessage(message, "IDK", Calendar.getInstance().time.toString("MMM dd HH:mm a"),
-                Utility.createID(), Utility.createID())
-        val list: ArrayList<ChatMessage> = chatMessages.value?.data
+                senderId, Utility.createID())
+        val list: ArrayList<ChatMessage> = _chatMessages.value?.data
                 ?: arrayListOf()
 
         val newList = ArrayList(list)
@@ -79,6 +85,15 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
     fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {
         val formatter = SimpleDateFormat(format, locale)
         return formatter.format(this)
+    }
+
+
+    fun sendMessage(message: String)
+    {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.webServicesProvider.send(message)
+            addToChatMessagesList(message,true)
+        }
     }
 
     fun closeConnection() {
