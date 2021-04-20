@@ -83,6 +83,10 @@ class ClassRoomDetailFrag(
         viewModel.getProjects(classroom.classroomuid)
     }
 
+    override fun getClassroom():String{
+        return classroom.classroomuid
+    }
+
 
     override fun getViewModel(): ClassRoomDetailViewModel {
         return viewModel

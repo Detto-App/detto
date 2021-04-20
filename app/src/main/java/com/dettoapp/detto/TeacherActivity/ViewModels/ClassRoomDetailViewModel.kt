@@ -3,15 +3,19 @@ package com.dettoapp.detto.TeacherActivity.ViewModels
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
+import androidx.core.util.Pair
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dettoapp.data.DeadlineModel
 import com.dettoapp.detto.Models.*
 import com.dettoapp.detto.TeacherActivity.Repositories.ClassroomDetailRepository
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.RetrofitInstance
+import com.dettoapp.detto.UtilityClasses.Utility
 import com.google.android.gms.tasks.*
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
 import kotlinx.coroutines.Dispatchers
@@ -88,6 +92,17 @@ class ClassRoomDetailViewModel(
                 val response = RetrofitInstance.notificationAPI.postNotification(PushNotification(x, "/topics/${classroom.classroomuid}"))
             } catch (e: Exception) {
                 Log.d(TAG, e.toString())
+            }
+        }
+    }
+
+    fun getDeadline(classroomuid: String,dateRangePicker: MaterialDatePicker<Pair<Long, Long>>, reason :String){
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val deadlineModel = DeadlineModel(Utility.createID(), reason, "", "")
+                repository.createDeadline(deadlineModel, classroomuid)
+            } catch (e: Exception) {
+                _classroomStudents.postValue(Resource.Error(message = "" + e.localizedMessage))
             }
         }
     }
