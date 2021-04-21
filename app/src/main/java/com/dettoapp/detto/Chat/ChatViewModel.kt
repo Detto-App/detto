@@ -1,19 +1,16 @@
 package com.dettoapp.detto.Chat
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.dettoapp.detto.Models.ChatMessage
 import com.dettoapp.detto.UtilityClasses.BaseViewModel
+import com.dettoapp.detto.UtilityClasses.Constants.toFormattedString
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.buffer
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
-import okio.IOException
-import java.io.IOError
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -75,7 +72,7 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
         else
             Utility.STUDENT.uid
 
-        val chatMessage = ChatMessage(message, "IDK", Calendar.getInstance().time.toString("MMM dd HH:mm a"),
+        val chatMessage = ChatMessage(message, "IDK", Calendar.getInstance().time.toFormattedString("MMM dd HH:mm a"),
                 senderId, Utility.createID())
         val list: ArrayList<ChatMessage> = _chatMessages.value?.data
                 ?: arrayListOf()
@@ -87,10 +84,7 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
     }
 
 
-    fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {
-        val formatter = SimpleDateFormat(format, locale)
-        return formatter.format(this)
-    }
+
 
 
     fun sendMessage(message: String) {

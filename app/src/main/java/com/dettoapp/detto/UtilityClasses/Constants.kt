@@ -1,5 +1,8 @@
 package com.dettoapp.detto.UtilityClasses
 
+import java.text.SimpleDateFormat
+import java.util.*
+
 object Constants {
     const val BASE_DETTO_URL = "https://detto.uk.to/"
     const val USER_EMAIL_KEY = "uEmail"
@@ -35,4 +38,9 @@ object Constants {
     const val BASE_URL_FCM = "https://fcm.googleapis.com/"
     const val SERVER_KEY_FCM = "AAAAb6g6I2A:APA91bFnVgQMRH9SUoJcF_MHmi5LaQdqmLK5KWCyeQzX_SJMAEDwjdE7BSINkendBSHQvbZFJNo9LXe-WJHfRHeer1e3-2n23SPPAmtf4WmZ9ZY9VGruzgS4Cdt0o-M6VrqQs7DMvqp5"
     const val CONTENT_TYPE_FCM = "application/json"
+
+    fun Date.toFormattedString(format: String, locale: Locale = Locale.getDefault()): String {
+        val formatter = SimpleDateFormat(format, locale)
+        return formatter.format(this)
+    }
 }
