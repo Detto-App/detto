@@ -22,6 +22,12 @@ abstract class BaseFragment<VM : ViewModel, B : ViewBinding, R : BaseRepository>
         super.onCreate(savedInstanceState)
         val factory = BaseViewModelFactory(getRepository(), requireContext().applicationContext)
         viewModel = ViewModelProvider(getBaseViewModelOwner(), factory).get(getViewModelClass())
+        getBaseOnCreate()
+    }
+
+    protected open fun getBaseOnCreate()
+    {
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

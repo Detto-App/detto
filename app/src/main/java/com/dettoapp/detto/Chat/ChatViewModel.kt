@@ -1,9 +1,11 @@
 package com.dettoapp.detto.Chat
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.dettoapp.detto.Models.ChatMessage
+import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.UtilityClasses.BaseViewModel
 import com.dettoapp.detto.UtilityClasses.Constants.toFormattedString
 import com.dettoapp.detto.UtilityClasses.Resource
@@ -11,7 +13,6 @@ import com.dettoapp.detto.UtilityClasses.Utility
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.collect
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -29,11 +30,11 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
 
     private var isFailure: Boolean = false
 
-    init {
-        subscribeToSocketEvents()
-    }
+    private lateinit var classroom: Classroom
 
-    private fun subscribeToSocketEvents() {
+    fun subscribeToSocketEvents(localClassroom: Classroom) {
+        Log.d("DDBB", "Link " + localClassroom.classroomuid)
+        classroom = localClassroom
         chatCollectJob = viewModelScope.launch(Dispatchers.IO)
         {
             try {
@@ -48,7 +49,7 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
 
 
     private suspend fun startSocket() =
-            repository.webServicesProvider.startSocket("wss://detto.uk.to/chat/1234").buffer(10)
+            repository.webServicesProvider.startSocket("wss://detto.uk.to/chat/" + classroom.classroomuid).buffer(10)
                     .collect {
                         when (it) {
                             is Resource.Success -> {
@@ -84,15 +85,12 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
     }
 
 
-
-
-
     fun sendMessage(message: String) {
         viewModelScope.launch {
             try {
                 if (isFailure) {
                     cancelPreviousJob()
-                    subscribeToSocketEvents()
+                    subscribeToSocketEvents(classroom)
                     chatCollectJob.join()
                 }
                 _chatMessageEvent.postValue(Resource.Loading())

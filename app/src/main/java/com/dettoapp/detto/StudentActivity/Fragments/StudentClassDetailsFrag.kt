@@ -57,7 +57,7 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<S
         }
 
         binding.chat.setOnClickListener {
-            Utility.navigateFragment(requireActivity().supportFragmentManager, R.id.StudentFragContainer, ChatFragment(), "chat")
+            Utility.navigateFragment(requireActivity().supportFragmentManager, R.id.StudentFragContainer, ChatFragment(classroom), "chat")
         }
 
         binding.edit.setOnClickListener {

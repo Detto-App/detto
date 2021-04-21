@@ -6,15 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.UtilityClasses.BaseFragment
 import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentChatBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class ChatFragment : BaseFragment<ChatViewModel, FragmentChatBinding, ChatRepository>() {
+class ChatFragment(private val classroom: Classroom) : BaseFragment<ChatViewModel, FragmentChatBinding, ChatRepository>() {
 
     private lateinit var chatAdapter: ChatAdapter
+
+    override fun getBaseOnCreate() {
+        viewModel.subscribeToSocketEvents(classroom)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

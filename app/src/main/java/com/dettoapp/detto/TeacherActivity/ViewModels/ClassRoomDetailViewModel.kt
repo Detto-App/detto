@@ -96,11 +96,11 @@ class ClassRoomDetailViewModel(
         }
     }
 
-    fun getDeadline(classroomuid: String,dateRangePicker: MaterialDatePicker<Pair<Long, Long>>, reason :String){
+    fun getDeadline(classroomUid: String, dateRangePicker: MaterialDatePicker<Pair<Long, Long>>, reason :String){
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val deadlineModel = DeadlineModel(Utility.createID(), reason, "", "")
-                repository.createDeadline(deadlineModel, classroomuid)
+                repository.createDeadline(deadlineModel, classroomUid)
             } catch (e: Exception) {
                 _classroomStudents.postValue(Resource.Error(message = "" + e.localizedMessage))
             }
