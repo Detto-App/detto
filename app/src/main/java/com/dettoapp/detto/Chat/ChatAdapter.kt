@@ -13,7 +13,7 @@ class ChatAdapter(private val userID: String) : RecyclerView.Adapter<RecyclerVie
 
     private val diffUtil = object : DiffUtil.ItemCallback<ChatMessage>() {
         override fun areItemsTheSame(oldItem: ChatMessage, newItem: ChatMessage): Boolean {
-            return oldItem.chatID == newItem.chatID
+            return oldItem.chatid == newItem.chatid
         }
 
         override fun areContentsTheSame(oldItem: ChatMessage, newItem: ChatMessage): Boolean {
@@ -33,6 +33,7 @@ class ChatAdapter(private val userID: String) : RecyclerView.Adapter<RecyclerVie
     inner class ChatSendViewHolder(val binding: ChatCellSendBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(chatMessage: ChatMessage) {
             binding.messageTextSend.text = chatMessage.message
+            binding.sendTime.text = chatMessage.time
         }
     }
 

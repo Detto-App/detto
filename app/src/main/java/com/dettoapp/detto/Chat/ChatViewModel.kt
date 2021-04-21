@@ -6,10 +6,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.dettoapp.detto.Models.ChatMessage
 import com.dettoapp.detto.Models.Classroom
+import com.dettoapp.detto.Models.TeacherModel
 import com.dettoapp.detto.UtilityClasses.BaseViewModel
 import com.dettoapp.detto.UtilityClasses.Constants.toFormattedString
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.collect
@@ -73,15 +76,25 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
         else
             Utility.STUDENT.uid
 
-        val chatMessage = ChatMessage(message, "IDK", Calendar.getInstance().time.toFormattedString("MMM dd HH:mm a"),
-                senderId, Utility.createID())
-        val list: ArrayList<ChatMessage> = _chatMessages.value?.data
-                ?: arrayListOf()
+//        val chatMessage = ChatMessage(message, "IDK", Calendar.getInstance().time.toFormattedString("MMM dd HH:mm a"),
+//                senderId, Utility.createID())
 
-        val newList = ArrayList(list)
-        newList.add(chatMessage)
+        try {
 
-        _chatMessages.postValue(Resource.Success(data = newList))
+            Log.d("DDBB"," message "+message)
+            val type = object: TypeToken<ChatMessage>(){}.type
+            val chatMessage = Gson().fromJson<ChatMessage>(message,type)
+            val list: ArrayList<ChatMessage> = _chatMessages.value?.data
+                    ?: arrayListOf()
+
+            val newList = ArrayList(list)
+            newList.add(chatMessage)
+
+            _chatMessages.postValue(Resource.Success(data = newList))
+        } catch (e: Exception) {
+            Log.d("DDBB", "Parsing " + e.localizedMessage)
+        }
+
     }
 
 
@@ -94,11 +107,13 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
                     chatCollectJob.join()
                 }
                 _chatMessageEvent.postValue(Resource.Loading())
-                repository.webServicesProvider.send(message)
-                addToChatMessagesList(message, true)
+                val chatMessage = ChatMessage(message, Utility.STUDENT.name + " - " + Utility.STUDENT.susn, Calendar.getInstance().time.toFormattedString("MMM dd HH:mm a"), Utility.STUDENT.uid, Utility.createID())
+                val chatMessageString = Gson().toJson(chatMessage)
+                repository.webServicesProvider.send(chatMessageString)
+                addToChatMessagesList(chatMessageString, true)
                 _chatMessageEvent.postValue(Resource.Success(""))
             } catch (e: Exception) {
-
+                Log.d("DDBB ", "HH " + e.localizedMessage)
             }
         }
     }
