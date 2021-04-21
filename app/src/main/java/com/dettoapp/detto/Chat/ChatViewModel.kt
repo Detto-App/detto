@@ -8,12 +8,12 @@ import com.dettoapp.detto.Models.ChatMessage
 import com.dettoapp.detto.UtilityClasses.BaseViewModel
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.buffer
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import okio.IOException
+import java.io.IOError
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -24,47 +24,53 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
     val chatMessages: LiveData<Resource<ArrayList<ChatMessage>>>
         get() = _chatMessages
 
-    init {
+    private val _chatMessageEvent = MutableLiveData<Resource<String>>()
+    val chatMessageEvent: LiveData<Resource<String>>
+        get() = _chatMessageEvent
 
+    private lateinit var chatCollectJob: Job
+
+    private var isFailure: Boolean = false
+
+    init {
         subscribeToSocketEvents()
-        //sendMessage()
     }
 
     private fun subscribeToSocketEvents() {
-        lauchSendMessage()
-        viewModelScope.launch(Dispatchers.IO) {
+        chatCollectJob = viewModelScope.launch(Dispatchers.IO)
+        {
             try {
-                repository.webServicesProvider.startSocket("wss://detto.uk.to/chat/1234").buffer(10)
-                        .collect {
-                            //Log.d("DDAA",it)
-                            delay(100)
-                            addToChatMessagesList(it)
-                        }
+                startSocket()
+            } catch (ce: CancellationException) {
+                // You can ignore or log this exception
             } catch (ex: Exception) {
-                Log.d("DDAA", "" + ex.localizedMessage)
+                _chatMessageEvent.postValue(Resource.Error(message = "" + ex.localizedMessage))
             }
         }
     }
 
-    private fun lauchSendMessage() {
-//        GlobalScope.launch(Dispatchers.IO) {
-//            delay(4000)
-//            val chatMessage = ChatMessage("Heyyy", "IDK", Calendar.getInstance().time.toString("MMM dd HH:mm a"),
-//                    Utility.STUDENT.uid, Utility.createID())
-//
-//            val list: ArrayList<ChatMessage> = chatMessages.value?.data
-//                    ?: arrayListOf()
-//
-//            val newList = ArrayList(list)
-//            newList.add(chatMessage)
-//
-//            _chatMessages.postValue(Resource.Success(data = newList))
-//        }
-    }
 
-    private  fun addToChatMessagesList(message: String,sending :Boolean = false) {
+    private suspend fun startSocket() =
+            repository.webServicesProvider.startSocket("wss://detto.uk.to/chat/1234").buffer(10)
+                    .collect {
+                        when (it) {
+                            is Resource.Success -> {
+                                isFailure = false
+                                delay(100)
+                                addToChatMessagesList(it.data!!)
+                                _chatMessageEvent.postValue(Resource.Success(data = ""))
+                            }
+                            is Resource.Error -> {
+                                isFailure = true
+                            }
+                            else -> {
+                            }
+                        }
+                    }
 
-        val senderId = if(!sending)
+    private fun addToChatMessagesList(message: String, sending: Boolean = false) {
+
+        val senderId = if (!sending)
             Utility.createID()
         else
             Utility.STUDENT.uid
@@ -78,7 +84,6 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
         newList.add(chatMessage)
 
         _chatMessages.postValue(Resource.Success(data = newList))
-        Log.d("DDAA", "List size" + list.size)
     }
 
 
@@ -88,11 +93,31 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
     }
 
 
-    fun sendMessage(message: String)
-    {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.webServicesProvider.send(message)
-            addToChatMessagesList(message,true)
+    fun sendMessage(message: String) {
+        viewModelScope.launch {
+            try {
+                if (isFailure) {
+                    cancelPreviousJob()
+                    subscribeToSocketEvents()
+                    chatCollectJob.join()
+                }
+                _chatMessageEvent.postValue(Resource.Loading())
+                repository.webServicesProvider.send(message)
+                addToChatMessagesList(message, true)
+                _chatMessageEvent.postValue(Resource.Success(""))
+            } catch (e: Exception) {
+
+            }
+        }
+    }
+
+    private suspend fun cancelPreviousJob() {
+
+        chatCollectJob.let {
+            if (it.isActive) {
+                repository.webServicesProvider.stopSocket()
+                it.cancelAndJoin()
+            }
         }
     }
 

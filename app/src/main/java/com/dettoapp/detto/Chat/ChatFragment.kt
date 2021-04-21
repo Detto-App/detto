@@ -30,6 +30,19 @@ class ChatFragment : BaseFragment<ChatViewModel, FragmentChatBinding, ChatReposi
                 binding.chatRecyclerView.smoothScrollToPosition(getRecyclerViewScrollPosition())
             }
         })
+
+        observeWithLiveData(viewModel.chatMessageEvent, onLoading = {
+            binding.chatProgressBar.visibility = View.VISIBLE
+            //binding.sendChatButton.isEnabled = true
+        }, onSuccess = {
+            binding.sendMessageField.text.clear()
+            binding.chatProgressBar.visibility = View.GONE
+            //binding.sendChatButton.isEnabled = true
+        }, onError = {
+            baseActivity.showErrorSnackMessage(it)
+            baseActivity.closeKeyBoard(requireView())
+           // binding.sendChatButton.isEnabled = true
+        })
     }
 
     private fun initialise() {
@@ -46,17 +59,19 @@ class ChatFragment : BaseFragment<ChatViewModel, FragmentChatBinding, ChatReposi
 
 
         binding.sendChatButton.setOnClickListener {
-            viewModel.sendMessage(binding.sendMessageField.text.toString())
-            binding.sendMessageField.text.clear()
+            sendMessageToServer()
         }
 
         binding.chatRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext()).apply {
                 stackFromEnd = true
-                //reverseLayout = true
             }
             adapter = chatAdapter
         }
+    }
+
+    private fun sendMessageToServer() {
+        viewModel.sendMessage(binding.sendMessageField.text.toString())
     }
 
     private fun getRecyclerViewScrollPosition() = if (chatAdapter.itemCount == 0)
