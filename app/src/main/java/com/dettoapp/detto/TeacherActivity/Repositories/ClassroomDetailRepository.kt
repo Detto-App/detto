@@ -1,5 +1,6 @@
 package com.dettoapp.detto.TeacherActivity.Repositories
 
+import com.dettoapp.data.DeadlineModel
 import com.dettoapp.detto.Models.ClassRoomStudents
 import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.UtilityClasses.BaseRepository
@@ -23,4 +24,9 @@ class ClassroomDetailRepository:BaseRepository() {
         return RetrofitInstance.projectAPI.changeStatus(pid,status,Utility.TOKEN).body()
             ?: throw Exception("Unable to Change Status")
     }
+
+    suspend fun createDeadline(deadlineModel: DeadlineModel, cid:String){
+        RetrofitInstance.projectAPI.createDeadline(deadlineModel, Utility.TOKEN,cid)
+    }
+
 }

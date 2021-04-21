@@ -28,30 +28,17 @@ class DeadlineFragment(private val operations: ClassroomDetailOperations) :
 
 
     private fun initilize(){
-
-
         binding.datePicker.setOnClickListener {
             dDialog=DeadlineDialog(this)
             dDialog.show(requireActivity().supportFragmentManager,"dhsa")
-//            val dateRangePicker =
-//                MaterialDatePicker.Builder.dateRangePicker()
-//                    .setTitleText("Select dates")
-//                    .setSelection(
-//                        Pair(
-//                            MaterialDatePicker.thisMonthInUtcMilliseconds(),
-//                            MaterialDatePicker.todayInUtcMilliseconds()
-//                        )
-//                    )
-//                    .build()
-//            dateRangePicker.show(requireActivity().supportFragmentManager," ")
-//            dateRangePicker.addOnPositiveButtonClickListener {
-//                Log.d("12343",""+dateRangePicker.selection!!)
-//            }
         }
+
+
     }
 
 
     override fun getDeadline(dateRangePicker: MaterialDatePicker<Pair<Long, Long>>,reason :String) {
+        viewModel.getDeadline(operations.getClassroom(),dateRangePicker,reason)
         Log.d("12343",""+dateRangePicker.selection!!)
         dDialog.dismiss()
     }

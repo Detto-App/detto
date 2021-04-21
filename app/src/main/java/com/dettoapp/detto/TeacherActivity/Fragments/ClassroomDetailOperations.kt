@@ -14,4 +14,6 @@ interface ClassroomDetailOperations
     fun getViewModel():ClassRoomDetailViewModel
 
     fun getViewModelStoreOwner():ViewModelStoreOwner
+
+    fun getClassroom():String
 }

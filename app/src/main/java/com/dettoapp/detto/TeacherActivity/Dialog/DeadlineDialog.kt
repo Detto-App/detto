@@ -43,9 +43,7 @@ class DeadlineDialog(private val deadlineDialogListener: DeadlineDialogListener)
                 .build()
 
         binding.datepicker.setOnClickListener {
-
             dateRangePicker.show(requireActivity().supportFragmentManager," ")
-
         }
 //            dateRangePicker.addOnPositiveButtonClickListener {
 //                Log.d("12343",""+dateRangePicker.selection!!)
@@ -53,8 +51,6 @@ class DeadlineDialog(private val deadlineDialogListener: DeadlineDialogListener)
         binding.submit.setOnClickListener {
             deadlineDialogListener.getDeadline(dateRangePicker
                 ,binding.deadline.editText?.text.toString())
-
-
         }
 
     }
