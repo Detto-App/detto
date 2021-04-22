@@ -40,7 +40,9 @@ class ChatFragment(private val classroom: Classroom, private val name: String, p
             binding.chatProgressBar.visibility = View.VISIBLE
             //binding.sendChatButton.isEnabled = true
         }, onSuccess = {
-            binding.sendMessageField.text.clear()
+            if (it.isEmpty())
+                binding.sendMessageField.text.clear()
+
             binding.chatProgressBar.visibility = View.GONE
             enableHideChatSendButton()
             //binding.sendChatButton.isEnabled = true
@@ -53,14 +55,11 @@ class ChatFragment(private val classroom: Classroom, private val name: String, p
     }
 
 
-    fun enableHideChatSendButton(isEnabled: Boolean = true) {
-        if (!isEnabled)
-        {
+    private fun enableHideChatSendButton(isEnabled: Boolean = true) {
+        if (!isEnabled) {
             binding.sendChatButton.alpha = 0.3f
             binding.sendChatButton.isEnabled = false
-        }
-        else
-        {
+        } else {
             binding.sendChatButton.alpha = 1f
             binding.sendChatButton.isEnabled = true
         }

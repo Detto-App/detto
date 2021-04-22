@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.dettoapp.detto.Models.ChatMessage
 import com.dettoapp.detto.Models.Classroom
-import com.dettoapp.detto.Models.TeacherModel
 import com.dettoapp.detto.UtilityClasses.BaseViewModel
 import com.dettoapp.detto.UtilityClasses.Constants.toFormattedString
 import com.dettoapp.detto.UtilityClasses.Resource
@@ -45,7 +44,7 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
 
     }
 
-    fun subscribeToSocketEvents(localClassroom: Classroom) {
+    private fun subscribeToSocketEvents(localClassroom: Classroom) {
         chatCollectJob = viewModelScope.launch(Dispatchers.IO)
         {
             try {
@@ -67,7 +66,7 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
                                 isFailure = false
                                 delay(100)
                                 addToChatMessagesList(it.data!!)
-                                _chatMessageEvent.postValue(Resource.Success(data = ""))
+                                _chatMessageEvent.postValue(Resource.Success(data = "Dont Clear"))
                             }
                             is Resource.Error -> {
                                 isFailure = true
