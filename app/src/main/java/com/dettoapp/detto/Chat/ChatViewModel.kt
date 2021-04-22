@@ -34,10 +34,18 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
     private var isFailure: Boolean = false
 
     private lateinit var classroom: Classroom
+    private lateinit var name: String
+    private lateinit var userID: String
+
+    fun initialise(localClassroom: Classroom, name: String, userID: String) {
+        classroom = localClassroom
+        this.name = name
+        this.userID = userID
+        subscribeToSocketEvents(classroom)
+
+    }
 
     fun subscribeToSocketEvents(localClassroom: Classroom) {
-        Log.d("DDBB", "Link " + localClassroom.classroomuid)
-        classroom = localClassroom
         chatCollectJob = viewModelScope.launch(Dispatchers.IO)
         {
             try {
@@ -71,19 +79,19 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
 
     private fun addToChatMessagesList(message: String, sending: Boolean = false) {
 
-        val senderId = if (!sending)
-            Utility.createID()
-        else
-            Utility.STUDENT.uid
+//        val senderId = if (!sending)
+//            Utility.createID()
+//        else
+//            Utility.STUDENT.uid
 
 //        val chatMessage = ChatMessage(message, "IDK", Calendar.getInstance().time.toFormattedString("MMM dd HH:mm a"),
 //                senderId, Utility.createID())
 
         try {
 
-            Log.d("DDBB"," message "+message)
-            val type = object: TypeToken<ChatMessage>(){}.type
-            val chatMessage = Gson().fromJson<ChatMessage>(message,type)
+            Log.d("DDBB", " message " + message)
+            val type = object : TypeToken<ChatMessage>() {}.type
+            val chatMessage = Gson().fromJson<ChatMessage>(message, type)
             val list: ArrayList<ChatMessage> = _chatMessages.value?.data
                     ?: arrayListOf()
 
@@ -107,7 +115,7 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
                     chatCollectJob.join()
                 }
                 _chatMessageEvent.postValue(Resource.Loading())
-                val chatMessage = ChatMessage(message, Utility.STUDENT.name + " - " + Utility.STUDENT.susn, Calendar.getInstance().time.toFormattedString("MMM dd HH:mm a"), Utility.STUDENT.uid, Utility.createID())
+                val chatMessage = ChatMessage(message, name, Calendar.getInstance().time.toFormattedString("MMM dd HH:mm a"), userID, Utility.createID())
                 val chatMessageString = Gson().toJson(chatMessage)
                 repository.webServicesProvider.send(chatMessageString)
                 addToChatMessagesList(chatMessageString, true)

@@ -13,12 +13,12 @@ import com.dettoapp.detto.databinding.FragmentChatBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class ChatFragment(private val classroom: Classroom) : BaseFragment<ChatViewModel, FragmentChatBinding, ChatRepository>() {
+class ChatFragment(private val classroom: Classroom, private val name: String, private val userID: String) : BaseFragment<ChatViewModel, FragmentChatBinding, ChatRepository>() {
 
     private lateinit var chatAdapter: ChatAdapter
 
     override fun getBaseOnCreate() {
-        viewModel.subscribeToSocketEvents(classroom)
+        viewModel.initialise(classroom, name, userID)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,12 +42,28 @@ class ChatFragment(private val classroom: Classroom) : BaseFragment<ChatViewMode
         }, onSuccess = {
             binding.sendMessageField.text.clear()
             binding.chatProgressBar.visibility = View.GONE
+            enableHideChatSendButton()
             //binding.sendChatButton.isEnabled = true
         }, onError = {
             baseActivity.showErrorSnackMessage(it)
             baseActivity.closeKeyBoard(requireView())
-           // binding.sendChatButton.isEnabled = true
+
+            // binding.sendChatButton.isEnabled = true
         })
+    }
+
+
+    fun enableHideChatSendButton(isEnabled: Boolean = true) {
+        if (!isEnabled)
+        {
+            binding.sendChatButton.alpha = 0.3f
+            binding.sendChatButton.isEnabled = false
+        }
+        else
+        {
+            binding.sendChatButton.alpha = 1f
+            binding.sendChatButton.isEnabled = true
+        }
     }
 
     private fun initialise() {
@@ -64,6 +80,7 @@ class ChatFragment(private val classroom: Classroom) : BaseFragment<ChatViewMode
 
 
         binding.sendChatButton.setOnClickListener {
+            enableHideChatSendButton(false)
             sendMessageToServer()
         }
 
