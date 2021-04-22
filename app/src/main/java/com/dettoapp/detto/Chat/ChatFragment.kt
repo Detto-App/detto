@@ -67,7 +67,7 @@ class ChatFragment(private val classroom: Classroom, private val name: String, p
     }
 
     private fun initialise() {
-        chatAdapter = ChatAdapter(Utility.STUDENT.uid)
+        chatAdapter = ChatAdapter(userID)
 
         binding.chatRecyclerView.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
             if (bottom < oldBottom) {

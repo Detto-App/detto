@@ -5,13 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelStoreOwner
+import com.dettoapp.detto.Chat.ChatFragment
 import com.dettoapp.detto.Models.Classroom
+import com.dettoapp.detto.R
 import com.dettoapp.detto.TeacherActivity.Adapters.ClassRoomDetailFragViewPagerAdapter
 import com.dettoapp.detto.TeacherActivity.DataBaseOperations
 import com.dettoapp.detto.TeacherActivity.Repositories.ClassroomDetailRepository
 import com.dettoapp.detto.TeacherActivity.ViewModels.ClassRoomDetailViewModel
 import com.dettoapp.detto.UtilityClasses.BaseFragment
 import com.dettoapp.detto.UtilityClasses.Constants
+import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentClassRoomDetailBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.ktx.Firebase
@@ -45,6 +48,11 @@ class ClassRoomDetailFrag(
         }
 
         view.setOnClickListener {
+
+        }
+
+        binding.teacherChatButton.setOnClickListener {
+            Utility.navigateFragment(requireActivity().supportFragmentManager, R.id.teacherHomeContainer, ChatFragment(classroom, Utility.TEACHER.name + " - Teacher" , Utility.TEACHER.uid), "chat")
 
         }
 
