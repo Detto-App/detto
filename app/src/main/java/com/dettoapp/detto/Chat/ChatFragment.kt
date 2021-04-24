@@ -1,7 +1,6 @@
 package com.dettoapp.detto.Chat
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,23 +38,14 @@ class ChatFragment(private val classroom: Classroom, private val name: String, p
 
         observeWithLiveData(viewModel.chatMessageEvent, onLoading = {
             binding.chatProgressBar.visibility = View.VISIBLE
-            //binding.sendChatButton.isEnabled = true
         }, onSuccess = {
             if (it.isEmpty())
                 binding.sendMessageField.text.clear()
-
             binding.chatProgressBar.visibility = View.GONE
             enableHideChatSendButton()
-            //binding.sendChatButton.isEnabled = true
         }, onError = {
             baseActivity.showErrorSnackMessage(it)
             baseActivity.closeKeyBoard(requireView())
-
-            // binding.sendChatButton.isEnabled = true
-        })
-
-        viewModel.chatMessages2.observe(viewLifecycleOwner,{
-            Log.d("FFGG",it.toString())
         })
     }
 

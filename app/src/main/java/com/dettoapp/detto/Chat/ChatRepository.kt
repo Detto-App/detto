@@ -30,5 +30,5 @@ class ChatRepository(private val webServicesProvider: ChatServiceProvider, priva
         chatMessageDAO.insertChatMessage(Mapper.mapChatMessageToChatMessageLocalModel(chatRoomID, message))
     }
 
-    fun getChatMessagesFromLocalDb(chatRoomID: String) = chatMessageDAO.getChatMessages(chatRoomID)
+    fun getChatMessagesFromLocalDbFlow(chatRoomID: String) = chatMessageDAO.getChatMessagesFlow(chatRoomID)
 }

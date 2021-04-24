@@ -12,52 +12,30 @@ import com.dettoapp.detto.UtilityClasses.Utility
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.*
 import kotlin.collections.ArrayList
 
+@Suppress("EXPERIMENTAL_API_USAGE")
 class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
 
-    private val _chatMessages = MutableLiveData<Resource<ArrayList<ChatMessage>>>()
-    val chatMessages: LiveData<Resource<ArrayList<ChatMessage>>>
-        get() = _chatMessages
-
-
-    private val chatRoomID = MutableLiveData("1234")
-    val chatMessages2 :LiveData<List<ChatMessageLocalStoreModel>> = chatRoomID.switchMap {
-        repository.getChatMessagesFromLocalDb(it)
-    }
-
-    private var firstTime = true
-    init {
-        subscribeToChatMessageUpdates()
-    }
-
-    private fun subscribeToChatMessageUpdates() {
-        viewModelScope.launch {
-            chatMessages2.asFlow().collect { messages ->
-                val list = ArrayList<ChatMessage>()
-                messages.forEach {
-                    list.add(Mapper.mapChatMessageLocalModelToChatMessage(it))
-                }
-                if (firstTime)
-                {
-                    delay(500)
-                    firstTime = false
-                }
-
-                _chatMessages.postValue(Resource.Success(data = list))
-            }
-        }
-    }
+    private lateinit var chatCollectJob: Job
 
     private val _chatMessageEvent = MutableLiveData<Resource<String>>()
     val chatMessageEvent: LiveData<Resource<String>>
         get() = _chatMessageEvent
 
-    private lateinit var chatCollectJob: Job
+    private val chatRoomID = MutableStateFlow("")
 
+    private val chatMessageLocalStoreModelFlow = chatRoomID.flatMapLatest {
+        repository.getChatMessagesFromLocalDbFlow(it)
+    }.transform { value ->
+        emit(transformList(value))
+    }
+
+    val chatMessages = chatMessageLocalStoreModelFlow.asLiveData(Dispatchers.Default)
+
+    private var firstTime = true
     private var isFailure: Boolean = false
-
     private lateinit var classroom: Classroom
     private lateinit var name: String
     private lateinit var userID: String
@@ -66,12 +44,32 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
         classroom = localClassroom
         this.name = name
         this.userID = userID
-        subscribeToSocketEvents(classroom)
-        chatRoomID.value = localClassroom.classroomuid
-        Log.d("DDFF","chat is "+localClassroom.classroomuid)
+        chatRoomID.value = classroom.classroomuid
+        subscribeToSocketEvents()
+        Log.d("DDFF", "chat is " + localClassroom.classroomuid)
     }
 
-    private fun subscribeToSocketEvents(localClassroom: Classroom) {
+
+    private suspend fun transformList(localChatMessageDBList: List<ChatMessageLocalStoreModel>): Resource<ArrayList<ChatMessage>> {
+        delayChatDisplayForFirstTime()
+
+        val list = ArrayList<ChatMessage>()
+        localChatMessageDBList.forEach {
+            list.add(Mapper.mapChatMessageLocalModelToChatMessage(it))
+        }
+        return Resource.Success(data = list)
+    }
+
+
+    private suspend fun delayChatDisplayForFirstTime() {
+        if (firstTime) {
+            delay(500)
+            firstTime = false
+        }
+    }
+
+
+    private fun subscribeToSocketEvents() {
         chatCollectJob = viewModelScope.launch(Dispatchers.IO)
         {
             try {
@@ -91,49 +89,27 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
                         when (it) {
                             is Resource.Success -> {
                                 isFailure = false
-                                delay(100)
                                 addToChatMessagesList(it.data!!)
-                                _chatMessageEvent.postValue(Resource.Success(data = "Dont Clear"))
+                                _chatMessageEvent.postValue(Resource.Success(data = "Don't Clear"))
                             }
                             is Resource.Error -> {
                                 isFailure = true
                             }
-                            else -> {
-                            }
+                            else -> { }
                         }
                     }
 
-    private suspend fun addToChatMessagesList(message: String, sending: Boolean = false) {
-
-//        val senderId = if (!sending)
-//            Utility.createID()
-//        else
-//            Utility.STUDENT.uid
-
-//        val chatMessage = ChatMessage(message, "IDK", Calendar.getInstance().time.toFormattedString("MMM dd HH:mm a"),
-//                senderId, Utility.createID())
-
+    private suspend fun addToChatMessagesList(message: String) {
         try {
-
-            Log.d("DDBB", " message " + message)
             val type = object : TypeToken<ChatMessage>() {}.type
             val chatMessage = Gson().fromJson<ChatMessage>(message, type)
-            repository.storeMessage(chatRoomID.value!!,chatMessage)
-//            val list: ArrayList<ChatMessage> = _chatMessages.value?.data
-//                    ?: arrayListOf()
-//
-//            val newList = ArrayList(list)
-//            newList.add(chatMessage)
-
-            //_chatMessages.postValue(Resource.Success(data = newList))
+            repository.storeMessage(chatRoomID.value, chatMessage)
         } catch (e: Exception) {
-            Log.d("DDBB", "Parsing " + e.localizedMessage)
+            _chatMessageEvent.postValue(Resource.Error(message = "Parsing Error"))
         }
-
     }
 
 
-//    .toFormattedString("MMM dd HH:mm a")
     fun sendMessage(message: String) {
         viewModelScope.launch {
             try {
@@ -141,28 +117,32 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
                     reconnectToServer()
                 }
                 _chatMessageEvent.postValue(Resource.Loading())
-                val chatMessage = ChatMessage(message, name, System.currentTimeMillis().toString(), userID, Utility.createID())
-                val chatMessageString = Gson().toJson(chatMessage)
-                repository.sendMessage(chatRoomID.value!!,chatMessage)
-                addToChatMessagesList(chatMessageString, true)
+
+                val chatMessage = ChatMessage(message, name,
+                        System.currentTimeMillis().toString(),
+                        userID,
+                        Utility.createID()
+                )
+
+                repository.sendMessage(chatRoomID.value, chatMessage)
+
                 _chatMessageEvent.postValue(Resource.Success(""))
             } catch (e: Exception) {
-                Log.d("DDBB ", "HH " + e.localizedMessage)
+                _chatMessageEvent.postValue(Resource.Error(message = "" + e.localizedMessage))
             }
         }
     }
 
     private suspend fun reconnectToServer() {
         cancelPreviousJob()
-        subscribeToSocketEvents(classroom)
+        subscribeToSocketEvents()
         chatCollectJob.join()
     }
 
     private suspend fun cancelPreviousJob() {
-
         if (chatCollectJob.isActive) {
             repository.endConnection()
-            chatCollectJob.join()
+            chatCollectJob.cancelAndJoin()
         }
     }
 
