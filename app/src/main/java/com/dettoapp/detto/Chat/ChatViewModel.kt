@@ -5,10 +5,7 @@ import androidx.lifecycle.*
 import com.dettoapp.detto.Models.ChatMessage
 import com.dettoapp.detto.Models.ChatMessageLocalStoreModel
 import com.dettoapp.detto.Models.Classroom
-import com.dettoapp.detto.UtilityClasses.BaseViewModel
-import com.dettoapp.detto.UtilityClasses.Mapper
-import com.dettoapp.detto.UtilityClasses.Resource
-import com.dettoapp.detto.UtilityClasses.Utility
+import com.dettoapp.detto.UtilityClasses.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
@@ -94,8 +91,15 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
                             }
                             is Resource.Error -> {
                                 isFailure = true
+                                _chatMessageEvent.postValue(Resource.Error(message = Constants.CHAT_DISCONNECTED))
                             }
-                            else -> { }
+
+                            is Resource.Confirm -> {
+                                isFailure = false
+                                _chatMessageEvent.postValue(Resource.Confirm(message = ""))
+                            }
+                            else -> {
+                            }
                         }
                     }
 
@@ -113,10 +117,14 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
     fun sendMessage(message: String) {
         viewModelScope.launch {
             try {
-                if (isFailure) {
-                    reconnectToServer()
+                if (message.isEmpty()) {
+                    return@launch
                 }
                 _chatMessageEvent.postValue(Resource.Loading())
+
+                if (isFailure) {
+                    throw Exception("Not able to Send Message\nReconnect or Check InternetConnection")
+                }
 
                 val chatMessage = ChatMessage(message, name,
                         System.currentTimeMillis().toString(),
@@ -148,5 +156,11 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
 
     fun closeConnection() {
         repository.endConnection()
+    }
+
+    fun reconnect() {
+        viewModelScope.launch {
+            reconnectToServer()
+        }
     }
 }

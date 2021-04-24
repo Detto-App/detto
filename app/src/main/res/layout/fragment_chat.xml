@@ -16,7 +16,7 @@
         app:layout_constraintBottom_toTopOf="@+id/sendMessageField"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chatProgressBar" />
+        app:layout_constraintTop_toBottomOf="@+id/disconnecttedChatBox" />
 
     <EditText
         android:id="@+id/sendMessageField"
@@ -25,8 +25,9 @@
         android:background="@color/white"
         android:ems="10"
         android:hint="Enter Text Here"
-        android:inputType="textPersonName"
+        android:inputType="textMultiLine"
         android:padding="8dp"
+        android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/sendChatButton"
         app:layout_constraintStart_toStartOf="parent" />
@@ -34,7 +35,7 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/sendChatButton"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:background="@color/purple_700"
         android:gravity="center"
         android:paddingStart="12dp"
@@ -42,9 +43,7 @@
         android:text="SEND"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/sendMessageField"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/textView3"
@@ -69,4 +68,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/disconnecttedChatBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/darker_gray"
+        android:gravity="center"
+        android:padding="4dp"
+        android:text="Chat has been disconnted \n Click here to reconnet "
+        android:textColor="@color/cus_light_white"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chatProgressBar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

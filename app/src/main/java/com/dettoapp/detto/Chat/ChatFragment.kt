@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.UtilityClasses.BaseFragment
+import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.databinding.FragmentChatBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -29,6 +30,7 @@ class ChatFragment(private val classroom: Classroom, private val name: String, p
 
     private fun liveDataObservers() {
         observeWithLiveData(viewModel.chatMessages, onSuccess = {
+            binding.chatProgressBar.visibility = View.GONE
             chatAdapter.differ.submitList(it)
             lifecycleScope.launch {
                 delay(100)
@@ -38,14 +40,28 @@ class ChatFragment(private val classroom: Classroom, private val name: String, p
 
         observeWithLiveData(viewModel.chatMessageEvent, onLoading = {
             binding.chatProgressBar.visibility = View.VISIBLE
+            enableHideChatSendButton(false)
         }, onSuccess = {
             if (it.isEmpty())
                 binding.sendMessageField.text.clear()
             binding.chatProgressBar.visibility = View.GONE
             enableHideChatSendButton()
         }, onError = {
-            baseActivity.showErrorSnackMessage(it)
-            baseActivity.closeKeyBoard(requireView())
+            binding.chatProgressBar.visibility = View.GONE
+            enableHideChatSendButton()
+            when (it) {
+                Constants.CHAT_DISCONNECTED -> {
+                    binding.disconnecttedChatBox.visibility = View.VISIBLE
+                }
+                else -> {
+                    baseActivity.showErrorSnackMessage(it)
+                    baseActivity.closeKeyBoard(requireView())
+                }
+            }
+
+        }, onConfirm = {
+            binding.chatProgressBar.visibility = View.GONE
+            binding.disconnecttedChatBox.visibility = View.GONE
         })
     }
 
@@ -74,8 +90,13 @@ class ChatFragment(private val classroom: Classroom, private val name: String, p
 
 
         binding.sendChatButton.setOnClickListener {
-            enableHideChatSendButton(false)
             sendMessageToServer()
+        }
+
+
+        binding.disconnecttedChatBox.setOnClickListener {
+            binding.chatProgressBar.visibility = View.VISIBLE
+            viewModel.reconnect()
         }
 
         binding.chatRecyclerView.apply {

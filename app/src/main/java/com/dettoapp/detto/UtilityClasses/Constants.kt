@@ -35,6 +35,7 @@ object Constants {
     const val SHOULD_FETCH = "should_fetch"
     const val CHAT_BASE_URL = "wss://detto.uk.to/chat/"
 
+    const val CHAT_DISCONNECTED ="Disconnected"
 
     const val BASE_URL_FCM = "https://fcm.googleapis.com/"
     const val SERVER_KEY_FCM = "AAAAb6g6I2A:APA91bFnVgQMRH9SUoJcF_MHmi5LaQdqmLK5KWCyeQzX_SJMAEDwjdE7BSINkendBSHQvbZFJNo9LXe-WJHfRHeer1e3-2n23SPPAmtf4WmZ9ZY9VGruzgS4Cdt0o-M6VrqQs7DMvqp5"
