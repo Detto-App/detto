@@ -16,7 +16,9 @@ class ChatWebSocketListener : WebSocketListener() {
     val chatFlow = MutableSharedFlow<Resource<String>>()
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
-        Log.d("DDBB","Open")
+        GlobalScope.launch(Dispatchers.IO) {
+            chatFlow.emit(Resource.Confirm(message = ""))
+        }
     }
 
     override fun onMessage(webSocket: WebSocket, text: String) {
@@ -31,10 +33,8 @@ class ChatWebSocketListener : WebSocketListener() {
 
     override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
         super.onClosed(webSocket, code, reason)
-        Log.d("DDBB","Close")
     }
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
-        Log.d("DDBB","fail")
         GlobalScope.launch(Dispatchers.IO) {
             chatFlow.emit(Resource.Error(message = "" + t.localizedMessage))
         }
