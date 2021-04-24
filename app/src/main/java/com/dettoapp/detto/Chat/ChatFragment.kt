@@ -1,14 +1,15 @@
 package com.dettoapp.detto.Chat
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.UtilityClasses.BaseFragment
-import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentChatBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -51,6 +52,10 @@ class ChatFragment(private val classroom: Classroom, private val name: String, p
             baseActivity.closeKeyBoard(requireView())
 
             // binding.sendChatButton.isEnabled = true
+        })
+
+        viewModel.chatMessages2.observe(viewLifecycleOwner,{
+            Log.d("FFGG",it.toString())
         })
     }
 
@@ -109,7 +114,7 @@ class ChatFragment(private val classroom: Classroom, private val name: String, p
     }
 
     override fun getRepository(): ChatRepository {
-        return ChatRepository(ChatServiceProvider())
+        return ChatRepository(ChatServiceProvider(), DatabaseDetto.getInstance(requireContext().applicationContext).chatMessageDAO)
     }
 
     override fun onBaseDestroy() {

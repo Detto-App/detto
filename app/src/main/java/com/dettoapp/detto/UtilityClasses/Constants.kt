@@ -33,6 +33,7 @@ object Constants {
     const val ENTIRE_MODEL_KEY = "model"
 
     const val SHOULD_FETCH = "should_fetch"
+    const val CHAT_BASE_URL = "wss://detto.uk.to/chat/"
 
 
     const val BASE_URL_FCM = "https://fcm.googleapis.com/"
