@@ -16,4 +16,6 @@ interface ClassroomDetailOperations
     fun getViewModelStoreOwner():ViewModelStoreOwner
 
     fun getClassroom():String
+
+    fun getDeadlineFromServer()
 }

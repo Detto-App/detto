@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,6 +9,7 @@
     tools:context=".TeacherActivity.Fragments.DeadlineFragment">
 
 
+<!--<<<<<<< Updated upstream-->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/datePicker"
         android:layout_width="wrap_content"
@@ -19,4 +22,38 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.023" />
+<!--=======-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/deadline_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/datePicker"
+        app:layout_constraintVertical_bias="1" />
+
+    <ProgressBar
+        android:id="@+id/prgress_bar_deadline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/deadline_recycler_view"
+        app:layout_constraintStart_toStartOf="@+id/deadline_recycler_view"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".5" />
+
+
+<!--    <Button-->
+<!--&gt;>>>>>> Stashed changes-->
+
+<!--<<<<<<< Updated upstream-->
+
+<!--=======-->
+<!--        app:layout_constraintHorizontal_bias=".1"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias=".05" />-->
+<!--&gt;>>>>>> Stashed changes-->
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,7 +8,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dettoapp.data.DeadlineModel
 import com.dettoapp.detto.Models.*
 import com.dettoapp.detto.TeacherActivity.Repositories.ClassroomDetailRepository
 import com.dettoapp.detto.UtilityClasses.Resource
@@ -38,6 +37,10 @@ class ClassRoomDetailViewModel(
     private val _projectList = MutableLiveData<Resource<List<ProjectModel>>>()
     val projectList: LiveData<Resource<List<ProjectModel>>>
         get() = _projectList
+
+    private val _deadline = MutableLiveData<Resource<List<DeadlineModel>>>()
+    val deadline: LiveData<Resource<List<DeadlineModel>>>
+        get() = _deadline
 
     fun getClassStudents(classroom: Classroom) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -99,10 +102,30 @@ class ClassRoomDetailViewModel(
     fun getDeadline(classroomUid: String, dateRangePicker: MaterialDatePicker<Pair<Long, Long>>, reason :String){
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val deadlineModel = DeadlineModel(Utility.createID(), reason, "", "")
+                if(dateRangePicker.selection==null)
+                    _deadline.postValue(Resource.Error(message = "Date not selected"))
+                if(reason == "")
+                    _deadline.postValue(Resource.Error(message = "reason field is empty"))
+
+                val deadlineModel = DeadlineModel(Utility.createID(), reason, dateRangePicker.selection!!.first.toString(),
+                                                    dateRangePicker.selection!!.second.toString())
                 repository.createDeadline(deadlineModel, classroomUid)
             } catch (e: Exception) {
-                _classroomStudents.postValue(Resource.Error(message = "" + e.localizedMessage))
+                _deadline.postValue(Resource.Error(message = "" + e.localizedMessage))
+            }
+        }
+    }
+
+    fun getDeadlineFromServer(cid: String){
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val deadline = repository.getDeadline(cid)
+//                val deadlineModel=DeadlineModel(";dsj","sfddxc","dscx","fdstyre")
+//                val list=ArrayList<DeadlineModel>()
+//                list.add(deadlineModel)
+                _deadline.postValue(Resource.Success(data = deadline))
+            } catch (e: Exception) {
+                _deadline.postValue(Resource.Error(message = "" + e.localizedMessage))
             }
         }
     }

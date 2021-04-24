@@ -1,6 +1,6 @@
 package com.dettoapp.detto.APIs
 
-import com.dettoapp.data.DeadlineModel
+import com.dettoapp.detto.Models.DeadlineModel
 import com.dettoapp.detto.Models.ProjectModel
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -61,4 +61,11 @@ interface ProjectAPI {
         @Header("Authorization") token: String,
         @Path(value = "cid") cid: String,
     )
+
+    @GET("/getDeadline/{cid}")
+    suspend fun getDeadline(
+        @Path(value = "cid")cid:String,
+        @Header("Authorization")token: String
+    ):Response<ArrayList<DeadlineModel>>
+
 }

@@ -6,11 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.util.Pair
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.dettoapp.detto.TeacherActivity.Adapters.DeadlineAdapterClassroomDetail
 import com.dettoapp.detto.TeacherActivity.Dialog.DeadlineDialog
 import com.dettoapp.detto.TeacherActivity.Repositories.ClassroomDetailRepository
 import com.dettoapp.detto.TeacherActivity.ViewModels.ClassRoomDetailViewModel
 import com.dettoapp.detto.UtilityClasses.BaseFragment
+import com.dettoapp.detto.UtilityClasses.Constants
+import com.dettoapp.detto.UtilityClasses.Resource
+import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentDeadlineBinding
 import com.google.android.material.datepicker.MaterialDatePicker
 
@@ -18,19 +24,67 @@ class DeadlineFragment(private val operations: ClassroomDetailOperations) :
         BaseFragment<ClassRoomDetailViewModel, FragmentDeadlineBinding, ClassroomDetailRepository>(),
         DeadlineDialog.DeadlineDialogListener {
 
+    private lateinit var deadlineAdapter: DeadlineAdapterClassroomDetail
     private lateinit var dDialog: DeadlineDialog
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+//<<<<<<< Updated upstream
         initialise()
+        liveDataObservers()
     }
 
 
-    private fun initialise() {
+//    private fun initialise() {
+//=======
+//        initilize()
+//
+//    }
+
+
+    private fun initialise(){
+        deadlineAdapter = DeadlineAdapterClassroomDetail()
+        binding.deadlineRecyclerView.apply {
+            adapter = deadlineAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+//        Log.d("asd",Utility.TOKEN)
+//>>>>>>> Stashed changes
         binding.datePicker.setOnClickListener {
             dDialog = DeadlineDialog(this)
             dDialog.show(requireActivity().supportFragmentManager, "dhsa")
         }
+        operations.getDeadlineFromServer()
+
+
+
+//<<<<<<< Updated upstream
+//=======
+    }
+
+    fun liveDataObservers(){
+        viewModel.deadline.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is Resource.Success -> {
+                    binding.prgressBarDeadline.visibility = View.GONE
+//                    binding.re.isRefreshing = false
+                    deadlineAdapter.differ.submitList(it.data)
+
+                }
+                is Resource.Error -> {
+                    baseActivity.showErrorSnackMessage(it.message!!)
+                }
+                is Resource.Loading -> {
+                    baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
+                }
+                is Resource.Confirm ->{
+                    baseActivity.hideProgressDialog()
+                }
+                else -> {
+                }
+            }
+        })
+//>>>>>>> Stashed changes
     }
 
 

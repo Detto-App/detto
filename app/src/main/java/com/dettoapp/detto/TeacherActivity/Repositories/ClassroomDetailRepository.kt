@@ -1,7 +1,7 @@
 package com.dettoapp.detto.TeacherActivity.Repositories
 
-import com.dettoapp.data.DeadlineModel
 import com.dettoapp.detto.Models.ClassRoomStudents
+import com.dettoapp.detto.Models.DeadlineModel
 import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.UtilityClasses.BaseRepository
 import com.dettoapp.detto.UtilityClasses.RetrofitInstance
@@ -27,6 +27,11 @@ class ClassroomDetailRepository:BaseRepository() {
 
     suspend fun createDeadline(deadlineModel: DeadlineModel, cid:String){
         RetrofitInstance.projectAPI.createDeadline(deadlineModel, Utility.TOKEN,cid)
+    }
+
+    suspend fun getDeadline(classID: String): List<DeadlineModel>{
+        return RetrofitInstance.projectAPI.getDeadline(classID,Utility.TOKEN).body()
+            ?: throw Exception("Unable to Fetch Deadline")
     }
 
 }

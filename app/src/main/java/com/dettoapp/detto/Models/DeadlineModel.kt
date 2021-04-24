@@ -1,9 +1,8 @@
-package com.dettoapp.data
-
+package com.dettoapp.detto.Models
 
 data class DeadlineModel(
     val did:String,
     val description:String,
-    val fromDate:String,
-    val toDate:String
+    val fromdate:String,
+    val todate:String
 )
