@@ -21,7 +21,8 @@ import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentStudentHomeBinding
 
 
-class StudentHomeFrag : BaseFragment<StudentHomeFragViewModel, FragmentStudentHomeBinding, StudentRepository>(), StudentClassroomAdapter.StudentClassroomAdapterCLickListener {
+class StudentHomeFrag : BaseFragment<StudentHomeFragViewModel, FragmentStudentHomeBinding, StudentRepository>(),
+    StudentClassroomAdapter.StudentClassroomAdapterCLickListener {
 
     private lateinit var studentClassroomAdapter: StudentClassroomAdapter
 

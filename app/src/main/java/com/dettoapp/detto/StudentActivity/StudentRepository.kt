@@ -3,6 +3,7 @@ package com.dettoapp.detto.StudentActivity
 import android.content.Context
 import com.dettoapp.detto.Db.ClassroomDAO
 import com.dettoapp.detto.Db.ProjectDAO
+import com.dettoapp.detto.Models.DeadlineModel
 import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.UtilityClasses.BaseRepository
 import com.dettoapp.detto.UtilityClasses.Constants
@@ -99,5 +100,10 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
     }
 
     suspend fun getClassRoomList() = dao.getAllClassRoomList()
+
+    suspend fun getDeadline(classID: String): List<DeadlineModel>{
+        return RetrofitInstance.projectAPI.getDeadline(classID,Utility.TOKEN).body()
+            ?: throw Exception("Unable to Fetch Deadline")
+    }
 
 }

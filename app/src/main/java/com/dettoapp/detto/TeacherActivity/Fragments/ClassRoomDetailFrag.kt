@@ -1,5 +1,6 @@
 package com.dettoapp.detto.TeacherActivity.Fragments
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import com.dettoapp.detto.TeacherActivity.Repositories.ClassroomDetailRepository
 import com.dettoapp.detto.TeacherActivity.ViewModels.ClassRoomDetailViewModel
 import com.dettoapp.detto.UtilityClasses.BaseFragment
 import com.dettoapp.detto.UtilityClasses.Constants
+import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentClassRoomDetailBinding
 import com.google.android.material.tabs.TabLayoutMediator
@@ -61,7 +63,7 @@ class ClassRoomDetailFrag(
         }
 
         val viewPagerAdapter = ClassRoomDetailFragViewPagerAdapter(requireActivity(), this)
-        binding.viewPagerClassroomDetailFrag.adapter = viewPagerAdapter
+            binding.viewPagerClassroomDetailFrag.adapter = viewPagerAdapter
 
         TabLayoutMediator(
             binding.tabLayoutClassroomDetailFrag,
@@ -71,7 +73,6 @@ class ClassRoomDetailFrag(
             binding.viewPagerClassroomDetailFrag.setCurrentItem(tab.position, true)
         }.attach()
     }
-
     private fun showBottomDialog() {
         val bottomSheet = ClassRoomDetailModal(this)
         bottomSheet.show(requireActivity().supportFragmentManager, "classroomModal")

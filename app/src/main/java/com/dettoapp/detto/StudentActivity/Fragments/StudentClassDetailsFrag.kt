@@ -8,24 +8,30 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.app.ShareCompat
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelStoreOwner
 import com.dettoapp.detto.Chat.ChatFragment
 import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.R
+import com.dettoapp.detto.StudentActivity.Adapters.StudentHomeViewPagerAdapter
 import com.dettoapp.detto.StudentActivity.Dialog.ProjectDetailsDialog
 import com.dettoapp.detto.StudentActivity.Dialog.ProjectEditDialog
+import com.dettoapp.detto.StudentActivity.StudentOperations
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.StudentActivity.ViewModels.StudentClassDetailViewModel
+import com.dettoapp.detto.TeacherActivity.Adapters.ClassRoomDetailFragViewPagerAdapter
 import com.dettoapp.detto.UtilityClasses.BaseFragment
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentStudentClassDetailsBinding
+import com.google.android.material.tabs.TabLayoutMediator
 
 
 class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<StudentClassDetailViewModel, FragmentStudentClassDetailsBinding, StudentRepository>(),
-        ProjectDetailsDialog.ProjectDialogClickListener, ProjectEditDialog.ProjectEditDialogClickListner {
+        ProjectDetailsDialog.ProjectDialogClickListener, ProjectEditDialog.ProjectEditDialogClickListner ,
+        StudentOperations {
 
 
     private lateinit var projectModel: ProjectModel
@@ -64,6 +70,17 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<S
             projectEditDialog = ProjectEditDialog(this)
             projectEditDialog.show(requireActivity().supportFragmentManager, "pEdit")
         }
+
+        val viewPagerAdapter = StudentHomeViewPagerAdapter(requireActivity(),classroom,this)
+        binding.studentinclassviewpager.adapter = viewPagerAdapter
+
+        TabLayoutMediator(
+            binding.tabLayoutStudentClassDetail,
+            binding.studentinclassviewpager
+        ) { tab, position ->
+            tab.text = Constants.studentClassDetailFragTabNames[position]
+            binding.studentinclassviewpager.setCurrentItem(tab.position, true)
+        }.attach()
 
     }
 
@@ -155,6 +172,7 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<S
     }
 
     override fun getViewModelClass(): Class<StudentClassDetailViewModel> = StudentClassDetailViewModel::class.java
+
     override fun getFragmentBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentStudentClassDetailsBinding {
         return FragmentStudentClassDetailsBinding.inflate(inflater, container, false)
     }
@@ -163,4 +181,8 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<S
             DatabaseDetto.getInstance(requireContext().applicationContext).classroomDAO,
             DatabaseDetto.getInstance(requireContext().applicationContext).projectDAO
     )
+
+    override fun getViewModelOwner():ViewModelStoreOwner {
+        return this
+    }
 }

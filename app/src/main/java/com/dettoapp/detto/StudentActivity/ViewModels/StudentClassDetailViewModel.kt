@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.dettoapp.detto.Models.Classroom
+import com.dettoapp.detto.Models.DeadlineModel
 import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.UtilityClasses.BaseViewModel
@@ -30,6 +31,10 @@ class StudentClassDetailViewModel(
     private val _project = MutableLiveData<Resource<ProjectModel>>()
     val project: LiveData<Resource<ProjectModel>>
         get() = _project
+
+    private val _studentDeadline = MutableLiveData<Resource<List<DeadlineModel>>>()
+    val studentDeadline: LiveData<Resource<List<DeadlineModel>>>
+        get() = _studentDeadline
 
 
     fun getProject(cid: String) {
@@ -121,6 +126,19 @@ class StudentClassDetailViewModel(
 
     }
 
+    fun getDeadlineFromServer(cid: String){
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val deadline = repository.getDeadline(cid)
+//                val deadlineModel=DeadlineModel(";dsj","sfddxc","dscx","fdstyre")
+//                val list=ArrayList<DeadlineModel>()
+//                list.add(deadlineModel)
+                _studentDeadline.postValue(Resource.Success(data = deadline))
+            } catch (e: Exception) {
+                _studentDeadline.postValue(Resource.Error(message = "" + e.localizedMessage))
+            }
+        }
+    }
 
     fun getProjectFromSharedPref(classroom: Classroom) =
             repository.getProjectFromSharedPref(classroom.classroomuid, context)
