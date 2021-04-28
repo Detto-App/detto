@@ -3,6 +3,7 @@ package com.dettoapp.detto.TeacherActivity.ViewModels
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
+import android.view.View
 import androidx.core.util.Pair
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,6 +11,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dettoapp.detto.Models.*
 import com.dettoapp.detto.TeacherActivity.Repositories.ClassroomDetailRepository
+import com.dettoapp.detto.UtilityClasses.Constants.toFormattedString
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 import com.dettoapp.detto.UtilityClasses.Utility
@@ -20,6 +22,9 @@ import com.google.firebase.messaging.ktx.messaging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.Comparator
+import kotlin.collections.ArrayList
 
 
 @SuppressLint("StaticFieldLeak")
@@ -108,8 +113,8 @@ class ClassRoomDetailViewModel(
                 if(reason == "")
                     _deadline.postValue(Resource.Error(message = "reason field is empty"))
 
-                val deadlineModel = DeadlineModel(Utility.createID(), reason, dateRangePicker.selection!!.first.toString(),
-                                                    dateRangePicker.selection!!.second.toString())
+                val array=getDates(dateRangePicker.selection)
+                val deadlineModel = DeadlineModel(Utility.createID(), reason,array[0]!!,array[1]!!)
                 repository.createDeadline(deadlineModel, classroomUid)
             } catch (e: Exception) {
                 _deadline.postValue(Resource.Error(message = "" + e.localizedMessage))
@@ -129,5 +134,14 @@ class ClassRoomDetailViewModel(
                 _deadline.postValue(Resource.Error(message = "" + e.localizedMessage))
             }
         }
+    }
+
+    private fun getDates(selection: Pair<Long, Long>?):Array<String?> {
+        val array = arrayOfNulls<String>(2)
+        selection?.let {
+            array[0]= Date(it.first!!).toFormattedString("MMM dd YYYY")
+            array[1]= Date(it.second!!).toFormattedString("MMM dd YYYY")
+        }
+        return array
     }
 }
