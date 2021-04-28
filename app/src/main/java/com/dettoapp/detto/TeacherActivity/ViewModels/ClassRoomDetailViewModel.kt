@@ -69,6 +69,29 @@ class ClassRoomDetailViewModel(
         }
     }
 
+    fun getDeadlineFromServer(cid: String){
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val deadline = repository.getDeadline(cid)
+
+                val customComparator = Comparator<DeadlineModel> { a, b ->
+                    val aDate: Long = a.fromdate.toLong()
+                    val bDate: Long = b.fromdate.toLong()
+                    return@Comparator aDate.compareTo(bDate)
+                }
+
+                val list = ArrayList(deadline)
+                list.sortWith(customComparator)
+//                val deadlineModel=DeadlineModel(";dsj","sfddxc","dscx","fdstyre")
+//                val list=ArrayList<DeadlineModel>()
+//                list.add(deadlineModel)
+                _deadline.postValue(Resource.Success(data = deadline))
+            } catch (e: Exception) {
+                _deadline.postValue(Resource.Error(message = "" + e.localizedMessage))
+            }
+        }
+    }
+
     fun getProjects(cid: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -113,8 +136,9 @@ class ClassRoomDetailViewModel(
                 if(reason == "")
                     _deadline.postValue(Resource.Error(message = "reason field is empty"))
 
-                val array=getDates(dateRangePicker.selection)
-                val deadlineModel = DeadlineModel(Utility.createID(), reason,array[0]!!,array[1]!!)
+//                val array=getDates(dateRangePicker.selection)
+                val deadlineModel = DeadlineModel(Utility.createID(), reason,dateRangePicker.selection!!.first.toString(),
+                    dateRangePicker.selection!!.second.toString())
                 repository.createDeadline(deadlineModel, classroomUid)
             } catch (e: Exception) {
                 _deadline.postValue(Resource.Error(message = "" + e.localizedMessage))
@@ -122,26 +146,5 @@ class ClassRoomDetailViewModel(
         }
     }
 
-    fun getDeadlineFromServer(cid: String){
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val deadline = repository.getDeadline(cid)
-//                val deadlineModel=DeadlineModel(";dsj","sfddxc","dscx","fdstyre")
-//                val list=ArrayList<DeadlineModel>()
-//                list.add(deadlineModel)
-                _deadline.postValue(Resource.Success(data = deadline))
-            } catch (e: Exception) {
-                _deadline.postValue(Resource.Error(message = "" + e.localizedMessage))
-            }
-        }
-    }
 
-    private fun getDates(selection: Pair<Long, Long>?):Array<String?> {
-        val array = arrayOfNulls<String>(2)
-        selection?.let {
-            array[0]= Date(it.first!!).toFormattedString("MMM dd YYYY")
-            array[1]= Date(it.second!!).toFormattedString("MMM dd YYYY")
-        }
-        return array
-    }
 }
