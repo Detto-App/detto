@@ -29,9 +29,11 @@ import com.dettoapp.detto.databinding.FragmentStudentClassDetailsBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
 
-class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<StudentClassDetailViewModel, FragmentStudentClassDetailsBinding, StudentRepository>(),
-        ProjectDetailsDialog.ProjectDialogClickListener, ProjectEditDialog.ProjectEditDialogClickListner ,
-        StudentOperations {
+class StudentClassDetailsFrag(private val classroom: Classroom) :
+    BaseFragment<StudentClassDetailViewModel, FragmentStudentClassDetailsBinding, StudentRepository>(),
+    ProjectDetailsDialog.ProjectDialogClickListener,
+    ProjectEditDialog.ProjectEditDialogClickListner,
+    StudentOperations {
 
 
     private lateinit var projectModel: ProjectModel
@@ -63,7 +65,16 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<S
         }
 
         binding.chat.setOnClickListener {
-            Utility.navigateFragment(requireActivity().supportFragmentManager, R.id.StudentFragContainer, ChatFragment(classroom,Utility.STUDENT.name + " - " + Utility.STUDENT.susn,Utility.STUDENT.uid), "chat")
+            Utility.navigateFragment(
+                requireActivity().supportFragmentManager,
+                R.id.StudentFragContainer,
+                ChatFragment(
+                    classroom,
+                    Utility.STUDENT.name + " - " + Utility.STUDENT.susn,
+                    Utility.STUDENT.uid
+                ),
+                "chat"
+            )
         }
 
         binding.edit.setOnClickListener {
@@ -71,7 +82,7 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<S
             projectEditDialog.show(requireActivity().supportFragmentManager, "pEdit")
         }
 
-        val viewPagerAdapter = StudentHomeViewPagerAdapter(requireActivity(),classroom,this)
+        val viewPagerAdapter = StudentHomeViewPagerAdapter(requireActivity(), classroom, this)
         binding.studentinclassviewpager.adapter = viewPagerAdapter
 
         TabLayoutMediator(
@@ -84,7 +95,12 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<S
 
     }
 
-    override fun onProjectCreate(title: String, description: String, usnMap: HashMap<Int, String>, arrayList: ArrayList<String>) {
+    override fun onProjectCreate(
+        title: String,
+        description: String,
+        usnMap: HashMap<Int, String>,
+        arrayList: ArrayList<String>
+    ) {
         viewModel.storeProject(title, description, usnMap, classroom, arrayList)
     }
 
@@ -165,24 +181,28 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<S
 
         binding.shareProjectLink.setOnClickListener {
             ShareCompat.IntentBuilder.from(requireActivity())
-                    .setText(shareLink).setType("text/plain")
-                    .setChooserTitle("Game Details")
-                    .startChooser()
+                .setText(shareLink).setType("text/plain")
+                .setChooserTitle("Game Details")
+                .startChooser()
         }
     }
 
-    override fun getViewModelClass(): Class<StudentClassDetailViewModel> = StudentClassDetailViewModel::class.java
+    override fun getViewModelClass(): Class<StudentClassDetailViewModel> =
+        StudentClassDetailViewModel::class.java
 
-    override fun getFragmentBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentStudentClassDetailsBinding {
+    override fun getFragmentBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentStudentClassDetailsBinding {
         return FragmentStudentClassDetailsBinding.inflate(inflater, container, false)
     }
 
     override fun getRepository(): StudentRepository = StudentRepository(
-            DatabaseDetto.getInstance(requireContext().applicationContext).classroomDAO,
-            DatabaseDetto.getInstance(requireContext().applicationContext).projectDAO
+        DatabaseDetto.getInstance(requireContext().applicationContext).classroomDAO,
+        DatabaseDetto.getInstance(requireContext().applicationContext).projectDAO
     )
 
-    override fun getViewModelOwner():ViewModelStoreOwner {
+    override fun getViewModelOwner(): ViewModelStoreOwner {
         return this
     }
 }

@@ -72,7 +72,10 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
     }
 
     private suspend fun getManyProjectDetails(): ArrayList<ProjectModel> {
-        return RetrofitInstance.projectAPI.getManyProjectDetails(Utility.STUDENT.projects, Utility.TOKEN).body()
+        return RetrofitInstance.projectAPI.getManyProjectDetails(
+                Utility.STUDENT.projects,
+                Utility.TOKEN
+        ).body()
                 ?: throw Exception("Unable to Fetch Projects")
     }
 
@@ -101,9 +104,13 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
 
     suspend fun getClassRoomList() = dao.getAllClassRoomList()
 
-    suspend fun getDeadline(classID: String): List<DeadlineModel>{
-        return RetrofitInstance.projectAPI.getDeadline(classID,Utility.TOKEN).body()
-            ?: throw Exception("Unable to Fetch Deadline")
+    suspend fun getDeadline(classID: String): List<DeadlineModel> {
+        return RetrofitInstance.projectAPI.getDeadline(classID, Utility.TOKEN).body()
+                ?: throw Exception("Unable to Fetch Deadline")
     }
 
+
+    @Suppress("BlockingMethodInNonBlockingContext")
+    suspend fun getGDriveToken() = RetrofitInstance.gDriveAPI.getGDriveToken().body()?.string()
+            ?: throw Exception("Unable to Fetch GDrive token")
 }
