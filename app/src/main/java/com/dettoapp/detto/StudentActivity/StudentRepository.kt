@@ -23,7 +23,7 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
         return sharedPreference.getInt(classID, Constants.PROJECT_NOT_CREATED)
     }
 
-    suspend fun insertProject(listOfProjectModel: List<ProjectModel>) {
+    private suspend fun insertProject(listOfProjectModel: List<ProjectModel>) {
         projectDao.insertProject(listOfProjectModel)
     }
 
@@ -47,10 +47,8 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
         return projectModel
     }
 
-    suspend fun updateProject(projectModel: ProjectModel) {
+    private suspend fun updateProject(projectModel: ProjectModel) {
         projectDao.updateProject(projectModel)
-
-
     }
 
     suspend fun storeEditedProject(cid: String, title: String, description: String): ProjectModel {
@@ -108,7 +106,6 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
         return RetrofitInstance.projectAPI.getDeadline(classID, Utility.TOKEN).body()
                 ?: throw Exception("Unable to Fetch Deadline")
     }
-
 
     @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun getGDriveToken() = RetrofitInstance.gDriveAPI.getGDriveToken().body()?.string()
