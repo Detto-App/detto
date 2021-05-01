@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.util.Log
+import com.dettoapp.detto.UtilityClasses.Utility
 import com.google.android.gms.drive.DriveFolder
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
@@ -80,11 +81,11 @@ class DriveServiceHelper(driveService: Drive) {
     /**
      * Creates a text file in the user's My Drive folder and returns its file ID.
      */
-    fun createFile(): Task<String> {
+    fun createFile(folderID: String = "root", mimeType: String = "text/plain"): Task<String> {
         return Tasks.call(mExecutor, Callable {
             val metadata: File = File()
-                .setParents(Collections.singletonList("root"))
-                .setMimeType("text/plain")
+                .setParents(Collections.singletonList(folderID))
+                .setMimeType(mimeType)
                 .setName("Untitled file")
 
 
@@ -153,7 +154,7 @@ class DriveServiceHelper(driveService: Drive) {
             // Update the metadata and contents.
 
             val type = mDriveService.files().update(fileId, metadata, mediaContent)
-            type.mediaHttpUploader.progressListener = CustomProgressListener()
+            //type.mediaHttpUploader.progressListener = CustomProgressListener(v)
 
             //val request: Drive.Files.Insert = drive.files().insert(fileMetadata, mediaContent)
 
@@ -163,45 +164,54 @@ class DriveServiceHelper(driveService: Drive) {
     }
 
 
-    fun saveFile(
-        fileId: String?,
-        name: String?,
-        mediaContent: InputStreamContent,
-        uploader: CustomProgressListener,
-    ): Task<Void> {
-        return Tasks.call(mExecutor, Callable {
-            // Update the metadata and contents.
-//            val type = mDriveService.files().update(fileId, File().setName("IDKIDK"), mediaContent)
+//    fun saveFile(
+//        fileId: String?,
+//        name: String?,
+//        mediaContent: InputStreamContent,
+//        uploader: CustomProgressListener,
+//    ): Task<Void> {
+//        return Tasks.call(mExecutor, Callable {
+//            // Update the metadata and contents.
+////            val type = mDriveService.files().update(fileId, File().setName("IDKIDK"), mediaContent)
+////            val up = type.mediaHttpUploader
+//
+//
+////            val metadata: File = File()
+////                .setParents(Collections.singletonList(Utility.STUDENT.uid))
+////                .setMimeType("image/jpg")
+////                .setName("Untitled file")
+//
+//
+////            val permission: Permission = Permission()
+////                .setType("anyone")
+////                .setRole("reader")
+////
+////            val x = mDriveService.Permissions().create(fileId, permission).execute()
+////
+////            val file: File = mDriveService.files().get(fileId).setFields("webViewLink").execute()
+////
+////            Log.d("FFGG", file.webViewLink)
+//
+//
+//            //val type = mDriveService.files().create(metadata,mediaContent)
+//            val type = mDriveService.files().update(fileId, File().setName(name), mediaContent)
+//            type.setFields("id")
 //            val up = type.mediaHttpUploader
+//
+//            up.setDirectUploadEnabled(false)
+//            up.setChunkSize(MediaHttpUploader.MINIMUM_CHUNK_SIZE)
+//
+//
+//            type.mediaHttpUploader.progressListener = uploader
+//
+//            //val request: Drive.Files.Insert = drive.files().insert(fileMetadata, mediaContent)
+//
+//            type.execute()
+//            null
+//        })
+//    }
 
 
-            val permission: Permission = Permission()
-                .setType("anyone")
-                .setRole("reader")
-
-            val x = mDriveService.Permissions().create(fileId, permission).execute()
-
-            val file: File = mDriveService.files().get(fileId).setFields("webViewLink").execute()
-
-            Log.d("FFGG", file.webViewLink)
-
-
-            val type = mDriveService.files().update(fileId, File().setName("IDKIDK"), mediaContent)
-            type.setFields("id")
-            val up = type.mediaHttpUploader
-
-            up.setDirectUploadEnabled(false)
-            up.setChunkSize(MediaHttpUploader.MINIMUM_CHUNK_SIZE)
-
-
-            type.mediaHttpUploader.progressListener = uploader
-
-            //val request: Drive.Files.Insert = drive.files().insert(fileMetadata, mediaContent)
-
-            type.execute()
-            null
-        })
-    }
 
     /**
      * Returns a [FileList] containing all the visible files in the user's My Drive.
@@ -266,7 +276,8 @@ class DriveServiceHelper(driveService: Drive) {
         })
     }
 
-    fun createOrGetFolderReference(folderName: String) = getFolderID(folderName) ?: createFolder(folderName)
+    fun createOrGetFolderReference(folderName: String) =
+        getFolderID(folderName) ?: createFolder(folderName)
 
     private fun getFolderID(folderName: String): File? {
         var pageToken: String? = null
@@ -309,7 +320,36 @@ class DriveServiceHelper(driveService: Drive) {
             .setType("anyone")
             .setRole("reader")
 
-        mDriveService.Permissions().create(folderID,permission).execute()
+        mDriveService.Permissions().create(folderID, permission).execute()
+    }
+
+    fun uploadFile(folderID: String,name: String,mimeType: String,mediaContent: InputStreamContent,customProgressListener: CustomProgressListener): Task<String> = Tasks.call(mExecutor){
+
+        val metadata: File = File()
+            .setParents(Collections.singletonList(folderID))
+            .setMimeType(mimeType)
+            .setName(name)
+
+        val createRequest = mDriveService.files().create(metadata,mediaContent)
+        createRequest.fields ="id, webViewLink"
+
+        createRequest.mediaHttpUploader.apply {
+            isDirectUploadEnabled = false
+            chunkSize = MediaHttpUploader.MINIMUM_CHUNK_SIZE
+            progressListener  = customProgressListener
+        }
+        //            val up = type.mediaHttpUploader
+
+        //            up.setDirectUploadEnabled(false)
+//            up.setChunkSize(MediaHttpUploader.MINIMUM_CHUNK_SIZE)
+//
+//
+//            type.mediaHttpUploader.progressListener = uploader
+
+        val output = createRequest.execute()
+
+        Log.d("SSSS", "File ID "+output.webViewLink)
+        return@call output.webViewLink
     }
 
 }

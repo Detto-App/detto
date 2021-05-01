@@ -43,7 +43,7 @@ class BaseViewModelFactory(private val repository: BaseRepository, private val c
             ) as T
             modelClass.isAssignableFrom(ChatViewModel::class.java) -> ChatViewModel((repository as ChatRepository)) as T
             modelClass.isAssignableFrom(StudentSubmissionViewModel::class.java) -> StudentSubmissionViewModel(
-                (repository as StudentRepository)
+                (repository as StudentRepository),context
             ) as T
             else -> throw IllegalStateException("Cant Create ViewModel,No option Base Factory")
         }
