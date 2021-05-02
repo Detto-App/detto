@@ -2,6 +2,7 @@ package com.dettoapp.detto.StudentActivity.Fragments
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,10 +10,15 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.StudentActivity.ViewModels.StudentSubmissionViewModel
+import com.dettoapp.detto.StudentActivity.gdrive.UploadGDriveWorker
 import com.dettoapp.detto.UtilityClasses.BaseFragment
+import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentStudentSubmissionBinding
 
 class StudentSubmissionFrag :
@@ -30,36 +36,44 @@ class StudentSubmissionFrag :
 
     private fun handleIt(result: ActivityResult) {
         if (result.resultCode == Activity.RESULT_OK) {
-            // There are no request codes
             val data = result.data?.data
-            binding.fileName.text = "" + data
-
             data?.let {
-                viewModel.uploadFile(it)
+                scheduleUploadWorker(it, viewModel.gDriveToken)
             }
         }
     }
+
+    private fun scheduleUploadWorker(uri: Uri, gDriveToken: String) {
+
+        val data = Data.Builder()
+            .putString(UploadGDriveWorker.URI_PATH, uri.toString())
+            .putString(UploadGDriveWorker.GDRIVE_TOKEN, gDriveToken)
+            .putString(UploadGDriveWorker.FOLDER_NAME,Utility.STUDENT.uid)
+            .build()
+
+        val uploadWorkRequest =
+            OneTimeWorkRequestBuilder<UploadGDriveWorker>()
+                .setInputData(data)
+                .build()
+
+        WorkManager
+            .getInstance(requireContext().applicationContext)
+            .enqueue(uploadWorkRequest)
+
+        baseActivity.showToast("File Uploading\nCheck Notifications")
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.fileChooser.setOnClickListener {
-            val intent2 = Intent(Intent.ACTION_OPEN_DOCUMENT)
-            intent2.addCategory(Intent.CATEGORY_OPENABLE)
-            intent2.setType("*/*")
-            //intent.type = "text/plain"
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
-                // Optionally, specify a URI for the directory that should be opened in
-                // the system file picker when it loads.
-                //putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri)
-            }
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+            intent.addCategory(Intent.CATEGORY_OPENABLE)
+            intent.type = "*/*"
 
-            resultLauncher.launch(intent2)
+            resultLauncher.launch(intent)
         }
-
-        viewModel.x.observe(viewLifecycleOwner,{
-            binding.fileName.text = it
-        })
     }
 
     override fun getViewModelClass(): Class<StudentSubmissionViewModel> {

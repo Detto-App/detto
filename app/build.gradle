@@ -102,6 +102,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging-ktx:21.0.1'
     implementation 'com.google.firebase:firebase-analytics-ktx:18.0.3'
 
+    //Workmanaget Support
+    def work_version = "2.5.0"
+    implementation "androidx.work:work-runtime-ktx:$work_version"
+
     // for drive integration
     implementation "com.google.android.gms:play-services-drive:17.0.0"
     implementation 'com.google.http-client:google-http-client-gson:1.26.0'
@@ -113,5 +117,6 @@ dependencies {
                 exclude group: 'org.apache.httpcomponents'
             }
 
+    implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
 }
 

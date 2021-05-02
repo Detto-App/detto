@@ -4,6 +4,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 object Constants {
+
+    const val PROGRESS_CHANNEL_ID = "12345"
+    const val PROGRESS_CHANNEL_NAME ="Progress Updates"
+
     const val BASE_DETTO_URL = "https://detto.uk.to/"
     const val USER_EMAIL_KEY = "uEmail"
 
