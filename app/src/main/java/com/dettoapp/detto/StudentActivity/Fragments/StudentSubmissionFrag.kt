@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,14 +18,17 @@ import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.StudentActivity.ViewModels.StudentSubmissionViewModel
 import com.dettoapp.detto.StudentActivity.gdrive.UploadGDriveWorker
-import com.dettoapp.detto.UtilityClasses.*
+import com.dettoapp.detto.UtilityClasses.BaseFragment
+import com.dettoapp.detto.UtilityClasses.EasyPermission
+import com.dettoapp.detto.UtilityClasses.Utility
+import com.dettoapp.detto.UtilityClasses.requestPermission
 import com.dettoapp.detto.databinding.FragmentStudentSubmissionBinding
 
 class StudentSubmissionFrag :
         BaseFragment<StudentSubmissionViewModel, FragmentStudentSubmissionBinding, StudentRepository>() {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
-    private val readStoragePermissionResult: EasyPermission by requestMultiplePermission(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA,
+    private val readStoragePermissionResult: EasyPermission by requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE,
             granted = {
                 displayView(true)
             }, denied = {
@@ -39,10 +41,6 @@ class StudentSubmissionFrag :
                 registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                     handleIt(it)
                 }
-    }
-
-    private fun handleit2(it: Boolean) {
-        Log.d("DDSS", "ress " + it)
     }
 
     private fun handleIt(result: ActivityResult) {
