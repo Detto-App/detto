@@ -307,7 +307,7 @@ class DriveServiceHelper(driveService: Drive) {
     private fun createFolder(folderName: String, isShareable: Boolean = true): File {
         val fileMetadata = File()
         fileMetadata.name = folderName
-        fileMetadata.mimeType = "application/vnd.google-apps.folder"
+        fileMetadata.mimeType = TYPE_GOOGLE_DRIVE_FOLDER
 
 
         val file: File = mDriveService.files().create(fileMetadata)

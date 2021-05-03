@@ -46,6 +46,7 @@ class UploadGDriveWorker(context: Context, parameters: WorkerParameters) :
     private val notificationManager: NotificationManager by lazy { applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
     private var driveServiceHelper: DriveServiceHelper? = null
     private lateinit var folder: File
+    private var fileName: String ="Uploading"
 
     override suspend fun doWork(): Result {
         return try {
@@ -101,7 +102,7 @@ class UploadGDriveWorker(context: Context, parameters: WorkerParameters) :
     }
 
     private fun createNotification(message: String): Notification {
-        val title = "Uploading File"
+        val title = fileName
         val cancel = "cancel"
 
         // This PendingIntent can be used to cancel the worker
@@ -119,14 +120,12 @@ class UploadGDriveWorker(context: Context, parameters: WorkerParameters) :
                 .build()
     }
 
-    private fun createForegroundInfo(uniqueID: Int, initialMessage: String="Starting"): ForegroundInfo {
+    private fun createForegroundInfo(uniqueID: Int, initialMessage: String = "Starting"): ForegroundInfo {
         return ForegroundInfo(uniqueID, createNotification(initialMessage))
     }
 
     private suspend fun uploadFile(uri: Uri, uniqueID: Int) {
-
-
-        val fileName = getFileName(uri)
+        fileName = getFileName(uri)
         val fileMIMEType = getMimeType(uri) ?: "text/plain"
         val path = applicationContext.cacheDir
 
