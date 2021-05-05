@@ -24,7 +24,11 @@ import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.model.File
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import java.io.BufferedInputStream
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -40,14 +44,14 @@ class UploadGDriveWorker(context: Context, parameters: WorkerParameters) :
         const val URI_PATH = "uriPath"
         const val GDRIVE_TOKEN = "gToken"
         const val FOLDER_NAME = "folder"
-        const val FILE_NAME ="fileName"
+        const val FILE_NAME = "fileName"
         private val counter = AtomicInteger(6)
     }
 
     private val notificationManager: NotificationManager by lazy { applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
     private var driveServiceHelper: DriveServiceHelper? = null
     private lateinit var folder: File
-    private var fileName: String ="Uploading"
+    private var fileName: String = "Uploading"
 
     override suspend fun doWork(): Result {
         return try {
@@ -55,12 +59,15 @@ class UploadGDriveWorker(context: Context, parameters: WorkerParameters) :
             beginTask(uniqueID)
             Result.success()
         } catch (e: CancellationException) {
+            //Log.d("SSSS", "" + e.localizedMessage)
             driveServiceHelper?.stopGDriveService()
             Result.failure()
         } catch (e: FinishedException) {
+            //Log.d("SSSS", "" + e.localizedMessage)
             Result.success()
         } catch (e: Exception) {
-            Log.d("SSSS", "" + e.localizedMessage)
+            //Log.d("SSSS", "" + e.localizedMessage)
+            showErrorNotification()
             Result.failure()
         }
     }
@@ -72,7 +79,6 @@ class UploadGDriveWorker(context: Context, parameters: WorkerParameters) :
         val gDriveToken = inputData.getString(GDRIVE_TOKEN)
                 ?: throw Exception("Could not Connect to GoogleDrive")
 
-        Log.d("DDSS","GUpload "+gDriveToken)
         val folderName =
                 inputData.getString(FOLDER_NAME) ?: throw Exception("No folder Information")
 
@@ -83,7 +89,7 @@ class UploadGDriveWorker(context: Context, parameters: WorkerParameters) :
             initialiseDriveService(gDriveToken)
 
         getIndividualFolderID(folderName)
-        uploadFile(uri, uniqueID,fileName)
+        uploadFile(uri, uniqueID, fileName)
     }
 
     private fun initialiseDriveService(gDriveToken: String) {
@@ -130,7 +136,7 @@ class UploadGDriveWorker(context: Context, parameters: WorkerParameters) :
         return ForegroundInfo(uniqueID, createNotification(initialMessage))
     }
 
-    private suspend fun uploadFile(uri: Uri, uniqueID: Int,fileNameReceived:String) {
+    private suspend fun uploadFile(uri: Uri, uniqueID: Int, fileNameReceived: String) {
         fileName = fileNameReceived
         val fileMIMEType = getMimeType(uri) ?: "text/plain"
         val path = applicationContext.cacheDir
@@ -146,7 +152,7 @@ class UploadGDriveWorker(context: Context, parameters: WorkerParameters) :
         mediaContent.length = file.length()
 
         val progressListener = CustomProgressListener()
-
+        listenForProgressUpdates(progressListener, uniqueID)
 
         val fileID = driveServiceHelper!!.uploadFile(
                 folder.id,
@@ -154,9 +160,9 @@ class UploadGDriveWorker(context: Context, parameters: WorkerParameters) :
                 fileMIMEType,
                 mediaContent,
                 progressListener
-        )
+        ).await()
 
-        listenForProgressUpdates(progressListener, uniqueID)
+
     }
 
     private fun getFileName(fileUri: Uri): String {
@@ -193,14 +199,16 @@ class UploadGDriveWorker(context: Context, parameters: WorkerParameters) :
         inputStream.copyTo(outputStream)
     }
 
-    private suspend fun listenForProgressUpdates(progressListener: CustomProgressListener, uniqueID: Int) {
-        progressListener.progressUpdates.collect {
-            when (it) {
-                is Resource.Success -> displayFileUpLoadProgress(it.data!!, uniqueID)
-                is Resource.NavigateForward -> {
-                    throw FinishedException("Done")
-                }
-                else -> {
+    private fun listenForProgressUpdates(progressListener: CustomProgressListener, uniqueID: Int) {
+        CoroutineScope(Dispatchers.Default).launch {
+            progressListener.progressUpdates.collect {
+                when (it) {
+                    is Resource.Success -> displayFileUpLoadProgress(it.data!!, uniqueID)
+                    is Resource.NavigateForward -> {
+                        throw FinishedException("Done")
+                    }
+                    else -> {
+                    }
                 }
             }
         }
@@ -219,4 +227,15 @@ class UploadGDriveWorker(context: Context, parameters: WorkerParameters) :
     private fun getID() = counter.incrementAndGet()
 
     inner class FinishedException(message: String) : Exception(message)
+
+    private fun showErrorNotification(message: String="Unable to upload file\nCheck Network Connection") {
+        val notification = NotificationCompat.Builder(applicationContext, Constants.PROGRESS_CHANNEL_ID)
+                .setContentTitle(fileName)
+                .setTicker(fileName)
+                .setContentText(message)
+                .setSmallIcon(R.mipmap.ic_launcher_foreground)
+                .build()
+
+        notificationManager.notify(System.currentTimeMillis().toInt(), notification)
+    }
 }

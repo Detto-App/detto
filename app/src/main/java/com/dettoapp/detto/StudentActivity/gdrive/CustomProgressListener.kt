@@ -15,18 +15,15 @@ class CustomProgressListener :
     val progressUpdates = MutableStateFlow<Resource<String>>(Resource.Success(data = "0"))
 
     override fun progressChanged(uploader: MediaHttpUploader?) {
-        CoroutineScope(Dispatchers.Default).launch {
-            when (uploader?.uploadState) {
-                MediaHttpUploader.UploadState.MEDIA_IN_PROGRESS -> {
-                    progressUpdates.emit(Resource.Success(data = uploader.progress.toString()))
-                }
-                MediaHttpUploader.UploadState.MEDIA_COMPLETE -> {
-                    progressUpdates.emit(Resource.NavigateForward())
-                }
-                else -> {
-                }
+        when (uploader?.uploadState) {
+            MediaHttpUploader.UploadState.MEDIA_IN_PROGRESS -> {
+                progressUpdates.value = Resource.Success(data = uploader.progress.toString())
+            }
+            MediaHttpUploader.UploadState.MEDIA_COMPLETE -> {
+                progressUpdates.value = Resource.NavigateForward()
+            }
+            else -> {
             }
         }
-
     }
 }
