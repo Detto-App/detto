@@ -40,6 +40,7 @@ class UploadGDriveWorker(context: Context, parameters: WorkerParameters) :
         const val URI_PATH = "uriPath"
         const val GDRIVE_TOKEN = "gToken"
         const val FOLDER_NAME = "folder"
+        const val FILE_NAME ="fileName"
         private val counter = AtomicInteger(6)
     }
 
@@ -70,14 +71,19 @@ class UploadGDriveWorker(context: Context, parameters: WorkerParameters) :
                 inputData.getString(URI_PATH)?.toUri() ?: throw Exception("Unable to Locate File")
         val gDriveToken = inputData.getString(GDRIVE_TOKEN)
                 ?: throw Exception("Could not Connect to GoogleDrive")
+
+        Log.d("DDSS","GUpload "+gDriveToken)
         val folderName =
                 inputData.getString(FOLDER_NAME) ?: throw Exception("No folder Information")
+
+        val fileName =
+                inputData.getString(FILE_NAME) ?: throw Exception("No fileName Information Information")
 
         if (driveServiceHelper == null)
             initialiseDriveService(gDriveToken)
 
         getIndividualFolderID(folderName)
-        uploadFile(uri, uniqueID)
+        uploadFile(uri, uniqueID,fileName)
     }
 
     private fun initialiseDriveService(gDriveToken: String) {
@@ -124,8 +130,8 @@ class UploadGDriveWorker(context: Context, parameters: WorkerParameters) :
         return ForegroundInfo(uniqueID, createNotification(initialMessage))
     }
 
-    private suspend fun uploadFile(uri: Uri, uniqueID: Int) {
-        fileName = getFileName(uri)
+    private suspend fun uploadFile(uri: Uri, uniqueID: Int,fileNameReceived:String) {
+        fileName = fileNameReceived
         val fileMIMEType = getMimeType(uri) ?: "text/plain"
         val path = applicationContext.cacheDir
 

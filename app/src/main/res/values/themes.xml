@@ -39,4 +39,14 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
+
+    <style name="CustomDialog" parent="ThemeOverlay.MaterialComponents">
+        <item name="android:windowAnimationStyle">@style/CustomDialogAnimation</item>
+    </style>
+
+    <style name="CustomDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_left</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_right</item>
+    </style>
+
 </resources>

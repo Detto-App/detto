@@ -15,18 +15,18 @@ import androidx.work.Data
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.dettoapp.detto.Db.DatabaseDetto
+import com.dettoapp.detto.StudentActivity.Dialog.UploadFileSelectionDialog
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.StudentActivity.ViewModels.StudentSubmissionViewModel
 import com.dettoapp.detto.StudentActivity.gdrive.UploadGDriveWorker
-import com.dettoapp.detto.UtilityClasses.BaseFragment
-import com.dettoapp.detto.UtilityClasses.EasyPermission
-import com.dettoapp.detto.UtilityClasses.Utility
-import com.dettoapp.detto.UtilityClasses.requestPermission
+import com.dettoapp.detto.UtilityClasses.*
 import com.dettoapp.detto.databinding.FragmentStudentSubmissionBinding
+import java.util.*
 
 class StudentSubmissionFrag :
-        BaseFragment<StudentSubmissionViewModel, FragmentStudentSubmissionBinding, StudentRepository>() {
+        BaseFragment<StudentSubmissionViewModel, FragmentStudentSubmissionBinding, StudentRepository>(), UploadFileSelectionDialog.UploadFileSelectionInterface {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+    private lateinit var fileUploadDialog: UploadFileSelectionDialog
 
     private val readStoragePermissionResult: EasyPermission by requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE,
             granted = {
@@ -47,20 +47,21 @@ class StudentSubmissionFrag :
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data?.data
             data?.let {
-                scheduleUploadWorker(it, viewModel.gDriveToken)
+                //scheduleUploadWorker(it, viewModel.gDriveToken)
+                fileUploadDialog.onFileSelected(viewModel.getFileName(it))
             }
         }
     }
 
-    private fun scheduleUploadWorker(uri: Uri, gDriveToken: String) {
+    private fun scheduleUploadWorker(uri: Uri, gDriveToken: String, fileName: String) {
 
         val data = Data.Builder()
                 .putString(UploadGDriveWorker.URI_PATH, uri.toString())
                 .putString(UploadGDriveWorker.GDRIVE_TOKEN, gDriveToken)
-                .putString(UploadGDriveWorker.FOLDER_NAME, Utility.STUDENT.name.toUpperCase() + "-" + Utility.STUDENT.susn.toUpperCase())
+                .putString(UploadGDriveWorker.FOLDER_NAME, Utility.STUDENT.name.toUpperCase(Locale.ROOT) + "-" + Utility.STUDENT.susn.toUpperCase(Locale.ROOT))
+                .putString(UploadGDriveWorker.FILE_NAME, fileName)
                 .build()
 
-        //registerForActivityResult(ActivityResultContracts.RequestPermission())
         val uploadWorkRequest =
                 OneTimeWorkRequestBuilder<UploadGDriveWorker>()
                         .setInputData(data)
@@ -80,6 +81,34 @@ class StudentSubmissionFrag :
 
         checkPermissions()
         initialise()
+        liveDataObservers()
+    }
+
+    private fun liveDataObservers() {
+        viewModel.submissionFragEvent.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            when (it) {
+                is Resource.Success -> {
+                    when (it.data!!) {
+                        "token" -> {
+                            binding.fileChooser.isEnabled = true
+                            binding.refresh.visibility = View.GONE
+                        }
+                        else -> {
+                            scheduleUploadWorker(viewModel.getFileURI(), viewModel.gDriveToken, it.data)
+                            fileUploadDialog.dismiss()
+                        }
+                    }
+                }
+                is Resource.Error -> {
+                    if (it.data != null && it.data == "token")
+                        binding.refresh.visibility = View.VISIBLE
+                    baseActivity.showErrorSnackMessage(it.message!!)
+                }
+                is Resource.Loading -> {
+                    baseActivity.showToast("Loading...")
+                }
+            }
+        })
     }
 
     private fun initialise() {
@@ -88,10 +117,11 @@ class StudentSubmissionFrag :
         }
 
         binding.fileChooser.setOnClickListener {
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-            intent.addCategory(Intent.CATEGORY_OPENABLE)
-            intent.type = "*/*"
-            resultLauncher.launch(intent)
+            fileUploadDialog = UploadFileSelectionDialog(requireContext(), this)
+            fileUploadDialog.show()
+        }
+        binding.refresh.setOnClickListener {
+            viewModel.getGDriveToken()
         }
     }
 
@@ -130,122 +160,15 @@ class StudentSubmissionFrag :
             binding.fileName.visibility = View.GONE
         }
     }
+
+    override fun launchFileChooser() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.type = "*/*"
+        resultLauncher.launch(intent)
+    }
+
+    override fun onUploadButton(modifiedFileName: String) {
+        viewModel.validate(modifiedFileName)
+    }
 }
-
-//class ActivityResultLazy<R : ActivityResultLauncher<String>>(private val fragment: Fragment, private val permission: String,
-//                                                             private val granted: (permission: String) -> Unit) :
-//        ReadOnlyProperty<Fragment, R> {
-//
-//    private var permissionResult: ActivityResultLauncher<String>? = null
-//
-//
-//    init {
-//        fragment.lifecycle.addObserver(object : DefaultLifecycleObserver {
-//            override fun onCreate(owner: LifecycleOwner) {
-//                fragment.apply {
-//                    permissionResult = registerForActivityResult(ActivityResultContracts.RequestPermission()
-//                    ) { isGranted: kotlin.Boolean ->
-//                        if (isGranted) {
-//                            granted(permission)
-//                            // Permission is granted. Continue the action or workflow in your
-//                            // app.
-//                        } else {
-//                            android.util.Log.d("DDSS", "R D 2")
-//                            // Explain to the user that the feature is unavailable because the
-//                            // features requires a permission that the user has denied. At the
-//                            // same time, respect the user's decision. Don't link to system
-//                            // settings in an effort to convince the user to change their
-//                            // decision.
-//                        }
-//                    }
-//                }
-//            }
-//
-//            override fun onDestroy(owner: LifecycleOwner) {
-//                permissionResult = null
-//            }
-//        })
-//    }
-//
-//    override fun getValue(thisRef: Fragment, property: KProperty<*>): R {
-//        permissionResult?.let { return (it as R) }
-//
-//        error("Not Working")
-//    }
-////    override val value: R
-////        get() {
-////            x.apply {
-////                val x2 = registerForActivityResult(ActivityResultContracts.RequestPermission()
-////                ) { isGranted: Boolean ->
-////                    if (isGranted) {
-////                        Log.d("DDSS", "R G 2")
-////                        // Permission is granted. Continue the action or workflow in your
-////                        // app.
-////                    } else {
-////                        Log.d("DDSS", "R D 2")
-////                        // Explain to the user that the feature is unavailable because the
-////                        // features requires a permission that the user has denied. At the
-////                        // same time, respect the user's decision. Don't link to system
-////                        // settings in an effort to convince the user to change their
-////                        // decision.
-////                    }
-////                }
-////                return (x2 as R)
-////            }
-////        }
-////
-////    override fun isInitialized(): Boolean {
-////        return false
-////    }
-//}
-//
-//inline fun <reified R : ActivityResultLauncher<String>> Fragment.requestPermission(
-//        permission: String,
-//        noinline granted: (permission: String) -> Unit = {},
-//        crossinline denied: (permission: String) -> Unit = {},
-//        crossinline explained: (permission: String) -> Unit = {}
-//
-//): ReadOnlyProperty<Fragment, R> = ActivityResultLazy(this, permission, granted)
-
-
-//        val x = registerForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
-//            when {
-//                result -> granted.invoke(permission)
-//                shouldShowRequestPermissionRationale(permission) -> denied.invoke(permission)
-//                else -> {
-//                    x.launch(permission)
-//                    //denied.invoke(permission)
-//                    if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_MEDIA_LOCATION
-//                            ) == PackageManager.PERMISSION_GRANTED) {
-//                        granted.invoke(permission)
-//                    }
-//                    else
-//                    {
-//                        Log.d("DDSS","Heyy")
-//                    }
-//                }
-//            }
-//        }
-//
-//        return ActivityResultLazy(x)
-//    }
-//
-//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-//
-//    }
-
-//    private lateinit var resultLauncher2: ActivityResultLauncher<String>
-//
-//    val x2: StudentSubmissionViewModel by activityViewModels()
-//    val x3: FragmentStudentSubmissionBinding by viewBinding()
-//
-//    val x: ActivityResultLauncher<String> by requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE, {
-//        Log.d("DDSS", "hello g")
-//    }, {
-//        Log.d("DDSS", "hello d")
-////        ActivityCompat.requestPermissions(this.requireActivity(),
-////                arrayOf(it),
-////                10)
-//    }, {
-//        Log.d("DDSS", "hello e")
-//    })

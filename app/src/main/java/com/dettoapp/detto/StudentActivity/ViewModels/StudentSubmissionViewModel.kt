@@ -1,56 +1,69 @@
 package com.dettoapp.detto.StudentActivity.ViewModels
 
 import android.annotation.SuppressLint
-import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.util.Log
-import android.webkit.MimeTypeMap
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.dettoapp.detto.StudentActivity.StudentRepository
-import com.dettoapp.detto.StudentActivity.gdrive.CustomProgressListener
-import com.dettoapp.detto.StudentActivity.gdrive.DriveServiceHelper
 import com.dettoapp.detto.UtilityClasses.BaseViewModel
 import com.dettoapp.detto.UtilityClasses.Resource
-import com.dettoapp.detto.UtilityClasses.Utility
-import com.google.api.client.extensions.android.http.AndroidHttp
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
-import com.google.api.client.http.InputStreamContent
-import com.google.api.client.json.gson.GsonFactory
-import com.google.api.services.drive.Drive
-import com.google.api.services.drive.model.File
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import java.io.BufferedInputStream
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.util.*
 
 
 @Suppress("BlockingMethodInNonBlockingContext")
 @SuppressLint("StaticFieldLeak")
 class StudentSubmissionViewModel(
-    private val repository: StudentRepository,
-    private val applicationContext: Context
+        private val repository: StudentRepository,
+        private val applicationContext: Context
 ) :
-    BaseViewModel() {
+        BaseViewModel() {
 
-    lateinit var gDriveToken: String
+    var gDriveToken: String = "nothing"
+
+    private lateinit var tempURI: Uri
+
+    private val _submissionFragEvent = MutableLiveData<Resource<String>>()
+    val submissionFragEvent: LiveData<Resource<String>>
+        get() = _submissionFragEvent
+
     init {
         getGDriveToken()
     }
 
-    private fun getGDriveToken() {
+    fun getGDriveToken() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                _submissionFragEvent.postValue(Resource.Loading())
                 gDriveToken = repository.getGDriveToken()
+                _submissionFragEvent.postValue(Resource.Success("token"))
             } catch (e: Exception) {
-                Log.d("DDSS", "GDRIVE TOKEN Error ${e.localizedMessage}")
+                _submissionFragEvent.postValue(Resource.Error(message = "Unable to Connect", data = "token"))
             }
         }
+    }
+
+    fun getFileName(fileUri: Uri): String {
+        tempURI = fileUri
+        var name = ""
+        val returnCursor = applicationContext.contentResolver.query(fileUri, null, null, null, null)
+        if (returnCursor != null) {
+            val nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            returnCursor.moveToFirst()
+            name = returnCursor.getString(nameIndex)
+            returnCursor.close()
+        }
+        return name
+    }
+
+
+    fun getFileURI() = tempURI
+
+    fun validate(fileName: String) {
+        _submissionFragEvent.postValue(Resource.Success(data = fileName))
     }
 }
