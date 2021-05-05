@@ -13,6 +13,7 @@ import com.dettoapp.detto.UtilityClasses.BaseViewModel
 import com.dettoapp.detto.UtilityClasses.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 
 
 @Suppress("BlockingMethodInNonBlockingContext")
@@ -64,6 +65,15 @@ class StudentSubmissionViewModel(
     fun getFileURI() = tempURI
 
     fun validate(fileName: String) {
-        _submissionFragEvent.postValue(Resource.Success(data = fileName))
+        viewModelScope.launch {
+            try {
+                val localFileName = fileName.trim().capitalize(Locale.ROOT)
+                if (localFileName.isEmpty() || localFileName.length <= 4)
+                    throw Exception("Bad File Name")
+                _submissionFragEvent.postValue(Resource.Success(data = fileName))
+            } catch (e: Exception) {
+                _submissionFragEvent.postValue(Resource.Error(message = "" + e.localizedMessage, data = "dialog"))
+            }
+        }
     }
 }

@@ -15,8 +15,6 @@ class UploadFileSelectionDialog(context: Context, private val uploadFileSelectio
     private val binding: DialogUploadFileSelectionBinding
         get() = _binding!!
 
-    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
-
     interface UploadFileSelectionInterface {
         fun launchFileChooser()
         fun onUploadButton(modifiedFileName: String)
@@ -45,4 +43,6 @@ class UploadFileSelectionDialog(context: Context, private val uploadFileSelectio
         binding.fileUploadGroup.visibility = View.VISIBLE
         binding.fileName.editText?.setText(fileName)
     }
+
+    fun getView() = binding.root
 }

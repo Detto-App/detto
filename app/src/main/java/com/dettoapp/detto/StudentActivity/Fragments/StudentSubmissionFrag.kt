@@ -100,9 +100,18 @@ class StudentSubmissionFrag :
                     }
                 }
                 is Resource.Error -> {
-                    if (it.data != null && it.data == "token")
-                        binding.refresh.visibility = View.VISIBLE
-                    baseActivity.showErrorSnackMessage(it.message!!)
+                    it.data?.let { errorMessage ->
+                        when (errorMessage) {
+                            "token" -> {
+                                binding.refresh.visibility = View.VISIBLE
+                                baseActivity.showErrorSnackMessage(it.message!!)
+                            }
+                            "dialog" -> {
+                                baseActivity.showErrorSnackMessage(it.message!!, fileUploadDialog.getView())
+                            }
+                        }
+
+                    } ?: baseActivity.showErrorSnackMessage(it.message!!)
                 }
                 is Resource.Loading -> {
                     baseActivity.showToast("Loading...")
@@ -169,6 +178,7 @@ class StudentSubmissionFrag :
     }
 
     override fun onUploadButton(modifiedFileName: String) {
+        baseActivity.closeKeyBoard(fileUploadDialog.getView())
         viewModel.validate(modifiedFileName)
     }
 }

@@ -23,11 +23,8 @@ import com.google.api.client.http.InputStreamContent
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.model.File
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.io.BufferedInputStream
 import java.io.FileInputStream
@@ -52,9 +49,17 @@ class UploadGDriveWorker(context: Context, parameters: WorkerParameters) :
     private var driveServiceHelper: DriveServiceHelper? = null
     private lateinit var folder: File
     private var fileName: String = "Uploading"
+    private lateinit var errorHandler :CoroutineExceptionHandler
 
     override suspend fun doWork(): Result {
         return try {
+             errorHandler = CoroutineExceptionHandler { context, error ->
+                when (error) {
+                    is FinishedException ->
+                        Result.success()
+                }
+            }
+
             val uniqueID = getID()
             beginTask(uniqueID)
             Result.success()
@@ -200,7 +205,7 @@ class UploadGDriveWorker(context: Context, parameters: WorkerParameters) :
     }
 
     private fun listenForProgressUpdates(progressListener: CustomProgressListener, uniqueID: Int) {
-        CoroutineScope(Dispatchers.Default).launch {
+        CoroutineScope(errorHandler).launch {
             progressListener.progressUpdates.collect {
                 when (it) {
                     is Resource.Success -> displayFileUpLoadProgress(it.data!!, uniqueID)
@@ -228,7 +233,7 @@ class UploadGDriveWorker(context: Context, parameters: WorkerParameters) :
 
     inner class FinishedException(message: String) : Exception(message)
 
-    private fun showErrorNotification(message: String="Unable to upload file\nCheck Network Connection") {
+    private fun showErrorNotification(message: String = "Unable to upload file\nCheck Network Connection") {
         val notification = NotificationCompat.Builder(applicationContext, Constants.PROGRESS_CHANNEL_ID)
                 .setContentTitle(fileName)
                 .setTicker(fileName)
