@@ -4,4 +4,5 @@ import androidx.lifecycle.ViewModelStoreOwner
 
 interface StudentOperations {
     fun getViewModelOwner():ViewModelStoreOwner
+    fun getTodo()
 }

@@ -11,7 +11,6 @@ import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.UtilityClasses.BaseViewModel
 import com.dettoapp.detto.UtilityClasses.Resource
-import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.UtilityClasses.Utility.toHashSet
 import com.dettoapp.detto.UtilityClasses.Utility.toLowerAndTrim
@@ -20,8 +19,8 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("StaticFieldLeak")
 class StudentClassDetailViewModel(
-        private val repository: StudentRepository,
-        private val context: Context
+    private val repository: StudentRepository,
+    private val context: Context
 ) : BaseViewModel() {
 
     private val _stuProjectCreation = MutableLiveData<Resource<ProjectModel>>()

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -19,8 +18,8 @@ import java.util.*
 @Suppress("BlockingMethodInNonBlockingContext")
 @SuppressLint("StaticFieldLeak")
 class StudentSubmissionViewModel(
-        private val repository: StudentRepository,
-        private val applicationContext: Context
+    private val repository: StudentRepository,
+    private val applicationContext: Context
 ) :
         BaseViewModel() {
 

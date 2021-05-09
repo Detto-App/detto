@@ -2,6 +2,7 @@ package com.dettoapp.detto.APIs
 
 import com.dettoapp.detto.Models.DeadlineModel
 import com.dettoapp.detto.Models.ProjectModel
+import com.dettoapp.detto.Models.Todo
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.*
@@ -68,4 +69,16 @@ interface ProjectAPI {
         @Header("Authorization")token: String
     ):Response<ArrayList<DeadlineModel>>
 
+    @POST("/createTodo/{cid}")
+    suspend fun createTodo(
+        @Body todo: Todo,
+        @Header("Authorization")token: String,
+        @Path(value = "cid")cid: String
+    )
+
+    @GET("/getTodo/{cid}")
+    suspend fun getTodo(
+        @Path(value = "cid")cid:String,
+        @Header("Authorization")token: String
+    ):Response<ArrayList<Todo>>
 }

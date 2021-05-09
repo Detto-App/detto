@@ -1,12 +1,9 @@
 package com.dettoapp.detto.StudentActivity.Fragments
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.Models.Classroom
@@ -16,7 +13,6 @@ import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.StudentActivity.ViewModels.StudentHomeFragViewModel
 import com.dettoapp.detto.UtilityClasses.BaseFragment
 import com.dettoapp.detto.UtilityClasses.Constants
-import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentStudentHomeBinding
 
@@ -80,9 +76,11 @@ class StudentHomeFrag : BaseFragment<StudentHomeFragViewModel, FragmentStudentHo
 
     override fun getFragmentBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentStudentHomeBinding = FragmentStudentHomeBinding.inflate(inflater, container, false)
 
-    override fun getRepository(): StudentRepository = StudentRepository(
+    override fun getRepository(): StudentRepository =
+        StudentRepository(
             DatabaseDetto.getInstance(requireContext()).classroomDAO,
-            DatabaseDetto.getInstance(requireContext()).projectDAO)
+            DatabaseDetto.getInstance(requireContext()).projectDAO
+        )
 }
 
 //        viewModel.project1.observe(viewLifecycleOwner, Observer {

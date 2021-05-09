@@ -5,6 +5,7 @@ import com.dettoapp.detto.Db.ClassroomDAO
 import com.dettoapp.detto.Db.ProjectDAO
 import com.dettoapp.detto.Models.DeadlineModel
 import com.dettoapp.detto.Models.ProjectModel
+import com.dettoapp.detto.Models.Todo
 import com.dettoapp.detto.UtilityClasses.BaseRepository
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.RetrofitInstance
@@ -110,4 +111,14 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
     @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun getGDriveToken() = RetrofitInstance.gDriveAPI.getGDriveToken().body()?.string()
             ?: throw Exception("Unable to Fetch GDrive token")
+
+    suspend fun createTodo(todo:Todo, cid:String){
+        RetrofitInstance.projectAPI.createTodo(todo, Utility.TOKEN,cid)
+    }
+
+    suspend fun getTodo(classID: String): List<Todo> {
+        return RetrofitInstance.projectAPI.getTodo(classID, Utility.TOKEN).body()
+            ?: throw Exception("Unable to Fetch Todo")
+    }
+
 }

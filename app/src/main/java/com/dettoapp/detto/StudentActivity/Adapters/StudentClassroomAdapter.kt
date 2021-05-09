@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dettoapp.detto.R
 import com.dettoapp.detto.Models.Classroom
 
-class StudentClassroomAdapter(private val studentClassroomAdapterCLickListener:StudentClassroomAdapter.StudentClassroomAdapterCLickListener): RecyclerView.Adapter<StudentClassroomAdapter.ClassroomViewHolder>() {
+class StudentClassroomAdapter(private val studentClassroomAdapterCLickListener:StudentClassroomAdapter.
+StudentClassroomAdapterCLickListener): RecyclerView.Adapter<StudentClassroomAdapter.ClassroomViewHolder>() {
 
 
     interface StudentClassroomAdapterCLickListener{

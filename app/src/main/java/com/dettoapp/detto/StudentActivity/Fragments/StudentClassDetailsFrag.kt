@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.core.app.ShareCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelStoreOwner
@@ -20,7 +19,6 @@ import com.dettoapp.detto.StudentActivity.Dialog.ProjectEditDialog
 import com.dettoapp.detto.StudentActivity.StudentOperations
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.StudentActivity.ViewModels.StudentClassDetailViewModel
-import com.dettoapp.detto.TeacherActivity.Adapters.ClassRoomDetailFragViewPagerAdapter
 import com.dettoapp.detto.UtilityClasses.BaseFragment
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
@@ -204,5 +202,9 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
 
     override fun getViewModelOwner(): ViewModelStoreOwner {
         return this
+    }
+
+    override fun getTodo() {
+
     }
 }
