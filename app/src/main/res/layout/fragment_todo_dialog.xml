@@ -20,7 +20,7 @@
         app:layout_constraintVertical_bias=".1" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tittle"
+        android:id="@+id/todoTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -38,13 +38,13 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/category_edit_text"
+        android:id="@+id/todoCategory"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/tittle"
-        app:layout_constraintStart_toStartOf="@+id/tittle"
-        app:layout_constraintTop_toBottomOf="@+id/tittle"
+        app:layout_constraintEnd_toEndOf="@+id/todoTitle"
+        app:layout_constraintStart_toStartOf="@+id/todoTitle"
+        app:layout_constraintTop_toBottomOf="@+id/todoTitle"
         app:layout_constraintVertical_bias=".1">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -57,10 +57,11 @@
         android:id="@+id/assigned"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/tittle"
-        app:layout_constraintStart_toStartOf="@+id/tittle"
-        app:layout_constraintTop_toBottomOf="@+id/tittle"
+        app:layout_constraintEnd_toEndOf="@+id/todoTitle"
+        app:layout_constraintStart_toStartOf="@+id/todoTitle"
+        app:layout_constraintTop_toBottomOf="@+id/todoTitle"
         app:layout_constraintVertical_bias=".3" />
 
     <Button
@@ -69,8 +70,8 @@
         android:layout_height="wrap_content"
         android:text="submit"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/tittle"
-        app:layout_constraintStart_toStartOf="@+id/tittle"
-        app:layout_constraintTop_toBottomOf="@+id/tittle" />
+        app:layout_constraintEnd_toEndOf="@+id/todoTitle"
+        app:layout_constraintStart_toStartOf="@+id/todoTitle"
+        app:layout_constraintTop_toBottomOf="@+id/todoTitle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

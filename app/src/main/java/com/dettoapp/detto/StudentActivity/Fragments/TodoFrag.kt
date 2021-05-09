@@ -13,8 +13,6 @@ import com.dettoapp.detto.StudentActivity.Dialog.TodoDialog
 import com.dettoapp.detto.StudentActivity.StudentOperations
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.StudentActivity.ViewModels.TodoViewModel
-import com.dettoapp.detto.TeacherActivity.Adapters.DeadlineAdapterClassroomDetail
-import com.dettoapp.detto.TeacherActivity.Dialog.DeadlineDialog
 import com.dettoapp.detto.UtilityClasses.BaseFragment
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
@@ -42,12 +40,10 @@ class TodoFrag(private val classroom: Classroom, private val studentOperations: 
             layoutManager = LinearLayoutManager(requireContext())
         }
         binding.addtodo.setOnClickListener {
-            tDialog = TodoDialog(this)
-            tDialog.show(requireActivity().supportFragmentManager, "dhsa")
+            tDialog = TodoDialog(this,requireContext())
+            tDialog.show()
         }
         viewModel.getTodo(classroom.classroomuid)
-
-
     }
 
     fun liveDataObservers(){
@@ -55,17 +51,10 @@ class TodoFrag(private val classroom: Classroom, private val studentOperations: 
             when (it) {
                 is Resource.Success -> {
                     binding.todoprogressBar.visibility = View.GONE
-//                    binding.re.isRefreshing = false
                     todoAdapter.differ.submitList(it.data)
                 }
                 is Resource.Error -> {
                     baseActivity.showErrorSnackMessage(it.message!!)
-                }
-                is Resource.Loading -> {
-                    baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
-                }
-                is Resource.Confirm ->{
-                    baseActivity.hideProgressDialog()
                 }
                 else -> {
                 }
@@ -92,6 +81,4 @@ class TodoFrag(private val classroom: Classroom, private val studentOperations: 
         viewModel.createTodo(classroom.classroomuid,tittle,category,assigned)
         tDialog.dismiss()
     }
-
-
 }
