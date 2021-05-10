@@ -13,6 +13,7 @@ import com.dettoapp.detto.UtilityClasses.BaseViewModel
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class TodoViewModel(
@@ -39,6 +40,8 @@ class TodoViewModel(
     fun getTodo(pid: String){
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                //Keep it, It is to ease the UI loading as many items may load at first
+                delay(200)
                 val todo = repository.getTodo(pid)
                 _todo.postValue(Resource.Success(data = todo))
             } catch (e: Exception) {

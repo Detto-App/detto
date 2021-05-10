@@ -18,6 +18,5 @@ class StudentActivity : BaseActivity() {
                 false,
                 false
         )
-
     }
 }
