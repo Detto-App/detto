@@ -112,12 +112,12 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
     suspend fun getGDriveToken() = RetrofitInstance.gDriveAPI.getGDriveToken().body()?.string()
             ?: throw Exception("Unable to Fetch GDrive token")
 
-    suspend fun createTodo(todo:Todo, cid:String){
-        RetrofitInstance.projectAPI.createTodo(todo, Utility.TOKEN,cid)
+    suspend fun createTodo(todo:Todo, pid:String){
+        RetrofitInstance.projectAPI.createTodo(todo, Utility.TOKEN,pid)
     }
 
-    suspend fun getTodo(classID: String): List<Todo> {
-        return RetrofitInstance.projectAPI.getTodo(classID, Utility.TOKEN).body()
+    suspend fun getTodo(pid: String): List<Todo> {
+        return RetrofitInstance.projectAPI.getTodo(pid, Utility.TOKEN).body()
             ?: throw Exception("Unable to Fetch Todo")
     }
 

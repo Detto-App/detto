@@ -80,7 +80,7 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
             projectEditDialog.show(requireActivity().supportFragmentManager, "pEdit")
         }
 
-        val viewPagerAdapter = StudentHomeViewPagerAdapter(requireActivity(), classroom, this)
+        val viewPagerAdapter = StudentHomeViewPagerAdapter(requireActivity(),classroom, projectModel, this)
         binding.studentinclassviewpager.adapter = viewPagerAdapter
 
         TabLayoutMediator(

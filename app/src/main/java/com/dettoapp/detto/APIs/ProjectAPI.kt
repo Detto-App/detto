@@ -76,9 +76,9 @@ interface ProjectAPI {
         @Path(value = "cid")cid: String
     )
 
-    @GET("/getTodo/{cid}")
+    @GET("/getTodo/{pid}")
     suspend fun getTodo(
-        @Path(value = "cid")cid:String,
+        @Path(value = "pid")pid:String,
         @Header("Authorization")token: String
     ):Response<ArrayList<Todo>>
 }

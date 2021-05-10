@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.Models.Classroom
+import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.StudentActivity.Adapters.ToDoAdapter
 import com.dettoapp.detto.StudentActivity.Dialog.TodoDialog
 import com.dettoapp.detto.StudentActivity.StudentOperations
@@ -21,7 +22,7 @@ import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.databinding.FragmentTodoBinding
 
 
-class TodoFrag(private val classroom: Classroom, private val studentOperations: StudentOperations) :
+class TodoFrag(private val projectModel: ProjectModel, private val studentOperations: StudentOperations) :
     BaseFragment<TodoViewModel, FragmentTodoBinding, StudentRepository>() ,
     TodoDialog.TodoDialogListener  {
 
@@ -45,7 +46,7 @@ class TodoFrag(private val classroom: Classroom, private val studentOperations: 
             tDialog = TodoDialog(this)
             tDialog.show(requireActivity().supportFragmentManager, "dhsa")
         }
-        viewModel.getTodo(classroom.classroomuid)
+        viewModel.getTodo(projectModel.pid)
 
 
     }
@@ -89,7 +90,7 @@ class TodoFrag(private val classroom: Classroom, private val studentOperations: 
     }
 
     override fun createTodo(tittle:String , category :String , assigned:String) {
-        viewModel.createTodo(classroom.classroomuid,tittle,category,assigned)
+        viewModel.createTodo(projectModel.pid,tittle,category,assigned)
         tDialog.dismiss()
     }
 

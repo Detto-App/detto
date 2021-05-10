@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.dettoapp.detto.Models.Classroom
+import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.StudentActivity.Fragments.StudentDeadlineFrag
 import com.dettoapp.detto.StudentActivity.Fragments.StudentSubmissionFrag
 import com.dettoapp.detto.StudentActivity.Fragments.TodoFrag
@@ -11,8 +12,8 @@ import com.dettoapp.detto.StudentActivity.StudentOperations
 
 @Suppress("PrivatePropertyName")
 class StudentHomeViewPagerAdapter(
-    fa: FragmentActivity, private val classroom: Classroom, private val studentOperations:
-    StudentOperations
+    fa: FragmentActivity, private val classroom: Classroom, private val projectModel: ProjectModel, private val
+    studentOperations: StudentOperations
 ) :
     FragmentStateAdapter
         (fa) {
@@ -24,7 +25,7 @@ class StudentHomeViewPagerAdapter(
         return when (position) {
             0 -> StudentDeadlineFrag(classroom, studentOperations)
             1 -> StudentSubmissionFrag()
-            2 -> TodoFrag(classroom, studentOperations)
+            2 -> TodoFrag(projectModel, studentOperations)
             else -> {
                 StudentDeadlineFrag(classroom, studentOperations)
             }

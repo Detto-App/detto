@@ -1,3 +1,9 @@
 package com.dettoapp.detto.Models
 
-data class Todo(val toid:String,val tittle:String, val category:String ,val assignedTo:String)
+data class Todo(
+    val toid:String,
+    val tittle:String,
+    val category:String ,
+    val assignedTo:String,
+    val status:String
+)

@@ -24,22 +24,22 @@ class TodoViewModel(
     val todo: LiveData<Resource<List<Todo>>>
         get() = _todo
 
-    fun createTodo(classroomuid: String, tittle:String, category:String, assigned:String){
+    fun createTodo(pid: String, tittle:String, category:String, assigned:String){
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val todo = Todo(
                     Utility.createID(), tittle,category,assigned)
-                repository.createTodo(todo, classroomuid)
+                repository.createTodo(todo, pid)
             } catch (e: Exception) {
                 _todo.postValue(Resource.Error(message = "" + e.localizedMessage))
             }
         }
     }
 
-    fun getTodo(cid: String){
+    fun getTodo(pid: String){
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val todo = repository.getTodo(cid)
+                val todo = repository.getTodo(pid)
                 _todo.postValue(Resource.Success(data = todo))
             } catch (e: Exception) {
                 _todo.postValue(Resource.Error(message = "" + e.localizedMessage))
