@@ -53,16 +53,26 @@
             android:hint="category" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Spinner
-        android:id="@+id/assigned"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/roleTextInputLayo"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/todoTitle"
-        app:layout_constraintStart_toStartOf="@+id/todoTitle"
-        app:layout_constraintTop_toBottomOf="@+id/todoTitle"
-        app:layout_constraintVertical_bias=".3" />
+        app:layout_constraintEnd_toEndOf="@+id/todoCategory"
+        app:layout_constraintStart_toStartOf="@+id/todoCategory"
+        app:layout_constraintTop_toBottomOf="@+id/todoCategory"
+        app:layout_constraintVertical_bias=".1">
+
+        <AutoCompleteTextView
+            android:id="@+id/assigned_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:hint="Select Whom to Assign"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/submit_task"

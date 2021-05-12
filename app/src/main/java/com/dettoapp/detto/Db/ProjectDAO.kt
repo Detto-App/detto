@@ -17,6 +17,9 @@ interface ProjectDAO {
     @Query("SELECT * FROM project_table WHERE cid = :cid")
     suspend fun getProject(cid:String) : ProjectModel?
 
+    @Query("SELECT * FROM project_table WHERE pid = :pid")
+    suspend fun getProjectUsingPid(pid:String) : ProjectModel?
+
     @Update
     suspend fun updateProject(projectModel: ProjectModel)
 

@@ -1,6 +1,7 @@
 package com.dettoapp.detto.StudentActivity
 
 import android.content.Context
+import android.util.Log
 import com.dettoapp.detto.Db.ClassroomDAO
 import com.dettoapp.detto.Db.ProjectDAO
 import com.dettoapp.detto.Models.DeadlineModel
@@ -10,6 +11,7 @@ import com.dettoapp.detto.UtilityClasses.BaseRepository
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 import com.dettoapp.detto.UtilityClasses.Utility
+import okhttp3.ResponseBody
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -119,6 +121,41 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
     suspend fun getTodo(pid: String): List<Todo> {
         return RetrofitInstance.projectAPI.getTodo(pid, Utility.TOKEN).body()
             ?: throw Exception("Unable to Fetch Todo")
+    }
+
+    fun storeProjectIdinSharedPref(cid:String,pid:String,context:Context){
+        val sharedPreference =
+            context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
+                ?: throw Exception("Data Storage Exception")
+
+        with(sharedPreference.edit())
+        {
+            putString(cid, pid)
+            apply()
+        }
+    }
+
+    fun getProjectFromSharedPrefForTodo(cid:String,context:Context):String{
+        val sharedPreference =
+            context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
+                ?: throw Exception("Data Storage Exception")
+
+        return sharedPreference.getString(cid, null)!!
+    }
+
+    suspend fun getRoles(pid:String):List<String>{
+        Log.d("cvb","vi")
+        return projectDao.getProjectUsingPid(pid)!!.studentList.toList()
+    }
+
+     suspend fun deleteTodo(pid:String,toid:String): ResponseBody {
+         return RetrofitInstance.projectAPI.deleteTodo(pid,toid ,Utility.TOKEN).body()
+             ?: throw Exception("Unable to Delete Todo")
+    }
+
+    suspend fun changeStatus(toid:String,pid:String):ResponseBody{
+        return RetrofitInstance.projectAPI.changeStatusOfTodo(toid,pid,Utility.TOKEN).body()
+            ?: throw Exception("Data Storage Exception")
     }
 
 }

@@ -53,7 +53,7 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
         }
         view.setOnClickListener { }
 
-        if (viewModel.getProjectFromSharedPref(classroom) == Constants.PROJECT_NOT_CREATED)
+        if (viewModel.getProjectFromSharedPref(classroom.classroomuid) == Constants.PROJECT_NOT_CREATED)
             binding.noProjectContent.visibility = View.VISIBLE
         else
             binding.yesProjectContent.visibility = View.VISIBLE
@@ -80,7 +80,8 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
             projectEditDialog.show(requireActivity().supportFragmentManager, "pEdit")
         }
 
-        val viewPagerAdapter = StudentHomeViewPagerAdapter(requireActivity(),classroom, projectModel, this)
+        val viewPagerAdapter = StudentHomeViewPagerAdapter(requireActivity(),classroom
+            , this)
         binding.studentinclassviewpager.adapter = viewPagerAdapter
 
         TabLayoutMediator(

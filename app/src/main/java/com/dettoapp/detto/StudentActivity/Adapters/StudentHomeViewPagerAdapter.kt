@@ -12,7 +12,7 @@ import com.dettoapp.detto.StudentActivity.StudentOperations
 
 @Suppress("PrivatePropertyName")
 class StudentHomeViewPagerAdapter(
-    fa: FragmentActivity, private val classroom: Classroom, private val projectModel: ProjectModel, private val
+    fa: FragmentActivity, private val classroom: Classroom,  private val
     studentOperations: StudentOperations
 ) :
     FragmentStateAdapter
@@ -25,7 +25,7 @@ class StudentHomeViewPagerAdapter(
         return when (position) {
             0 -> StudentDeadlineFrag(classroom, studentOperations)
             1 -> StudentSubmissionFrag()
-            2 -> TodoFrag(projectModel, studentOperations)
+            2 -> TodoFrag( classroom.classroomuid,studentOperations)
             else -> {
                 StudentDeadlineFrag(classroom, studentOperations)
             }

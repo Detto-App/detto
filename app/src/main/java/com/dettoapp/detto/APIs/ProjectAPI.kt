@@ -81,4 +81,19 @@ interface ProjectAPI {
         @Path(value = "pid")pid:String,
         @Header("Authorization")token: String
     ):Response<ArrayList<Todo>>
+
+
+    @GET("/deleteTodo/{pid}/{toid}")
+    suspend fun deleteTodo(
+        @Path(value="pid")pid:String,
+        @Path(value="toid")toid:String,
+        @Header("Authorization")token: String
+    ):Response<ResponseBody>
+
+    @GET("/changeStatusOfTodo/{toid}/{pid}")
+    suspend fun changeStatusOfTodo(
+        @Path(value="toid")toid:String,
+        @Path(value="pid")pid:String,
+        @Header("Authorization")token: String
+    ):Response<ResponseBody>
 }

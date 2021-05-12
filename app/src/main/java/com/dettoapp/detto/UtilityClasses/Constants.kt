@@ -46,6 +46,9 @@ object Constants {
     const val SERVER_KEY_FCM = "AAAAb6g6I2A:APA91bFnVgQMRH9SUoJcF_MHmi5LaQdqmLK5KWCyeQzX_SJMAEDwjdE7BSINkendBSHQvbZFJNo9LXe-WJHfRHeer1e3-2n23SPPAmtf4WmZ9ZY9VGruzgS4Cdt0o-M6VrqQs7DMvqp5"
     const val CONTENT_TYPE_FCM = "application/json"
 
+    const val DONE =0
+    const val NOTDONE =1
+
     fun Date.toFormattedString(format: String, locale: Locale = Locale.getDefault()): String {
         val formatter = SimpleDateFormat(format, locale)
         return formatter.format(this)

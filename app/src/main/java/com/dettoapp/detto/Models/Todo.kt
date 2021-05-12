@@ -4,6 +4,6 @@ data class Todo(
     val toid:String,
     val tittle:String,
     val category:String ,
-    val assignedTo:String,
-    val status:String
+    val assigned_to:String,
+    val status:Int
 )

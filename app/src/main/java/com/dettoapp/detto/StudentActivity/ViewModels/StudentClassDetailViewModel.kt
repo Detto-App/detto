@@ -36,13 +36,16 @@ class StudentClassDetailViewModel(
         get() = _studentDeadline
 
 
+
     fun getProject(cid: String) {
         operateWithLiveData(_project, mainFunction = {
             val projectModel = repository.getProject(cid)
             if (projectModel == null)
                 it.postValue(Resource.Error(message = "Not Found"))
-            else
+            else {
+                    repository.storeProjectIdinSharedPref(projectModel.cid,projectModel.pid,context)
                 it.postValue(Resource.Success(data = projectModel))
+            }
         })
     }
 
@@ -139,8 +142,10 @@ class StudentClassDetailViewModel(
         }
     }
 
-    fun getProjectFromSharedPref(classroom: Classroom) =
-            repository.getProjectFromSharedPref(classroom.classroomuid, context)
+    fun getProjectFromSharedPref(cid: String) =
+            repository.getProjectFromSharedPref(cid, context)
+
+
 
 }
 
