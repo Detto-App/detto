@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +18,7 @@ import com.dettoapp.detto.R
 import com.dettoapp.detto.UtilityClasses.Constants.toFormattedString
 import java.time.LocalDate
 import java.util.*
+
 
 class DeadlineAdapterClassroomDetail :
     RecyclerView.Adapter<DeadlineAdapterClassroomDetail.DeadlineViewHolder>() {
@@ -48,12 +50,14 @@ class DeadlineAdapterClassroomDetail :
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
+
     override fun onBindViewHolder(holder: DeadlineAdapterClassroomDetail.DeadlineViewHolder, position: Int) {
         holder.bind(differ.currentList[position])
     }
 
     inner class DeadlineViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         @RequiresApi(Build.VERSION_CODES.O)
+
         fun bind(deadlineModel: DeadlineModel) {
             val reason = itemView.findViewById<TextView>(R.id.reason_text)
             val date = itemView.findViewById<TextView>(R.id.deadline_date)
@@ -67,6 +71,7 @@ class DeadlineAdapterClassroomDetail :
                 itemView.findViewById<Button>(R.id.status).setBackgroundColor(Color.RED)
 
 //            Log.d("vikas",LocalDate.now().toString())
+
         }
     }
 

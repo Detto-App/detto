@@ -1,8 +1,7 @@
 package com.dettoapp.detto.APIs
 
-import com.dettoapp.detto.Models.ClassRoomStudents
-import com.dettoapp.detto.Models.Classroom
-import com.dettoapp.detto.Models.StudentModel
+import androidx.room.Update
+import com.dettoapp.detto.Models.*
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -35,4 +34,34 @@ interface CreateClassroomAPI {
         @Path(value = "classID") classID: String,
         @Header("Authorization") token: String
     ):Response<ClassRoomStudents>
+
+    @POST("/createRubrics")
+    suspend fun createRubrics(@Body rubricsModel: RubricsModel,@Header("Authorization")token: String)
+
+    @GET("getRubrics/{classID}")
+    suspend fun getRubrics(
+            @Path(value = "classID")classID: String,
+            @Header("Authorization")token: String
+    ):Response<RubricsModel>
+
+    @GET("getProjectRubrics/{cid}/{pid}")
+    suspend fun getRubricsForProject(
+        @Path(value = "cid") cid: String,
+        @Path(value = "pid") pid:String,
+        @Header("Authorization") token: String
+    ):Response<ArrayList<ProjectRubricsModel>>
+
+    @POST("insertProjectRubrics")
+    suspend fun insertProjectRubrics(
+        @Body projectRubricsList:ArrayList<ProjectRubricsModel>,
+        @Header("Authorization")token: String
+    )
+
+    @POST("updateProjectRubrics/{cid}/{pid}")
+    suspend fun updateProjectRubrics(
+        @Body studentHashMap: HashMap<String,RubricsModel>,
+        @Path ("cid") cid: String,
+        @Path("pid") pid: String,
+        @Header("Authorization")token: String
+    )
 }

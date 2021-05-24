@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelStoreOwner
 import com.dettoapp.detto.Chat.ChatFragment
+import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.R
 import com.dettoapp.detto.TeacherActivity.Adapters.ClassRoomDetailFragViewPagerAdapter
@@ -121,7 +122,7 @@ class ClassRoomDetailFrag(
     }
 
     override fun getRepository(): ClassroomDetailRepository {
-        return ClassroomDetailRepository()
+        return ClassroomDetailRepository(DatabaseDetto.getInstance(requireContext().applicationContext).rubricsDAO)
     }
 
 }

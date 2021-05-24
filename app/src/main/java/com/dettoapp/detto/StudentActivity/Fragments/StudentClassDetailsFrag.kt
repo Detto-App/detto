@@ -14,13 +14,13 @@ import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.R
-
 import com.dettoapp.detto.StudentActivity.Adapters.StudentHomeViewPagerAdapter
 import com.dettoapp.detto.StudentActivity.Dialog.ProjectDetailsDialog
 import com.dettoapp.detto.StudentActivity.Dialog.ProjectEditDialog
 import com.dettoapp.detto.StudentActivity.StudentOperations
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.StudentActivity.ViewModels.StudentClassDetailViewModel
+import com.dettoapp.detto.TeacherActivity.Adapters.ClassRoomDetailFragViewPagerAdapter
 import com.dettoapp.detto.UtilityClasses.BaseFragment
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
@@ -34,8 +34,6 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
     ProjectDetailsDialog.ProjectDialogClickListener,
     ProjectEditDialog.ProjectEditDialogClickListner,
     StudentOperations {
-
-
     private lateinit var projectModel: ProjectModel
     private lateinit var pDialog: ProjectDetailsDialog
     private lateinit var projectEditDialog: ProjectEditDialog
@@ -75,6 +73,7 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
                 ),
                 "chat"
             )
+
         }
 
         binding.edit.setOnClickListener {
@@ -84,6 +83,7 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
 
         val viewPagerAdapter = StudentHomeViewPagerAdapter(requireActivity(),classroom
             , this)
+
         binding.studentinclassviewpager.adapter = viewPagerAdapter
 
         TabLayoutMediator(
@@ -102,6 +102,7 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
         usnMap: HashMap<Int, String>,
         arrayList: ArrayList<String>
     ) {
+
         viewModel.storeProject(title, description, usnMap, classroom, arrayList)
     }
 
@@ -152,6 +153,7 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
                         binding.statusDisplay1.text = Constants.PROJECT_PENDING
                         binding.checkStatus.visibility=View.VISIBLE
                         binding.edit.visibility=View.GONE
+
                     }
                 }
                 is Resource.Error -> showHideProjectContent(classroom.settingsModel.groupType)
@@ -211,6 +213,7 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
         inflater: LayoutInflater,
         container: ViewGroup?
     ): FragmentStudentClassDetailsBinding {
+
         return FragmentStudentClassDetailsBinding.inflate(inflater, container, false)
     }
 
@@ -226,4 +229,5 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
     override fun getTodo() {
 
     }
+
 }

@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.TeacherActivity.Adapters.StudentsAdapterClassRoomDetail
 import com.dettoapp.detto.TeacherActivity.Repositories.ClassroomDetailRepository
 import com.dettoapp.detto.TeacherActivity.ViewModels.ClassRoomDetailViewModel
@@ -84,7 +85,7 @@ class StudentsInClassFragment(private val classroomDetailOperations: ClassroomDe
     }
 
     override fun getRepository(): ClassroomDetailRepository {
-        return ClassroomDetailRepository()
+        return ClassroomDetailRepository(DatabaseDetto.getInstance(requireContext().applicationContext).rubricsDAO)
     }
 
     override fun getBaseViewModelOwner(): ViewModelStoreOwner {

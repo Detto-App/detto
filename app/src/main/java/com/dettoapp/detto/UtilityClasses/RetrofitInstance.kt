@@ -12,6 +12,7 @@ class RetrofitInstance {
                 .baseUrl(Constants.BASE_DETTO_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
+
         }
 
         private val retrofit2 by lazy {
@@ -19,6 +20,7 @@ class RetrofitInstance {
                 .baseUrl(Constants.BASE_URL_FCM)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
+
         }
 
         val dettoAPI: DettoAPI by lazy {
@@ -43,6 +45,7 @@ class RetrofitInstance {
         val gDriveAPI: GDriveAPI by lazy {
             retrofit.create(GDriveAPI::class.java)
         }
+
     }
 
 }

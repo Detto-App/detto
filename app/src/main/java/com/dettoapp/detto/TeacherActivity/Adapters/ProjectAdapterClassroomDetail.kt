@@ -14,8 +14,12 @@ import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.R
 import com.dettoapp.detto.UtilityClasses.Constants
 
-class ProjectAdapterClassroomDetail(private val classroomProjectOperation:ClassroomProjectOperation) :
+class ProjectAdapterClassroomDetail(private val classroomProjectOperation:ClassroomProjectOperation,
+private val projectAdapterClickListener: ProjectAdapterClickListner) :
         RecyclerView.Adapter<ProjectAdapterClassroomDetail.ProjectViewHolder>() {
+    interface ProjectAdapterClickListner{
+        fun OnProjectClicked(projectModel: ProjectModel)
+    }
 
 interface ClassroomProjectOperation{
     fun changeStatus(pid:String,status:String)
@@ -54,6 +58,9 @@ interface ClassroomProjectOperation{
         fun bind(projectModel: ProjectModel) {
 
             initialise(projectModel)
+            itemView.setOnClickListener{
+                projectAdapterClickListener.OnProjectClicked(projectModel)
+            }
         }
 
         fun initialise(projectModel: ProjectModel) {

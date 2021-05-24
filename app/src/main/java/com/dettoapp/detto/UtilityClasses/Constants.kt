@@ -29,6 +29,7 @@ object Constants {
     val classDetailFragTabNames = arrayOf("Projects", "Students","Deadlines")
     val studentClassDetailFragTabNames = arrayOf("Deadlines","Submission","Todo")
 
+
     const val PROJECT_CREATED = 0
     const val PROJECT_NOT_CREATED = -1
 
@@ -50,6 +51,7 @@ object Constants {
 
     const val DONE =0
     const val NOTDONE =1
+
 
     fun Date.toFormattedString(format: String, locale: Locale = Locale.getDefault()): String {
         val formatter = SimpleDateFormat(format, locale)

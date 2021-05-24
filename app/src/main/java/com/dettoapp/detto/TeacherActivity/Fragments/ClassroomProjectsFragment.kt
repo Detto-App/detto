@@ -10,20 +10,20 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dettoapp.detto.Db.DatabaseDetto
+import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.R
 import com.dettoapp.detto.TeacherActivity.Adapters.ClassroomAdapter
 import com.dettoapp.detto.TeacherActivity.Adapters.ProjectAdapterClassroomDetail
 import com.dettoapp.detto.TeacherActivity.Repositories.ClassroomDetailRepository
 import com.dettoapp.detto.TeacherActivity.ViewModels.ClassRoomDetailViewModel
-import com.dettoapp.detto.UtilityClasses.BaseActivity
-import com.dettoapp.detto.UtilityClasses.BaseFragment
-import com.dettoapp.detto.UtilityClasses.Constants
-import com.dettoapp.detto.UtilityClasses.Resource
+import com.dettoapp.detto.UtilityClasses.*
 import com.dettoapp.detto.databinding.FragmentClassroomProjectsBinding
 
 class ClassroomProjectsFragment(private val operations: ClassroomDetailOperations) :
     BaseFragment<ClassRoomDetailViewModel,FragmentClassroomProjectsBinding, ClassroomDetailRepository>() ,
-    ProjectAdapterClassroomDetail.ClassroomProjectOperation{
+    ProjectAdapterClassroomDetail.ClassroomProjectOperation,
+    ProjectAdapterClassroomDetail.ProjectAdapterClickListner {
     private lateinit var projectAdapterClassroomDetail: ProjectAdapterClassroomDetail
 
 
@@ -33,7 +33,7 @@ class ClassroomProjectsFragment(private val operations: ClassroomDetailOperation
     }
 
     private fun initialise() {
-        projectAdapterClassroomDetail = ProjectAdapterClassroomDetail(this)
+        projectAdapterClassroomDetail = ProjectAdapterClassroomDetail(this,this)
         binding.tClassroomProjectRecyclerview.apply {
             adapter = projectAdapterClassroomDetail
             layoutManager = LinearLayoutManager(requireContext())
@@ -77,7 +77,7 @@ class ClassroomProjectsFragment(private val operations: ClassroomDetailOperation
     }
 
     override fun getRepository(): ClassroomDetailRepository {
-        return ClassroomDetailRepository()
+        return ClassroomDetailRepository(DatabaseDetto.getInstance(requireContext().applicationContext).rubricsDAO)
     }
 
     override fun getBaseViewModelOwner(): ViewModelStoreOwner {
@@ -86,6 +86,11 @@ class ClassroomProjectsFragment(private val operations: ClassroomDetailOperation
 
     override fun changeStatus(pid:String,status:String) {
         viewModel.changeStatus(pid,status)
+    }
+
+    override fun OnProjectClicked(projectModel: ProjectModel) {
+        Utility.navigateFragment(requireActivity().supportFragmentManager, R.id.teacherHomeContainer, ProjectHomeFragment(projectModel), "detailClassRoom")
+
     }
 
 

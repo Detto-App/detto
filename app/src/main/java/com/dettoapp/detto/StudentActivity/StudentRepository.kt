@@ -50,9 +50,12 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
         return projectModel
     }
 
-    private suspend fun updateProject(projectModel: ProjectModel) {
+
+    suspend fun updateProject(projectModel: ProjectModel) {
         projectDao.updateProject(projectModel)
     }
+
+
 
     suspend fun storeEditedProject(cid: String, title: String, description: String): ProjectModel {
         val projectModelFromDatabase =
@@ -153,9 +156,10 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
              ?: throw Exception("Unable to Delete Todo")
     }
 
-    suspend fun changeStatus(toid:String,pid:String):ResponseBody{
-        return RetrofitInstance.projectAPI.changeStatusOfTodo(toid,pid,Utility.TOKEN).body()
+    suspend fun changeStatus(toid:String,pid:String):ResponseBody {
+        return RetrofitInstance.projectAPI.changeStatusOfTodo(toid, pid, Utility.TOKEN).body()
             ?: throw Exception("Data Storage Exception")
     }
+
 
 }

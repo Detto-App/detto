@@ -2,6 +2,7 @@ package com.dettoapp.detto.Db
 
 import androidx.room.TypeConverter
 import com.dettoapp.detto.Models.ClassroomSettingsModel
+import com.dettoapp.detto.Models.MarksModel
 import com.dettoapp.detto.Models.TeacherModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -28,6 +29,17 @@ class RoomConverters {
         return Gson().fromJson(classroomSettingsString,type)
     }
     @TypeConverter
+    fun fromMarksModel(marksModel: ArrayList<MarksModel>):String{
+        return Gson().toJson(marksModel)
+    }
+
+    @TypeConverter
+    fun fromMarksModelString(marksString:String):ArrayList<MarksModel>{
+        val type = object: TypeToken<ArrayList<MarksModel>>(){}.type
+        return Gson().fromJson(marksString,type)
+    }
+
+    @TypeConverter
     fun fromHashSet(set:HashSet<String>):String{
         return  Gson().toJson(set)
     }
@@ -49,4 +61,16 @@ class RoomConverters {
         val type = object :TypeToken<ArrayList<String>>(){}.type
         return Gson().fromJson(listString,type)
     }
+
+    @TypeConverter
+    fun fromHashMap(map: HashMap<Int,String>):String{
+        return Gson().toJson(map.values)
+    }
+
+    @TypeConverter
+    fun fromHashMapString(mapString:String):HashMap<Int,String>{
+        val type=object :TypeToken<HashMap<Int,String>>(){}.type
+        return Gson().fromJson(mapString,type)
+    }
+
 }
