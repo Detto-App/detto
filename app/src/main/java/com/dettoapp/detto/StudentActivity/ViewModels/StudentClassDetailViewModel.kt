@@ -6,11 +6,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.dettoapp.detto.Models.Classroom
+import com.dettoapp.detto.Models.DeadlineModel
 import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.UtilityClasses.BaseViewModel
 import com.dettoapp.detto.UtilityClasses.Resource
-import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.UtilityClasses.Utility.toHashSet
 import com.dettoapp.detto.UtilityClasses.Utility.toLowerAndTrim
@@ -19,8 +19,8 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("StaticFieldLeak")
 class StudentClassDetailViewModel(
-        private val repository: StudentRepository,
-        private val context: Context
+    private val repository: StudentRepository,
+    private val context: Context
 ) : BaseViewModel() {
 
     private val _stuProjectCreation = MutableLiveData<Resource<ProjectModel>>()
@@ -31,14 +31,21 @@ class StudentClassDetailViewModel(
     val project: LiveData<Resource<ProjectModel>>
         get() = _project
 
+    private val _studentDeadline = MutableLiveData<Resource<List<DeadlineModel>>>()
+    val studentDeadline: LiveData<Resource<List<DeadlineModel>>>
+        get() = _studentDeadline
+
+
 
     fun getProject(cid: String) {
         operateWithLiveData(_project, mainFunction = {
             val projectModel = repository.getProject(cid)
             if (projectModel == null)
                 it.postValue(Resource.Error(message = "Not Found"))
-            else
+            else {
+                    repository.storeProjectIdinSharedPref(projectModel.cid,projectModel.pid,context)
                 it.postValue(Resource.Success(data = projectModel))
+            }
         })
     }
 
@@ -121,9 +128,24 @@ class StudentClassDetailViewModel(
 
     }
 
+    fun getDeadlineFromServer(cid: String){
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val deadline = repository.getDeadline(cid)
+//                val deadlineModel=DeadlineModel(";dsj","sfddxc","dscx","fdstyre")
+//                val list=ArrayList<DeadlineModel>()
+//                list.add(deadlineModel)
+                _studentDeadline.postValue(Resource.Success(data = deadline))
+            } catch (e: Exception) {
+                _studentDeadline.postValue(Resource.Error(message = "" + e.localizedMessage))
+            }
+        }
+    }
 
-    fun getProjectFromSharedPref(classroom: Classroom) =
-            repository.getProjectFromSharedPref(classroom.classroomuid, context)
+    fun getProjectFromSharedPref(cid: String) =
+            repository.getProjectFromSharedPref(cid, context)
+
+
 
 }
 

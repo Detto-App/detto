@@ -101,7 +101,7 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
 
     }
 
-    override fun onClassRoomCLicked(classroom: Classroom) {
+    override fun onClassRoomClicked(classroom: Classroom) {
         Utility.navigateFragment(requireActivity().supportFragmentManager, R.id.teacherHomeContainer, ClassRoomDetailFrag(classroom, this), "detailClassRoom")
     }
 

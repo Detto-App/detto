@@ -39,7 +39,7 @@ class LinkParseViewModel(private val repository: LinkParserRepository,  private 
 
 
 
-                compute(type,id)
+                compute(type,id,role)
 
             }catch (e:Exception){
                 _linkParse.postValue(Resource.Error(message = ""+e.localizedMessage))
@@ -49,8 +49,6 @@ class LinkParseViewModel(private val repository: LinkParserRepository,  private 
     private fun authenticate(role :Int){
         if (role == -1) {
             throw Exception("User not logged in!!. Try again after Logging in")
-        } else if (role == Constants.TEACHER) {
-            throw Exception("Unable to because the user is teacher")
         }
     }
     private fun getID(data:String) = data.substring(data.length-36)
@@ -64,12 +62,12 @@ class LinkParseViewModel(private val repository: LinkParserRepository,  private 
         return ""
     }
 
-    private suspend fun getClassroom(type:String,id:String){
+    private suspend fun getClassroom(role:String,id:String){
         val classroom = RetrofitInstance.createClassroomAPI.getClassroom(id, Utility.TOKEN).body()?:
             throw Exception("Unable to Find Classroom")
         val classRoomDetails="Classroom Name: "+classroom.classroomname+"\nCreated by: "+classroom.teacher.name+"\nSection: "+classroom.section+"\nSem: "+classroom.sem
        tempClassroom=classroom
-        _linkParse.postValue(Resource.Confirm(type, classRoomDetails))
+        _linkParse.postValue(Resource.Confirm(""+role, classRoomDetails))
     }
     private suspend fun getProject(type:String,id:String){
         val project=repository.getSingleProjectDetails(id).body()?:
@@ -88,13 +86,18 @@ class LinkParseViewModel(private val repository: LinkParserRepository,  private 
 
 
 
-     fun insertClassroom(){
+     fun insertClassroom(role:String){
          viewModelScope.launch(Dispatchers.IO) {
              try {
                  repository.insertClassroom(tempClassroom)
-                 val studentModel=Utility.getStudentModel(context)
-                 repository.regStudentToClassroom(studentModel,tempClassroom.classroomuid)
-                 _linkParse.postValue(Resource.Success(""))
+                 if(role=="1") {
+                     val studentModel = Utility.getStudentModel(context)
+                     repository.regStudentToClassroom(studentModel, tempClassroom.classroomuid)
+                     _linkParse.postValue(Resource.Success("STUDENT"))
+                 }else {
+                        _linkParse.postValue(Resource.Success("TEACHER"))
+                 }
+
              }
              catch (e:Exception){
                  _linkParse.postValue(Resource.Error(message = "You have Already Joined The Classroom: "+tempClassroom.classroomname))
@@ -114,9 +117,9 @@ class LinkParseViewModel(private val repository: LinkParserRepository,  private 
         }
     }
 
-    private suspend fun compute(type:String,id:String){
+    private suspend fun compute(type:String,id:String,role:Int){
         when(type){
-            Constants.TYPE_CID ->getClassroom(type,id)
+            Constants.TYPE_CID ->getClassroom(""+role,id)
             Constants.TYPE_PID->getProject(type,id)
         }
     }

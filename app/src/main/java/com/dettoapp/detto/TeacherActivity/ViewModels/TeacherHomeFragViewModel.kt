@@ -12,7 +12,7 @@ import com.dettoapp.detto.TeacherActivity.Repositories.TeacherRepository
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.UtilityClasses.Utility.toLowerAndTrim
-import com.dettoapp.detto.ChatServiceProvider
+import com.dettoapp.detto.Chat.ChatServiceProvider
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.collect
@@ -34,29 +34,29 @@ class TeacherHomeFragViewModel(
     }
 
     private fun sendMessage() {
-        GlobalScope.launch(Dispatchers.IO) {
-            delay(3000L)
-            webServicesProvider.send("Hey From Android")
-        }
+//        GlobalScope.launch(Dispatchers.IO) {
+//            delay(3000L)
+//            webServicesProvider.send("Hey From Android")
+//        }
     }
 
-    @ExperimentalCoroutinesApi
+
     private fun subscribeToSocketEvents() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                webServicesProvider.startSocket("wss://detto.uk.to/chat/1234").buffer(10)
-                    .collect {
-                        Log.d("DDFF", "Collecting : ${it}")
-//                    if (it.exception == null) {
-//
-//                    } else {
-//                        //onSocketError(it.exception!!)
+//        viewModelScope.launch(Dispatchers.IO) {
+//            try {
+//                webServicesProvider.startSocket("wss://detto.uk.to/chat/1234").buffer(10)
+//                    .collect {
+//                        Log.d("DDFF", "Collecting : ${it}")
+////                    if (it.exception == null) {
+////
+////                    } else {
+////                        //onSocketError(it.exception!!)
+////                    }
 //                    }
-                    }
-            } catch (ex: Exception) {
-                Log.d("DDFF", "" + ex.localizedMessage)
-            }
-        }
+//            } catch (ex: Exception) {
+//                Log.d("DDFF", "" + ex.localizedMessage)
+//            }
+//        }
     }
 
     private val _classRoomCreation = MutableLiveData<Resource<String>>()

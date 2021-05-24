@@ -23,7 +23,7 @@ class ClassroomAdapter(
 ) : RecyclerView.Adapter<ClassroomAdapter.ClassroomViewHolder>() {
 
     interface ClassRoomAdapterClickListener {
-        fun onClassRoomCLicked(classroom: Classroom)
+        fun onClassRoomClicked(classroom: Classroom)
         fun onClassLinkShare(link:String)
     }
 
@@ -48,7 +48,6 @@ class ClassroomAdapter(
                 .inflate(R.layout.classroom_view_holder, parent, false)
         )
     }
-
 
     override fun getItemCount(): Int {
         return differ.currentList.size
@@ -80,7 +79,7 @@ class ClassroomAdapter(
             }
 
             itemView.setOnClickListener {
-                classRoomAdapterClickListener.onClassRoomCLicked(classroom)
+                classRoomAdapterClickListener.onClassRoomClicked(classroom)
             }
         }
     }

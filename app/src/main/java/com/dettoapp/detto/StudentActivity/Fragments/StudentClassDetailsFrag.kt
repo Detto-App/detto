@@ -6,30 +6,39 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.core.app.ShareCompat
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelStoreOwner
+import com.dettoapp.detto.Chat.ChatFragment
 import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.R
+
+import com.dettoapp.detto.StudentActivity.Adapters.StudentHomeViewPagerAdapter
 import com.dettoapp.detto.StudentActivity.Dialog.ProjectDetailsDialog
 import com.dettoapp.detto.StudentActivity.Dialog.ProjectEditDialog
+import com.dettoapp.detto.StudentActivity.StudentOperations
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.StudentActivity.ViewModels.StudentClassDetailViewModel
 import com.dettoapp.detto.UtilityClasses.BaseFragment
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
+import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentStudentClassDetailsBinding
+import com.google.android.material.tabs.TabLayoutMediator
 
 
-class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<StudentClassDetailViewModel, FragmentStudentClassDetailsBinding, StudentRepository>(),
-        ProjectDetailsDialog.ProjectDialogClickListener,ProjectEditDialog.ProjectEditDialogClickListner{
+class StudentClassDetailsFrag(private val classroom: Classroom) :
+    BaseFragment<StudentClassDetailViewModel, FragmentStudentClassDetailsBinding, StudentRepository>(),
+    ProjectDetailsDialog.ProjectDialogClickListener,
+    ProjectEditDialog.ProjectEditDialogClickListner,
+    StudentOperations {
 
 
     private lateinit var projectModel: ProjectModel
     private lateinit var pDialog: ProjectDetailsDialog
-    private lateinit var projectEditDialog:ProjectEditDialog
+    private lateinit var projectEditDialog: ProjectEditDialog
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -46,7 +55,7 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<S
         }
         view.setOnClickListener { }
 
-        if (viewModel.getProjectFromSharedPref(classroom) == Constants.PROJECT_NOT_CREATED)
+        if (viewModel.getProjectFromSharedPref(classroom.classroomuid) == Constants.PROJECT_NOT_CREATED)
             binding.noProjectContent.visibility = View.VISIBLE
         else
             binding.yesProjectContent.visibility = View.VISIBLE
@@ -54,19 +63,50 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<S
         binding.checkStatus.setOnClickListener {
             viewModel.checkProjectStatus(projectModel.pid)
         }
-        binding.edit.setOnClickListener {
-            projectEditDialog= ProjectEditDialog(this)
-            projectEditDialog.show(requireActivity().supportFragmentManager,"pEdit")
+
+        binding.chat.setOnClickListener {
+            Utility.navigateFragment(
+                requireActivity().supportFragmentManager,
+                R.id.StudentFragContainer,
+                ChatFragment(
+                    classroom,
+                    Utility.STUDENT.name + " - " + Utility.STUDENT.susn,
+                    Utility.STUDENT.uid
+                ),
+                "chat"
+            )
         }
+
+        binding.edit.setOnClickListener {
+            projectEditDialog = ProjectEditDialog(this)
+            projectEditDialog.show(requireActivity().supportFragmentManager, "pEdit")
+        }
+
+        val viewPagerAdapter = StudentHomeViewPagerAdapter(requireActivity(),classroom
+            , this)
+        binding.studentinclassviewpager.adapter = viewPagerAdapter
+
+        TabLayoutMediator(
+            binding.tabLayoutStudentClassDetail,
+            binding.studentinclassviewpager
+        ) { tab, position ->
+            tab.text = Constants.studentClassDetailFragTabNames[position]
+            binding.studentinclassviewpager.setCurrentItem(tab.position, true)
+        }.attach()
 
     }
 
-    override fun onProjectCreate(title: String, description: String, usnMap: HashMap<Int, String>, arrayList: ArrayList<String>) {
-        viewModel.storeProject(title, description, usnMap, classroom,arrayList)
+    override fun onProjectCreate(
+        title: String,
+        description: String,
+        usnMap: HashMap<Int, String>,
+        arrayList: ArrayList<String>
+    ) {
+        viewModel.storeProject(title, description, usnMap, classroom, arrayList)
     }
 
     override fun onProjectEdit(title: String, description: String) {
-        viewModel.storeEditedProject(classroom.classroomuid,title,description)
+        viewModel.storeEditedProject(classroom.classroomuid, title, description)
         projectEditDialog.dismiss()
     }
 
@@ -77,15 +117,15 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<S
 
     private fun liveDataObservers() {
 
-        observeWithLiveData(viewModel.stuProjectCreation,onSuccess = {
+        observeWithLiveData(viewModel.stuProjectCreation, onSuccess = {
             baseActivity.hideProgressDialog()
             pDialog.dismiss()
             setUpProjectDisplayContent(it)
             viewModel.stuProjectCreation.removeObservers(viewLifecycleOwner)
-        },onError = {
+        }, onError = {
             baseActivity.hideProgressDialog()
             baseActivity.showErrorSnackMessage(it, pDialog.getViewDialog())
-        },onLoading = {
+        }, onLoading = {
             baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
         })
 
@@ -93,14 +133,14 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<S
             when (it) {
                 is Resource.Success -> {
                     setUpProjectDisplayContent(it.data!!)
-                    if(it.data.status==Constants.PROJECT_ACCEPTED){
+                    if (it.data.status == Constants.PROJECT_ACCEPTED) {
                         binding.statusDisplay1.setBackgroundColor(Color.GREEN)
                         binding.statusDisplay1.text = Constants.PROJECT_ACCEPTED
                         binding.checkStatus.visibility=View.GONE
                         binding.edit.visibility=View.GONE
 
-                    }
-                    else if(it.data.status==Constants.PROJECT_REJECTED){
+
+                    } else if (it.data.status == Constants.PROJECT_REJECTED) {
                         binding.statusDisplay1.setBackgroundColor(Color.RED)
                         binding.statusDisplay1.text = Constants.PROJECT_REJECTED
                         binding.checkStatus.visibility=View.GONE
@@ -158,19 +198,32 @@ class StudentClassDetailsFrag(private val classroom: Classroom) : BaseFragment<S
 
         binding.shareProjectLink.setOnClickListener {
             ShareCompat.IntentBuilder.from(requireActivity())
-                    .setText(shareLink).setType("text/plain")
-                    .setChooserTitle("Game Details")
-                    .startChooser()
+                .setText(shareLink).setType("text/plain")
+                .setChooserTitle("Game Details")
+                .startChooser()
         }
     }
 
-    override fun getViewModelClass(): Class<StudentClassDetailViewModel> = StudentClassDetailViewModel::class.java
-    override fun getFragmentBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentStudentClassDetailsBinding {
+    override fun getViewModelClass(): Class<StudentClassDetailViewModel> =
+        StudentClassDetailViewModel::class.java
+
+    override fun getFragmentBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentStudentClassDetailsBinding {
         return FragmentStudentClassDetailsBinding.inflate(inflater, container, false)
     }
 
     override fun getRepository(): StudentRepository = StudentRepository(
-            DatabaseDetto.getInstance(requireContext().applicationContext).classroomDAO,
-            DatabaseDetto.getInstance(requireContext().applicationContext).projectDAO
+        DatabaseDetto.getInstance(requireContext().applicationContext).classroomDAO,
+        DatabaseDetto.getInstance(requireContext().applicationContext).projectDAO
     )
+
+    override fun getViewModelOwner(): ViewModelStoreOwner {
+        return this
+    }
+
+    override fun getTodo() {
+
+    }
 }
