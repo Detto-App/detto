@@ -202,9 +202,11 @@ class ClassRoomDetailViewModel(
                 val titleMarksList=rubricsModel.titleMarksList
 
                 _marks.postValue(Resource.Success(data = titleMarksList!!))
+
             } catch (e: Exception) {
                 _marks.postValue(Resource.Error(message = "" + e.localizedMessage))
             }
+
         }
 
     }
@@ -219,22 +221,35 @@ class ClassRoomDetailViewModel(
                 val usnlist =ArrayList<String>(projectModel.studentList)
                 val namelist=ArrayList<String>(projectModel.studentNameList)
                 for(i in 0 until usnlist.size){
-                    projectRubricsList.add(Mapper.mapProjectModelAndRubricsModelToProjectRubricsModel(usnlist[0],projectModel.pid,namelist[0],rubricsModel))
+                    projectRubricsList.add(Mapper.mapProjectModelAndRubricsModelToProjectRubricsModel(usnlist[i],projectModel.pid,namelist[i],rubricsModel))
                 }
+//                    Log.d("WSS",projectRubricsList.toString())
                     repository.insertProjectRubricsToServer(projectRubricsList)
                 }
 
                 _projectRubrics.postValue(Resource.Success(data = projectRubricsList))
             } catch (e: Exception) {
-                _projectRubrics.postValue(Resource.Error(message = "hhhhh" + e.localizedMessage))
+                _projectRubrics.postValue(Resource.Error(message = "" + e.localizedMessage))
             }
         }
     }
     fun rubricsUpdate(studentHashMap:HashMap<String,ArrayList<MarksModel>>,projectModel: ProjectModel) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-//
-            repository.updateprojectRubrics(studentHashMap,projectModel.cid,projectModel.pid)
+                Log.d("WXX",studentHashMap.toString())
+                val rubricsModel =repository.getRubrics(projectModel.cid)
+                Log.d("WQQ","djhjgf")
+
+                val studentRubricsMap=HashMap<String,RubricsModel>()
+                Log.d("WES",studentHashMap.toString()+rubricsModel.toString())
+                for (i in studentHashMap.keys){
+                    val tempRubricsModel=Mapper.mapRubricsModelToTempRubricsModel(rubricsModel.rid,studentHashMap[i]!!,rubricsModel.cid)
+                    studentRubricsMap[i]=tempRubricsModel
+                    Log.d("WQQT",studentRubricsMap.toString())
+                }
+                Log.d("WQQ",studentRubricsMap.toString())
+
+                repository.updateProjectRubrics(studentRubricsMap,rubricsModel.cid,projectModel.pid)
                 _marks.postValue(Resource.Confirm(message = "done"))
             } catch (e: Exception) {
                 _marks.postValue(Resource.Error(message = "" + e.localizedMessage))

@@ -53,17 +53,25 @@ class DeadlineFragment(private val operations: ClassroomDetailOperations) :
             when (it) {
                 is Resource.Success -> {
                     binding.prgressBarDeadline.visibility = View.GONE
+
 //                    binding.re.isRefreshing = false
+                    baseActivity.hideProgressDialog()
+
                     deadlineAdapter.differ.submitList(it.data)
 
                 }
                 is Resource.Error -> {
-                    baseActivity.showErrorSnackMessage(it.message!!)
+                    binding.prgressBarDeadline.visibility = View.GONE
+                    binding.noDeadlines.visibility=View.VISIBLE
+                    binding.noDeadlines.text="There are no Deadlines"
                 }
                 is Resource.Loading -> {
+                    binding.prgressBarDeadline.visibility = View.VISIBLE
+
                     baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
                 }
                 is Resource.Confirm ->{
+                    binding.prgressBarDeadline.visibility = View.GONE
                     baseActivity.hideProgressDialog()
                 }
                 else -> {

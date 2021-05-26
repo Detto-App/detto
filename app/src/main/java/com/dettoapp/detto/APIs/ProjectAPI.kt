@@ -98,4 +98,10 @@ interface ProjectAPI {
         @Header("Authorization")token: String
     ):Response<ResponseBody>
 
+    @POST("/getStudentNameList")
+    suspend fun getStudentNameList(
+        @Body usnMapSet:HashSet<String>,
+        @Header("Authorization")token:String
+    ):Response<HashMap<String,String>>
+
 }

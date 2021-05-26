@@ -57,21 +57,20 @@ class ClassroomDetailRepository(private val dao:RubricsDAO):BaseRepository() {
             return projectRubricsList
     }
     suspend fun getRubrics(classID: String):RubricsModel{
-        val rubricsModel= RetrofitInstance.createClassroomAPI.getRubrics(classID,Utility.TOKEN).body()
-                ?: throw Exception("Unable to Fetch Deadline")
-        dao.insertRubrics(rubricsModel)
+
+        val rubricsModel= dao.getRubrics(classID)
+        if(rubricsModel==null) {
+            RetrofitInstance.createClassroomAPI.getRubrics(classID, Utility.TOKEN).body()
+                ?: throw Exception("Unable to Fetch Rubrics")
+            dao.insertRubrics(rubricsModel)
+        }
         return rubricsModel
     }
     suspend fun insertProjectRubricsToServer(projectRubricsList:ArrayList<ProjectRubricsModel>){
         RetrofitInstance.createClassroomAPI.insertProjectRubrics(projectRubricsList,Utility.TOKEN)
     }
-    suspend fun updateprojectRubrics(studentHashMap: HashMap<String,ArrayList<MarksModel>>,cid: String,pid: String  ){
-        var rubricsModel =getRubrics(cid)
-        val studentRubricsMap=HashMap<String,RubricsModel>()
-        for (i in studentHashMap.keys){
-            rubricsModel.titleMarksList=studentHashMap[i]!!
-            studentRubricsMap[i]=rubricsModel
-        }
+    suspend fun updateProjectRubrics(studentRubricsMap:HashMap<String,RubricsModel>,cid:String,pid:String ){
+
         RetrofitInstance.createClassroomAPI.updateProjectRubrics(studentRubricsMap,cid,pid,Utility.TOKEN)
 
     }

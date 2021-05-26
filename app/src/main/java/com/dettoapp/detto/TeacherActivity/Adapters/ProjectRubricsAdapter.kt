@@ -1,5 +1,6 @@
 package com.dettoapp.detto.TeacherActivity.Adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -69,6 +70,7 @@ class ProjectRubricsAdapter:
             }
             projectRubricsShowAdapter.differ.submitList(studentNameList.rubrics.titleMarksList)
             val marksList=projectRubricsShowAdapter.getMarksHashMap()
+            Log.d("WWA",marksList.toString())
             studentHashMap[studentNameList.usn]=marksList
 
 

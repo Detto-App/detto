@@ -31,8 +31,8 @@
 
     <Button
         android:id="@+id/rubrics_update"
-        android:layout_width="84dp"
-        android:layout_height="40dp"
+        android:layout_width="112dp"
+        android:layout_height="34dp"
         android:text="Update"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

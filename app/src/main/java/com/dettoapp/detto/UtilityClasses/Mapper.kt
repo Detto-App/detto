@@ -6,6 +6,7 @@ import com.dettoapp.detto.Models.ChatMessageLocalStoreModel
 import com.dettoapp.detto.Models.*
 import com.dettoapp.detto.UtilityClasses.Constants.toFormattedString
 import java.util.*
+import kotlin.collections.ArrayList
 
 object Mapper {
 
@@ -24,5 +25,8 @@ object Mapper {
 
     fun mapProjectModelAndRubricsModelToProjectRubricsModel(usn:String,pid:String,name:String, rubricsModel: RubricsModel): ProjectRubricsModel {
         return ProjectRubricsModel(usn,pid,name,rubricsModel)
+    }
+    fun mapRubricsModelToTempRubricsModel(rid:String,titleMarksList:ArrayList<MarksModel>,cid:String):RubricsModel{
+        return RubricsModel(rid,titleMarksList,cid)
     }
 }

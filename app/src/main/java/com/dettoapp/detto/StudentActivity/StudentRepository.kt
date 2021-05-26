@@ -14,6 +14,8 @@ import com.dettoapp.detto.UtilityClasses.Utility
 import okhttp3.ResponseBody
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+import kotlin.collections.HashSet
 
 class StudentRepository(private val dao: ClassroomDAO, private val projectDao: ProjectDAO) :
         BaseRepository() {
@@ -159,6 +161,10 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
     suspend fun changeStatus(toid:String,pid:String):ResponseBody {
         return RetrofitInstance.projectAPI.changeStatusOfTodo(toid, pid, Utility.TOKEN).body()
             ?: throw Exception("Data Storage Exception")
+    }
+    suspend fun getStudentNameList(usnMapSet:HashSet<String>):HashMap<String,String>{
+        return RetrofitInstance.projectAPI.getStudentNameList(usnMapSet,Utility.TOKEN).body()
+            ?:throw  Exception("Illegal USN")
     }
 
 

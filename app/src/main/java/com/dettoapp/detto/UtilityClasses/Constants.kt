@@ -26,7 +26,7 @@ object Constants {
     const val MESSAGE_LOADING = "Loading..."
     const val ERROR_FILL_ALL_FIELDS = "Enter All Fields"
 
-    val classDetailFragTabNames = arrayOf("Projects", "Students","Deadlines")
+    val classDetailFragTabNames = arrayOf("Projects", "Students","Deadlines","Rubrics")
     val studentClassDetailFragTabNames = arrayOf("Deadlines","Submission","Todo")
 
 
@@ -39,8 +39,8 @@ object Constants {
     const val ENTIRE_MODEL_KEY = "model"
 
     const val SHOULD_FETCH="should_fetch"
-    const val MANUAL="Manual"
-    const val AUTO="Auto"
+    const val MANUAL="manual"
+    const val AUTO="auto"
     const val CHAT_BASE_URL = "wss://detto.uk.to/chat/"
 
     const val CHAT_DISCONNECTED ="Disconnected"

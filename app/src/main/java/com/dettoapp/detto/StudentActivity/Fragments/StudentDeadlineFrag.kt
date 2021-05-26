@@ -42,7 +42,6 @@ class StudentDeadlineFrag(private val classroom: Classroom,private val studentOp
             layoutManager = LinearLayoutManager(requireContext())
         }
         viewModel.getDeadlineFromServer(classroom.classroomuid)
-
     }
 
     fun liveDataObservers(){
@@ -50,17 +49,22 @@ class StudentDeadlineFrag(private val classroom: Classroom,private val studentOp
             when (it) {
                 is Resource.Success -> {
                     binding.prgressBarDeadline.visibility = View.GONE
+                    baseActivity.hideProgressDialog()
 //                    binding./.isRefreshing = false
                     deadlineAdapter.differ.submitList(it.data)
 
                 }
                 is Resource.Error -> {
-                    baseActivity.showErrorSnackMessage(it.message!!)
+                    binding.prgressBarDeadline.visibility = View.GONE
+                    baseActivity.hideProgressDialog()
+                    binding.noDeadlines.visibility=View.VISIBLE
                 }
                 is Resource.Loading -> {
+                    binding.prgressBarDeadline.visibility = View.VISIBLE
                     baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
                 }
                 is Resource.Confirm ->{
+                    binding.prgressBarDeadline.visibility = View.GONE
                     baseActivity.hideProgressDialog()
                 }
                 else -> {

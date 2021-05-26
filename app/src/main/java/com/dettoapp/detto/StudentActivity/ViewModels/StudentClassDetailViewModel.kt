@@ -61,6 +61,8 @@ class StudentClassDetailViewModel(
                 val usnMapSet = usnMap.toHashSet()
                 _stuProjectCreation.postValue(Resource.Loading())
                 validate(title, description, usnMap, arrayList, usnMapSet)
+                val studentNameList=repository.getStudentNameList(usnMapSet)
+                val slist=ArrayList<String>(studentNameList.values)
                 val projectModel = ProjectModel(
                         Utility.createID(),
                         title.toLowerAndTrim(),
@@ -68,7 +70,7 @@ class StudentClassDetailViewModel(
                         usnMapSet,
                         classroom.teacher.uid,
                         classroom.classroomuid,
-                        studentNameList = arrayListOf(Utility.STUDENT.name)
+                        studentNameList = slist
                 )
                 repository.insertProject(projectModel)
                 repository.insertProjectToServer(projectModel)
