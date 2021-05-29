@@ -5,19 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dettoapp.detto.Models.MarksModel
 import com.dettoapp.detto.Models.ProjectRubricsModel
-import com.dettoapp.detto.Models.RubricsModel
 import com.dettoapp.detto.R
-import com.dettoapp.detto.TeacherActivity.Fragments.ProjectHomeFragment
-import com.google.android.material.textfield.TextInputLayout
 
-class ProjectRubricsAdapter:
+class ProjectRubricsAdapter :
     RecyclerView.Adapter<ProjectRubricsAdapter.showRubrics>() {
     private val studentHashMap = HashMap<String, ArrayList<MarksModel>>()
 
@@ -61,23 +57,22 @@ class ProjectRubricsAdapter:
     inner class showRubrics(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(studentNameList: ProjectRubricsModel) {
             val name = itemView.findViewById<TextView>(R.id.student_name)
-            val rubrics= itemView.findViewById<RecyclerView>(R.id.project_rubrics)
-                name.setText(studentNameList.name)
-            var projectRubricsShowAdapter= ProjectRubricsShowAdapter()
+            val rubrics = itemView.findViewById<RecyclerView>(R.id.project_rubrics)
+            name.setText(studentNameList.name)
+            var projectRubricsShowAdapter = ProjectRubricsShowAdapter()
             rubrics.apply {
-                adapter=projectRubricsShowAdapter
+                adapter = projectRubricsShowAdapter
                 layoutManager = LinearLayoutManager(itemView.context)
             }
             projectRubricsShowAdapter.differ.submitList(studentNameList.rubrics.titleMarksList)
-            val marksList=projectRubricsShowAdapter.getMarksHashMap()
-            Log.d("WWA",marksList.toString())
-            studentHashMap[studentNameList.usn]=marksList
-
-
+            val marksList = projectRubricsShowAdapter.getMarksHashMap()
+            Log.d("WWA", marksList.toString())
+            studentHashMap[studentNameList.usn] = marksList
 
 
         }
 
     }
-    fun getStudentHashMap()=studentHashMap
+
+    fun getStudentHashMap() = studentHashMap
 }

@@ -15,29 +15,29 @@ class ChatServiceProvider {
 
 
     private val socketOkHttpClient = OkHttpClient.Builder()
-            .readTimeout(30, TimeUnit.SECONDS)
-            .connectTimeout(39, TimeUnit.SECONDS)
-            .hostnameVerifier { _, _ -> true }
-            .build()
+        .readTimeout(30, TimeUnit.SECONDS)
+        .connectTimeout(39, TimeUnit.SECONDS)
+        .hostnameVerifier { _, _ -> true }
+        .build()
 
 
     private var _webSocketListener: ChatWebSocketListener? = null
 
 
     fun startSocket(url: String): Flow<Resource<String>> =
-            with(ChatWebSocketListener()) {
-                startSocket(this, url)
-                urlLink = url
-                this@with.chatFlow
-            }
+        with(ChatWebSocketListener()) {
+            startSocket(this, url)
+            urlLink = url
+            this@with.chatFlow
+        }
 
 
     private fun startSocket(chatWebSocketListener: ChatWebSocketListener, url: String) {
-        Log.d("DDBB","new Socket")
+        Log.d("DDBB", "new Socket")
         _webSocketListener = chatWebSocketListener
         _webSocket = socketOkHttpClient.newWebSocket(
-                Request.Builder().url(url).build(),
-                chatWebSocketListener
+            Request.Builder().url(url).build(),
+            chatWebSocketListener
         )
         socketOkHttpClient.connectionPool.evictAll()
     }

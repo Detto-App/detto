@@ -50,12 +50,12 @@ class SignUpFrag : BaseFragment<LoginSignUpActivityViewModel, FragmentSignUpBind
             val roleSelected = binding.role.text.toString()
             val roleIndex = roles.indexOf(roleSelected)
             viewModel.signUpProcess(
-                    roleIndex,
-                    binding.etname2.editText?.text.toString(),
-                    binding.etUsn.editText?.text.toString().toLowerCase(Locale.ROOT),
-                    binding.etEmail.editText?.text.toString().toLowerCase(Locale.ROOT),
-                    binding.password.editText?.text.toString(),
-                    binding.etPassword2.editText?.text.toString()
+                roleIndex,
+                binding.etname2.editText?.text.toString(),
+                binding.etUsn.editText?.text.toString().toLowerCase(Locale.ROOT),
+                binding.etEmail.editText?.text.toString().toLowerCase(Locale.ROOT),
+                binding.password.editText?.text.toString(),
+                binding.etPassword2.editText?.text.toString()
             )
         }
     }
@@ -65,7 +65,10 @@ class SignUpFrag : BaseFragment<LoginSignUpActivityViewModel, FragmentSignUpBind
             when (it) {
                 is Resource.Success -> {
                     baseActivity.hideProgressDialog()
-                    showAlertDialog("Verify Email", "A Verification Email has been sent to your email,Please Verify the email and Login Again")
+                    showAlertDialog(
+                        "Verify Email",
+                        "A Verification Email has been sent to your email,Please Verify the email and Login Again"
+                    )
                 }
                 is Resource.Error -> {
                     baseActivity.hideProgressDialog()
@@ -103,9 +106,11 @@ class SignUpFrag : BaseFragment<LoginSignUpActivityViewModel, FragmentSignUpBind
 
     override fun getViewModelClass(): Class<LoginSignUpActivityViewModel> = LoginSignUpActivityViewModel::class.java
 
-    override fun getFragmentBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSignUpBinding = FragmentSignUpBinding.inflate(inflater, container, false)
+    override fun getFragmentBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSignUpBinding =
+        FragmentSignUpBinding.inflate(inflater, container, false)
 
-    override fun getRepository(): LoginSignUpRepository = LoginSignUpRepository(DatabaseDetto.getInstance(requireContext()).classroomDAO)
+    override fun getRepository(): LoginSignUpRepository =
+        LoginSignUpRepository(DatabaseDetto.getInstance(requireContext()).classroomDAO)
 
     override fun getBaseViewModelOwner(): ViewModelStoreOwner = requireActivity()
 }

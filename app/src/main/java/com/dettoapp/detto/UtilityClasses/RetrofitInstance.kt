@@ -3,7 +3,6 @@ package com.dettoapp.detto.UtilityClasses
 import com.dettoapp.detto.APIs.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 
 class RetrofitInstance {
     companion object {

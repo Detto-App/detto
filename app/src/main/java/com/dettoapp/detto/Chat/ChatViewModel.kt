@@ -1,7 +1,10 @@
 package com.dettoapp.detto.Chat
 
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import com.dettoapp.detto.Models.ChatMessage
 import com.dettoapp.detto.Models.ChatMessageLocalStoreModel
 import com.dettoapp.detto.Models.Classroom
@@ -9,8 +12,10 @@ import com.dettoapp.detto.UtilityClasses.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import kotlin.collections.ArrayList
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.transform
 
 @Suppress("EXPERIMENTAL_API_USAGE")
 class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
@@ -81,27 +86,27 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
 
 
     private suspend fun startSocket() =
-            repository.getChatMessagesFromServer(classroom.classroomuid)
-                    .collect {
-                        when (it) {
-                            is Resource.Success -> {
-                                isFailure = false
-                                addToChatMessagesList(it.data!!)
-                                _chatMessageEvent.postValue(Resource.Success(data = "Don't Clear"))
-                            }
-                            is Resource.Error -> {
-                                isFailure = true
-                                _chatMessageEvent.postValue(Resource.Error(message = Constants.CHAT_DISCONNECTED))
-                            }
-
-                            is Resource.Confirm -> {
-                                isFailure = false
-                                _chatMessageEvent.postValue(Resource.Confirm(message = ""))
-                            }
-                            else -> {
-                            }
-                        }
+        repository.getChatMessagesFromServer(classroom.classroomuid)
+            .collect {
+                when (it) {
+                    is Resource.Success -> {
+                        isFailure = false
+                        addToChatMessagesList(it.data!!)
+                        _chatMessageEvent.postValue(Resource.Success(data = "Don't Clear"))
                     }
+                    is Resource.Error -> {
+                        isFailure = true
+                        _chatMessageEvent.postValue(Resource.Error(message = Constants.CHAT_DISCONNECTED))
+                    }
+
+                    is Resource.Confirm -> {
+                        isFailure = false
+                        _chatMessageEvent.postValue(Resource.Confirm(message = ""))
+                    }
+                    else -> {
+                    }
+                }
+            }
 
     private suspend fun addToChatMessagesList(message: String) {
         try {
@@ -126,10 +131,11 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
                     throw Exception("Not able to Send Message\nReconnect or Check InternetConnection")
                 }
 
-                val chatMessage = ChatMessage(message, name,
-                        System.currentTimeMillis().toString(),
-                        userID,
-                        Utility.createID()
+                val chatMessage = ChatMessage(
+                    message, name,
+                    System.currentTimeMillis().toString(),
+                    userID,
+                    Utility.createID()
                 )
 
                 repository.sendMessage(chatRoomID.value, chatMessage)

@@ -1,7 +1,6 @@
 package com.dettoapp.detto.StudentActivity.Adapters
 
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.dettoapp.detto.Models.Todo
 import com.dettoapp.detto.R
-import com.dettoapp.detto.UtilityClasses.Constants
 
 class ToDoAdapter(private val todoOperation: TodoOperation) : RecyclerView
 .Adapter<ToDoAdapter.TodoViewHolder>() {

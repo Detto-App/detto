@@ -4,21 +4,18 @@ import android.content.Context
 import android.content.Intent
 import android.text.Editable
 import android.view.Gravity
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.transition.Fade
 import androidx.transition.Slide
 import com.dettoapp.detto.Models.StudentModel
 import com.dettoapp.detto.Models.TeacherModel
-import com.dettoapp.detto.TeacherActivity.TeacherActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.collections.HashMap
 import kotlin.collections.HashSet
 
 object Utility {
@@ -30,7 +27,7 @@ object Utility {
     fun initialiseData(role: Int, appContext: Context) {
         GlobalScope.launch(Dispatchers.IO) {
             val sharedPreference = appContext.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
-                    ?: throw Exception("Data Storage Exception")
+                ?: throw Exception("Data Storage Exception")
             val dataInString = sharedPreference.getString(Constants.ENTIRE_MODEL_KEY, "")!!
 
             if (role == Constants.TEACHER) {
@@ -49,7 +46,7 @@ object Utility {
             "Bearer $token"
         else {
             val sharedPreference = context?.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
-                    ?: throw Exception("Data Storage Exception")
+                ?: throw Exception("Data Storage Exception")
             "Bearer " + sharedPreference.getString(Constants.USER_TOKEN_KEY, "cc")!!
         }
     }
@@ -68,7 +65,14 @@ object Utility {
         return this
     }
 
-    fun navigateFragment(fragManager: FragmentManager, containerID: Int, fragment: Fragment, tag: String, addToBackStack: Boolean = true, isAdding: Boolean = true) {
+    fun navigateFragment(
+        fragManager: FragmentManager,
+        containerID: Int,
+        fragment: Fragment,
+        tag: String,
+        addToBackStack: Boolean = true,
+        isAdding: Boolean = true
+    ) {
 
         val transaction = if (isAdding)
             fragManager.beginTransaction().add(containerID, fragment.applyTransaction())
@@ -87,7 +91,7 @@ object Utility {
     @Deprecated("USE TOKEN variable")
     fun gettoken(context: Context): String {
         val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
-                ?: throw Exception("Data Storage Exception")
+            ?: throw Exception("Data Storage Exception")
         return "Bearer " + sharedPreference.getString(Constants.USER_TOKEN_KEY, "cc")!!
     }
 
@@ -95,21 +99,22 @@ object Utility {
     @Deprecated("Use the STUDENT variable initialised by initialiseData() method")
     fun getStudentModel(context: Context): StudentModel {
         val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
-                ?: throw Exception("Data Storage Exception")
+            ?: throw Exception("Data Storage Exception")
 
         return StudentModel(
-                sharedPreference.getString(Constants.USER_NAME_KEY, "")!!,
-                sharedPreference.getString(Constants.USER_EMAIL_KEY, "")!!,
-                sharedPreference.getString(Constants.USER_ID, "")!!,
-                sharedPreference.getString(Constants.USER_USN_KEY, "")!!,
-                HashSet<String>())
+            sharedPreference.getString(Constants.USER_NAME_KEY, "")!!,
+            sharedPreference.getString(Constants.USER_EMAIL_KEY, "")!!,
+            sharedPreference.getString(Constants.USER_ID, "")!!,
+            sharedPreference.getString(Constants.USER_USN_KEY, "")!!,
+            HashSet<String>()
+        )
 
 
     }
 
     fun getUID(context: Context): String {
         val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
-                ?: throw Exception("Data Storage Exception")
+            ?: throw Exception("Data Storage Exception")
         return sharedPreference.getString(Constants.USER_ID, "")!!
     }
 
@@ -127,8 +132,7 @@ object Utility {
         return hashSet
     }
 
-    fun <T> navigateActivity(context: Context,toActivityClass:Class<T>)
-    {
+    fun <T> navigateActivity(context: Context, toActivityClass: Class<T>) {
         val intent = Intent(context, toActivityClass)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)

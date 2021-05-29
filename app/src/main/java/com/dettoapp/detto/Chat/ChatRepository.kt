@@ -8,14 +8,15 @@ import com.dettoapp.detto.UtilityClasses.Mapper
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.buffer
 
-class ChatRepository(private val webServicesProvider: ChatServiceProvider, private val chatMessageDAO: ChatMessageDAO) : BaseRepository() {
+class ChatRepository(private val webServicesProvider: ChatServiceProvider, private val chatMessageDAO: ChatMessageDAO) :
+    BaseRepository() {
 
     @Suppress("SpellCheckingInspection")
     private val gson = Gson()
 
     fun getChatMessagesFromServer(endPoint: String) = webServicesProvider
-            .startSocket(Constants.CHAT_BASE_URL + endPoint)
-            .buffer(10)
+        .startSocket(Constants.CHAT_BASE_URL + endPoint)
+        .buffer(10)
 
     fun endConnection() = webServicesProvider.stopSocket()
 

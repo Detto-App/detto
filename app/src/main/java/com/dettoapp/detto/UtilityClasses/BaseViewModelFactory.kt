@@ -13,7 +13,6 @@ import com.dettoapp.detto.TeacherActivity.Repositories.TeacherRepository
 import com.dettoapp.detto.TeacherActivity.ViewModels.ClassRoomDetailViewModel
 import com.dettoapp.detto.TeacherActivity.ViewModels.TeacherHomeFragViewModel
 import com.dettoapp.detto.loginActivity.ViewModels.LoginSignUpActivityViewModel
-import java.lang.IllegalStateException
 
 class BaseViewModelFactory(private val repository: BaseRepository, private val context: Context) :
     ViewModelProvider.NewInstanceFactory() {
@@ -41,13 +40,13 @@ class BaseViewModelFactory(private val repository: BaseRepository, private val c
             ) as T
             modelClass.isAssignableFrom(ChatViewModel::class.java) -> ChatViewModel((repository as ChatRepository)) as T
             modelClass.isAssignableFrom(StudentSubmissionViewModel::class.java) -> StudentSubmissionViewModel(
-                (repository as StudentRepository),context
+                (repository as StudentRepository), context
             ) as T
             modelClass.isAssignableFrom(TodoViewModel::class.java) -> TodoViewModel(
-                (repository as StudentRepository),context
+                (repository as StudentRepository), context
             ) as T
             modelClass.isAssignableFrom(TimelineViewModel::class.java) -> TimelineViewModel(
-                (repository as StudentRepository),context
+                (repository as StudentRepository), context
             ) as T
 
             else -> throw IllegalStateException("Cant Create ViewModel,No option Base Factory")

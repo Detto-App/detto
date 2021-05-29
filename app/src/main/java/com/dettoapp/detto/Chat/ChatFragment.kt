@@ -14,7 +14,8 @@ import com.dettoapp.detto.databinding.FragmentChatBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class ChatFragment(private val classroom: Classroom, private val name: String, private val userID: String) : BaseFragment<ChatViewModel, FragmentChatBinding, ChatRepository>() {
+class ChatFragment(private val classroom: Classroom, private val name: String, private val userID: String) :
+    BaseFragment<ChatViewModel, FragmentChatBinding, ChatRepository>() {
 
     private lateinit var chatAdapter: ChatAdapter
 
@@ -125,7 +126,10 @@ class ChatFragment(private val classroom: Classroom, private val name: String, p
     }
 
     override fun getRepository(): ChatRepository {
-        return ChatRepository(ChatServiceProvider(), DatabaseDetto.getInstance(requireContext().applicationContext).chatMessageDAO)
+        return ChatRepository(
+            ChatServiceProvider(),
+            DatabaseDetto.getInstance(requireContext().applicationContext).chatMessageDAO
+        )
     }
 
     override fun onBaseDestroy() {

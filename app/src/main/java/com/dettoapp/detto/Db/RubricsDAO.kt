@@ -11,5 +11,5 @@ interface RubricsDAO {
     suspend fun insertRubrics(rubricsModel: RubricsModel)
 
     @Query("SELECT * FROM rubrics_table WHERE cid = :cid")
-    suspend fun getRubrics(cid:String):RubricsModel
+    suspend fun getRubrics(cid: String): RubricsModel
 }

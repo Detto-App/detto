@@ -7,27 +7,22 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.dettoapp.detto.Db.DatabaseDetto
-import com.dettoapp.detto.Models.Classroom
-import com.dettoapp.detto.TeacherActivity.Adapters.DeadlineAdapterClassroomDetail
 import com.dettoapp.detto.TeacherActivity.Adapters.RubricsAdapter
 import com.dettoapp.detto.TeacherActivity.Adapters.RubricsShowAdapter
-import com.dettoapp.detto.TeacherActivity.Dialog.DeadlineDialog
 import com.dettoapp.detto.TeacherActivity.Dialog.RubricsDialog
 import com.dettoapp.detto.TeacherActivity.Repositories.ClassroomDetailRepository
 import com.dettoapp.detto.TeacherActivity.ViewModels.ClassRoomDetailViewModel
 import com.dettoapp.detto.UtilityClasses.BaseFragment
-import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
-import com.dettoapp.detto.databinding.FragmentDeadlineBinding
 import com.dettoapp.detto.databinding.FragmentRubricsBinding
 
-class   RubricsFragment(private  val operations: ClassroomDetailOperations):
-    BaseFragment<ClassRoomDetailViewModel, FragmentRubricsBinding, ClassroomDetailRepository>(),RubricsDialog.RubricsDialogListener{
+class RubricsFragment(private val operations: ClassroomDetailOperations) :
+    BaseFragment<ClassRoomDetailViewModel, FragmentRubricsBinding, ClassroomDetailRepository>(),
+    RubricsDialog.RubricsDialogListener {
 
 
-    private lateinit var rDialog:RubricsDialog
+    private lateinit var rDialog: RubricsDialog
     private lateinit var rubricsAdapter: RubricsAdapter
     private lateinit var rubricsShowAdapter: RubricsShowAdapter
 
@@ -36,10 +31,11 @@ class   RubricsFragment(private  val operations: ClassroomDetailOperations):
         initialise()
         liveDataObservers()
     }
-    private fun initialise(){
-        rubricsShowAdapter=RubricsShowAdapter()
+
+    private fun initialise() {
+        rubricsShowAdapter = RubricsShowAdapter()
         binding.rubricsShow.apply {
-            adapter=rubricsShowAdapter
+            adapter = rubricsShowAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
 
@@ -49,14 +45,15 @@ class   RubricsFragment(private  val operations: ClassroomDetailOperations):
         }
         viewModel.getRubrics(operations.getClassroom())
     }
-    fun liveDataObservers(){
+
+    fun liveDataObservers() {
         viewModel.rubrics.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
                     baseActivity.hideProgressDialog()
 //                    binding.re.isRefreshing = false
                     baseActivity.showToast("done")
-                    binding.btnRubrics.visibility=View.GONE
+                    binding.btnRubrics.visibility = View.GONE
                 }
                 is Resource.Error -> {
                     baseActivity.showErrorSnackMessage(it.message!!)
@@ -64,7 +61,7 @@ class   RubricsFragment(private  val operations: ClassroomDetailOperations):
                 is Resource.Loading -> {
 //                    baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
                 }
-                is Resource.Confirm ->{
+                is Resource.Confirm -> {
                     baseActivity.hideProgressDialog()
                 }
                 else -> {
@@ -77,7 +74,7 @@ class   RubricsFragment(private  val operations: ClassroomDetailOperations):
                     baseActivity.hideProgressDialog()
 //                    binding.re.isRefreshing = false
                     baseActivity.showToast("done")
-                    binding.btnRubrics.visibility=View.GONE
+                    binding.btnRubrics.visibility = View.GONE
 
 
                     rubricsShowAdapter.differ.submitList(it.data)
@@ -89,13 +86,13 @@ class   RubricsFragment(private  val operations: ClassroomDetailOperations):
                 is Resource.Loading -> {
 //                    baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
                 }
-                is Resource.Confirm ->{
+                is Resource.Confirm -> {
                     baseActivity.hideProgressDialog()
                 }
                 else -> {
                 }
             }
-    })
+        })
 
 
     }
@@ -120,7 +117,6 @@ class   RubricsFragment(private  val operations: ClassroomDetailOperations):
     }
 
 
-
     override fun onDestroy() {
         super.onDestroy()
     }
@@ -129,8 +125,12 @@ class   RubricsFragment(private  val operations: ClassroomDetailOperations):
         super.onBaseDestroy()
     }
 
-    override fun setRubrics(titleMap: HashMap<Int, String>, marksMap: HashMap<Int, Int>,convertMap: HashMap<Int,Int>) {
-        viewModel.storeRubrics(titleMap,marksMap,convertMap,operations.getClassroom())
+    override fun setRubrics(
+        titleMap: HashMap<Int, String>,
+        marksMap: HashMap<Int, Int>,
+        convertMap: HashMap<Int, Int>
+    ) {
+        viewModel.storeRubrics(titleMap, marksMap, convertMap, operations.getClassroom())
         liveDataObservers()
         rDialog.dismiss()
 

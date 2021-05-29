@@ -1,6 +1,5 @@
 package com.dettoapp.detto.Chat
 
-import android.util.Log
 import com.dettoapp.detto.Chat.ChatServiceProvider.Companion.NORMAL_CLOSURE_STATUS
 import com.dettoapp.detto.UtilityClasses.Resource
 import kotlinx.coroutines.Dispatchers
@@ -34,6 +33,7 @@ class ChatWebSocketListener : WebSocketListener() {
     override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
         super.onClosed(webSocket, code, reason)
     }
+
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
         GlobalScope.launch(Dispatchers.IO) {
             chatFlow.emit(Resource.Error(message = "" + t.localizedMessage))

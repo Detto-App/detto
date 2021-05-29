@@ -10,16 +10,16 @@ import com.dettoapp.detto.Models.Classroom
 @Dao
 interface ClassroomDAO {
     @Insert
-    suspend fun insertClassroom(classroom : Classroom)
+    suspend fun insertClassroom(classroom: Classroom)
 
     @Query("SELECT * FROM classroom_table")
-    fun getAllClassRooms() : LiveData<List<Classroom>>
+    fun getAllClassRooms(): LiveData<List<Classroom>>
 
     @Query("SELECT * FROM classroom_table")
-    suspend fun getAllClassRoomList() : List<Classroom>
+    suspend fun getAllClassRoomList(): List<Classroom>
 
     @Insert
-    suspend fun insertClassroom(classroomList : List<Classroom>)
+    suspend fun insertClassroom(classroomList: List<Classroom>)
 
     @Delete
     suspend fun deleteClassroom(classroom: Classroom)

@@ -7,10 +7,10 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.dettoapp.detto.R
+import com.google.android.material.snackbar.Snackbar
 
 open class BaseActivity : AppCompatActivity() {
 
@@ -60,11 +60,13 @@ open class BaseActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    fun showAlertDialog(dialogTitle: String, dialogMessage: String,
-                        yesString: String = "Ok",
-                        yesFunction: (() -> Unit)? = null,
-                        noString: String = "Cancel",
-                        noFunction: (() -> Unit)? = null) {
+    fun showAlertDialog(
+        dialogTitle: String, dialogMessage: String,
+        yesString: String = "Ok",
+        yesFunction: (() -> Unit)? = null,
+        noString: String = "Cancel",
+        noFunction: (() -> Unit)? = null
+    ) {
 
         val builder = AlertDialog.Builder(this)
 

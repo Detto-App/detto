@@ -14,6 +14,6 @@ interface ChatMessageDAO {
     suspend fun insertChatMessage(chatMessageLocalStoreModel: ChatMessageLocalStoreModel)
 
     @Query("SELECT * FROM chat_messages WHERE chatroomID = :chatRoomID ORDER BY time")
-    fun getChatMessagesFlow(chatRoomID:String) : Flow<List<ChatMessageLocalStoreModel>>
+    fun getChatMessagesFlow(chatRoomID: String): Flow<List<ChatMessageLocalStoreModel>>
 
 }

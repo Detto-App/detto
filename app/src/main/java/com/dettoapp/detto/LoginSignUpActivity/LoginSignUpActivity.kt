@@ -1,8 +1,6 @@
 package com.dettoapp.detto.LoginSignUpActivity
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.LoginSignUpActivity.Fragments.LoginFrag
@@ -22,20 +20,20 @@ class LoginSignUpActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login_sign_up)
         val factory = LoginSignUpActivityViewModelFactory(
-                LoginSignUpRepository(
-                        DatabaseDetto.getInstance(this).classroomDAO
-                ), this.applicationContext
+            LoginSignUpRepository(
+                DatabaseDetto.getInstance(this).classroomDAO
+            ), this.applicationContext
         )
         val viewModel =
-                ViewModelProvider(this, factory).get(LoginSignUpActivityViewModel::class.java)
+            ViewModelProvider(this, factory).get(LoginSignUpActivityViewModel::class.java)
 
         if (Firebase.auth.currentUser == null || Firebase.auth.uid == null || Firebase.auth.currentUser?.isEmailVerified == false)
             Utility.navigateFragment(
-                    supportFragmentManager,
-                    R.id.loginFragContainer,
-                    LoginFrag(),
-                    "splash",
-                    addToBackStack = false
+                supportFragmentManager,
+                R.id.loginFragContainer,
+                LoginFrag(),
+                "splash",
+                addToBackStack = false
             )
         else {
             val role = viewModel.getRole()

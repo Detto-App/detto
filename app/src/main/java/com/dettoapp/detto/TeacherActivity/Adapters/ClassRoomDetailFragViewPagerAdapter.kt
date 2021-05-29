@@ -20,7 +20,7 @@ class ClassRoomDetailFragViewPagerAdapter(
             0 -> ClassroomProjectsFragment(classroomDetailOperations)
             1 -> StudentsInClassFragment(classroomDetailOperations)
             2 -> DeadlineFragment(classroomDetailOperations)
-            3->RubricsFragment(classroomDetailOperations)
+            3 -> RubricsFragment(classroomDetailOperations)
 
             else -> {
                 StudentsInClassFragment(classroomDetailOperations)

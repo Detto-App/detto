@@ -2,7 +2,6 @@ package com.dettoapp.detto.loginActivity.ViewModels
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,8 +24,8 @@ import kotlinx.coroutines.tasks.await
 
 @SuppressLint("StaticFieldLeak")
 class LoginSignUpActivityViewModel(
-        private val repository: LoginSignUpRepository,
-        private val context: Context
+    private val repository: LoginSignUpRepository,
+    private val context: Context
 ) : ViewModel() {
 
 
@@ -83,18 +82,18 @@ class LoginSignUpActivityViewModel(
 
     private suspend fun getUserDetailsFromServer(email: String, role: Int) {
         val receivingUserModel = RetrofitInstance.registrationAPI.getDetails(email, role.toString()).body()
-                ?: throw Exception("Please Check Your User Role,Account Not Found")
+            ?: throw Exception("Please Check Your User Role,Account Not Found")
         repository.storeUserAndTokenData(context, receivingUserModel)
     }
 
 
     fun signUpProcess(
-            role: Int,
-            name: String,
-            usn: String,
-            email: String,
-            password: String,
-            re_password: String
+        role: Int,
+        name: String,
+        usn: String,
+        email: String,
+        password: String,
+        re_password: String
     ) {
         viewModelScope.launch(Dispatchers.IO) {
 
@@ -133,15 +132,15 @@ class LoginSignUpActivityViewModel(
     }
 
     private fun signUpValidate(
-            role: Int,
-            name: String,
-            usn: String,
-            email: String,
-            password: String,
-            re_password: String
+        role: Int,
+        name: String,
+        usn: String,
+        email: String,
+        password: String,
+        re_password: String
     ) {
         val validation =
-                email.isEmpty() || password.isEmpty() || re_password.isEmpty() || name.isEmpty()
+            email.isEmpty() || password.isEmpty() || re_password.isEmpty() || name.isEmpty()
         if ((role == 0 && validation) || (role == 1 && (validation || usn.isEmpty())))
             throw Exception("Enter all fields")
         else if (!email.matches(Regex("[a-zA-Z]+[-._A-Za-z0-9]*[@][a-zA-Z]+[.a-zA-Z]+")))

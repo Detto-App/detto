@@ -11,6 +11,13 @@ class TeacherActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_teacher)
 
-        Utility.navigateFragment(supportFragmentManager, R.id.teacherHomeContainer, TeacherHomeFrag(), "teacherHomeFrag", false, false)
+        Utility.navigateFragment(
+            supportFragmentManager,
+            R.id.teacherHomeContainer,
+            TeacherHomeFrag(),
+            "teacherHomeFrag",
+            false,
+            false
+        )
     }
 }

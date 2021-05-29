@@ -7,17 +7,17 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "classroom_table")
 data class Classroom(
-    @ColumnInfo(name="classroom_name")
+    @ColumnInfo(name = "classroom_name")
     val classroomname: String,
-    @ColumnInfo(name="sem")
+    @ColumnInfo(name = "sem")
     val sem: String,
-    @ColumnInfo(name="section")
+    @ColumnInfo(name = "section")
     val section: String,
     @PrimaryKey(autoGenerate = false)
-    @ColumnInfo(name="classroom_uid")
+    @ColumnInfo(name = "classroom_uid")
     val classroomuid: String,
-    @ColumnInfo(name="teacher")
-    val teacher:TeacherModel,
-    @ColumnInfo(name="settings")
-    val settingsModel:ClassroomSettingsModel
+    @ColumnInfo(name = "teacher")
+    val teacher: TeacherModel,
+    @ColumnInfo(name = "settings")
+    val settingsModel: ClassroomSettingsModel
 )

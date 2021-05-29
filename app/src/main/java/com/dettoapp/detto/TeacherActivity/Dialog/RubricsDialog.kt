@@ -7,17 +7,15 @@ import android.view.ViewGroup
 import android.viewbinding.library.fragment.viewBinding
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.R
-import com.dettoapp.detto.StudentActivity.Adapters.AddMembersAdapter
 import com.dettoapp.detto.TeacherActivity.Adapters.RubricsAdapter
 import com.dettoapp.detto.databinding.DialogAddRubricsBinding
 
-class RubricsDialog(private val rubricsDialogListener:RubricsDialogListener): DialogFragment() {
+class RubricsDialog(private val rubricsDialogListener: RubricsDialogListener) : DialogFragment() {
     private val binding: DialogAddRubricsBinding by viewBinding()
 
     interface RubricsDialogListener {
-        fun setRubrics(titleMap:HashMap<Int,String>,marksMap:HashMap<Int,Int>,convertMap:HashMap<Int,Int>)
+        fun setRubrics(titleMap: HashMap<Int, String>, marksMap: HashMap<Int, Int>, convertMap: HashMap<Int, Int>)
     }
 
     override fun onCreateView(
@@ -27,6 +25,7 @@ class RubricsDialog(private val rubricsDialogListener:RubricsDialogListener): Di
     ): View? {
         return inflater.inflate(R.layout.dialog_add_rubrics, container, false)
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -52,6 +51,7 @@ class RubricsDialog(private val rubricsDialogListener:RubricsDialogListener): Di
             )
         }
     }
+
     override fun getTheme(): Int {
         return R.style.ThemeOverlay_MaterialComponents
     }

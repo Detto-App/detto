@@ -1,27 +1,26 @@
 package com.dettoapp.detto.TeacherActivity.Fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.viewbinding.library.fragment.viewBinding
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.R
-import com.dettoapp.detto.TeacherActivity.Adapters.ClassroomAdapter
 import com.dettoapp.detto.TeacherActivity.Adapters.ProjectAdapterClassroomDetail
 import com.dettoapp.detto.TeacherActivity.Repositories.ClassroomDetailRepository
 import com.dettoapp.detto.TeacherActivity.ViewModels.ClassRoomDetailViewModel
-import com.dettoapp.detto.UtilityClasses.*
+import com.dettoapp.detto.UtilityClasses.BaseFragment
+import com.dettoapp.detto.UtilityClasses.Constants
+import com.dettoapp.detto.UtilityClasses.Resource
+import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentClassroomProjectsBinding
 
 class ClassroomProjectsFragment(private val operations: ClassroomDetailOperations) :
-    BaseFragment<ClassRoomDetailViewModel,FragmentClassroomProjectsBinding, ClassroomDetailRepository>() ,
+    BaseFragment<ClassRoomDetailViewModel, FragmentClassroomProjectsBinding, ClassroomDetailRepository>(),
     ProjectAdapterClassroomDetail.ClassroomProjectOperation,
     ProjectAdapterClassroomDetail.ProjectAdapterClickListner {
     private lateinit var projectAdapterClassroomDetail: ProjectAdapterClassroomDetail
@@ -33,7 +32,7 @@ class ClassroomProjectsFragment(private val operations: ClassroomDetailOperation
     }
 
     private fun initialise() {
-        projectAdapterClassroomDetail = ProjectAdapterClassroomDetail(this,this)
+        projectAdapterClassroomDetail = ProjectAdapterClassroomDetail(this, this)
         binding.tClassroomProjectRecyclerview.apply {
             adapter = projectAdapterClassroomDetail
             layoutManager = LinearLayoutManager(requireContext())
@@ -42,7 +41,7 @@ class ClassroomProjectsFragment(private val operations: ClassroomDetailOperation
         liveDataObservers()
     }
 
-    fun liveDataObservers(){
+    fun liveDataObservers() {
         viewModel.projectList.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
@@ -51,12 +50,12 @@ class ClassroomProjectsFragment(private val operations: ClassroomDetailOperation
                 }
                 is Resource.Error -> {
                     binding.progressBarInProject.visibility = View.GONE
-                   baseActivity.showErrorSnackMessage(it.message!!)
+                    baseActivity.showErrorSnackMessage(it.message!!)
                 }
                 is Resource.Loading -> {
                     baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
                 }
-                is Resource.Confirm ->{
+                is Resource.Confirm -> {
                     baseActivity.hideProgressDialog()
                 }
                 else -> {
@@ -73,7 +72,7 @@ class ClassroomProjectsFragment(private val operations: ClassroomDetailOperation
         inflater: LayoutInflater,
         container: ViewGroup?
     ): FragmentClassroomProjectsBinding {
-        return FragmentClassroomProjectsBinding.inflate(inflater,container,false)
+        return FragmentClassroomProjectsBinding.inflate(inflater, container, false)
     }
 
     override fun getRepository(): ClassroomDetailRepository {
@@ -84,12 +83,17 @@ class ClassroomProjectsFragment(private val operations: ClassroomDetailOperation
         return operations.getViewModelStoreOwner()
     }
 
-    override fun changeStatus(pid:String,status:String) {
-        viewModel.changeStatus(pid,status)
+    override fun changeStatus(pid: String, status: String) {
+        viewModel.changeStatus(pid, status)
     }
 
     override fun OnProjectClicked(projectModel: ProjectModel) {
-        Utility.navigateFragment(requireActivity().supportFragmentManager, R.id.teacherHomeContainer, ProjectHomeFragment(projectModel), "detailClassRoom")
+        Utility.navigateFragment(
+            requireActivity().supportFragmentManager,
+            R.id.teacherHomeContainer,
+            ProjectHomeFragment(projectModel),
+            "detailClassRoom"
+        )
 
     }
 

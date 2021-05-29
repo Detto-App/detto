@@ -1,13 +1,9 @@
 package com.dettoapp.detto.StudentActivity.ViewModels
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.dettoapp.detto.Models.Classroom
-import com.dettoapp.detto.Models.DeadlineModel
-import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.Models.Todo
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.UtilityClasses.BaseViewModel

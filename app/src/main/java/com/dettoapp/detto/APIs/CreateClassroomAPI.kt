@@ -1,6 +1,5 @@
 package com.dettoapp.detto.APIs
 
-import androidx.room.Update
 import com.dettoapp.detto.Models.*
 import okhttp3.ResponseBody
 import retrofit2.Response

@@ -25,8 +25,7 @@ abstract class BaseFragment<VM : ViewModel, B : ViewBinding, R : BaseRepository>
         getBaseOnCreate()
     }
 
-    protected open fun getBaseOnCreate()
-    {
+    protected open fun getBaseOnCreate() {
 
     }
 
@@ -40,9 +39,11 @@ abstract class BaseFragment<VM : ViewModel, B : ViewBinding, R : BaseRepository>
     abstract fun getRepository(): R
 
 
-    inline fun <T> observeWithLiveData(liveData: LiveData<Resource<T>>, noinline onSuccess: ((data: T) -> Unit)? = null,
-                                       noinline onLoading: (() -> Unit)? = null, noinline onError: ((message: String) -> Unit)? = null,
-                                       noinline onConfirm: (() -> Unit)? = null) {
+    inline fun <T> observeWithLiveData(
+        liveData: LiveData<Resource<T>>, noinline onSuccess: ((data: T) -> Unit)? = null,
+        noinline onLoading: (() -> Unit)? = null, noinline onError: ((message: String) -> Unit)? = null,
+        noinline onConfirm: (() -> Unit)? = null
+    ) {
         liveData.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
@@ -80,8 +81,7 @@ abstract class BaseFragment<VM : ViewModel, B : ViewBinding, R : BaseRepository>
         super.onDestroy()
     }
 
-    protected open fun onBaseDestroy()
-    {
+    protected open fun onBaseDestroy() {
 
     }
 }

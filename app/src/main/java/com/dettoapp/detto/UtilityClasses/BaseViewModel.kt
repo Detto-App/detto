@@ -8,10 +8,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel : ViewModel() {
-    inline fun <T> operateWithLiveData(liveData: MutableLiveData<Resource<T>>,
-                                       crossinline mainFunction:
-                                       suspend (passedLiveData: MutableLiveData<Resource<T>>) -> Unit,
-                                       noinline onError: ((errorMessage: String) -> Unit)? = null) {
+    inline fun <T> operateWithLiveData(
+        liveData: MutableLiveData<Resource<T>>,
+        crossinline mainFunction:
+        suspend (passedLiveData: MutableLiveData<Resource<T>>) -> Unit,
+        noinline onError: ((errorMessage: String) -> Unit)? = null
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 liveData.postValue(Resource.Loading())

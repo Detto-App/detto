@@ -15,7 +15,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @SuppressLint("StaticFieldLeak")
-class StudentHomeFragViewModel(private val repository: StudentRepository, private val context: Context) : BaseViewModel() {
+class StudentHomeFragViewModel(private val repository: StudentRepository, private val context: Context) :
+    BaseViewModel() {
     private val _project1 = MutableLiveData<Resource<String>>()
     val project1: LiveData<Resource<String>>
         get() = _project1

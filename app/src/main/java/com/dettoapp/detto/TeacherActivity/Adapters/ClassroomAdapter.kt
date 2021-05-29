@@ -9,12 +9,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.app.ShareCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.dettoapp.detto.R
 import com.dettoapp.detto.Models.Classroom
+import com.dettoapp.detto.R
 import java.util.*
 
 class ClassroomAdapter(
@@ -24,7 +23,7 @@ class ClassroomAdapter(
 
     interface ClassRoomAdapterClickListener {
         fun onClassRoomClicked(classroom: Classroom)
-        fun onClassLinkShare(link:String)
+        fun onClassLinkShare(link: String)
     }
 
 

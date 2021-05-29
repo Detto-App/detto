@@ -6,7 +6,7 @@ import java.util.*
 object Constants {
 
     const val PROGRESS_CHANNEL_ID = "12345"
-    const val PROGRESS_CHANNEL_NAME ="Progress Updates"
+    const val PROGRESS_CHANNEL_NAME = "Progress Updates"
 
     const val BASE_DETTO_URL = "https://detto.uk.to/"
     const val USER_EMAIL_KEY = "uEmail"
@@ -26,8 +26,8 @@ object Constants {
     const val MESSAGE_LOADING = "Loading..."
     const val ERROR_FILL_ALL_FIELDS = "Enter All Fields"
 
-    val classDetailFragTabNames = arrayOf("Projects", "Students","Deadlines","Rubrics")
-    val studentClassDetailFragTabNames = arrayOf("Deadlines","Submission","Todo","Stats","Timeline")
+    val classDetailFragTabNames = arrayOf("Projects", "Students", "Deadlines", "Rubrics")
+    val studentClassDetailFragTabNames = arrayOf("Deadlines", "Submission", "Todo", "Stats", "Timeline")
 
 
     const val PROJECT_CREATED = 0
@@ -38,20 +38,21 @@ object Constants {
     const val PROJECT_REJECTED = "rejected"
     const val ENTIRE_MODEL_KEY = "model"
 
-    const val SHOULD_FETCH="should_fetch"
-    const val MANUAL="manual"
-    const val AUTO="auto"
+    const val SHOULD_FETCH = "should_fetch"
+    const val MANUAL = "manual"
+    const val AUTO = "auto"
     const val CHAT_BASE_URL = "wss://detto.uk.to/chat/"
 
-    const val CHAT_DISCONNECTED ="Disconnected"
+    const val CHAT_DISCONNECTED = "Disconnected"
 
     const val BASE_URL_FCM = "https://fcm.googleapis.com/"
-    const val SERVER_KEY_FCM = "AAAAb6g6I2A:APA91bFnVgQMRH9SUoJcF_MHmi5LaQdqmLK5KWCyeQzX_SJMAEDwjdE7BSINkendBSHQvbZFJNo9LXe-WJHfRHeer1e3-2n23SPPAmtf4WmZ9ZY9VGruzgS4Cdt0o-M6VrqQs7DMvqp5"
+    const val SERVER_KEY_FCM =
+        "AAAAb6g6I2A:APA91bFnVgQMRH9SUoJcF_MHmi5LaQdqmLK5KWCyeQzX_SJMAEDwjdE7BSINkendBSHQvbZFJNo9LXe-WJHfRHeer1e3-2n23SPPAmtf4WmZ9ZY9VGruzgS4Cdt0o-M6VrqQs7DMvqp5"
     const val CONTENT_TYPE_FCM = "application/json"
 
-    const val DONE =0
-    const val NOTDONE =1
-    const val ACCESS="Access"
+    const val DONE = 0
+    const val NOTDONE = 1
+    const val ACCESS = "Access"
 
 
     fun Date.toFormattedString(format: String, locale: Locale = Locale.getDefault()): String {

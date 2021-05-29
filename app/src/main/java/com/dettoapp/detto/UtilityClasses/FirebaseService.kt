@@ -1,5 +1,7 @@
 package com.dettoapp.detto.UtilityClasses
 
+//import com.google.firebase.messaging.FirebaseMessagingService
+//import com.google.firebase.messaging.RemoteMessage
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_HIGH
@@ -10,20 +12,18 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.dettoapp.detto.LoginSignUpActivity.LoginSignUpActivity
 import com.dettoapp.detto.R
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-//import com.google.firebase.messaging.FirebaseMessagingService
-//import com.google.firebase.messaging.RemoteMessage
 import kotlin.random.Random
 
 
 class FirebaseService : FirebaseMessagingService() {
-    private  val CHANNEL_ID = "my_channel"
+    private val CHANNEL_ID = "my_channel"
+
     companion object {
         var sharedPref: SharedPreferences? = null
 
@@ -48,7 +48,7 @@ class FirebaseService : FirebaseMessagingService() {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationID = Random.nextInt()
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel(notificationManager)
         }
 

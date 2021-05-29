@@ -2,14 +2,13 @@ package com.dettoapp.detto.StudentActivity.Dialog
 
 import android.app.Dialog
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.activity.result.ActivityResultLauncher
 import com.dettoapp.detto.R
 import com.dettoapp.detto.databinding.DialogUploadFileSelectionBinding
 
-class UploadFileSelectionDialog(context: Context, private val uploadFileSelectionInterface: UploadFileSelectionInterface
+class UploadFileSelectionDialog(
+    context: Context, private val uploadFileSelectionInterface: UploadFileSelectionInterface
 ) : Dialog(context, R.style.CustomDialog) {
     private var _binding: DialogUploadFileSelectionBinding? = null
     private val binding: DialogUploadFileSelectionBinding

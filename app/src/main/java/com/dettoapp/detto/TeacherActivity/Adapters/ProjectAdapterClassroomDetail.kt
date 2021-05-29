@@ -14,16 +14,18 @@ import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.R
 import com.dettoapp.detto.UtilityClasses.Constants
 
-class ProjectAdapterClassroomDetail(private val classroomProjectOperation:ClassroomProjectOperation,
-private val projectAdapterClickListener: ProjectAdapterClickListner) :
-        RecyclerView.Adapter<ProjectAdapterClassroomDetail.ProjectViewHolder>() {
-    interface ProjectAdapterClickListner{
+class ProjectAdapterClassroomDetail(
+    private val classroomProjectOperation: ClassroomProjectOperation,
+    private val projectAdapterClickListener: ProjectAdapterClickListner
+) :
+    RecyclerView.Adapter<ProjectAdapterClassroomDetail.ProjectViewHolder>() {
+    interface ProjectAdapterClickListner {
         fun OnProjectClicked(projectModel: ProjectModel)
     }
 
-interface ClassroomProjectOperation{
-    fun changeStatus(pid:String,status:String)
-}
+    interface ClassroomProjectOperation {
+        fun changeStatus(pid: String, status: String)
+    }
 
     private val diffCallBack = object : DiffUtil.ItemCallback<ProjectModel>() {
         override fun areItemsTheSame(oldItem: ProjectModel, newItem: ProjectModel): Boolean {
@@ -38,7 +40,7 @@ interface ClassroomProjectOperation{
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectViewHolder {
         return ProjectViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.t_classroom_detail_project_viewholder, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.t_classroom_detail_project_viewholder, parent, false)
         )
     }
 
@@ -51,14 +53,14 @@ interface ClassroomProjectOperation{
     }
 
     inner class ProjectViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val statusAccepted=itemView.findViewById<TextView>(R.id.acceptProjectClassroom)
-        val statusRejected=itemView.findViewById<TextView>(R.id.rejectProjectClassroom)
-        val statusDisplay=itemView.findViewById<TextView>(R.id.statusDisplay)
+        val statusAccepted = itemView.findViewById<TextView>(R.id.acceptProjectClassroom)
+        val statusRejected = itemView.findViewById<TextView>(R.id.rejectProjectClassroom)
+        val statusDisplay = itemView.findViewById<TextView>(R.id.statusDisplay)
 
         fun bind(projectModel: ProjectModel) {
 
             initialise(projectModel)
-            itemView.setOnClickListener{
+            itemView.setOnClickListener {
                 projectAdapterClickListener.OnProjectClicked(projectModel)
             }
         }
@@ -66,49 +68,49 @@ interface ClassroomProjectOperation{
         fun initialise(projectModel: ProjectModel) {
             val accept = itemView.findViewById<TextView>(R.id.acceptProjectClassroom)
             val reject = itemView.findViewById<TextView>(R.id.rejectProjectClassroom)
-            val projectName=itemView.findViewById<TextView>(R.id.message)
-            val projectDesc=itemView.findViewById<TextView>(R.id.tcdpv_project_desc)
-            projectName.text=projectModel.title
-            projectDesc.text=projectModel.desc
+            val projectName = itemView.findViewById<TextView>(R.id.message)
+            val projectDesc = itemView.findViewById<TextView>(R.id.tcdpv_project_desc)
+            projectName.text = projectModel.title
+            projectDesc.text = projectModel.desc
 
-            if(projectModel.status==Constants.PROJECT_REJECTED)
-                changeViewOnClick(Constants.PROJECT_REJECTED,Color.RED)
-            else if(projectModel.status==Constants.PROJECT_ACCEPTED)
-                changeViewOnClick(Constants.PROJECT_ACCEPTED,Color.GREEN)
+            if (projectModel.status == Constants.PROJECT_REJECTED)
+                changeViewOnClick(Constants.PROJECT_REJECTED, Color.RED)
+            else if (projectModel.status == Constants.PROJECT_ACCEPTED)
+                changeViewOnClick(Constants.PROJECT_ACCEPTED, Color.GREEN)
 
 
             accept.setOnClickListener {
                 showAlertDialog("Accept", "") {
-                    changeViewOnClick(Constants.PROJECT_ACCEPTED,Color.GREEN)
-                    classroomProjectOperation.changeStatus(projectModel.pid,Constants.PROJECT_ACCEPTED)
+                    changeViewOnClick(Constants.PROJECT_ACCEPTED, Color.GREEN)
+                    classroomProjectOperation.changeStatus(projectModel.pid, Constants.PROJECT_ACCEPTED)
                 }
             }
 
             reject.setOnClickListener {
                 showAlertDialog("Reject", "") {
-                    changeViewOnClick(Constants.PROJECT_REJECTED,Color.RED)
-                    classroomProjectOperation.changeStatus(projectModel.pid,Constants.PROJECT_REJECTED)
+                    changeViewOnClick(Constants.PROJECT_REJECTED, Color.RED)
+                    classroomProjectOperation.changeStatus(projectModel.pid, Constants.PROJECT_REJECTED)
                 }
             }
 
         }
 
-        private fun changeViewOnClick(status: String,color: Int){
-            statusDisplay.text="Status: ${status}"
+        private fun changeViewOnClick(status: String, color: Int) {
+            statusDisplay.text = "Status: ${status}"
             statusDisplay.setBackgroundColor(color)
-            statusAccepted.visibility=View.GONE
-            statusRejected.visibility=View.GONE
+            statusAccepted.visibility = View.GONE
+            statusRejected.visibility = View.GONE
         }
 
         private fun showAlertDialog(title: String, message: String, onClickButton: () -> Unit) {
             val dialogBuilder = AlertDialog.Builder(itemView.context)
-                    .setMessage(message)
-                    .setTitle(title)
-                    .setPositiveButton("yes", DialogInterface.OnClickListener { _, _ ->
-                        onClickButton()
-                    }).setNegativeButton("Cancel") { _, _ ->
+                .setMessage(message)
+                .setTitle(title)
+                .setPositiveButton("yes", DialogInterface.OnClickListener { _, _ ->
+                    onClickButton()
+                }).setNegativeButton("Cancel") { _, _ ->
 
-                    }.show()
+                }.show()
         }
     }
 }

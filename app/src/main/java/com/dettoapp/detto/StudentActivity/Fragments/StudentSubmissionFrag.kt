@@ -24,23 +24,24 @@ import com.dettoapp.detto.databinding.FragmentStudentSubmissionBinding
 import java.util.*
 
 class StudentSubmissionFrag :
-        BaseFragment<StudentSubmissionViewModel, FragmentStudentSubmissionBinding, StudentRepository>(), UploadFileSelectionDialog.UploadFileSelectionInterface {
+    BaseFragment<StudentSubmissionViewModel, FragmentStudentSubmissionBinding, StudentRepository>(),
+    UploadFileSelectionDialog.UploadFileSelectionInterface {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private lateinit var fileUploadDialog: UploadFileSelectionDialog
 
     private val readStoragePermissionResult: EasyPermission by requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE,
-            granted = {
-                displayView(true)
-            }, denied = {
-        displayView(false)
-    })
+        granted = {
+            displayView(true)
+        }, denied = {
+            displayView(false)
+        })
 
     override fun getBaseOnCreate() {
         super.getBaseOnCreate()
         resultLauncher =
-                registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                    handleIt(it)
-                }
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                handleIt(it)
+            }
     }
 
     private fun handleIt(result: ActivityResult) {
@@ -56,20 +57,23 @@ class StudentSubmissionFrag :
     private fun scheduleUploadWorker(uri: Uri, gDriveToken: String, fileName: String) {
 
         val data = Data.Builder()
-                .putString(UploadGDriveWorker.URI_PATH, uri.toString())
-                .putString(UploadGDriveWorker.GDRIVE_TOKEN, gDriveToken)
-                .putString(UploadGDriveWorker.FOLDER_NAME, Utility.STUDENT.name.toUpperCase(Locale.ROOT) + "-" + Utility.STUDENT.susn.toUpperCase(Locale.ROOT))
-                .putString(UploadGDriveWorker.FILE_NAME, fileName)
-                .build()
+            .putString(UploadGDriveWorker.URI_PATH, uri.toString())
+            .putString(UploadGDriveWorker.GDRIVE_TOKEN, gDriveToken)
+            .putString(
+                UploadGDriveWorker.FOLDER_NAME,
+                Utility.STUDENT.name.toUpperCase(Locale.ROOT) + "-" + Utility.STUDENT.susn.toUpperCase(Locale.ROOT)
+            )
+            .putString(UploadGDriveWorker.FILE_NAME, fileName)
+            .build()
 
         val uploadWorkRequest =
-                OneTimeWorkRequestBuilder<UploadGDriveWorker>()
-                        .setInputData(data)
-                        .build()
+            OneTimeWorkRequestBuilder<UploadGDriveWorker>()
+                .setInputData(data)
+                .build()
 
         WorkManager
-                .getInstance(requireContext().applicationContext)
-                .enqueue(uploadWorkRequest)
+            .getInstance(requireContext().applicationContext)
+            .enqueue(uploadWorkRequest)
 
         baseActivity.showToast("File Uploading\nCheck Notifications")
     }
@@ -143,16 +147,16 @@ class StudentSubmissionFrag :
     }
 
     override fun getFragmentBinding(
-            inflater: LayoutInflater,
-            container: ViewGroup?
+        inflater: LayoutInflater,
+        container: ViewGroup?
     ): FragmentStudentSubmissionBinding {
         return FragmentStudentSubmissionBinding.inflate(inflater, container, false)
     }
 
     override fun getRepository(): StudentRepository {
         return StudentRepository(
-                DatabaseDetto.getInstance(requireContext().applicationContext).classroomDAO,
-                DatabaseDetto.getInstance(requireContext().applicationContext).projectDAO
+            DatabaseDetto.getInstance(requireContext().applicationContext).classroomDAO,
+            DatabaseDetto.getInstance(requireContext().applicationContext).projectDAO
         )
     }
 
