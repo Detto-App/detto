@@ -13,6 +13,8 @@ import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.UtilityClasses.Utility.toLowerAndTrim
 import com.dettoapp.detto.Chat.ChatServiceProvider
+import com.dettoapp.detto.Models.AccessModel
+import com.dettoapp.detto.Models.TeacherModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.collect
@@ -66,6 +68,9 @@ class TeacherHomeFragViewModel(
     private val _classRoomDeletion = MutableLiveData<Resource<String>>()
     val classRoomDeletion: LiveData<Resource<String>>
         get() = _classRoomDeletion
+    private val _addAccess = MutableLiveData<Resource<String>>()
+    val addAccess: LiveData<Resource<String>>
+        get() = _addAccess
 
 
     val allClassRooms = repository.getAllClassRooms()
@@ -117,6 +122,25 @@ class TeacherHomeFragViewModel(
             }
         }
     }
+    fun addAccess(access:String,sem:String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val tid=Utility.getUID(context)
+                val accessModel=AccessModel(access,sem)
+                repository.addAccess(context,accessModel,tid)
+                _addAccess.postValue(Resource.Success("Success") )
+            } catch (e: Exception) {
+                _addAccess.postValue(Resource.Error(message = "" + e.localizedMessage))
+            }
+        }
+    }
+    fun getTeacherModel():TeacherModel{
+        return repository.getTeacherModel()
+    }
+    fun changeAccess(access: String,sem: String){
+
+
+    }
 
     fun getTeacherName() = repository.getTeacherName()
 
@@ -124,4 +148,5 @@ class TeacherHomeFragViewModel(
         if (classroomName.isEmpty() || sec.isEmpty() || sem.isEmpty() || projectType.isEmpty() || teamSize.isEmpty())
             throw Exception("Please Enter all Fields")
     }
+
 }

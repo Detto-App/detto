@@ -51,6 +51,7 @@ object Constants {
 
     const val DONE =0
     const val NOTDONE =1
+    const val ACCESS="Access"
 
 
     fun Date.toFormattedString(format: String, locale: Locale = Locale.getDefault()): String {

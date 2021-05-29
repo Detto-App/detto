@@ -7,6 +7,19 @@
     android:background="@color/cus_light_white"
     tools:context=".TeacherActivity.Fragments.ClassRoomDetailFrag">
 
+    <Button
+        android:id="@+id/form_teams"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Form Teams"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.78"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.19" />
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayoutClassroomDetailFrag"
         android:layout_width="0dp"
@@ -22,7 +35,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tabLayoutClassroomDetailFrag" />
+        app:layout_constraintTop_toBottomOf="@+id/tabLayoutClassroomDetailFrag" >
+
+    </androidx.viewpager2.widget.ViewPager2>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"

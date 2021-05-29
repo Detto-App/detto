@@ -18,6 +18,11 @@
         <item>8</item>
 
     </string-array>
+    <string-array name="access">
+        <item>HOD</item>
+        <item>CO-ORDINATOR</item>
+    </string-array>
+
     <string-array name="sec">
         <item>A</item>
         <item>B</item>

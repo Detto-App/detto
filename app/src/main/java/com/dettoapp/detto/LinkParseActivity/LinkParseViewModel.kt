@@ -2,12 +2,15 @@ package com.dettoapp.detto.LinkParseActivity
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.Models.ProjectModel
+import com.dettoapp.detto.R
+import com.dettoapp.detto.TeacherActivity.Fragments.ClassRoomDetailFrag
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.RetrofitInstance
@@ -22,6 +25,9 @@ class LinkParseViewModel(private val repository: LinkParserRepository,  private 
     private val _linkParse = MutableLiveData<Resource<String>>()
     val linkParse: LiveData<Resource<String>>
         get() = _linkParse
+    private val _linkParseTeacher = MutableLiveData<Resource<Classroom>>()
+    val linkParseTeacher: LiveData<Resource<Classroom>>
+        get() = _linkParseTeacher
 
     fun validationOfUserWhoClickedTheLink(data:String){
         viewModelScope.launch(Dispatchers.IO) {
@@ -69,34 +75,59 @@ class LinkParseViewModel(private val repository: LinkParserRepository,  private 
        tempClassroom=classroom
         _linkParse.postValue(Resource.Confirm(""+role, classRoomDetails))
     }
-    private suspend fun getProject(type:String,id:String){
+    private suspend fun getProject(type:String,id:String,role:Int){
+        Log.d("WSX","JJHg")
+
         val project=repository.getSingleProjectDetails(id).body()?:
                 throw Exception("Unable to Find This Project room")
-        val susn=repository.getSusn()
-        if(susn in project.studentList ){
-            tempProject=project
-            val projectDeatils="Project Name"+project.title+"\nDescription: "+project.desc
-            _linkParse.postValue(Resource.Confirm(type, projectDeatils))
+        tempClassroom=repository.getClassroom(project.cid)
+        if(role==Constants.STUDENT) {
+            val susn = repository.getSusn()
+            val studentModel = repository.getStudentModel(susn)
+            tempProject = project
+            if (project.cid in studentModel.classrooms && susn in project.studentList) {
+                if(!(project.pid in studentModel.projects)) {
+                    val projectDeatils = "Project Name" + project.title + "\nDescription: " + project.desc
+                    _linkParse.postValue(Resource.Confirm(type + role, projectDeatils))
+                }
+                else{
+                    _linkParse.postValue(Resource.Error(message = "you have Already Joined the group"))
+                }
+
+            } else if (susn in project.studentList) {
+                val classroom = RetrofitInstance.createClassroomAPI.getClassroom(project.cid, Utility.TOKEN).body()
+                        ?: throw Exception("Class Not Found")
+                val classRoomDetails = "Classroom Name: " + classroom.classroomname + "\nCreated by: " + classroom.teacher.name + "\nSection: " + classroom.section + "\nSem: " + classroom.sem
+                _linkParse.postValue(Resource.Confirm("10$role", classRoomDetails))
+
+            }
+            else{
+                _linkParse.postValue(Resource.Error(message = "Sorry ,You Are Not Authorized to Join This Group"))
+
+            }
+        }
+    else if(role==Constants.TEACHER){
+            val projectDeatils = "Project Name" + project.title + "\nDescription: " + project.desc
+
+            _linkParse.postValue(Resource.Confirm("10$role",projectDeatils))
 
         }
-        else
-            _linkParse.postValue(Resource.Error(message = "Sorry ,You Are Not Authorized to Join This Group"))
 
     }
 
 
 
-     fun insertClassroom(role:String){
+     fun insertClassroom(role:String,cid:String?=""){
          viewModelScope.launch(Dispatchers.IO) {
              try {
-                 repository.insertClassroom(tempClassroom)
-                 if(role=="1") {
-                     val studentModel = Utility.getStudentModel(context)
-                     repository.regStudentToClassroom(studentModel, tempClassroom.classroomuid)
-                     _linkParse.postValue(Resource.Success("STUDENT"))
-                 }else {
-                        _linkParse.postValue(Resource.Success("TEACHER"))
-                 }
+                     if (role == "1") {
+                         repository.insertClassroom(tempClassroom)
+                         val studentModel = Utility.getStudentModel(context)
+                         repository.regStudentToClassroom(studentModel, tempClassroom.classroomuid)
+                         _linkParse.postValue(Resource.Success("STUDENT"))
+                     } else {
+                        _linkParseTeacher.postValue(Resource.Success(tempClassroom))
+                     }
 
              }
              catch (e:Exception){
@@ -104,6 +135,25 @@ class LinkParseViewModel(private val repository: LinkParserRepository,  private 
              }
          }
     }
+//     fun insertClassroom2(role:Int) {
+//         viewModelScope.launch(Dispatchers.IO) {
+//             try {
+//                 val classroom = repository.getClassroom(tempProject.cid)
+//                 if(role==Constants.TEACHER){
+//                     _linkParseTeacher.postValue(Resource.Success(classroom))
+//                 }
+//                 else {
+//                     repository.insertClassroom(classroom)
+//                     val studentModel = Utility.getStudentModel(context)
+//                     repository.regStudentToClassroom(studentModel, classroom.classroomuid)
+//                     _linkParse.postValue(Resource.Success("STUDENT"))
+//                 }
+//             } catch (e: Exception) {
+//                 _linkParse.postValue(Resource.Error(message = "You have Already Joined The Classroom: " + tempClassroom.classroomname))
+//             }
+//         }
+//     }
+
     fun insertProject(){
         viewModelScope.launch(Dispatchers.IO){
             try{
@@ -120,7 +170,8 @@ class LinkParseViewModel(private val repository: LinkParserRepository,  private 
     private suspend fun compute(type:String,id:String,role:Int){
         when(type){
             Constants.TYPE_CID ->getClassroom(""+role,id)
-            Constants.TYPE_PID->getProject(type,id)
+            Constants.TYPE_PID->getProject(type,id,role)
         }
     }
+
 }

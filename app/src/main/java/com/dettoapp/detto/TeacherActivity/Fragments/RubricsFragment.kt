@@ -23,7 +23,7 @@ import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.databinding.FragmentDeadlineBinding
 import com.dettoapp.detto.databinding.FragmentRubricsBinding
 
-class RubricsFragment(private  val operations: ClassroomDetailOperations):
+class   RubricsFragment(private  val operations: ClassroomDetailOperations):
     BaseFragment<ClassRoomDetailViewModel, FragmentRubricsBinding, ClassroomDetailRepository>(),RubricsDialog.RubricsDialogListener{
 
 

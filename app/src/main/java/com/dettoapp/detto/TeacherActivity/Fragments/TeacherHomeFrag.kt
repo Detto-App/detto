@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.app.ShareCompat
 import androidx.lifecycle.Observer
@@ -14,6 +15,7 @@ import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.R
 import com.dettoapp.detto.TeacherActivity.Adapters.ClassroomAdapter
 import com.dettoapp.detto.TeacherActivity.DataBaseOperations
+import com.dettoapp.detto.TeacherActivity.Dialog.AddAccessDialog
 import com.dettoapp.detto.TeacherActivity.Repositories.TeacherRepository
 import com.dettoapp.detto.TeacherActivity.ViewModels.TeacherHomeFragViewModel
 import com.dettoapp.detto.UtilityClasses.BaseFragment
@@ -23,10 +25,12 @@ import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentTeacherHomeBinding
 
 
-class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHomeBinding, TeacherRepository>(), ClassroomCreateFragment.ClassroomCreateFragmentOnClickListener, ClassroomAdapter.ClassRoomAdapterClickListener, DataBaseOperations {
+class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHomeBinding, TeacherRepository>(), ClassroomCreateFragment.ClassroomCreateFragmentOnClickListener, ClassroomAdapter.ClassRoomAdapterClickListener, DataBaseOperations,AddAccessDialog.AddAccessDialogListener {
 
     private lateinit var classroomAdapter: ClassroomAdapter
     private lateinit var classroomCreateFragment: ClassroomCreateFragment
+    private lateinit var addAccessDialog: AddAccessDialog
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,6 +39,20 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
     }
 
     private fun initialise() {
+        val accesLevels =ArrayList<String>()
+        accesLevels.add("Teacher")
+        val list =viewModel.getTeacherModel().accessModelList
+        if(list !=null)
+            for(i in list)
+                accesLevels.add(i.type+" "+i.sem)
+        val accessAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, accesLevels)
+        binding.accessmenu.setAdapter(accessAdapter)
+        binding.accessmenu.setOnItemClickListener { _, _, position, value ->
+            val selected=value.toString()
+            val access=selected.subSequence(0,selected.length-2)
+            val sem=selected.last()
+            changeAccess(access.toString(),sem.toString())
+        }
         binding.btnfab.setOnClickListener {
             Utility.navigateFragment(requireActivity().supportFragmentManager, R.id.teacherHomeContainer, ClassroomCreateFragment(this), "ddd")
         }
@@ -49,6 +67,11 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
                 if (dy > 20) binding.btnfab.hide() else if (dy < 20) binding.btnfab.show()
             }
         })
+        binding.addaccess.setOnClickListener {
+            addAccessDialog= AddAccessDialog(this)
+            addAccessDialog.show(requireActivity().supportFragmentManager,"add access dialog")
+        }
+
     }
 
     private fun liveDataObservers() {
@@ -76,6 +99,20 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
         })
 
         viewModel.classRoomDeletion.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is Resource.Success -> {
+                    baseActivity.hideProgressDialog()
+                }
+                is Resource.Error -> {
+                    baseActivity.hideProgressDialog()
+                    baseActivity.showErrorSnackMessage(it.message!!)
+                }
+                is Resource.Loading -> {
+                    baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
+                }
+            }
+        })
+        viewModel.addAccess.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
                     baseActivity.hideProgressDialog()
@@ -126,4 +163,11 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
     ): FragmentTeacherHomeBinding = FragmentTeacherHomeBinding.inflate(inflater, container, false)
 
     override fun getRepository(): TeacherRepository = TeacherRepository(DatabaseDetto.getInstance(requireContext().applicationContext).classroomDAO)
+    override fun addAccess(access: String, sem: String) {
+        viewModel.addAccess(access,sem)
+
+    }
+    fun changeAccess(access: String,sem: String){
+        viewModel.changeAccess(access,sem)
+    }
 }

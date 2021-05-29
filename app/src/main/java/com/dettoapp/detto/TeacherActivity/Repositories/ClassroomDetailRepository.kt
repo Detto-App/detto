@@ -1,10 +1,8 @@
 package com.dettoapp.detto.TeacherActivity.Repositories
-
+import android.util.Log
 import com.dettoapp.detto.Models.ClassRoomStudents
 import com.dettoapp.detto.Models.DeadlineModel
 import com.dettoapp.detto.Models.ProjectModel
-import android.util.Log
-import androidx.room.Dao
 import com.dettoapp.detto.Db.RubricsDAO
 import com.dettoapp.detto.Models.*
 import com.dettoapp.detto.UtilityClasses.BaseRepository
@@ -74,5 +72,11 @@ class ClassroomDetailRepository(private val dao:RubricsDAO):BaseRepository() {
         RetrofitInstance.createClassroomAPI.updateProjectRubrics(studentRubricsMap,cid,pid,Utility.TOKEN)
 
     }
+    suspend fun formTeams(projectModelList:ArrayList<ProjectModel>,cid: String){
+        Log.d("WRR",projectModelList.toString())
+        RetrofitInstance.projectAPI.createProjects(projectModelList,cid,Utility.TOKEN)
+
+    }
+
 
 }

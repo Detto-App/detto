@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.Comparator
 import kotlin.collections.ArrayList
-
+import kotlin.collections.HashSet
 
 
 @SuppressLint("StaticFieldLeak")
@@ -61,7 +61,9 @@ class ClassRoomDetailViewModel(
     private val _projectRubrics = MutableLiveData<Resource<ArrayList<ProjectRubricsModel>>>()
     val projectRubrics: LiveData<Resource<ArrayList<ProjectRubricsModel>>>
         get() = _projectRubrics
-
+    private val _autoProject = MutableLiveData<Resource<ArrayList<ProjectModel>>>()
+    val autoProject: LiveData<Resource<ArrayList<ProjectModel>>>
+        get() = _autoProject
 
 
     fun getClassStudents(classroom: Classroom) {
@@ -85,7 +87,7 @@ class ClassRoomDetailViewModel(
         }
     }
 
-    fun getDeadlineFromServer(cid: String){
+    fun getDeadlineFromServer(cid: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val deadline = repository.getDeadline(cid)
@@ -138,24 +140,35 @@ class ClassRoomDetailViewModel(
             try {
                 val x = Notification("Trial", "Trial Message")
                 Firebase.messaging.unsubscribeFromTopic("/topics/${classroom.classroomuid}")
-                val response = RetrofitInstance.notificationAPI.postNotification(PushNotification(x, "/topics/${classroom.classroomuid}"))
+                val response = RetrofitInstance.notificationAPI.postNotification(
+                    PushNotification(
+                        x,
+                        "/topics/${classroom.classroomuid}"
+                    )
+                )
             } catch (e: Exception) {
                 Log.d(TAG, e.toString())
             }
         }
     }
 
-    fun getDeadline(classroomUid: String, dateRangePicker: MaterialDatePicker<Pair<Long, Long>>, reason :String){
+    fun getDeadline(
+        classroomUid: String,
+        dateRangePicker: MaterialDatePicker<Pair<Long, Long>>,
+        reason: String
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                if(dateRangePicker.selection==null)
+                if (dateRangePicker.selection == null)
                     _deadline.postValue(Resource.Error(message = "Date not selected"))
-                if(reason == "")
+                if (reason == "")
                     _deadline.postValue(Resource.Error(message = "reason field is empty"))
 
 //                val array=getDates(dateRangePicker.selection)
-                val deadlineModel = DeadlineModel(Utility.createID(), reason,dateRangePicker.selection!!.first.toString(),
-                    dateRangePicker.selection!!.second.toString())
+                val deadlineModel = DeadlineModel(
+                    Utility.createID(), reason, dateRangePicker.selection!!.first.toString(),
+                    dateRangePicker.selection!!.second.toString()
+                )
                 repository.createDeadline(deadlineModel, classroomUid)
             } catch (e: Exception) {
                 _deadline.postValue(Resource.Error(message = "" + e.localizedMessage))
@@ -164,28 +177,27 @@ class ClassRoomDetailViewModel(
     }
 
 
-
-
-
-
-
-
-    fun storeRubrics(titleMap: HashMap<Int, String>, marksMap: HashMap<Int, Int>, convertMap: HashMap<Int, Int>, classid: String) {
+    fun storeRubrics(
+        titleMap: HashMap<Int, String>,
+        marksMap: HashMap<Int, Int>,
+        convertMap: HashMap<Int, Int>,
+        classid: String
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _rubrics.postValue(Resource.Loading())
                 val marksModelList = ArrayList<MarksModel>()
-                for(i in 0..(titleMap.size-1)){
-                    val marksModel=MarksModel(titleMap[i]!!,marksMap[i]!!,convertMap[i]!!)
+                for (i in 0..(titleMap.size - 1)) {
+                    val marksModel = MarksModel(titleMap[i]!!, marksMap[i]!!, convertMap[i]!!)
                     marksModelList.add(marksModel)
-                    Log.d("ASDF","fdfd")
+                    Log.d("ASDF", "fdfd")
 
                 }
-                Log.d("ASDF","fdfd")
+                Log.d("ASDF", "fdfd")
                 val rubricsModel = RubricsModel(
-                        Utility.createID(),
-                        marksModelList,
-                        classid
+                    Utility.createID(),
+                    marksModelList,
+                    classid
                 )
                 repository.insertRubricsToServer(rubricsModel)
                 _rubrics.postValue(Resource.Success(data = rubricsModel))
@@ -194,12 +206,13 @@ class ClassRoomDetailViewModel(
             }
         }
     }
-    fun getRubrics(cid:String){
+
+    fun getRubrics(cid: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
 //                _rubrics.postValue(Resource.Loading())
                 val rubricsModel = repository.getRubricsFromDAO(cid)
-                val titleMarksList=rubricsModel.titleMarksList
+                val titleMarksList = rubricsModel.titleMarksList
 
                 _marks.postValue(Resource.Success(data = titleMarksList!!))
 
@@ -210,19 +223,27 @@ class ClassRoomDetailViewModel(
         }
 
     }
-    fun getRubricsForProject(projectModel: ProjectModel){
+
+    fun getRubricsForProject(projectModel: ProjectModel) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 var projectRubricsList: ArrayList<ProjectRubricsModel> =
-                    repository.getRubricsForProject(projectModel.cid,projectModel.pid)!!
-                Log.d("ASD",projectRubricsList.toString())
-                if(projectRubricsList.size==0) {
-                val rubricsModel = repository.getRubricsFromDAO(projectModel.cid)
-                val usnlist =ArrayList<String>(projectModel.studentList)
-                val namelist=ArrayList<String>(projectModel.studentNameList)
-                for(i in 0 until usnlist.size){
-                    projectRubricsList.add(Mapper.mapProjectModelAndRubricsModelToProjectRubricsModel(usnlist[i],projectModel.pid,namelist[i],rubricsModel))
-                }
+                    repository.getRubricsForProject(projectModel.cid, projectModel.pid)!!
+                Log.d("ASD", projectRubricsList.toString())
+                if (projectRubricsList.size == 0) {
+                    val rubricsModel = repository.getRubricsFromDAO(projectModel.cid)
+                    val usnlist = ArrayList<String>(projectModel.studentList)
+                    val namelist = ArrayList<String>(projectModel.studentNameList)
+                    for (i in 0 until usnlist.size) {
+                        projectRubricsList.add(
+                            Mapper.mapProjectModelAndRubricsModelToProjectRubricsModel(
+                                usnlist[i],
+                                projectModel.pid,
+                                namelist[i],
+                                rubricsModel
+                            )
+                        )
+                    }
 //                    Log.d("WSS",projectRubricsList.toString())
                     repository.insertProjectRubricsToServer(projectRubricsList)
                 }
@@ -233,26 +254,126 @@ class ClassRoomDetailViewModel(
             }
         }
     }
-    fun rubricsUpdate(studentHashMap:HashMap<String,ArrayList<MarksModel>>,projectModel: ProjectModel) {
+
+    fun rubricsUpdate(
+        studentHashMap: HashMap<String, ArrayList<MarksModel>>,
+        projectModel: ProjectModel
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                Log.d("WXX",studentHashMap.toString())
-                val rubricsModel =repository.getRubrics(projectModel.cid)
-                Log.d("WQQ","djhjgf")
+                Log.d("WXX", studentHashMap.toString())
+                val rubricsModel = repository.getRubrics(projectModel.cid)
+                Log.d("WQQ", "djhjgf")
 
-                val studentRubricsMap=HashMap<String,RubricsModel>()
-                Log.d("WES",studentHashMap.toString()+rubricsModel.toString())
-                for (i in studentHashMap.keys){
-                    val tempRubricsModel=Mapper.mapRubricsModelToTempRubricsModel(rubricsModel.rid,studentHashMap[i]!!,rubricsModel.cid)
-                    studentRubricsMap[i]=tempRubricsModel
-                    Log.d("WQQT",studentRubricsMap.toString())
+                val studentRubricsMap = HashMap<String, RubricsModel>()
+                Log.d("WES", studentHashMap.toString() + rubricsModel.toString())
+                for (i in studentHashMap.keys) {
+                    val tempRubricsModel = Mapper.mapRubricsModelToTempRubricsModel(
+                        rubricsModel.rid,
+                        studentHashMap[i]!!,
+                        rubricsModel.cid
+                    )
+                    studentRubricsMap[i] = tempRubricsModel
+                    Log.d("WQQT", studentRubricsMap.toString())
                 }
-                Log.d("WQQ",studentRubricsMap.toString())
+                Log.d("WQQ", studentRubricsMap.toString())
 
-                repository.updateProjectRubrics(studentRubricsMap,rubricsModel.cid,projectModel.pid)
+                repository.updateProjectRubrics(
+                    studentRubricsMap,
+                    rubricsModel.cid,
+                    projectModel.pid
+                )
                 _marks.postValue(Resource.Confirm(message = "done"))
             } catch (e: Exception) {
                 _marks.postValue(Resource.Error(message = "" + e.localizedMessage))
+            }
+
+        }
+    }
+
+     fun formTeams(classroom: Classroom) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val teamSize = classroom.settingsModel.teamSize.toInt()
+                val students=repository.getClassroomStudents(classroom.classroomuid)
+                Log.d("WRR",students.toString())
+
+                val classSize = students.studentList.size
+                val studentsModels = ArrayList<StudentModel>(students.studentList)
+                var i = 0
+                val projectModelList = ArrayList<ProjectModel>()
+                val rem = classSize % teamSize
+                if(teamSize>classSize){
+                    Log.d("WRR","enf")
+
+                    val studenUsnList = HashSet<String>()
+                    val studentNameList = ArrayList<String>()
+                    for(k in 0 until classSize){
+                        Log.d("WRR",studentsModels[k].susn)
+
+
+                        studenUsnList.add(studentsModels[k].susn)
+                        studentNameList.add(studentsModels[k].name)
+
+                    }
+                    Log.d("WRR","enf3")
+
+                    val projectModel = Mapper.mapProjectModel(
+                            Utility.createID(),
+                            studentUsnlist = studenUsnList,
+                            tid = classroom.teacher.uid,
+                            cid = classroom.classroomuid,
+                            studentNameList = studentNameList)
+                    projectModelList.add(projectModel)
+                }
+                else {
+                    while (i < (classSize - rem)) {
+                        var j = 0
+                        val studenUsnList = HashSet<String>()
+                        val studentNameList = ArrayList<String>()
+                        while (j < teamSize) {
+                            Log.d("WRR", i.toString())
+                            studenUsnList.add(studentsModels[i + j].susn)
+                            studentNameList.add(studentsModels[i + j].name)
+                            Log.d("WRR", studenUsnList.toString())
+                            Log.d("WRR", j.toString())
+                            j += 1
+                        }
+                        val projectModel = Mapper.mapProjectModel(
+                                Utility.createID(),
+                                studentUsnlist = studenUsnList,
+                                tid = classroom.teacher.uid,
+                                cid = classroom.classroomuid,
+                                studentNameList = studentNameList
+                        )
+                        projectModelList.add(projectModel)
+                        i += j
+                    }
+                    while (i < classSize) {
+                        Log.d("WRR", teamSize.toString())
+                        Log.d("WRR", classSize.toString())
+
+                        val studenUsnList = HashSet<String>()
+                        val studentNameList = ArrayList<String>()
+                        studenUsnList.add(studentsModels[i].susn)
+                        studentNameList.add(studentsModels[i].name)
+                        val projectModel = Mapper.mapProjectModel(
+                                Utility.createID(),
+                                studentUsnlist = studenUsnList,
+                                tid = classroom.teacher.uid,
+                                cid = classroom.classroomuid,
+                                studentNameList = studentNameList
+                        )
+                        projectModelList.add(projectModel)
+                        i += 1
+
+                    }
+                }
+                Log.d("WRR","enf")
+                repository.formTeams(projectModelList,classroom.classroomuid)
+                _autoProject.postValue(Resource.Confirm(message = "Done"))
+            } catch (e: Exception) {
+                _autoProject.postValue(Resource.Error(message = "" + e.localizedMessage))
             }
 
         }

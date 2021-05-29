@@ -32,7 +32,9 @@ class LoginSignUpRepository(private val dao: ClassroomDAO) :BaseRepository(){
             putString(Constants.USER_NAME_KEY, name)
             putInt(Constants.USER_ROLE_KEY, role)
             putString(Constants.USER_ID, userID)
+            putString(Constants.ACCESS,"Teacher")
             insertIfNotNull(this, Constants.USER_USN_KEY, usn)
+
             apply()
         }
     }

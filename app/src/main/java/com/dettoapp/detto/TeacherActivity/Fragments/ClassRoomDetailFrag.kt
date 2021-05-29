@@ -12,6 +12,7 @@ import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.R
 import com.dettoapp.detto.TeacherActivity.Adapters.ClassRoomDetailFragViewPagerAdapter
 import com.dettoapp.detto.TeacherActivity.DataBaseOperations
+import com.dettoapp.detto.TeacherActivity.Dialog.AddAccessDialog
 import com.dettoapp.detto.TeacherActivity.Repositories.ClassroomDetailRepository
 import com.dettoapp.detto.TeacherActivity.ViewModels.ClassRoomDetailViewModel
 import com.dettoapp.detto.UtilityClasses.BaseFragment
@@ -33,11 +34,11 @@ class ClassRoomDetailFrag(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        initialise(view)
+        initialise()
+        liveDataObservers()
     }
 
-    private fun initialise(view: View) {
+    private fun initialise() {
 
         FirebaseMessaging.getInstance().subscribeToTopic(classroom.classroomuid)
 
@@ -45,12 +46,15 @@ class ClassRoomDetailFrag(
         binding.classRoomDetailName.text = classroom.classroomname.capitalize(Locale.ROOT)
         binding.classRoomDetailTeacherName.text =
             "By -" + classroom.teacher.name.capitalize(Locale.ROOT)
+        if(classroom.settingsModel.groupType==Constants.AUTO){
+            binding.formTeams.visibility=View.VISIBLE
+        }
 
         binding.classRoomDetailMenu.setOnClickListener {
             showBottomDialog()
         }
 
-        view.setOnClickListener {
+        binding.root.setOnClickListener{
 
         }
 
@@ -61,6 +65,10 @@ class ClassRoomDetailFrag(
 
         binding.sendNotification.setOnClickListener {
             viewModel.sendNotification(classroom)
+        }
+        binding.formTeams.setOnClickListener {
+
+            viewModel.formTeams(classroom)
         }
 
         val viewPagerAdapter = ClassRoomDetailFragViewPagerAdapter(requireActivity(), this)
@@ -73,6 +81,29 @@ class ClassRoomDetailFrag(
             tab.text = Constants.classDetailFragTabNames[position]
             binding.viewPagerClassroomDetailFrag.setCurrentItem(tab.position, true)
         }.attach()
+    }
+    fun liveDataObservers(){
+        viewModel.autoProject.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            when (it) {
+                is Resource.Success -> {
+                    baseActivity.hideProgressDialog()
+//                    binding.re.isRefreshing = false
+                    baseActivity.showToast("done")
+                }
+                is Resource.Error -> {
+                    baseActivity.showErrorSnackMessage(it.message!!)
+                }
+                is Resource.Loading -> {
+//                    baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
+                }
+                is Resource.Confirm ->{
+                    baseActivity.showToast("done")
+                    baseActivity.hideProgressDialog()
+                }
+                else -> {
+                }
+            }
+    })
     }
     private fun showBottomDialog() {
         val bottomSheet = ClassRoomDetailModal(this)
@@ -124,5 +155,7 @@ class ClassRoomDetailFrag(
     override fun getRepository(): ClassroomDetailRepository {
         return ClassroomDetailRepository(DatabaseDetto.getInstance(requireContext().applicationContext).rubricsDAO)
     }
+
+
 
 }

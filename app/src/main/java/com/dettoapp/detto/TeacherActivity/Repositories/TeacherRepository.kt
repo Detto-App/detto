@@ -1,12 +1,16 @@
 package com.dettoapp.detto.TeacherActivity.Repositories
 
+import android.content.Context
 import com.dettoapp.detto.Db.ClassroomDAO
+import com.dettoapp.detto.Models.AccessModel
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.Models.ClassroomSettingsModel
 import com.dettoapp.detto.Models.TeacherModel
 import com.dettoapp.detto.UtilityClasses.BaseRepository
+import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 import com.dettoapp.detto.UtilityClasses.Utility
+import okhttp3.ResponseBody
 
 class TeacherRepository(private val dao: ClassroomDAO):BaseRepository() {
     suspend fun createClassroom(classroom: Classroom) {
@@ -34,5 +38,16 @@ class TeacherRepository(private val dao: ClassroomDAO):BaseRepository() {
     suspend fun deleteClassroom(classroom: Classroom) {
         RetrofitInstance.createClassroomAPI.deleteClassroom(classroom.classroomuid, Utility.TOKEN)
         dao.deleteClassroom(classroom)
+    }
+    suspend fun addAccess(context: Context,accessModel:AccessModel,tid:String):ResponseBody{
+        val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
+                ?: throw Exception("Data Storage Exception")
+        with(sharedPreference.edit())
+        {
+            putString(Constants.ACCESS,accessModel.type+" "+accessModel.sem)
+            apply()
+        }
+        return RetrofitInstance.createClassroomAPI.addAccess(accessModel,tid,Utility.TOKEN)  .body()?:throw Exception("Unable to Add Access")
+
     }
 }

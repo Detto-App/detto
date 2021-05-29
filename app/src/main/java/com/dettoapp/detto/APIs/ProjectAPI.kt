@@ -2,6 +2,7 @@ package com.dettoapp.detto.APIs
 
 import com.dettoapp.detto.Models.DeadlineModel
 import com.dettoapp.detto.Models.ProjectModel
+import com.dettoapp.detto.Models.StudentModel
 import com.dettoapp.detto.Models.Todo
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -103,5 +104,18 @@ interface ProjectAPI {
         @Body usnMapSet:HashSet<String>,
         @Header("Authorization")token:String
     ):Response<HashMap<String,String>>
+
+    @POST("/createProjects/{cid}")
+    suspend fun createProjects(
+        @Body projectModelList:ArrayList<ProjectModel>,
+        @Path(value="cid")cid:String,
+        @Header("Authorization")token: String
+    ):Response<ResponseBody>
+
+    @GET("/getStudentModel/{susn}")
+    suspend fun getStudentModel(
+            @Path(value = "susn")susn:String,
+            @Header("Authorization")token: String
+    ):Response<StudentModel>
 
 }

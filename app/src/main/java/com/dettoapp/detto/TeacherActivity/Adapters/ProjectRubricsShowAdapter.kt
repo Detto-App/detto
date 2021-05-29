@@ -69,25 +69,18 @@ class ProjectRubricsShowAdapter:RecyclerView.Adapter<ProjectRubricsShowAdapter.s
             marks.editText!!.setText(""+marksModel.marks.toString())
             var newMarksModel:MarksModel=marksModel
             marksHashMap[marksModel.title]=marksModel.marks!!
-            try{
 
             marks.editText?.doAfterTextChanged {
 //                marksHashMap[marksModel.title]= marks.text.toString().toDouble()
                 if(it.isNullOrEmpty()){
                     newMarksModel.marks="0".toString().toDouble()
                 }
-                newMarksModel.marks = marks.editText?.text.toString().toDouble()
-                Log.d("WZZ", newMarksModel.toString())
-            }
-
+                else {
+                    newMarksModel.marks = marks.editText?.text.toString().toDouble()
+                    Log.d("WZZ", newMarksModel.toString())
                 }
-            catch (e:Exception){
-                newMarksModel.marks="0".toString().toDouble()
-
             }
             marksList.add(newMarksModel)
-
-
         }
 
     }

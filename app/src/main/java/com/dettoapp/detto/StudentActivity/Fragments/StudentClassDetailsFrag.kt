@@ -73,7 +73,6 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
                 ),
                 "chat"
             )
-
         }
 
         binding.edit.setOnClickListener {

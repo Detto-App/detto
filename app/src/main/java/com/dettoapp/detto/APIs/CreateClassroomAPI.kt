@@ -2,6 +2,7 @@ package com.dettoapp.detto.APIs
 
 import androidx.room.Update
 import com.dettoapp.detto.Models.*
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -64,4 +65,11 @@ interface CreateClassroomAPI {
         @Path("pid") pid: String,
         @Header("Authorization")token: String
     )
+
+    @POST("addAccess/{tid}")
+    suspend fun addAccess(
+            @Body aaccesModel: AccessModel,
+            @Path(value = "tid") tid:String,
+            @Header("Authorization") token:String
+    ):Response<ResponseBody>
 }
