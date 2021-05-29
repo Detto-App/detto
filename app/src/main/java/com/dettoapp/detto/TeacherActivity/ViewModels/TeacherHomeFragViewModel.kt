@@ -68,9 +68,9 @@ class TeacherHomeFragViewModel(
     private val _classRoomDeletion = MutableLiveData<Resource<String>>()
     val classRoomDeletion: LiveData<Resource<String>>
         get() = _classRoomDeletion
-    private val _addAccess = MutableLiveData<Resource<String>>()
-    val addAccess: LiveData<Resource<String>>
-        get() = _addAccess
+    private val _access = MutableLiveData<Resource<String>>()
+    val access: LiveData<Resource<String>>
+        get() = _access
 
 
     val allClassRooms = repository.getAllClassRooms()
@@ -126,11 +126,13 @@ class TeacherHomeFragViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val tid=Utility.getUID(context)
+                Log.d("QQA","1")
                 val accessModel=AccessModel(access,sem)
                 repository.addAccess(context,accessModel,tid)
-                _addAccess.postValue(Resource.Success("Success") )
+                Log.d("QQA","jhhj")
+                _access.postValue(Resource.Success("Success") )
             } catch (e: Exception) {
-                _addAccess.postValue(Resource.Error(message = "" + e.localizedMessage))
+                _access.postValue(Resource.Error(message = "" + e.localizedMessage))
             }
         }
     }

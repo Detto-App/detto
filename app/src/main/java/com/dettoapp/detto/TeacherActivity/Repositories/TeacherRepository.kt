@@ -1,6 +1,7 @@
 package com.dettoapp.detto.TeacherActivity.Repositories
 
 import android.content.Context
+import android.util.Log
 import com.dettoapp.detto.Db.ClassroomDAO
 import com.dettoapp.detto.Models.AccessModel
 import com.dettoapp.detto.Models.Classroom
@@ -47,6 +48,8 @@ class TeacherRepository(private val dao: ClassroomDAO):BaseRepository() {
             putString(Constants.ACCESS,accessModel.type+" "+accessModel.sem)
             apply()
         }
+        Log.d("QQA","1")
+
         return RetrofitInstance.createClassroomAPI.addAccess(accessModel,tid,Utility.TOKEN)  .body()?:throw Exception("Unable to Add Access")
 
     }

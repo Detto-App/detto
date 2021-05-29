@@ -112,9 +112,10 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
                 }
             }
         })
-        viewModel.addAccess.observe(viewLifecycleOwner, Observer {
+        viewModel.access.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
+                    baseActivity.showToast("Success")
                     baseActivity.hideProgressDialog()
                 }
                 is Resource.Error -> {
@@ -167,7 +168,7 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
         viewModel.addAccess(access,sem)
 
     }
-    fun changeAccess(access: String,sem: String){
+    private fun changeAccess(access: String, sem: String){
         viewModel.changeAccess(access,sem)
     }
 }

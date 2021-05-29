@@ -68,7 +68,7 @@ interface CreateClassroomAPI {
 
     @POST("addAccess/{tid}")
     suspend fun addAccess(
-            @Body aaccesModel: AccessModel,
+            @Body accessModel: AccessModel,
             @Path(value = "tid") tid:String,
             @Header("Authorization") token:String
     ):Response<ResponseBody>
