@@ -41,7 +41,7 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
     private fun initialise() {
         val accesLevels =ArrayList<String>()
         accesLevels.add("Teacher")
-        val list =viewModel.getTeacherModel().accessModelList
+        val list =viewModel.getTeacherModel().accessmodelist
         if(list !=null)
             for(i in list)
                 accesLevels.add(i.type+" "+i.sem)

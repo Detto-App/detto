@@ -27,7 +27,7 @@ object Constants {
     const val ERROR_FILL_ALL_FIELDS = "Enter All Fields"
 
     val classDetailFragTabNames = arrayOf("Projects", "Students","Deadlines","Rubrics")
-    val studentClassDetailFragTabNames = arrayOf("Deadlines","Submission","Todo")
+    val studentClassDetailFragTabNames = arrayOf("Deadlines","Submission","Todo","Stats")
 
 
     const val PROJECT_CREATED = 0

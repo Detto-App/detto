@@ -63,13 +63,13 @@ class RoomConverters {
     }
 
     @TypeConverter
-    fun fromHashMap(map: HashMap<Int,String>):String{
+    fun fromHashMap(map: HashMap<String,String>):String{
         return Gson().toJson(map.values)
     }
 
     @TypeConverter
-    fun fromHashMapString(mapString:String):HashMap<Int,String>{
-        val type=object :TypeToken<HashMap<Int,String>>(){}.type
+    fun fromHashMapString(mapString:String):HashMap<String,String>{
+        val type=object :TypeToken<HashMap<String,String>>(){}.type
         return Gson().fromJson(mapString,type)
     }
 

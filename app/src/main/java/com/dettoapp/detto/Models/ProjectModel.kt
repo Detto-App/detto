@@ -24,8 +24,7 @@ data class ProjectModel(
         @ColumnInfo(name = "status")
         val status: String = PROJECT_PENDING,
         @ColumnInfo(name = "studentNameList")
-        val studentNameList:ArrayList<String> = ArrayList()
-
-
-
+        val studentNameList:ArrayList<String> = ArrayList(),
+        @ColumnInfo(name = "projectStudentList")
+        val projectStudentList: HashMap<String, String> = HashMap()
 )

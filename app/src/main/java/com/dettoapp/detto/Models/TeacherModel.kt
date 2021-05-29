@@ -4,5 +4,5 @@ data class TeacherModel(
         val name: String,
         val email: String,
         val uid: String,
-        val accessModelList:ArrayList<AccessModel> = ArrayList()
+        val accessmodelist:ArrayList<AccessModel> = ArrayList()
 )

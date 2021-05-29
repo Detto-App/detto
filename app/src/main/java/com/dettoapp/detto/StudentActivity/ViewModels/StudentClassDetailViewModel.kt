@@ -58,9 +58,11 @@ class StudentClassDetailViewModel(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val usnMapSet = usnMap.toHashSet()
                 _stuProjectCreation.postValue(Resource.Loading())
+                val usnMapSet = usnMap.toHashSet()
+
                 validate(title, description, usnMap, arrayList, usnMapSet)
+
                 val studentNameList=repository.getStudentNameList(usnMapSet)
                 val slist=ArrayList<String>(studentNameList.values)
                 val projectModel = ProjectModel(

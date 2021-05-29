@@ -62,6 +62,7 @@ class StudentHomeFrag : BaseFragment<StudentHomeFragViewModel, FragmentStudentHo
             baseActivity.showToast("Successfully fetched all data")
         }, onError = {
             baseActivity.showErrorSnackMessage(it)
+            baseActivity.hideProgressDialog()
         })
     }
 
