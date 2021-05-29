@@ -3,6 +3,7 @@ package com.dettoapp.detto.APIs
 import com.dettoapp.detto.Models.DeadlineModel
 import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.Models.StudentModel
+import com.dettoapp.detto.Models.Timeline
 import com.dettoapp.detto.Models.Todo
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -83,6 +84,12 @@ interface ProjectAPI {
         @Path(value = "pid")pid:String,
         @Header("Authorization")token: String
     ):Response<ArrayList<Todo>>
+
+    @GET("/getTimeline/{pid}")
+    suspend fun getTimeline(
+        @Path(value = "pid")pid:String,
+        @Header("Authorization")token: String
+    ):Response<ArrayList<Timeline>>
 
 
     @GET("/deleteTodo/{pid}/{toid}")

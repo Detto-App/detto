@@ -5,8 +5,7 @@ import com.dettoapp.detto.Models.User
 import retrofit2.Response
 import retrofit2.http.GET
 
-interface DettoAPI
-{
+interface DettoAPI {
     @GET("/data")
-    suspend fun getGetUsers():Response<ArrayList<User>>
+    suspend fun getGetUsers(): Response<ArrayList<User>>
 }

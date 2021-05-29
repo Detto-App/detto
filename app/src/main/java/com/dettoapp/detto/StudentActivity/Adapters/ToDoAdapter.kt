@@ -14,13 +14,13 @@ import com.dettoapp.detto.Models.Todo
 import com.dettoapp.detto.R
 import com.dettoapp.detto.UtilityClasses.Constants
 
-class ToDoAdapter(private val todoOperation:TodoOperation): RecyclerView
+class ToDoAdapter(private val todoOperation: TodoOperation) : RecyclerView
 .Adapter<ToDoAdapter.TodoViewHolder>() {
 
-    interface TodoOperation{
-        fun deleteTodo(toid:String)
+    interface TodoOperation {
+        fun deleteTodo(toid: String)
         fun reload()
-        fun changeStatus(toid:String)
+        fun changeStatus(toid: String)
     }
 
     private val diffCallBack = object : DiffUtil.ItemCallback<Todo>() {
@@ -50,7 +50,7 @@ class ToDoAdapter(private val todoOperation:TodoOperation): RecyclerView
     }
 
     inner class TodoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(todo:Todo) {
+        fun bind(todo: Todo) {
             val tittle = itemView.findViewById<TextView>(R.id.TodoTitle)
             val category = itemView.findViewById<TextView>(R.id.category)
             val assigned = itemView.findViewById<TextView>(R.id.role)
@@ -62,7 +62,7 @@ class ToDoAdapter(private val todoOperation:TodoOperation): RecyclerView
             category.text = todo.category
             assigned.text = todo.assigned_to
 
-            if(todo.status==0)
+            if (todo.status == 0)
                 itemView.setBackgroundColor(Color.GREEN)
 
             tododelete.setOnClickListener {

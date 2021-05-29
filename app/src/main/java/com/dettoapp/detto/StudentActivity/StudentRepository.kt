@@ -6,6 +6,7 @@ import com.dettoapp.detto.Db.ClassroomDAO
 import com.dettoapp.detto.Db.ProjectDAO
 import com.dettoapp.detto.Models.DeadlineModel
 import com.dettoapp.detto.Models.ProjectModel
+import com.dettoapp.detto.Models.Timeline
 import com.dettoapp.detto.Models.Todo
 import com.dettoapp.detto.UtilityClasses.BaseRepository
 import com.dettoapp.detto.UtilityClasses.Constants
@@ -18,13 +19,13 @@ import kotlin.collections.HashMap
 import kotlin.collections.HashSet
 
 class StudentRepository(private val dao: ClassroomDAO, private val projectDao: ProjectDAO) :
-        BaseRepository() {
+    BaseRepository() {
     fun getAllClassRooms() = dao.getAllClassRooms()
 
     fun getProjectFromSharedPref(classID: String, context: Context): Int {
         val sharedPreference =
-                context.getSharedPreferences(Constants.PROJECT_CLASS_FILE, Context.MODE_PRIVATE)
-                        ?: throw Exception("Data Storage Exception")
+            context.getSharedPreferences(Constants.PROJECT_CLASS_FILE, Context.MODE_PRIVATE)
+                ?: throw Exception("Data Storage Exception")
         return sharedPreference.getInt(classID, Constants.PROJECT_NOT_CREATED)
     }
 
@@ -46,8 +47,8 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
 
     suspend fun checkProjectStatus(pid: String): ProjectModel {
         val projectModel =
-                RetrofitInstance.projectAPI.getSingleProjectDetails(pid, Utility.TOKEN).body()
-                        ?: throw Exception("Unable to Find Classroom")
+            RetrofitInstance.projectAPI.getSingleProjectDetails(pid, Utility.TOKEN).body()
+                ?: throw Exception("Unable to Find Classroom")
         updateProject(projectModel)
         return projectModel
     }
@@ -58,19 +59,18 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
     }
 
 
-
     suspend fun storeEditedProject(cid: String, title: String, description: String): ProjectModel {
         val projectModelFromDatabase =
-                projectDao.getProject(cid) ?: throw Exception("No class FOund")
+            projectDao.getProject(cid) ?: throw Exception("No class FOund")
         val projectModel = ProjectModel(
-                projectModelFromDatabase.pid,
-                title,
-                description,
-                projectModelFromDatabase.studentList,
-                projectModelFromDatabase.tid,
-                projectModelFromDatabase.cid,
-                Constants.PROJECT_PENDING,
-                projectModelFromDatabase.studentNameList
+            projectModelFromDatabase.pid,
+            title,
+            description,
+            projectModelFromDatabase.studentList,
+            projectModelFromDatabase.tid,
+            projectModelFromDatabase.cid,
+            Constants.PROJECT_PENDING,
+            projectModelFromDatabase.studentNameList
         )
         updateProject(projectModel)
         RetrofitInstance.projectAPI.updateProject(projectModel, projectModel.pid, Utility.TOKEN)
@@ -79,16 +79,16 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
 
     private suspend fun getManyProjectDetails(): ArrayList<ProjectModel> {
         return RetrofitInstance.projectAPI.getManyProjectDetails(
-                Utility.STUDENT.projects,
-                Utility.TOKEN
+            Utility.STUDENT.projects,
+            Utility.TOKEN
         ).body()
-                ?: throw Exception("Unable to Fetch Projects")
+            ?: throw Exception("Unable to Fetch Projects")
     }
 
     suspend fun shouldFetch(context: Context) {
         val sharedPreference =
-                context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
-                        ?: throw Exception("Data Storage Exception")
+            context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
+                ?: throw Exception("Data Storage Exception")
 
         val listOfProjects = getManyProjectDetails()
 
@@ -103,8 +103,8 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
 
     fun getShouldFetch(context: Context): Boolean {
         val sharedPreference =
-                context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
-                        ?: throw Exception("Data Storage Exception")
+            context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
+                ?: throw Exception("Data Storage Exception")
         return sharedPreference.getBoolean(Constants.SHOULD_FETCH, true)
     }
 
@@ -112,15 +112,15 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
 
     suspend fun getDeadline(classID: String): List<DeadlineModel> {
         return RetrofitInstance.projectAPI.getDeadline(classID, Utility.TOKEN).body()
-                ?: throw Exception("Unable to Fetch Deadline")
+            ?: throw Exception("Unable to Fetch Deadline")
     }
 
     @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun getGDriveToken() = RetrofitInstance.gDriveAPI.getGDriveToken().body()?.string()
-            ?: throw Exception("Unable to Fetch GDrive token")
+        ?: throw Exception("Unable to Fetch GDrive token")
 
-    suspend fun createTodo(todo:Todo, pid:String){
-        RetrofitInstance.projectAPI.createTodo(todo, Utility.TOKEN,pid)
+    suspend fun createTodo(todo: Todo, pid: String) {
+        RetrofitInstance.projectAPI.createTodo(todo, Utility.TOKEN, pid)
     }
 
     suspend fun getTodo(pid: String): List<Todo> {
@@ -128,7 +128,13 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
             ?: throw Exception("Unable to Fetch Todo")
     }
 
-    fun storeProjectIdinSharedPref(cid:String,pid:String,context:Context){
+    suspend fun getTimeline(pid: String): List<Timeline> {
+        Log.d("123", "4")
+        return RetrofitInstance.projectAPI.getTimeline(pid, Utility.TOKEN).body()
+            ?: throw Exception("Unable to Fetch Timeline" + pid)
+    }
+
+    fun storeProjectIdinSharedPref(cid: String, pid: String, context: Context) {
         val sharedPreference =
             context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
                 ?: throw Exception("Data Storage Exception")
@@ -140,7 +146,7 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
         }
     }
 
-    fun getProjectFromSharedPrefForTodo(cid:String,context:Context):String{
+    fun getProjectFromSharedPrefForTodo(cid: String, context: Context): String {
         val sharedPreference =
             context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
                 ?: throw Exception("Data Storage Exception")
@@ -148,23 +154,24 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
         return sharedPreference.getString(cid, null)!!
     }
 
-    suspend fun getRoles(pid:String):List<String>{
-        Log.d("cvb","vi")
+    suspend fun getRoles(pid: String): List<String> {
+        Log.d("cvb", "vi")
         return projectDao.getProjectUsingPid(pid)!!.studentList.toList()
     }
 
-     suspend fun deleteTodo(pid:String,toid:String): ResponseBody {
-         return RetrofitInstance.projectAPI.deleteTodo(pid,toid ,Utility.TOKEN).body()
-             ?: throw Exception("Unable to Delete Todo")
+    suspend fun deleteTodo(pid: String, toid: String): ResponseBody {
+        return RetrofitInstance.projectAPI.deleteTodo(pid, toid, Utility.TOKEN).body()
+            ?: throw Exception("Unable to Delete Todo")
     }
 
-    suspend fun changeStatus(toid:String,pid:String):ResponseBody {
+    suspend fun changeStatus(toid: String, pid: String): ResponseBody {
         return RetrofitInstance.projectAPI.changeStatusOfTodo(toid, pid, Utility.TOKEN).body()
             ?: throw Exception("Data Storage Exception")
     }
-    suspend fun getStudentNameList(usnMapSet:HashSet<String>):HashMap<String,String>{
-        return RetrofitInstance.projectAPI.getStudentNameList(usnMapSet,Utility.TOKEN).body()
-            ?:throw  Exception("Illegal USN")
+
+    suspend fun getStudentNameList(usnMapSet: HashSet<String>): HashMap<String, String> {
+        return RetrofitInstance.projectAPI.getStudentNameList(usnMapSet, Utility.TOKEN).body()
+            ?: throw  Exception("Illegal USN")
     }
 
 

@@ -7,10 +7,7 @@ import com.dettoapp.detto.Chat.ChatRepository
 import com.dettoapp.detto.Chat.ChatViewModel
 import com.dettoapp.detto.LoginSignUpActivity.LoginSignUpRepository
 import com.dettoapp.detto.StudentActivity.StudentRepository
-import com.dettoapp.detto.StudentActivity.ViewModels.StudentClassDetailViewModel
-import com.dettoapp.detto.StudentActivity.ViewModels.StudentHomeFragViewModel
-import com.dettoapp.detto.StudentActivity.ViewModels.StudentSubmissionViewModel
-import com.dettoapp.detto.StudentActivity.ViewModels.TodoViewModel
+import com.dettoapp.detto.StudentActivity.ViewModels.*
 import com.dettoapp.detto.TeacherActivity.Repositories.ClassroomDetailRepository
 import com.dettoapp.detto.TeacherActivity.Repositories.TeacherRepository
 import com.dettoapp.detto.TeacherActivity.ViewModels.ClassRoomDetailViewModel
@@ -47,6 +44,9 @@ class BaseViewModelFactory(private val repository: BaseRepository, private val c
                 (repository as StudentRepository),context
             ) as T
             modelClass.isAssignableFrom(TodoViewModel::class.java) -> TodoViewModel(
+                (repository as StudentRepository),context
+            ) as T
+            modelClass.isAssignableFrom(TimelineViewModel::class.java) -> TimelineViewModel(
                 (repository as StudentRepository),context
             ) as T
 

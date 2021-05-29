@@ -26,18 +26,19 @@ class TodoViewModel(
     val todo: LiveData<Resource<List<Todo>>>
         get() = _todo
 
-    private lateinit var  pid:String
+    private lateinit var pid: String
 
     private val _project1 = MutableLiveData<Resource<List<String>>>()
     val project1: LiveData<Resource<List<String>>>
         get() = _project1
 
 
-    fun createTodo( tittle:String, category:String, assigned:String,status:Int){
+    fun createTodo(tittle: String, category: String, assigned: String, status: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val todo = Todo(
-                    Utility.createID(), tittle,category,assigned,status)
+                    Utility.createID(), tittle, category, assigned, status
+                )
                 repository.createTodo(todo, pid)
             } catch (e: Exception) {
                 _todo.postValue(Resource.Error(message = "" + e.localizedMessage))
@@ -45,7 +46,7 @@ class TodoViewModel(
         }
     }
 
-    fun getTodo(){
+    fun getTodo() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 //Keep it, It is to ease the UI loading as many items may load at first
@@ -65,17 +66,17 @@ class TodoViewModel(
     fun getRoles() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                Log.d("cvb","vikas")
+//                Log.d("cvb","vikas")
                 val projectModel = repository.getRoles(pid)
                 _project1.postValue(Resource.Success(data = projectModel!!))
-                Log.d("cvb",projectModel.toString())
-            }catch (e:Exception){
+//                Log.d("cvb",projectModel.toString())
+            } catch (e: Exception) {
                 _project1.postValue(Resource.Error(message = "" + e.localizedMessage))
             }
         }
     }
 
-    fun deleteTodo(toid:String){
+    fun deleteTodo(toid: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 repository.deleteTodo(pid, toid)
@@ -85,10 +86,10 @@ class TodoViewModel(
         }
     }
 
-    fun changeStatus(toid:String){
+    fun changeStatus(toid: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-               repository.changeStatus(toid,pid)
+                repository.changeStatus(toid, pid)
             } catch (e: Exception) {
                 _todo.postValue(Resource.Error(message = "" + e.localizedMessage))
             }

@@ -18,14 +18,14 @@ import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.databinding.FragmentTodoBinding
 
 
-class TodoFrag( private val cid:String,private val studentOperations: StudentOperations) :
-    BaseFragment<TodoViewModel, FragmentTodoBinding, StudentRepository>() ,
+class TodoFrag(private val cid: String, private val studentOperations: StudentOperations) :
+    BaseFragment<TodoViewModel, FragmentTodoBinding, StudentRepository>(),
     TodoDialog.TodoDialogListener,
     ToDoAdapter.TodoOperation {
 
     private lateinit var todoAdapter: ToDoAdapter
     private lateinit var tDialog: TodoDialog
-    private lateinit var roles:List<String>
+    private lateinit var roles: List<String>
 
     override fun getBaseOnCreate() {
         viewModel.getProjectFromSharedPrefForTodo(cid)
@@ -38,7 +38,7 @@ class TodoFrag( private val cid:String,private val studentOperations: StudentOpe
 
     }
 
-    fun initialise(){
+    fun initialise() {
         viewModel.getTodo()
         viewModel.getRoles()
 //        Log.d("vikas098",roles.toString())
@@ -53,13 +53,13 @@ class TodoFrag( private val cid:String,private val studentOperations: StudentOpe
 //        }
 
         binding.addtodo.setOnClickListener {
-            tDialog = TodoDialog(this,requireContext(),roles)
+            tDialog = TodoDialog(this, requireContext(), roles)
             tDialog.show()
         }
 
     }
 
-    fun liveDataObservers(){
+    fun liveDataObservers() {
         viewModel.todo.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
@@ -76,7 +76,7 @@ class TodoFrag( private val cid:String,private val studentOperations: StudentOpe
         viewModel.project1.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
-                    roles=it.data!!
+                    roles = it.data!!
                 }
             }
         })
@@ -97,13 +97,13 @@ class TodoFrag( private val cid:String,private val studentOperations: StudentOpe
         )
     }
 
-    override fun createTodo(tittle:String , category :String , assigned:String,status:Int) {
-        viewModel.createTodo(tittle,category,assigned,status)
+    override fun createTodo(tittle: String, category: String, assigned: String, status: Int) {
+        viewModel.createTodo(tittle, category, assigned, status)
         tDialog.dismiss()
         viewModel.getTodo()
     }
 
-    override fun deleteTodo(toid:String) {
+    override fun deleteTodo(toid: String) {
         viewModel.deleteTodo(toid)
     }
 

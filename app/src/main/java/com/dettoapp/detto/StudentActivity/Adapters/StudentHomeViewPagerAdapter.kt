@@ -8,6 +8,7 @@ import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.StudentActivity.Fragments.StatsStudentFragment
 import com.dettoapp.detto.StudentActivity.Fragments.StudentDeadlineFrag
 import com.dettoapp.detto.StudentActivity.Fragments.StudentSubmissionFrag
+import com.dettoapp.detto.StudentActivity.Fragments.TimelineFrag
 import com.dettoapp.detto.StudentActivity.Fragments.TodoFrag
 import com.dettoapp.detto.StudentActivity.StudentOperations
 
@@ -19,7 +20,7 @@ class StudentHomeViewPagerAdapter(
     FragmentStateAdapter
         (fa) {
 
-    private val NUM_OF_PAGES = 4
+    private val NUM_OF_PAGES = 5
     override fun getItemCount() = NUM_OF_PAGES
 
     override fun createFragment(position: Int): Fragment {
@@ -28,6 +29,7 @@ class StudentHomeViewPagerAdapter(
             1 -> StudentSubmissionFrag()
             2 -> TodoFrag( classroom.classroomuid,studentOperations)
             3 -> StatsStudentFragment()
+            4 -> TimelineFrag(classroom.classroomuid, studentOperations)
             else -> {
                 StudentDeadlineFrag(classroom, studentOperations)
             }
