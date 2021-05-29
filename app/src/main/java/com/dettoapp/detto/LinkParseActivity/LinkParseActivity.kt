@@ -77,8 +77,7 @@ class LinkParseActivity : BaseActivity(),DataBaseOperations {
         viewModel.linkParseTeacher.observe(this, Observer {
             when (it) {
                 is Resource.Success -> {
-                    Utility.navigateFragment(supportFragmentManager, R.id.teacherHomeContainer, ClassRoomDetailFrag(it.data!!,this ), "detailClassRoom")
-
+                    Utility.navigateFragment(supportFragmentManager, R.id.teacherHomeContainer, ClassRoomDetailFrag(it.data!!,this ), "detailClassRoom",false,false)
                 }
             }
         })
