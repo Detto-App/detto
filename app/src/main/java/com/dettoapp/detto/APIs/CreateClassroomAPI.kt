@@ -83,4 +83,11 @@ interface CreateClassroomAPI {
         @Path(value = "tid")tid: String,
         @Header("Authorization")token: String
     ):TeacherModel
+
+    @GET("getAccessClassRooms/{access}/{sem}")
+    suspend fun getAccessClassRooms(
+        @Path(value = "access")access:String,
+        @Path(value = "sem")sem:String,
+        @Header("Authorization")token: String
+    ):ArrayList<Classroom>
 }

@@ -20,6 +20,7 @@ object Constants {
     const val STUDENT = 1
     const val USER_ID = "uid"
     const val USER_TOKEN_KEY = "token"
+    const val ACCESSARRAY="accessArray"
 
     const val TYPE_CID = "cid"
     const val TYPE_PID = "pid"

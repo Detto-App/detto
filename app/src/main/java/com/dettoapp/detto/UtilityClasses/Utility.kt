@@ -16,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
 
 object Utility {
@@ -23,12 +24,15 @@ object Utility {
     lateinit var TEACHER: TeacherModel
     lateinit var STUDENT: StudentModel
     lateinit var TOKEN: String
+    lateinit var ACCESSARRAY:ArrayList<String>
 
     fun initialiseData(role: Int, appContext: Context) {
         GlobalScope.launch(Dispatchers.IO) {
             val sharedPreference = appContext.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
                 ?: throw Exception("Data Storage Exception")
             val dataInString = sharedPreference.getString(Constants.ENTIRE_MODEL_KEY, "")!!
+            val accesArray=sharedPreference.getString(Constants.ACCESSARRAY,"")!!
+
 
             if (role == Constants.TEACHER) {
                 val type = object : TypeToken<TeacherModel>() {}.type

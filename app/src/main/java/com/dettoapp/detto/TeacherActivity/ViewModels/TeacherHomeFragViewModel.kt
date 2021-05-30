@@ -73,6 +73,10 @@ class TeacherHomeFragViewModel(
     private val _getTeacherModel = MutableLiveData<Resource<TeacherModel>>()
     val getTeacherModel: LiveData<Resource<TeacherModel>>
         get() = _getTeacherModel
+    private val _accessChange = MutableLiveData<Resource<ArrayList<Classroom>>>()
+    val accessChange: LiveData<Resource<ArrayList<Classroom>>>
+        get() = _accessChange
+
 
 
     val allClassRooms = repository.getAllClassRooms()
@@ -132,10 +136,8 @@ class TeacherHomeFragViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val tid = Utility.getUID(context)
-                Log.d("QQA", "1")
                 val accessModel = AccessModel(access, sem)
                 repository.addAccess(context, accessModel, tid)
-                Log.d("QQA", "jhhj")
                 _access.postValue(Resource.Success("Success"))
             } catch (e: Exception) {
                 _access.postValue(Resource.Error(message = "" + e.localizedMessage))
@@ -161,8 +163,18 @@ class TeacherHomeFragViewModel(
     }
 
     fun changeAccess(access: String, sem: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
 
+                    val classrooms = repository.changeAccess(access, sem)
 
+                _accessChange.postValue(Resource.Success(classrooms))
+
+            } catch (e: Exception) {
+                _accessChange.postValue(Resource.Error(message = ""+e.localizedMessage))
+            }
+
+        }
     }
 
     fun getTeacherName() = repository.getTeacherName()

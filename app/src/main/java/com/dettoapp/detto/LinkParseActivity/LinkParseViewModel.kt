@@ -85,9 +85,12 @@ class LinkParseViewModel(private val repository: LinkParserRepository, private v
 
         tempClassroom=repository.getClassroom(project.cid)
         if(role==Constants.STUDENT) {
-            val localProject = repository.getLocalProject(project.cid)
-            if (!(localProject == null)) throw Exception("Sorry You can Only Join One Project For One Class")
-            else {
+            Log.d("ZZX","1")
+//            val localProject = repository.getLocalProject(project.cid)
+//            Log.d("ZZX",localProject.toString())
+
+//            if (!(localProject == null)) throw Exception("Sorry You can Only Join One Project For One Class")
+//            else {
                 val susn = repository.getSusn()
                 val studentModel = repository.getStudentModel(susn)
                 tempProject = project
@@ -113,7 +116,7 @@ class LinkParseViewModel(private val repository: LinkParserRepository, private v
                     _linkParse.postValue(Resource.Error(message = "Sorry ,You Are Not Authorized to Join This Group"))
 
                 }
-            }
+//            }
         } else if (role == Constants.TEACHER) {
             val projectDeatils = "Project Name" + project.title + "\nDescription: " + project.desc
 
