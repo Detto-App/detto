@@ -58,4 +58,12 @@ class TeacherRepository(private val dao: ClassroomDAO) : BaseRepository() {
         RetrofitInstance.createClassroomAPI.addAccess(accessModel,tid,Utility.TOKEN)
 
     }
+
+    suspend fun changeAccess(access:String,sem:String):ArrayList<Classroom>{
+        if(access=="Teach")
+            return ArrayList(dao.getAllClassRoomList())
+        else
+        return RetrofitInstance.createClassroomAPI.getAccessClassRooms(access,sem,Utility.TOKEN)
+
+    }
 }

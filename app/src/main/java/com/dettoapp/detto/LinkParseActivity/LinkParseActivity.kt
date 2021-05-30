@@ -143,24 +143,7 @@ class LinkParseActivity : BaseActivity(), DataBaseOperations {
                     }
                     "10${Constants.STUDENT}" -> {
                         viewModel.insertClassroom(Constants.STUDENT.toString())
-                        viewModel.insertProject()
-                        with(builder2)
-                        {
-                            setTitle("join the project now?")
-                            setMessage("Do You Wish to Join the project?")
-                            setPositiveButton("Yes") { _, _ ->
 
-                            }
-                            setNegativeButton("No") { _, _ ->
-                                showToast("Request rejected")
-                                finish()
-                            }
-
-                        }
-                        val alertDialog: AlertDialog = builder2.create().apply {
-                            setCancelable(false)
-                        }
-                        alertDialog.show()
 
                     }
                 }
@@ -176,6 +159,24 @@ class LinkParseActivity : BaseActivity(), DataBaseOperations {
             setCancelable(false)
         }
         alertDialog.show()
+        with(builder2)
+        {
+            setTitle("join the project now?")
+            setMessage("Do You Wish to Join the project?")
+            setPositiveButton("Yes") { _, _ ->
+                viewModel.insertProject()
+                finish()
+            }
+            setNegativeButton("No") { _, _ ->
+                showToast("Request rejected")
+                finish()
+            }
+
+        }
+        val alertDialog2: AlertDialog = builder2.create().apply {
+            setCancelable(false)
+        }
+        alertDialog2.show()
 
     }
 

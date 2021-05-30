@@ -35,6 +35,7 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
     private lateinit var classroomCreateFragment: ClassroomCreateFragment
     private lateinit var addAccessDialog: AddAccessDialog
     var list=ArrayList<AccessModel>()
+    var accesLevels = ArrayList<String>()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,8 +45,8 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
     }
 
     private fun initialise() {
-        val accesLevels = ArrayList<String>()
-        accesLevels.add("Teacher")
+        if(!("Teacher" in accesLevels))
+            accesLevels.add("Teacher")
 
         Log.d("PPW","fdhjdh")
         viewModel.getTeacherModelFromServer()
@@ -54,8 +55,11 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
                 accesLevels.add(i.type+" "+i.sem)
         val accessAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, accesLevels)
         binding.accessmenu.setAdapter(accessAdapter)
+
         binding.accessmenu.setOnItemClickListener { _, _, position, value ->
-            val selected = value.toString()
+            Log.d("EER",accesLevels.toString())
+
+            val selected = accesLevels[position]
             val access = selected.subSequence(0, selected.length - 2)
             val sem = selected.last()
             changeAccess(access.toString(), sem.toString())
@@ -130,7 +134,7 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
                 is Resource.Success -> {
                     baseActivity.hideProgressDialog()
                     list=it.data!!.accessmodelist
-                    val accesLevels =ArrayList<String>()
+                    accesLevels =ArrayList<String>()
                     accesLevels.add("Teacher")
                     if(list !=null)
                         for(i in list)
@@ -156,6 +160,26 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
                 is Resource.Success -> {
                     baseActivity.showToast("Success")
                     viewModel.getTeacherModelFromServer()
+//                    initialise()
+//                    liveDataObservers()
+
+                    baseActivity.hideProgressDialog()
+                }
+                is Resource.Error -> {
+                    baseActivity.hideProgressDialog()
+                    baseActivity.showErrorSnackMessage(it.message!!)
+                }
+                is Resource.Loading -> {
+                    baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
+                }
+            }
+        })
+
+        viewModel.accessChange.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is Resource.Success -> {
+                    baseActivity.showToast("Success")
+                    classroomAdapter.differ.submitList(it.data)
 //                    initialise()
 //                    liveDataObservers()
 
@@ -229,6 +253,7 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
     }
 
     private fun changeAccess(access: String, sem: String) {
+
         viewModel.changeAccess(access, sem)
     }
 
