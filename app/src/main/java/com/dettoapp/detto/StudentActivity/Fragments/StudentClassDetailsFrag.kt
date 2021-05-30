@@ -38,6 +38,10 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
     private lateinit var pDialog: ProjectDetailsDialog
     private lateinit var projectEditDialog: ProjectEditDialog
 
+    override fun getBaseOnCreate() {
+        viewModel.getProject(classroom.classroomuid)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -46,7 +50,7 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
     }
 
     private fun initialise(view: View) {
-        viewModel.getProject(classroom.classroomuid)
+
         binding.stuClassDetailsbutton.setOnClickListener {
             pDialog = ProjectDetailsDialog(this)
             pDialog.show(requireActivity().supportFragmentManager, "pCreate")
@@ -225,8 +229,5 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
         return this
     }
 
-    override fun getTodo() {
-
-    }
-
+    override fun getProjectModel() = projectModel
 }

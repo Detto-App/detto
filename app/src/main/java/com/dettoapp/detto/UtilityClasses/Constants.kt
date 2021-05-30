@@ -45,6 +45,9 @@ object Constants {
 
     const val CHAT_DISCONNECTED ="Disconnected"
 
+
+    const val GITHUB_API = "https://api.github.com/"
+
     const val BASE_URL_FCM = "https://fcm.googleapis.com/"
     const val SERVER_KEY_FCM = "AAAAb6g6I2A:APA91bFnVgQMRH9SUoJcF_MHmi5LaQdqmLK5KWCyeQzX_SJMAEDwjdE7BSINkendBSHQvbZFJNo9LXe-WJHfRHeer1e3-2n23SPPAmtf4WmZ9ZY9VGruzgS4Cdt0o-M6VrqQs7DMvqp5"
     const val CONTENT_TYPE_FCM = "application/json"

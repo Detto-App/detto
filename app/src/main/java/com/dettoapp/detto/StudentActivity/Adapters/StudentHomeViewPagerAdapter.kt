@@ -27,7 +27,7 @@ class StudentHomeViewPagerAdapter(
             0 -> StudentDeadlineFrag(classroom, studentOperations)
             1 -> StudentSubmissionFrag()
             2 -> TodoFrag( classroom.classroomuid,studentOperations)
-            3 -> StatsStudentFragment()
+            3 -> StatsStudentFragment(studentOperations)
             else -> {
                 StudentDeadlineFrag(classroom, studentOperations)
             }

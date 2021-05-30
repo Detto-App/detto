@@ -23,6 +23,14 @@ class RetrofitInstance {
 
         }
 
+        private val githubRetrofit by lazy {
+            Retrofit.Builder()
+                .baseUrl(Constants.GITHUB_API)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+        }
+
         val dettoAPI: DettoAPI by lazy {
             retrofit.create(DettoAPI::class.java)
         }
@@ -46,6 +54,9 @@ class RetrofitInstance {
             retrofit.create(GDriveAPI::class.java)
         }
 
+        val githubAPI:GithubAPI by lazy {
+            githubRetrofit.create(GithubAPI::class.java)
+        }
     }
 
 }
