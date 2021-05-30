@@ -23,8 +23,8 @@ class DeadlineDialog(private val deadlineDialogListener: DeadlineDialogListener)
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_deadline_dialog, container, false)
     }
@@ -32,9 +32,9 @@ class DeadlineDialog(private val deadlineDialogListener: DeadlineDialogListener)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val dateRangePicker =
-                MaterialDatePicker.Builder.dateRangePicker()
-                        .setTitleText("Select dates")
-                        .build()
+            MaterialDatePicker.Builder.dateRangePicker()
+                .setTitleText("Select dates")
+                .build()
 
         binding.datepicker.setOnClickListener {
             dateRangePicker.show(requireActivity().supportFragmentManager, " ")

@@ -18,10 +18,10 @@ import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
 fun FragmentActivity.requestPermission(
-        permission: String,
-        granted: () -> Unit = {},
-        denied: (permission: String) -> Unit = {},
-        explained: (permission: String) -> Unit = {}
+    permission: String,
+    granted: () -> Unit = {},
+    denied: (permission: String) -> Unit = {},
+    explained: (permission: String) -> Unit = {}
 ): ReadOnlyProperty<FragmentActivity, EasyPermission> {
     return ActivityDelegateSingle(permission, granted, denied, explained)
 }
@@ -29,64 +29,89 @@ fun FragmentActivity.requestPermission(
 
 @SuppressLint("NewApi")
 fun FragmentActivity.requestMultiplePermission(
-        vararg permissions: String,
-        granted: () -> Unit = {},
-        denied: (permissions: List<String>) -> Unit = {},
-        explained: (permissions: List<String>) -> Unit = {}
+    vararg permissions: String,
+    granted: () -> Unit = {},
+    denied: (permissions: List<String>) -> Unit = {},
+    explained: (permissions: List<String>) -> Unit = {}
 ): ReadOnlyProperty<FragmentActivity, EasyPermission> {
-    return ActivityDelegateMultiple(permissions = permissions.asList(), granted = granted, deniedMultiple = denied, explainedMultiple = explained)
+    return ActivityDelegateMultiple(
+        permissions = permissions.asList(),
+        granted = granted,
+        deniedMultiple = denied,
+        explainedMultiple = explained
+    )
 }
 
 fun Fragment.requestPermission(
-        permission: String,
-        granted: () -> Unit = {},
-        denied: (permission: String) -> Unit = {},
-        explained: (permission: String) -> Unit = {}
+    permission: String,
+    granted: () -> Unit = {},
+    denied: (permission: String) -> Unit = {},
+    explained: (permission: String) -> Unit = {}
 ): ReadOnlyProperty<Fragment, EasyPermission> {
     return EasyPermission(this, permission = permission, granted = granted, denied = denied, explained = explained)
 }
 
 @SuppressLint("NewApi")
 fun Fragment.requestMultiplePermission(
-        vararg permissions: String,
-        granted: () -> Unit = {},
-        denied: (permissions: List<String>) -> Unit = {},
-        explained: (permissions: List<String>) -> Unit = {}
+    vararg permissions: String,
+    granted: () -> Unit = {},
+    denied: (permissions: List<String>) -> Unit = {},
+    explained: (permissions: List<String>) -> Unit = {}
 ): EasyPermission {
-    return EasyPermission(this, permissions = permissions.asList(), granted = granted, deniedMultiple = denied, explainedMultiple = explained)
+    return EasyPermission(
+        this,
+        permissions = permissions.asList(),
+        granted = granted,
+        deniedMultiple = denied,
+        explainedMultiple = explained
+    )
 }
 
-class ActivityDelegateSingle(private val permission: String,
-                             private val granted: () -> Unit,
-                             private val denied: (permission: String) -> Unit,
-                             private val explained: (permission: String) -> Unit
+class ActivityDelegateSingle(
+    private val permission: String,
+    private val granted: () -> Unit,
+    private val denied: (permission: String) -> Unit,
+    private val explained: (permission: String) -> Unit
 ) : ReadOnlyProperty<FragmentActivity, EasyPermission> {
     override fun getValue(thisRef: FragmentActivity, property: KProperty<*>): EasyPermission {
-        return EasyPermission(activity = thisRef, permission = permission, granted = granted, denied = denied, explained = explained)
+        return EasyPermission(
+            activity = thisRef,
+            permission = permission,
+            granted = granted,
+            denied = denied,
+            explained = explained
+        )
     }
 }
 
 class ActivityDelegateMultiple(
-        private val permissions: List<String>,
-        private val granted: () -> Unit,
-        private val deniedMultiple: (permissions: List<String>) -> Unit,
-        private val explainedMultiple: (permissions: List<String>) -> Unit
+    private val permissions: List<String>,
+    private val granted: () -> Unit,
+    private val deniedMultiple: (permissions: List<String>) -> Unit,
+    private val explainedMultiple: (permissions: List<String>) -> Unit
 ) : ReadOnlyProperty<FragmentActivity, EasyPermission> {
     override fun getValue(thisRef: FragmentActivity, property: KProperty<*>): EasyPermission {
-        return EasyPermission(activity = thisRef, permissions = permissions, granted = granted, deniedMultiple = deniedMultiple, explainedMultiple = explainedMultiple)
+        return EasyPermission(
+            activity = thisRef,
+            permissions = permissions,
+            granted = granted,
+            deniedMultiple = deniedMultiple,
+            explainedMultiple = explainedMultiple
+        )
     }
 }
 
 
-class EasyPermission(fragment: Fragment? = null,
-                     activity: FragmentActivity? = null,
-                     private val permission: String? = null,
-                     private val permissions: List<String>? = null,
-                     private val granted: (() -> Unit)? = null,
-                     private val denied: ((permission: String) -> Unit)? = null,
-                     private val explained: ((permission: String) -> Unit)? = null,
-                     private val deniedMultiple: ((permissions: List<String>) -> Unit)? = null,
-                     private val explainedMultiple: ((permissions: List<String>) -> Unit)? = null
+class EasyPermission(
+    fragment: Fragment? = null,
+    activity: FragmentActivity? = null,
+    private val permission: String? = null,
+    private val permissions: List<String>? = null,
+    private val granted: (() -> Unit)? = null,
+    private val denied: ((permission: String) -> Unit)? = null,
+    private val explained: ((permission: String) -> Unit)? = null,
+    private val deniedMultiple: ((permissions: List<String>) -> Unit)? = null,
+    private val explainedMultiple: ((permissions: List<String>) -> Unit)? = null
 ) : ReadOnlyProperty<Any, EasyPermission> {
 
     private var permissionResult: ActivityResultLauncher<String>? = null
@@ -123,20 +148,35 @@ class EasyPermission(fragment: Fragment? = null,
 
 
     @SuppressLint("NewApi")
-    private fun initialiseSinglePermission(fragmentOrActivity: FragmentActivity? = null, fragment: Fragment? = null): ActivityResultLauncher<String> {
+    private fun initialiseSinglePermission(
+        fragmentOrActivity: FragmentActivity? = null,
+        fragment: Fragment? = null
+    ): ActivityResultLauncher<String> {
         val fragActivityCallback = fragmentOrActivity?.let { getSinglePermissionCallBack(it) }
-                ?: getSinglePermissionCallBack(fragment!!.requireActivity())
+            ?: getSinglePermissionCallBack(fragment!!.requireActivity())
 
         return fragment?.registerForActivityResult(ActivityResultContracts.RequestPermission(), fragActivityCallback)
-                ?: fragmentOrActivity!!.registerForActivityResult(ActivityResultContracts.RequestPermission(), fragActivityCallback)
+            ?: fragmentOrActivity!!.registerForActivityResult(
+                ActivityResultContracts.RequestPermission(),
+                fragActivityCallback
+            )
     }
 
-    private fun initialiseMultiplePermission(fragmentOrActivity: FragmentActivity? = null, fragment: Fragment? = null): ActivityResultLauncher<Array<String>> {
+    private fun initialiseMultiplePermission(
+        fragmentOrActivity: FragmentActivity? = null,
+        fragment: Fragment? = null
+    ): ActivityResultLauncher<Array<String>> {
         val fragActivityCallback = fragmentOrActivity?.let { getMultiplePermissionCallBack(it) }
-                ?: getMultiplePermissionCallBack(fragment!!.requireActivity())
+            ?: getMultiplePermissionCallBack(fragment!!.requireActivity())
 
-        return fragment?.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions(), fragActivityCallback)
-                ?: fragmentOrActivity!!.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions(), fragActivityCallback)
+        return fragment?.registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions(),
+            fragActivityCallback
+        )
+            ?: fragmentOrActivity!!.registerForActivityResult(
+                ActivityResultContracts.RequestMultiplePermissions(),
+                fragActivityCallback
+            )
     }
 
 
@@ -220,8 +260,8 @@ class EasyPermission(fragment: Fragment? = null,
     }
 
     private fun selfCheckPermission(permission: String) = ContextCompat.checkSelfPermission(
-            context!!,
-            permission
+        context!!,
+        permission
     ) == PackageManager.PERMISSION_GRANTED
 
     override fun getValue(thisRef: Any, property: KProperty<*>): EasyPermission {

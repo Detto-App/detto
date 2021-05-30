@@ -7,18 +7,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dettoapp.detto.Chat.ChatServiceProvider
+import com.dettoapp.detto.Models.AccessModel
 import com.dettoapp.detto.Models.Classroom
+import com.dettoapp.detto.Models.TeacherModel
 import com.dettoapp.detto.TeacherActivity.Repositories.TeacherRepository
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.UtilityClasses.Utility.toLowerAndTrim
-import com.dettoapp.detto.Chat.ChatServiceProvider
-import com.dettoapp.detto.Models.AccessModel
-import com.dettoapp.detto.Models.TeacherModel
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.buffer
-import kotlinx.coroutines.flow.collect
-import kotlin.Exception
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
 @SuppressLint("StaticFieldLeak")
@@ -76,28 +75,31 @@ class TeacherHomeFragViewModel(
     val allClassRooms = repository.getAllClassRooms()
 
 
-
     fun classRoomData(
         classroomName: String,
         sem: String,
         sec: String,
         teamSize: String,
         projectType: String,
-        groupType:String
+        groupType: String
     ) {
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _classRoomCreation.postValue(Resource.Loading())
-                validate(classroomName, sem, sec, teamSize, projectType,groupType)
+                validate(classroomName, sem, sec, teamSize, projectType, groupType)
                 val classroom = Classroom(
 
-                        classroomName.toLowerAndTrim(),
-                        sem.toLowerAndTrim(),
-                        sec.toLowerAndTrim(),
-                        Utility.createID(),
-                        repository.getTeacherModel(),
-                        repository.getClassroomSettingsModel(teamSize.toLowerAndTrim(), projectType.toLowerAndTrim(),groupType.toLowerAndTrim())
+                    classroomName.toLowerAndTrim(),
+                    sem.toLowerAndTrim(),
+                    sec.toLowerAndTrim(),
+                    Utility.createID(),
+                    repository.getTeacherModel(),
+                    repository.getClassroomSettingsModel(
+                        teamSize.toLowerAndTrim(),
+                        projectType.toLowerAndTrim(),
+                        groupType.toLowerAndTrim()
+                    )
                 )
                 repository.insertClassroom(classroom)
                 repository.createClassroom(classroom)
@@ -122,31 +124,41 @@ class TeacherHomeFragViewModel(
             }
         }
     }
-    fun addAccess(access:String,sem:String) {
+
+    fun addAccess(access: String, sem: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val tid=Utility.getUID(context)
-                Log.d("QQA","1")
-                val accessModel=AccessModel(access,sem)
-                repository.addAccess(context,accessModel,tid)
-                Log.d("QQA","jhhj")
-                _access.postValue(Resource.Success("Success") )
+                val tid = Utility.getUID(context)
+                Log.d("QQA", "1")
+                val accessModel = AccessModel(access, sem)
+                repository.addAccess(context, accessModel, tid)
+                Log.d("QQA", "jhhj")
+                _access.postValue(Resource.Success("Success"))
             } catch (e: Exception) {
                 _access.postValue(Resource.Error(message = "" + e.localizedMessage))
             }
         }
     }
-    fun getTeacherModel():TeacherModel{
+
+    fun getTeacherModel(): TeacherModel {
         return repository.getTeacherModel()
     }
-    fun changeAccess(access: String,sem: String){
+
+    fun changeAccess(access: String, sem: String) {
 
 
     }
 
     fun getTeacherName() = repository.getTeacherName()
 
-    private fun validate(classroomName: String, sec: String, sem: String, projectType: String, teamSize: String,groupType: String) {
+    private fun validate(
+        classroomName: String,
+        sec: String,
+        sem: String,
+        projectType: String,
+        teamSize: String,
+        groupType: String
+    ) {
         if (classroomName.isEmpty() || sec.isEmpty() || sem.isEmpty() || projectType.isEmpty() || teamSize.isEmpty())
             throw Exception("Please Enter all Fields")
     }

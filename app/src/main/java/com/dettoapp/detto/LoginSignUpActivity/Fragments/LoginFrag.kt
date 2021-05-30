@@ -39,21 +39,21 @@ class LoginFrag : BaseFragment<LoginSignUpActivityViewModel, FragmentLoginBindin
             val role = roles.indexOf(roleSelected)
 
             viewModel.loginProcess(
-                    role,
-                    binding.emailLogin.editText?.text.toString(),
-                    binding.passwordLogin.editText?.text.toString()
+                role,
+                binding.emailLogin.editText?.text.toString(),
+                binding.passwordLogin.editText?.text.toString()
             )
         }
 
         binding.signUpText.setOnClickListener {
             Utility.navigateFragment(
-                    requireActivity().supportFragmentManager,
-                    R.id.loginFragContainer, SignUpFrag(), "splash", addToBackStack = true
+                requireActivity().supportFragmentManager,
+                R.id.loginFragContainer, SignUpFrag(), "splash", addToBackStack = true
             )
         }
 
         val adapter =
-                ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, roles)
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, roles)
         binding.role.setAdapter(adapter)
 
 
@@ -90,9 +90,11 @@ class LoginFrag : BaseFragment<LoginSignUpActivityViewModel, FragmentLoginBindin
 
     override fun getViewModelClass(): Class<LoginSignUpActivityViewModel> = LoginSignUpActivityViewModel::class.java
 
-    override fun getRepository(): LoginSignUpRepository = LoginSignUpRepository(DatabaseDetto.getInstance(requireContext()).classroomDAO)
+    override fun getRepository(): LoginSignUpRepository =
+        LoginSignUpRepository(DatabaseDetto.getInstance(requireContext()).classroomDAO)
 
-    override fun getFragmentBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentLoginBinding.inflate(inflater, container, false)
+    override fun getFragmentBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        FragmentLoginBinding.inflate(inflater, container, false)
 
     override fun getBaseViewModelOwner(): ViewModelStoreOwner = requireActivity()
 }

@@ -33,14 +33,18 @@ class LinkParserRepository(private val dao: ClassroomDAO, private val projectDAO
     }
 
     suspend fun regStudentToProject(pid: String) {
-        RetrofitInstance.projectAPI.regStudentToProject(pid, getSname(),getSusn(), Utility.TOKEN)
+        RetrofitInstance.projectAPI.regStudentToProject(pid, getSname(), getSusn(), Utility.TOKEN)
     }
-    suspend fun getStudentModel(susn:String):StudentModel{
-        return RetrofitInstance.projectAPI.getStudentModel(susn,Utility.TOKEN).body() ?: throw Exception("no Such Student")
+
+    suspend fun getStudentModel(susn: String): StudentModel {
+        return RetrofitInstance.projectAPI.getStudentModel(susn, Utility.TOKEN).body()
+            ?: throw Exception("no Such Student")
 
     }
-    suspend fun getClassroom(cid: String):Classroom{
-        return RetrofitInstance.createClassroomAPI.getClassroom(cid,Utility.TOKEN).body() ?:throw Exception("no classroom")
+
+    suspend fun getClassroom(cid: String): Classroom {
+        return RetrofitInstance.createClassroomAPI.getClassroom(cid, Utility.TOKEN).body()
+            ?: throw Exception("no classroom")
     }
 
 

@@ -12,11 +12,19 @@ import androidx.fragment.app.Fragment
 import com.dettoapp.detto.R
 import com.google.android.material.textfield.TextInputLayout
 
-class ClassroomCreateFragment(private val classroomCreateFragmentOnClickListener: ClassroomCreateFragmentOnClickListener) : Fragment() {
+class ClassroomCreateFragment(private val classroomCreateFragmentOnClickListener: ClassroomCreateFragmentOnClickListener) :
+    Fragment() {
 
 
     interface ClassroomCreateFragmentOnClickListener {
-        fun onClassCreated(classname: String, sem: String, sec: String, teamSize: String, projectType: String,groupType:String)
+        fun onClassCreated(
+            classname: String,
+            sem: String,
+            sec: String,
+            teamSize: String,
+            projectType: String,
+            groupType: String
+        )
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -38,11 +46,31 @@ class ClassroomCreateFragment(private val classroomCreateFragmentOnClickListener
         val projectType = view.findViewById<AutoCompleteTextView>(R.id.ProjectType)
         val groupType = view.findViewById<AutoCompleteTextView>(R.id.groupFormationType)
 
-        val semesterAdapter = ArrayAdapter(semester.context, android.R.layout.simple_spinner_dropdown_item, semester.context.resources.getStringArray(R.array.sem))
-        val sectionAdapter = ArrayAdapter(section.context, android.R.layout.simple_spinner_dropdown_item, section.context.resources.getStringArray(R.array.sec))
-        val teamSizeAdapter = ArrayAdapter(teamSize.context, android.R.layout.simple_spinner_dropdown_item, teamSize.context.resources.getStringArray(R.array.teamSize))
-        val projectTypeAdapter = ArrayAdapter(projectType.context, android.R.layout.simple_spinner_dropdown_item, projectType.context.resources.getStringArray(R.array.project_type))
-        val groupTypeAdapter = ArrayAdapter(groupType.context, android.R.layout.simple_spinner_dropdown_item, groupType.context.resources.getStringArray(R.array.group_type))
+        val semesterAdapter = ArrayAdapter(
+            semester.context,
+            android.R.layout.simple_spinner_dropdown_item,
+            semester.context.resources.getStringArray(R.array.sem)
+        )
+        val sectionAdapter = ArrayAdapter(
+            section.context,
+            android.R.layout.simple_spinner_dropdown_item,
+            section.context.resources.getStringArray(R.array.sec)
+        )
+        val teamSizeAdapter = ArrayAdapter(
+            teamSize.context,
+            android.R.layout.simple_spinner_dropdown_item,
+            teamSize.context.resources.getStringArray(R.array.teamSize)
+        )
+        val projectTypeAdapter = ArrayAdapter(
+            projectType.context,
+            android.R.layout.simple_spinner_dropdown_item,
+            projectType.context.resources.getStringArray(R.array.project_type)
+        )
+        val groupTypeAdapter = ArrayAdapter(
+            groupType.context,
+            android.R.layout.simple_spinner_dropdown_item,
+            groupType.context.resources.getStringArray(R.array.group_type)
+        )
 
 
         semester.setAdapter(semesterAdapter)
@@ -53,7 +81,14 @@ class ClassroomCreateFragment(private val classroomCreateFragmentOnClickListener
 
 
         btn.setOnClickListener {
-            classroomCreateFragmentOnClickListener.onClassCreated(classname.editText?.text.toString(), semester.text.toString(), section.text.toString(), teamSize.text.toString(), projectType.text.toString(),groupType.text.toString())
+            classroomCreateFragmentOnClickListener.onClassCreated(
+                classname.editText?.text.toString(),
+                semester.text.toString(),
+                section.text.toString(),
+                teamSize.text.toString(),
+                projectType.text.toString(),
+                groupType.text.toString()
+            )
         }
     }
 

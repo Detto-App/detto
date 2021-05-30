@@ -1,13 +1,13 @@
 package com.dettoapp.detto.StudentActivity.Fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dettoapp.detto.Models.ProjectModel
+import androidx.fragment.app.Fragment
 import com.dettoapp.detto.R
 import com.dettoapp.detto.StudentActivity.Adapters.StatsAdapter
 import com.dettoapp.detto.StudentActivity.StudentOperations

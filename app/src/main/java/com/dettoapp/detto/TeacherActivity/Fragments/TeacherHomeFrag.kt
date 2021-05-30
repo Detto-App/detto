@@ -25,7 +25,9 @@ import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentTeacherHomeBinding
 
 
-class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHomeBinding, TeacherRepository>(), ClassroomCreateFragment.ClassroomCreateFragmentOnClickListener, ClassroomAdapter.ClassRoomAdapterClickListener, DataBaseOperations,AddAccessDialog.AddAccessDialogListener {
+class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHomeBinding, TeacherRepository>(),
+    ClassroomCreateFragment.ClassroomCreateFragmentOnClickListener, ClassroomAdapter.ClassRoomAdapterClickListener,
+    DataBaseOperations, AddAccessDialog.AddAccessDialogListener {
 
     private lateinit var classroomAdapter: ClassroomAdapter
     private lateinit var classroomCreateFragment: ClassroomCreateFragment
@@ -39,22 +41,27 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
     }
 
     private fun initialise() {
-        val accesLevels =ArrayList<String>()
+        val accesLevels = ArrayList<String>()
         accesLevels.add("Teacher")
-        val list =viewModel.getTeacherModel().accessmodelist
-        if(list !=null)
-            for(i in list)
-                accesLevels.add(i.type+" "+i.sem)
+        val list = viewModel.getTeacherModel().accessmodelist
+        if (list != null)
+            for (i in list)
+                accesLevels.add(i.type + " " + i.sem)
         val accessAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, accesLevels)
         binding.accessmenu.setAdapter(accessAdapter)
         binding.accessmenu.setOnItemClickListener { _, _, position, value ->
-            val selected=value.toString()
-            val access=selected.subSequence(0,selected.length-2)
-            val sem=selected.last()
-            changeAccess(access.toString(),sem.toString())
+            val selected = value.toString()
+            val access = selected.subSequence(0, selected.length - 2)
+            val sem = selected.last()
+            changeAccess(access.toString(), sem.toString())
         }
         binding.btnfab.setOnClickListener {
-            Utility.navigateFragment(requireActivity().supportFragmentManager, R.id.teacherHomeContainer, ClassroomCreateFragment(this), "ddd")
+            Utility.navigateFragment(
+                requireActivity().supportFragmentManager,
+                R.id.teacherHomeContainer,
+                ClassroomCreateFragment(this),
+                "ddd"
+            )
         }
         classroomAdapter = ClassroomAdapter(viewModel.getTeacherName(), this)
         binding.teacherRecyclerView.apply {
@@ -68,8 +75,8 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
             }
         })
         binding.addaccess.setOnClickListener {
-            addAccessDialog= AddAccessDialog(this)
-            addAccessDialog.show(requireActivity().supportFragmentManager,"add access dialog")
+            addAccessDialog = AddAccessDialog(this)
+            addAccessDialog.show(requireActivity().supportFragmentManager, "add access dialog")
         }
 
     }
@@ -86,7 +93,8 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
 
                     baseActivity.hideProgressDialog()
                     baseActivity.showErrorSnackMessage(it.message!!, classroomCreateFragment.getViewDialog())
-                    Toast.makeText(requireContext().applicationContext, "Please Select All Fields", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext().applicationContext, "Please Select All Fields", Toast.LENGTH_LONG)
+                        .show()
                 }
                 is Resource.Loading -> {
                     baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
@@ -133,22 +141,34 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
         })
     }
 
-    override fun onClassCreated(classname: String, sem: String, sec: String, teamSize: String, projectType: String,groupType:String) {
-        viewModel.classRoomData(classname, sem, sec, teamSize, projectType,groupType)
+    override fun onClassCreated(
+        classname: String,
+        sem: String,
+        sec: String,
+        teamSize: String,
+        projectType: String,
+        groupType: String
+    ) {
+        viewModel.classRoomData(classname, sem, sec, teamSize, projectType, groupType)
         activity?.supportFragmentManager?.popBackStack()
 
     }
 
     override fun onClassRoomClicked(classroom: Classroom) {
-        Utility.navigateFragment(requireActivity().supportFragmentManager, R.id.teacherHomeContainer, ClassRoomDetailFrag(classroom, this), "detailClassRoom")
+        Utility.navigateFragment(
+            requireActivity().supportFragmentManager,
+            R.id.teacherHomeContainer,
+            ClassRoomDetailFrag(classroom, this),
+            "detailClassRoom"
+        )
     }
 
     override fun onClassLinkShare(link: String) {
         ShareCompat.IntentBuilder.from(requireActivity())
-                .setText(link)
-                .setType("text/plain")
-                .setChooserTitle("Game Details")
-                .startChooser()
+            .setText(link)
+            .setType("text/plain")
+            .setChooserTitle("Game Details")
+            .startChooser()
     }
 
     override fun onClassRoomDelete(classroom: Classroom) {
@@ -159,16 +179,19 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
     override fun getViewModelClass(): Class<TeacherHomeFragViewModel> = TeacherHomeFragViewModel::class.java
 
     override fun getFragmentBinding(
-            inflater: LayoutInflater,
-            container: ViewGroup?
+        inflater: LayoutInflater,
+        container: ViewGroup?
     ): FragmentTeacherHomeBinding = FragmentTeacherHomeBinding.inflate(inflater, container, false)
 
-    override fun getRepository(): TeacherRepository = TeacherRepository(DatabaseDetto.getInstance(requireContext().applicationContext).classroomDAO)
+    override fun getRepository(): TeacherRepository =
+        TeacherRepository(DatabaseDetto.getInstance(requireContext().applicationContext).classroomDAO)
+
     override fun addAccess(access: String, sem: String) {
-        viewModel.addAccess(access,sem)
+        viewModel.addAccess(access, sem)
 
     }
-    private fun changeAccess(access: String, sem: String){
-        viewModel.changeAccess(access,sem)
+
+    private fun changeAccess(access: String, sem: String) {
+        viewModel.changeAccess(access, sem)
     }
 }

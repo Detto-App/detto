@@ -4,25 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.TeacherActivity.Adapters.StudentsAdapterClassRoomDetail
 import com.dettoapp.detto.TeacherActivity.Repositories.ClassroomDetailRepository
 import com.dettoapp.detto.TeacherActivity.ViewModels.ClassRoomDetailViewModel
-import com.dettoapp.detto.UtilityClasses.BaseActivity
 import com.dettoapp.detto.UtilityClasses.BaseFragment
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
-import com.dettoapp.detto.databinding.FragmentClassroomProjectsBinding
 import com.dettoapp.detto.databinding.FragmentStudentsInClassBinding
 
 
 class StudentsInClassFragment(private val classroomDetailOperations: ClassroomDetailOperations) :
-        BaseFragment<ClassRoomDetailViewModel, FragmentStudentsInClassBinding, ClassroomDetailRepository>() {
+    BaseFragment<ClassRoomDetailViewModel, FragmentStudentsInClassBinding, ClassroomDetailRepository>() {
 
 
     private lateinit var studentsAdapter: StudentsAdapterClassRoomDetail
@@ -46,7 +42,7 @@ class StudentsInClassFragment(private val classroomDetailOperations: ClassroomDe
                 is Resource.Error -> {
                     binding.progressBarStudentSV.visibility = View.GONE
                     binding.swipeToRefreshClassroomDetail.isRefreshing = false
-                  baseActivity.showErrorSnackMessage(it.message!!)
+                    baseActivity.showErrorSnackMessage(it.message!!)
                 }
                 is Resource.Loading -> {
                     baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
@@ -73,6 +69,7 @@ class StudentsInClassFragment(private val classroomDetailOperations: ClassroomDe
 
         classroomDetailOperations.getClassroomStudents()
     }
+
     override fun getViewModelClass(): Class<ClassRoomDetailViewModel> {
         return ClassRoomDetailViewModel::class.java
     }
@@ -81,7 +78,7 @@ class StudentsInClassFragment(private val classroomDetailOperations: ClassroomDe
         inflater: LayoutInflater,
         container: ViewGroup?
     ): FragmentStudentsInClassBinding {
-        return FragmentStudentsInClassBinding.inflate(inflater,container,false)
+        return FragmentStudentsInClassBinding.inflate(inflater, container, false)
     }
 
     override fun getRepository(): ClassroomDetailRepository {

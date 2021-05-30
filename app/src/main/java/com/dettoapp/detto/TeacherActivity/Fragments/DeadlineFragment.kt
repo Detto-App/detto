@@ -1,7 +1,6 @@
 package com.dettoapp.detto.TeacherActivity.Fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,6 @@ import androidx.core.util.Pair
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.LinearLayoutManager
-
 import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.TeacherActivity.Adapters.DeadlineAdapterClassroomDetail
 import com.dettoapp.detto.TeacherActivity.Dialog.DeadlineDialog
@@ -18,13 +16,12 @@ import com.dettoapp.detto.TeacherActivity.ViewModels.ClassRoomDetailViewModel
 import com.dettoapp.detto.UtilityClasses.BaseFragment
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
-import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentDeadlineBinding
 import com.google.android.material.datepicker.MaterialDatePicker
 
 class DeadlineFragment(private val operations: ClassroomDetailOperations) :
-        BaseFragment<ClassRoomDetailViewModel, FragmentDeadlineBinding, ClassroomDetailRepository>(),
-        DeadlineDialog.DeadlineDialogListener {
+    BaseFragment<ClassRoomDetailViewModel, FragmentDeadlineBinding, ClassroomDetailRepository>(),
+    DeadlineDialog.DeadlineDialogListener {
 
     private lateinit var deadlineAdapter: DeadlineAdapterClassroomDetail
     private lateinit var dDialog: DeadlineDialog
@@ -35,7 +32,7 @@ class DeadlineFragment(private val operations: ClassroomDetailOperations) :
         liveDataObservers()
     }
 
-    private fun initialise(){
+    private fun initialise() {
         deadlineAdapter = DeadlineAdapterClassroomDetail()
         binding.deadlineRecyclerView.apply {
             adapter = deadlineAdapter
@@ -48,7 +45,7 @@ class DeadlineFragment(private val operations: ClassroomDetailOperations) :
         operations.getDeadlineFromServer()
     }
 
-    fun liveDataObservers(){
+    fun liveDataObservers() {
         viewModel.deadline.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
@@ -62,15 +59,15 @@ class DeadlineFragment(private val operations: ClassroomDetailOperations) :
                 }
                 is Resource.Error -> {
                     binding.prgressBarDeadline.visibility = View.GONE
-                    binding.noDeadlines.visibility=View.VISIBLE
-                    binding.noDeadlines.text="There are no Deadlines"
+                    binding.noDeadlines.visibility = View.VISIBLE
+                    binding.noDeadlines.text = "There are no Deadlines"
                 }
                 is Resource.Loading -> {
                     binding.prgressBarDeadline.visibility = View.VISIBLE
 
                     baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
                 }
-                is Resource.Confirm ->{
+                is Resource.Confirm -> {
                     binding.prgressBarDeadline.visibility = View.GONE
                     baseActivity.hideProgressDialog()
                 }
@@ -92,8 +89,8 @@ class DeadlineFragment(private val operations: ClassroomDetailOperations) :
     }
 
     override fun getFragmentBinding(
-            inflater: LayoutInflater,
-            container: ViewGroup?
+        inflater: LayoutInflater,
+        container: ViewGroup?
     ): FragmentDeadlineBinding {
         return FragmentDeadlineBinding.inflate(inflater, container, false)
     }

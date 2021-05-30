@@ -39,7 +39,7 @@ class StudentHomeFrag : BaseFragment<StudentHomeFragViewModel, FragmentStudentHo
 
     private fun liveDataObservers() {
 
-        observeWithLiveData(viewModel.allClassRooms,onSuccess = {
+        observeWithLiveData(viewModel.allClassRooms, onSuccess = {
             studentClassroomAdapter.differ.submitList(it)
         })
 
@@ -48,16 +48,15 @@ class StudentHomeFrag : BaseFragment<StudentHomeFragViewModel, FragmentStudentHo
 //        })
 
 
-
         observeWithLiveData(viewModel.project1, onLoading = {
             baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
         }, onConfirm = {
             baseActivity.showAlertDialog("Old Projects",
-                    "Old projects found  \n press \"Yes\" to fetch", yesString = "Yes", yesFunction = {
-                viewModel.download()
-            }, noFunction = {
-                requireActivity().finish()
-            })
+                "Old projects found  \n press \"Yes\" to fetch", yesString = "Yes", yesFunction = {
+                    viewModel.download()
+                }, noFunction = {
+                    requireActivity().finish()
+                })
         }, onSuccess = {
             baseActivity.hideProgressDialog()
             baseActivity.showToast("Successfully fetched all data")
@@ -69,14 +68,17 @@ class StudentHomeFrag : BaseFragment<StudentHomeFragViewModel, FragmentStudentHo
 
 
     override fun onViewHolderClick(classroom: Classroom) {
-        Utility.navigateFragment(requireActivity().supportFragmentManager, R.id.StudentFragContainer,
-                StudentClassDetailsFrag(classroom), "abcd", true)
+        Utility.navigateFragment(
+            requireActivity().supportFragmentManager, R.id.StudentFragContainer,
+            StudentClassDetailsFrag(classroom), "abcd", true
+        )
 
     }
 
     override fun getViewModelClass(): Class<StudentHomeFragViewModel> = StudentHomeFragViewModel::class.java
 
-    override fun getFragmentBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentStudentHomeBinding = FragmentStudentHomeBinding.inflate(inflater, container, false)
+    override fun getFragmentBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentStudentHomeBinding =
+        FragmentStudentHomeBinding.inflate(inflater, container, false)
 
     override fun getRepository(): StudentRepository =
         StudentRepository(

@@ -11,13 +11,16 @@ import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.Models.RubricsModel
 
 
-@Database(entities = [Classroom::class, ProjectModel::class, ChatMessageLocalStoreModel::class, RubricsModel::class], version = 1)
+@Database(
+    entities = [Classroom::class, ProjectModel::class, ChatMessageLocalStoreModel::class, RubricsModel::class],
+    version = 1
+)
 @TypeConverters(RoomConverters::class)
 abstract class DatabaseDetto : RoomDatabase() {
 
     abstract val classroomDAO: ClassroomDAO
     abstract val projectDAO: ProjectDAO
-    abstract val chatMessageDAO : ChatMessageDAO
+    abstract val chatMessageDAO: ChatMessageDAO
     abstract val rubricsDAO: RubricsDAO
 
     companion object {
@@ -25,12 +28,12 @@ abstract class DatabaseDetto : RoomDatabase() {
         fun getInstance(context: Context): DatabaseDetto {
             synchronized(this) {
                 var instance: DatabaseDetto? =
-                        INSTANCE
+                    INSTANCE
                 if (instance == null) {
                     instance = Room.databaseBuilder(
-                            context.applicationContext,
-                            DatabaseDetto::class.java,
-                            "classroom_data_database"
+                        context.applicationContext,
+                        DatabaseDetto::class.java,
+                        "classroom_data_database"
                     ).build()
                 }
                 return instance

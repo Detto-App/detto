@@ -6,9 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.viewbinding.library.fragment.viewBinding
 import androidx.fragment.app.DialogFragment
-import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.R
-import com.dettoapp.detto.databinding.DialogProjectDetailsBinding
 import com.dettoapp.detto.databinding.DialogProjectEditBinding
 
 class ProjectEditDialog(private val projectEditDialogClickListener: ProjectEditDialogClickListner) : DialogFragment() {

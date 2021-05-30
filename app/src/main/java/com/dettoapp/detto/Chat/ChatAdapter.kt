@@ -48,7 +48,13 @@ class ChatAdapter(private val userID: String) : RecyclerView.Adapter<RecyclerVie
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             0 -> ChatSendViewHolder(ChatCellSendBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-            else -> ChatReceiveViewHolder(ChatCellReceiveBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            else -> ChatReceiveViewHolder(
+                ChatCellReceiveBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
 
         }
     }

@@ -3,21 +3,19 @@ package com.dettoapp.detto.TeacherActivity.Adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.R
 import com.dettoapp.detto.UtilityClasses.Utility.toLowerAndTrim
 import com.google.android.material.textfield.TextInputLayout
 
-class RubricsAdapter():RecyclerView.Adapter<RubricsAdapter.addRubrics>() {
+class RubricsAdapter() : RecyclerView.Adapter<RubricsAdapter.addRubrics>() {
     private val rubricsList = ArrayList<String>()
     private val valueHashMap = HashMap<Int, String>()
-    private val marksHashMap=HashMap<Int,Int>()
-    private val convertHashMap=HashMap<Int,Int>()
+    private val marksHashMap = HashMap<Int, Int>()
+    private val convertHashMap = HashMap<Int, Int>()
 
     private val diffUtil = object : DiffUtil.ItemCallback<String>() {
         override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
@@ -52,9 +50,9 @@ class RubricsAdapter():RecyclerView.Adapter<RubricsAdapter.addRubrics>() {
         fun bind(value: String, position: Int) {
             val title = itemView.findViewById<TextInputLayout>(R.id.rubrics_title)
             val marks = itemView.findViewById<TextInputLayout>(R.id.rubrics_marks)
-            val slno =itemView.findViewById<TextInputLayout>(R.id.slno)
-            val convert =itemView.findViewById<TextInputLayout>(R.id.convertTo)
-            slno.hint="$value"
+            val slno = itemView.findViewById<TextInputLayout>(R.id.slno)
+            val convert = itemView.findViewById<TextInputLayout>(R.id.convertTo)
+            slno.hint = "$value"
             title.editText?.setText("")
             marks.editText?.setText("")
             title.editText?.doAfterTextChanged {
@@ -62,10 +60,10 @@ class RubricsAdapter():RecyclerView.Adapter<RubricsAdapter.addRubrics>() {
 
             }
             marks.editText?.doAfterTextChanged {
-                marksHashMap[position]=marks.editText?.text.toString().toInt()
+                marksHashMap[position] = marks.editText?.text.toString().toInt()
             }
             convert.editText?.doAfterTextChanged {
-                convertHashMap[position]=convert.editText?.text.toString().toInt()
+                convertHashMap[position] = convert.editText?.text.toString().toInt()
             }
         }
     }
@@ -73,8 +71,8 @@ class RubricsAdapter():RecyclerView.Adapter<RubricsAdapter.addRubrics>() {
     fun addOption() {
         rubricsList.add("" + (rubricsList.size + 1))
         valueHashMap[(rubricsList.size - 1)] = ""
-        marksHashMap[(rubricsList.size-1)]=0
-        convertHashMap[(rubricsList.size-1)]=0
+        marksHashMap[(rubricsList.size - 1)] = 0
+        convertHashMap[(rubricsList.size - 1)] = 0
         differ.submitList(ArrayList(rubricsList))
     }
 
@@ -82,9 +80,9 @@ class RubricsAdapter():RecyclerView.Adapter<RubricsAdapter.addRubrics>() {
         if (rubricsList.size == 0)
             return
         valueHashMap.remove(rubricsList.size - 1)
-        marksHashMap.remove(rubricsList.size-1)
+        marksHashMap.remove(rubricsList.size - 1)
         rubricsList.removeAt(rubricsList.size - 1)
-        convertHashMap.remove(rubricsList.size-1)
+        convertHashMap.remove(rubricsList.size - 1)
         differ.submitList(ArrayList(rubricsList))
     }
 

@@ -36,25 +36,24 @@ class StudentClassDetailViewModel(
         get() = _studentDeadline
 
 
-
     fun getProject(cid: String) {
         operateWithLiveData(_project, mainFunction = {
             val projectModel = repository.getProject(cid)
             if (projectModel == null)
                 it.postValue(Resource.Error(message = "Not Found"))
             else {
-                    repository.storeProjectIdinSharedPref(projectModel.cid,projectModel.pid,context)
+                repository.storeProjectIdinSharedPref(projectModel.cid, projectModel.pid, context)
                 it.postValue(Resource.Success(data = projectModel))
             }
         })
     }
 
     fun storeProject(
-            title: String,
-            description: String,
-            usnMap: HashMap<Int, String>,
-            classroom: Classroom,
-            arrayList: ArrayList<String>
+        title: String,
+        description: String,
+        usnMap: HashMap<Int, String>,
+        classroom: Classroom,
+        arrayList: ArrayList<String>
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -64,12 +63,12 @@ class StudentClassDetailViewModel(
                 validate(title, description, usnMap, arrayList, usnMapSet)
 
                 val projectModel = ProjectModel(
-                        Utility.createID(),
-                        title.toLowerAndTrim(),
-                        description.toLowerAndTrim(),
-                        usnMapSet,
-                        classroom.teacher.uid,
-                        classroom.classroomuid
+                    Utility.createID(),
+                    title.toLowerAndTrim(),
+                    description.toLowerAndTrim(),
+                    usnMapSet,
+                    classroom.teacher.uid,
+                    classroom.classroomuid
                 )
                 repository.insertProject(projectModel)
                 repository.insertProjectToServer(projectModel)
@@ -80,7 +79,13 @@ class StudentClassDetailViewModel(
         }
     }
 
-    private fun validate(title: String, description: String, usnMap: HashMap<Int, String>, arrayList: ArrayList<String>, usnMapSet: Set<String>) {
+    private fun validate(
+        title: String,
+        description: String,
+        usnMap: HashMap<Int, String>,
+        arrayList: ArrayList<String>,
+        usnMapSet: Set<String>
+    ) {
         if (title.trim().isEmpty() || usnMapIsEmpty(usnMap))
             throw Exception("Title not Present")
         else if (description.trim().isEmpty())
@@ -129,7 +134,7 @@ class StudentClassDetailViewModel(
 
     }
 
-    fun getDeadlineFromServer(cid: String){
+    fun getDeadlineFromServer(cid: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val deadline = repository.getDeadline(cid)
@@ -144,9 +149,7 @@ class StudentClassDetailViewModel(
     }
 
     fun getProjectFromSharedPref(cid: String) =
-            repository.getProjectFromSharedPref(cid, context)
-
-
+        repository.getProjectFromSharedPref(cid, context)
 
 
 }

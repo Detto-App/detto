@@ -1,5 +1,5 @@
 package com.dettoapp.detto.Models
 
-class Token(val token:String) {
+class Token(val token: String) {
 
 }

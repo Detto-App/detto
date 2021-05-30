@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.util.Log
-import com.dettoapp.detto.UtilityClasses.Utility
 import com.google.android.gms.drive.DriveFolder
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
@@ -16,13 +15,14 @@ import com.google.api.services.drive.Drive
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
 import com.google.api.services.drive.model.Permission
-import kotlinx.coroutines.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.io.*
 import java.util.*
 import java.util.concurrent.Callable
-import java.util.concurrent.Executor
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import kotlin.collections.ArrayList
@@ -67,18 +67,18 @@ class DriveServiceHelper(driveService: Drive) {
         do {
             i++
             result = mDriveService.files()
-                    .list()
-                    .setQ(
-                            " mimeType = 'application/vnd.google-apps.folder' "
-                                    + " and 'root' in parents"
-                    )
+                .list()
+                .setQ(
+                    " mimeType = 'application/vnd.google-apps.folder' "
+                            + " and 'root' in parents"
+                )
 //                   .setQ("mimeType='image/png' or mimeType='text/pdf'")
-                    //setQ("'" + "root" + "' in parents")
-                    /*.setQ("mimeType='image/png' or mimeType='text/plain'")This si to list both image and text files. Mind the type of image(png or jpeg).setQ("mimeType='image/png' or mimeType='text/plain'") */
-                    .setSpaces("drive")
-                    .setFields("nextPageToken, files(id, name)")
-                    .setPageToken(pageToken)
-                    .execute()
+                //setQ("'" + "root" + "' in parents")
+                /*.setQ("mimeType='image/png' or mimeType='text/plain'")This si to list both image and text files. Mind the type of image(png or jpeg).setQ("mimeType='image/png' or mimeType='text/plain'") */
+                .setSpaces("drive")
+                .setFields("nextPageToken, files(id, name)")
+                .setPageToken(pageToken)
+                .execute()
             Log.d("SSSS", "hhdd")
             pageToken = result.nextPageToken
         } while (pageToken != null)
@@ -91,13 +91,13 @@ class DriveServiceHelper(driveService: Drive) {
     fun createFile(folderID: String = "root", mimeType: String = "text/plain"): Task<String> {
         return Tasks.call(mExecutor, Callable {
             val metadata: File = File()
-                    .setParents(Collections.singletonList(folderID))
-                    .setMimeType(mimeType)
-                    .setName("Untitled file")
+                .setParents(Collections.singletonList(folderID))
+                .setMimeType(mimeType)
+                .setName("Untitled file")
 
 
             val googleFile: File = mDriveService.files().create(metadata).execute()
-                    ?: throw IOException("Null result when requesting file creation.")
+                ?: throw IOException("Null result when requesting file creation.")
             googleFile.getId()
         })
     }
@@ -148,8 +148,8 @@ class DriveServiceHelper(driveService: Drive) {
 
 
             val mediaContent = InputStreamContent(
-                    "application/pdf",
-                    BufferedInputStream(FileInputStream(mediaFile))
+                "application/pdf",
+                BufferedInputStream(FileInputStream(mediaFile))
             )
 
             mediaContent.length = mediaFile.length()
@@ -230,9 +230,9 @@ class DriveServiceHelper(driveService: Drive) {
      */
     fun queryFiles(): Task<FileList> {
         return Tasks.call(mExecutor,
-                Callable {
-                    mDriveService.files().list().setSpaces("drive").execute()
-                })
+            Callable {
+                mDriveService.files().list().setSpaces("drive").execute()
+            })
     }
 
     /**
@@ -250,7 +250,7 @@ class DriveServiceHelper(driveService: Drive) {
      * created by [.createFilePickerIntent] using the given `contentResolver`.
      */
     fun openFileUsingStorageAccessFramework(
-            contentResolver: ContentResolver, uri: Uri?
+        contentResolver: ContentResolver, uri: Uri?
     ): Task<Pair<String, String>> {
         return Tasks.call(mExecutor, Callable {
 
@@ -283,18 +283,18 @@ class DriveServiceHelper(driveService: Drive) {
     }
 
     fun createOrGetFolderReference(folderName: String) =
-            getFolderID(folderName) ?: createFolder(folderName)
+        getFolderID(folderName) ?: createFolder(folderName)
 
     private fun getFolderID(folderName: String): File? {
         var pageToken: String? = null
         var file: File? = null
         do {
             val result: FileList = mDriveService.files().list()
-                    .setQ("mimeType='$TYPE_GOOGLE_DRIVE_FOLDER' and trashed=false and name='$folderName'")
-                    .setSpaces("drive")
-                    .setFields("nextPageToken, files(id, name)")
-                    .setPageToken(pageToken)
-                    .execute()
+                .setQ("mimeType='$TYPE_GOOGLE_DRIVE_FOLDER' and trashed=false and name='$folderName'")
+                .setSpaces("drive")
+                .setFields("nextPageToken, files(id, name)")
+                .setPageToken(pageToken)
+                .execute()
 
             if (result.files != null && result.files.size == 1)
                 file = result.files[0]
@@ -311,8 +311,8 @@ class DriveServiceHelper(driveService: Drive) {
 
 
         val file: File = mDriveService.files().create(fileMetadata)
-                .setFields("id")
-                .execute()
+            .setFields("id")
+            .execute()
 
         if (isShareable) {
             makeFolderShareable(file.id)
@@ -323,20 +323,26 @@ class DriveServiceHelper(driveService: Drive) {
 
     private fun makeFolderShareable(folderID: String) {
         val permission: Permission = Permission()
-                .setType("anyone")
-                .setRole("reader")
+            .setType("anyone")
+            .setRole("reader")
 
         mDriveService.Permissions().create(folderID, permission).execute()
     }
 
-    fun uploadFile(folderID: String, name: String, mimeType: String, mediaContent: InputStreamContent, customProgressListener: CustomProgressListener): Task<String> = Tasks.call(mExecutor) {
+    fun uploadFile(
+        folderID: String,
+        name: String,
+        mimeType: String,
+        mediaContent: InputStreamContent,
+        customProgressListener: CustomProgressListener
+    ): Task<String> = Tasks.call(mExecutor) {
 
         fileTransferList?.add(mediaContent.inputStream)
 
         val metadata: File = File()
-                .setParents(Collections.singletonList(folderID))
-                .setMimeType(mimeType)
-                .setName(name)
+            .setParents(Collections.singletonList(folderID))
+            .setMimeType(mimeType)
+            .setName(name)
 
         val createRequest = mDriveService.files().create(metadata, mediaContent)
         createRequest.fields = "id, webViewLink"

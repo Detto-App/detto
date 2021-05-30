@@ -8,16 +8,19 @@ import android.widget.TextView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.dettoapp.detto.R
 import com.dettoapp.detto.Models.Classroom
+import com.dettoapp.detto.R
 
-class StudentClassroomAdapter(private val studentClassroomAdapterCLickListener:StudentClassroomAdapter.
-StudentClassroomAdapterCLickListener): RecyclerView.Adapter<StudentClassroomAdapter.ClassroomViewHolder>() {
+class StudentClassroomAdapter(
+    private val studentClassroomAdapterCLickListener: StudentClassroomAdapter.
+    StudentClassroomAdapterCLickListener
+) : RecyclerView.Adapter<StudentClassroomAdapter.ClassroomViewHolder>() {
 
 
-    interface StudentClassroomAdapterCLickListener{
+    interface StudentClassroomAdapterCLickListener {
         fun onViewHolderClick(classroom: Classroom)
     }
+
     private val diffCallBack = object : DiffUtil.ItemCallback<Classroom>() {
         override fun areItemsTheSame(oldItem: Classroom, newItem: Classroom): Boolean {
             return oldItem.classroomuid == newItem.classroomuid
@@ -33,8 +36,8 @@ StudentClassroomAdapterCLickListener): RecyclerView.Adapter<StudentClassroomAdap
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClassroomViewHolder {
         return ClassroomViewHolder(
-                LayoutInflater.from(parent.context)
-                        .inflate(R.layout.studentclassroom_view_holder, parent, false)
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.studentclassroom_view_holder, parent, false)
         )
     }
 
@@ -56,7 +59,7 @@ StudentClassroomAdapterCLickListener): RecyclerView.Adapter<StudentClassroomAdap
             val teacherName = itemView.findViewById<TextView>(R.id.teachername)
             teacherName.text = classroom.teacher.name
 
-            itemView.setOnClickListener{
+            itemView.setOnClickListener {
                 studentClassroomAdapterCLickListener.onViewHolderClick(classroom)
 //                Toast.makeText(itemView.context,"", Toast.LENGTH_SHORT).show()
             }

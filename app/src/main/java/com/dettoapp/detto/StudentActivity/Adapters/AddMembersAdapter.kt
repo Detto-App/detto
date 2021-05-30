@@ -11,9 +11,6 @@ import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.R
 import com.dettoapp.detto.UtilityClasses.Utility.toLowerAndTrim
 import com.google.android.material.textfield.TextInputLayout
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import kotlin.collections.LinkedHashSet
 
 @Suppress("PrivatePropertyName")
 class AddMembersAdapter(classroom: Classroom) : RecyclerView.Adapter<AddMembersAdapter.MemberViewHolder>() {
@@ -37,8 +34,8 @@ class AddMembersAdapter(classroom: Classroom) : RecyclerView.Adapter<AddMembersA
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemberViewHolder {
         return MemberViewHolder(
-                LayoutInflater.from(parent.context)
-                        .inflate(R.layout.student_prject_details_view_holder, parent, false)
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.student_prject_details_view_holder, parent, false)
         )
     }
 

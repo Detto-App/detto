@@ -3,8 +3,6 @@ package com.dettoapp.detto.TeacherActivity.ViewModels
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
-import android.view.View
-import android.net.MacAddress
 import androidx.core.util.Pair
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,14 +10,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dettoapp.detto.Models.*
 import com.dettoapp.detto.TeacherActivity.Repositories.ClassroomDetailRepository
-import com.dettoapp.detto.UtilityClasses.Constants.toFormattedString
+import com.dettoapp.detto.UtilityClasses.Mapper
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 import com.dettoapp.detto.UtilityClasses.Utility
-import com.dettoapp.detto.UtilityClasses.Mapper
-import com.dettoapp.detto.UtilityClasses.Utility.toHashSet
-import com.dettoapp.detto.UtilityClasses.Utility.toLowerAndTrim
-import com.google.android.gms.tasks.*
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
@@ -34,8 +28,8 @@ import kotlin.collections.HashSet
 
 @SuppressLint("StaticFieldLeak")
 class ClassRoomDetailViewModel(
-        private val repository: ClassroomDetailRepository,
-        private val context: Context
+    private val repository: ClassroomDetailRepository,
+    private val context: Context
 ) : ViewModel() {
 
     private val TAG = "DDFF"
@@ -291,42 +285,42 @@ class ClassRoomDetailViewModel(
         }
     }
 
-     fun formTeams(classroom: Classroom) {
+    fun formTeams(classroom: Classroom) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val teamSize = classroom.settingsModel.teamSize.toInt()
-                val students=repository.getClassroomStudents(classroom.classroomuid)
-                Log.d("WRR",students.toString())
+                val students = repository.getClassroomStudents(classroom.classroomuid)
+                Log.d("WRR", students.toString())
 
                 val classSize = students.studentList.size
                 val studentsModels = ArrayList<StudentModel>(students.studentList)
                 var i = 0
                 val projectModelList = ArrayList<ProjectModel>()
                 val rem = classSize % teamSize
-                if(teamSize>classSize){
-                    Log.d("WRR","enf")
+                if (teamSize > classSize) {
+                    Log.d("WRR", "enf")
 
                     val studenUsnList = HashSet<String>()
                     val studentNameList = ArrayList<String>()
-                    for(k in 0 until classSize){
-                        Log.d("WRR",studentsModels[k].susn)
+                    for (k in 0 until classSize) {
+                        Log.d("WRR", studentsModels[k].susn)
 
 
                         studenUsnList.add(studentsModels[k].susn)
                         studentNameList.add(studentsModels[k].name)
 
                     }
-                    Log.d("WRR","enf3")
+                    Log.d("WRR", "enf3")
 
                     val projectModel = Mapper.mapProjectModel(
-                            Utility.createID(),
-                            studentUsnlist = studenUsnList,
-                            tid = classroom.teacher.uid,
-                            cid = classroom.classroomuid,
-                            studentNameList = studentNameList)
+                        Utility.createID(),
+                        studentUsnlist = studenUsnList,
+                        tid = classroom.teacher.uid,
+                        cid = classroom.classroomuid,
+                        studentNameList = studentNameList
+                    )
                     projectModelList.add(projectModel)
-                }
-                else {
+                } else {
                     while (i < (classSize - rem)) {
                         var j = 0
                         val studenUsnList = HashSet<String>()
@@ -340,11 +334,11 @@ class ClassRoomDetailViewModel(
                             j += 1
                         }
                         val projectModel = Mapper.mapProjectModel(
-                                Utility.createID(),
-                                studentUsnlist = studenUsnList,
-                                tid = classroom.teacher.uid,
-                                cid = classroom.classroomuid,
-                                studentNameList = studentNameList
+                            Utility.createID(),
+                            studentUsnlist = studenUsnList,
+                            tid = classroom.teacher.uid,
+                            cid = classroom.classroomuid,
+                            studentNameList = studentNameList
                         )
                         projectModelList.add(projectModel)
                         i += j
@@ -358,19 +352,19 @@ class ClassRoomDetailViewModel(
                         studenUsnList.add(studentsModels[i].susn)
                         studentNameList.add(studentsModels[i].name)
                         val projectModel = Mapper.mapProjectModel(
-                                Utility.createID(),
-                                studentUsnlist = studenUsnList,
-                                tid = classroom.teacher.uid,
-                                cid = classroom.classroomuid,
-                                studentNameList = studentNameList
+                            Utility.createID(),
+                            studentUsnlist = studenUsnList,
+                            tid = classroom.teacher.uid,
+                            cid = classroom.classroomuid,
+                            studentNameList = studentNameList
                         )
                         projectModelList.add(projectModel)
                         i += 1
 
                     }
                 }
-                Log.d("WRR","enf")
-                repository.formTeams(projectModelList,classroom.classroomuid)
+                Log.d("WRR", "enf")
+                repository.formTeams(projectModelList, classroom.classroomuid)
                 _autoProject.postValue(Resource.Confirm(message = "Done"))
             } catch (e: Exception) {
                 _autoProject.postValue(Resource.Error(message = "" + e.localizedMessage))

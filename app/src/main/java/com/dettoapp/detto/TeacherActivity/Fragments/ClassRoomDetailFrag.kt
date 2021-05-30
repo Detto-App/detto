@@ -1,6 +1,5 @@
 package com.dettoapp.detto.TeacherActivity.Fragments
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +11,6 @@ import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.R
 import com.dettoapp.detto.TeacherActivity.Adapters.ClassRoomDetailFragViewPagerAdapter
 import com.dettoapp.detto.TeacherActivity.DataBaseOperations
-import com.dettoapp.detto.TeacherActivity.Dialog.AddAccessDialog
 import com.dettoapp.detto.TeacherActivity.Repositories.ClassroomDetailRepository
 import com.dettoapp.detto.TeacherActivity.ViewModels.ClassRoomDetailViewModel
 import com.dettoapp.detto.UtilityClasses.BaseFragment
@@ -21,7 +19,6 @@ import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentClassRoomDetailBinding
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import java.util.*
 
@@ -46,20 +43,25 @@ class ClassRoomDetailFrag(
         binding.classRoomDetailName.text = classroom.classroomname.capitalize(Locale.ROOT)
         binding.classRoomDetailTeacherName.text =
             "By -" + classroom.teacher.name.capitalize(Locale.ROOT)
-        if(classroom.settingsModel.groupType==Constants.AUTO){
-            binding.formTeams.visibility=View.VISIBLE
+        if (classroom.settingsModel.groupType == Constants.AUTO) {
+            binding.formTeams.visibility = View.VISIBLE
         }
 
         binding.classRoomDetailMenu.setOnClickListener {
             showBottomDialog()
         }
 
-        binding.root.setOnClickListener{
+        binding.root.setOnClickListener {
 
         }
 
         binding.teacherChatButton.setOnClickListener {
-            Utility.navigateFragment(requireActivity().supportFragmentManager, R.id.teacherHomeContainer, ChatFragment(classroom, Utility.TEACHER.name + " - Teacher" , Utility.TEACHER.uid), "chat")
+            Utility.navigateFragment(
+                requireActivity().supportFragmentManager,
+                R.id.teacherHomeContainer,
+                ChatFragment(classroom, Utility.TEACHER.name + " - Teacher", Utility.TEACHER.uid),
+                "chat"
+            )
 
         }
 
@@ -72,7 +74,7 @@ class ClassRoomDetailFrag(
         }
 
         val viewPagerAdapter = ClassRoomDetailFragViewPagerAdapter(requireActivity(), this)
-            binding.viewPagerClassroomDetailFrag.adapter = viewPagerAdapter
+        binding.viewPagerClassroomDetailFrag.adapter = viewPagerAdapter
 
         TabLayoutMediator(
             binding.tabLayoutClassroomDetailFrag,
@@ -82,7 +84,8 @@ class ClassRoomDetailFrag(
             binding.viewPagerClassroomDetailFrag.setCurrentItem(tab.position, true)
         }.attach()
     }
-    fun liveDataObservers(){
+
+    fun liveDataObservers() {
         viewModel.autoProject.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             when (it) {
                 is Resource.Success -> {
@@ -96,15 +99,16 @@ class ClassRoomDetailFrag(
                 is Resource.Loading -> {
 //                    baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
                 }
-                is Resource.Confirm ->{
+                is Resource.Confirm -> {
                     baseActivity.showToast("done")
                     baseActivity.hideProgressDialog()
                 }
                 else -> {
                 }
             }
-    })
+        })
     }
+
     private fun showBottomDialog() {
         val bottomSheet = ClassRoomDetailModal(this)
         bottomSheet.show(requireActivity().supportFragmentManager, "classroomModal")
@@ -124,7 +128,7 @@ class ClassRoomDetailFrag(
         viewModel.getProjects(classroom.classroomuid)
     }
 
-    override fun getClassroom():String{
+    override fun getClassroom(): String {
         return classroom.classroomuid
     }
 
@@ -155,7 +159,6 @@ class ClassRoomDetailFrag(
     override fun getRepository(): ClassroomDetailRepository {
         return ClassroomDetailRepository(DatabaseDetto.getInstance(requireContext().applicationContext).rubricsDAO)
     }
-
 
 
 }

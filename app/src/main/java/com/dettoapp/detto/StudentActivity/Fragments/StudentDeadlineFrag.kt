@@ -22,9 +22,9 @@ import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentDeadlineBinding
 
 
-class StudentDeadlineFrag(private val classroom: Classroom,private val studentOperations: StudentOperations) :
+class StudentDeadlineFrag(private val classroom: Classroom, private val studentOperations: StudentOperations) :
     BaseFragment<StudentClassDetailViewModel, FragmentDeadlineBinding, StudentRepository>(),
-    StudentClassroomAdapter.StudentClassroomAdapterCLickListener{
+    StudentClassroomAdapter.StudentClassroomAdapterCLickListener {
 
     private lateinit var deadlineAdapter: DeadlineAdapterClassroomDetail
 
@@ -34,8 +34,8 @@ class StudentDeadlineFrag(private val classroom: Classroom,private val studentOp
         liveDataObservers()
     }
 
-    private fun initialise(){
-        binding.datePicker.visibility=View.GONE
+    private fun initialise() {
+        binding.datePicker.visibility = View.GONE
         deadlineAdapter = DeadlineAdapterClassroomDetail()
         binding.deadlineRecyclerView.apply {
             adapter = deadlineAdapter
@@ -44,7 +44,7 @@ class StudentDeadlineFrag(private val classroom: Classroom,private val studentOp
         viewModel.getDeadlineFromServer(classroom.classroomuid)
     }
 
-    fun liveDataObservers(){
+    fun liveDataObservers() {
         viewModel.studentDeadline.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
@@ -57,13 +57,13 @@ class StudentDeadlineFrag(private val classroom: Classroom,private val studentOp
                 is Resource.Error -> {
                     binding.prgressBarDeadline.visibility = View.GONE
                     baseActivity.hideProgressDialog()
-                    binding.noDeadlines.visibility=View.VISIBLE
+                    binding.noDeadlines.visibility = View.VISIBLE
                 }
                 is Resource.Loading -> {
                     binding.prgressBarDeadline.visibility = View.VISIBLE
                     baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
                 }
-                is Resource.Confirm ->{
+                is Resource.Confirm -> {
                     binding.prgressBarDeadline.visibility = View.GONE
                     baseActivity.hideProgressDialog()
                 }
@@ -74,8 +74,10 @@ class StudentDeadlineFrag(private val classroom: Classroom,private val studentOp
     }
 
     override fun onViewHolderClick(classroom: Classroom) {
-        Utility.navigateFragment(requireActivity().supportFragmentManager, R.id.StudentFragContainer,
-            StudentClassDetailsFrag(classroom), "abcd", true)
+        Utility.navigateFragment(
+            requireActivity().supportFragmentManager, R.id.StudentFragContainer,
+            StudentClassDetailsFrag(classroom), "abcd", true
+        )
 
     }
 
@@ -89,8 +91,10 @@ class StudentDeadlineFrag(private val classroom: Classroom,private val studentOp
     }
 
     override fun getRepository(): StudentRepository {
-        return StudentRepository( DatabaseDetto.getInstance(requireContext().applicationContext).classroomDAO,
-            DatabaseDetto.getInstance(requireContext().applicationContext).projectDAO)
+        return StudentRepository(
+            DatabaseDetto.getInstance(requireContext().applicationContext).classroomDAO,
+            DatabaseDetto.getInstance(requireContext().applicationContext).projectDAO
+        )
     }
 
     override fun getBaseViewModelOwner(): ViewModelStoreOwner {

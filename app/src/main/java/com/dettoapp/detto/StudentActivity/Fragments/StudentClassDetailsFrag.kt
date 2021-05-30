@@ -20,7 +20,6 @@ import com.dettoapp.detto.StudentActivity.Dialog.ProjectEditDialog
 import com.dettoapp.detto.StudentActivity.StudentOperations
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.StudentActivity.ViewModels.StudentClassDetailViewModel
-import com.dettoapp.detto.TeacherActivity.Adapters.ClassRoomDetailFragViewPagerAdapter
 import com.dettoapp.detto.UtilityClasses.BaseFragment
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
@@ -84,8 +83,10 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
             projectEditDialog.show(requireActivity().supportFragmentManager, "pEdit")
         }
 
-        val viewPagerAdapter = StudentHomeViewPagerAdapter(requireActivity(),classroom
-            , this)
+        val viewPagerAdapter = StudentHomeViewPagerAdapter(
+            requireActivity(), classroom
+            , this
+        )
 
         binding.studentinclassviewpager.adapter = viewPagerAdapter
 
@@ -140,22 +141,20 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
                     if (it.data.status == Constants.PROJECT_ACCEPTED) {
                         binding.statusDisplay1.setBackgroundColor(Color.GREEN)
                         binding.statusDisplay1.text = Constants.PROJECT_ACCEPTED
-                        binding.checkStatus.visibility=View.GONE
-                        binding.edit.visibility=View.GONE
+                        binding.checkStatus.visibility = View.GONE
+                        binding.edit.visibility = View.GONE
 
 
                     } else if (it.data.status == Constants.PROJECT_REJECTED) {
                         binding.statusDisplay1.setBackgroundColor(Color.RED)
                         binding.statusDisplay1.text = Constants.PROJECT_REJECTED
-                        binding.checkStatus.visibility=View.GONE
-                        binding.edit.visibility=View.VISIBLE
-                    }
-                    else if (it.data.status == Constants.PROJECT_PENDING)
-                    {
+                        binding.checkStatus.visibility = View.GONE
+                        binding.edit.visibility = View.VISIBLE
+                    } else if (it.data.status == Constants.PROJECT_PENDING) {
                         binding.statusDisplay1.setBackgroundColor(Color.YELLOW)
                         binding.statusDisplay1.text = Constants.PROJECT_PENDING
-                        binding.checkStatus.visibility=View.VISIBLE
-                        binding.edit.visibility=View.GONE
+                        binding.checkStatus.visibility = View.VISIBLE
+                        binding.edit.visibility = View.GONE
 
                     }
                 }
@@ -167,28 +166,27 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
     }
 
     private fun setUpProjectDisplayContent(projectModelLocal: ProjectModel) {
-        showHideProjectContent(classroom.settingsModel.groupType,isShowingProjectContent = true,)
+        showHideProjectContent(classroom.settingsModel.groupType, isShowingProjectContent = true,)
         projectModel = projectModelLocal
         setUpProjectDetails()
     }
 
     @SuppressLint("SetTextI18n")
-    private fun showHideProjectContent(projectType:String, isShowingProjectContent: Boolean = false) {
+    private fun showHideProjectContent(projectType: String, isShowingProjectContent: Boolean = false) {
         if (isShowingProjectContent) {
             binding.noProjectContent.visibility = View.GONE
             binding.yesProjectContent.visibility = View.VISIBLE
-            binding.stuClassDetailsbutton.visibility=View.GONE
+            binding.stuClassDetailsbutton.visibility = View.GONE
 
-        } else if(projectType==Constants.MANUAL) {
+        } else if (projectType == Constants.MANUAL) {
             binding.noProjectContent.visibility = View.VISIBLE
             binding.yesProjectContent.visibility = View.GONE
-            binding.stuClassDetailsbutton.visibility=View.VISIBLE
+            binding.stuClassDetailsbutton.visibility = View.VISIBLE
 
-        }
-        else{
-            binding.noProjectContent.visibility=View.VISIBLE
+        } else {
+            binding.noProjectContent.visibility = View.VISIBLE
             binding.yesProjectContent.visibility = View.GONE
-            binding.stuClassDetailsbutton.visibility=View.GONE
+            binding.stuClassDetailsbutton.visibility = View.GONE
             binding.details.text = "Please Wait For Teacher To Allot You To A Project Group"
 
 

@@ -21,7 +21,7 @@ class StudentSubmissionViewModel(
     private val repository: StudentRepository,
     private val applicationContext: Context
 ) :
-        BaseViewModel() {
+    BaseViewModel() {
 
     var gDriveToken: String = "nothing"
 

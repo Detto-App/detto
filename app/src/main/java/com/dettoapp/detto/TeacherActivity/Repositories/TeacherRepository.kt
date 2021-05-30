@@ -13,7 +13,7 @@ import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 import com.dettoapp.detto.UtilityClasses.Utility
 import okhttp3.ResponseBody
 
-class TeacherRepository(private val dao: ClassroomDAO):BaseRepository() {
+class TeacherRepository(private val dao: ClassroomDAO) : BaseRepository() {
     suspend fun createClassroom(classroom: Classroom) {
         RetrofitInstance.createClassroomAPI.createClassroom(classroom, Utility.TOKEN)
     }
@@ -32,25 +32,28 @@ class TeacherRepository(private val dao: ClassroomDAO):BaseRepository() {
         return Utility.TEACHER
     }
 
-    fun getClassroomSettingsModel(teamSize: String, projectType: String,groupType:String): ClassroomSettingsModel {
-        return ClassroomSettingsModel(teamSize, projectType,groupType)
+    fun getClassroomSettingsModel(teamSize: String, projectType: String, groupType: String): ClassroomSettingsModel {
+        return ClassroomSettingsModel(teamSize, projectType, groupType)
     }
 
     suspend fun deleteClassroom(classroom: Classroom) {
         RetrofitInstance.createClassroomAPI.deleteClassroom(classroom.classroomuid, Utility.TOKEN)
         dao.deleteClassroom(classroom)
     }
-    suspend fun addAccess(context: Context,accessModel:AccessModel,tid:String):ResponseBody{
+
+    suspend fun addAccess(context: Context, accessModel: AccessModel, tid: String): ResponseBody {
         val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
-                ?: throw Exception("Data Storage Exception")
+            ?: throw Exception("Data Storage Exception")
         with(sharedPreference.edit())
         {
-            putString(Constants.ACCESS,accessModel.type+" "+accessModel.sem)
+            putString(Constants.ACCESS, accessModel.type + " " + accessModel.sem)
             apply()
         }
-        Log.d("QQA","1")
+        Log.d("QQA", "1")
 
-        return RetrofitInstance.createClassroomAPI.addAccess(accessModel,tid,Utility.TOKEN)  .body()?:throw Exception("Unable to Add Access")
+        return RetrofitInstance.createClassroomAPI.addAccess(accessModel, tid, Utility.TOKEN).body() ?: throw Exception(
+            "Unable to Add Access"
+        )
 
     }
 }
