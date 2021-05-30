@@ -18,6 +18,9 @@ interface ClassroomDAO {
     @Query("SELECT * FROM classroom_table")
     suspend fun getAllClassRoomList(): List<Classroom>
 
+    @Query("SELECT * FROM classroom_table where classroom_uid = :cid")
+    suspend fun getLocalClassroom(cid:String): Classroom?
+
     @Insert
     suspend fun insertClassroom(classroomList: List<Classroom>)
 

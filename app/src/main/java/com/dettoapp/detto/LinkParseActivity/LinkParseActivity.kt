@@ -63,25 +63,55 @@ class LinkParseActivity : BaseActivity(), DataBaseOperations {
                             showAlertDialog("Do You Really Want To Join This Class?", it.message!!, yesFunction = {
                                 viewModel.insertClassroom(Constants.STUDENT.toString())
                                 showToast("Successfully joined the classroom")
-                            },noFunction = {
+                            }, noFunction = {
                                 finish()
                             })
                         }
-//                        Constants.TEACHER.toString() -> showConfirmationDialog(
-//                            it.data!!,
-//                            "Do You Want To Review This Class?",
-//                            " " + it.message
-//                        )
-//                        Constants.TYPE_PID + Constants.STUDENT -> showConfirmationDialog(
-//                            it.data!!,
-//                            "Do You Want To Join This Project?",
-//                            " " + it.message
-//                        )
-//                        "10${Constants.TEACHER}" -> showConfirmationDialog(
-//                            it.data!!,
-//                            "Do You Want To Review this Project",
-//                            " " + it.message
-//                        )
+                        Constants.TEACHER.toString() -> {
+                            showAlertDialog(
+                                    "Do You Want To Review This Class?",
+                                    " " + it.message, yesFunction = {
+                                Utility.navigateFragment(
+                                        supportFragmentManager,
+                                        R.id.teacherHomeContainer,
+                                        ClassRoomDetailFrag(viewModel.tempClassroom, this),
+                                        "detailClassRoom",
+                                        false,
+                                        false
+                                )
+                            }
+                            )
+                        }
+                        Constants.TYPE_PID + Constants.STUDENT -> {
+                            showAlertDialog(
+                                    "Do You Want To Join This Project?",
+                                    " " + it.message,
+                                    yesFunction = {
+                                        viewModel.insertProject()
+                                        showToast("Successfully joined the project")
+                                        finish()
+                                    }, noFunction = {
+                                finish()
+                            }
+                            )
+                        }
+                        "10${Constants.TEACHER}" -> {
+                            showAlertDialog(
+                                    "Do You Want To Review this Project",
+                                    " " + it.message, yesFunction = {
+                                Utility.navigateFragment(
+                                        supportFragmentManager,
+                                        R.id.teacherHomeContainer,
+                                        ClassRoomDetailFrag(viewModel.tempClassroom, this),
+                                        "detailClassRoom",
+                                        false,
+                                        false
+                                )
+                            }, noFunction = {
+                                finish()
+                            }
+                            )
+                        }
 //                        "10${Constants.STUDENT}" -> showConfirmationDialog(
 //                            it.data!!,
 //                            "you have to Join this Class to Join the project ",
@@ -139,7 +169,7 @@ class LinkParseActivity : BaseActivity(), DataBaseOperations {
 //
 //                    }
 //                    "10${Constants.TEACHER}" -> {
-//                        viewModel.insertClassroom(Constants.TEACHER.toString())
+                //viewModel.insertClassroom(Constants.TEACHER.toString())
 //                        showToast("you can review the project now")
 //
 //

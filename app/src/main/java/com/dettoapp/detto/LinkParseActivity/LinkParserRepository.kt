@@ -46,9 +46,10 @@ class LinkParserRepository(private val dao: ClassroomDAO, private val projectDAO
         return RetrofitInstance.createClassroomAPI.getClassroom(cid, Utility.TOKEN).body()
             ?: throw Exception("no classroom")
     }
-    suspend fun getLocalProject(cid:String):ProjectModel?{
-        return projectDAO.getProject(cid)!!
-    }
+
+    suspend fun getLocalClassroom(cid: String) = dao.getLocalClassroom(cid)
+
+    suspend fun getLocalProject(cid: String) = projectDAO.getLocalProject(cid)
 
 
     fun getSusn() = Utility.STUDENT.susn.toLowerCase(Locale.ROOT)
