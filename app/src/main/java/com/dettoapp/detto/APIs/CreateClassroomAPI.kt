@@ -73,8 +73,14 @@ interface CreateClassroomAPI {
 
     @POST("addAccess/{tid}")
     suspend fun addAccess(
-        @Body accessModel: AccessModel,
-        @Path(value = "tid") tid: String,
-        @Header("Authorization") token: String
-    ): Response<ResponseBody>
+
+            @Body accessModel: AccessModel,
+            @Path(value = "tid") tid:String,
+            @Header("Authorization") token:String
+    )
+    @GET("getTeacherModel/{tid}")
+    suspend fun getTeacherModel(
+        @Path(value = "tid")tid: String,
+        @Header("Authorization")token: String
+    ):TeacherModel
 }

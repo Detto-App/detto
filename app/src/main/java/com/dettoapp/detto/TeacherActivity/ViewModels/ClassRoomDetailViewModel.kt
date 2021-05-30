@@ -23,6 +23,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.Comparator
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 import kotlin.collections.HashSet
 
 
@@ -226,8 +227,9 @@ class ClassRoomDetailViewModel(
                 Log.d("ASD", projectRubricsList.toString())
                 if (projectRubricsList.size == 0) {
                     val rubricsModel = repository.getRubricsFromDAO(projectModel.cid)
-                    val usnlist = ArrayList<String>(projectModel.studentList)
-                    val namelist = ArrayList<String>(projectModel.studentNameList)
+                    val projectNameList=HashMap<String,String>(projectModel.projectStudentList)
+                    val usnlist= ArrayList(projectNameList.keys)
+                    val namelist=ArrayList(projectNameList.values)
                     for (i in 0 until usnlist.size) {
                         projectRubricsList.add(
                             Mapper.mapProjectModelAndRubricsModelToProjectRubricsModel(

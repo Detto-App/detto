@@ -1,6 +1,7 @@
 package com.dettoapp.detto.TeacherActivity.Fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dettoapp.detto.Db.DatabaseDetto
+import com.dettoapp.detto.Models.AccessModel
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.R
 import com.dettoapp.detto.TeacherActivity.Adapters.ClassroomAdapter
@@ -32,6 +34,7 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
     private lateinit var classroomAdapter: ClassroomAdapter
     private lateinit var classroomCreateFragment: ClassroomCreateFragment
     private lateinit var addAccessDialog: AddAccessDialog
+    var list=ArrayList<AccessModel>()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,10 +46,12 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
     private fun initialise() {
         val accesLevels = ArrayList<String>()
         accesLevels.add("Teacher")
-        val list = viewModel.getTeacherModel().accessmodelist
-        if (list != null)
-            for (i in list)
-                accesLevels.add(i.type + " " + i.sem)
+
+        Log.d("PPW","fdhjdh")
+        viewModel.getTeacherModelFromServer()
+        if(list !=null)
+            for(i in list)
+                accesLevels.add(i.type+" "+i.sem)
         val accessAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, accesLevels)
         binding.accessmenu.setAdapter(accessAdapter)
         binding.accessmenu.setOnItemClickListener { _, _, position, value ->
@@ -120,10 +125,40 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
                 }
             }
         })
+        viewModel.getTeacherModel.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is Resource.Success -> {
+                    baseActivity.hideProgressDialog()
+                    list=it.data!!.accessmodelist
+                    val accesLevels =ArrayList<String>()
+                    accesLevels.add("Teacher")
+                    if(list !=null)
+                        for(i in list)
+                            accesLevels.add(i.type+" "+i.sem)
+                    val accessAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, accesLevels)
+                    binding.accessmenu.setAdapter(accessAdapter)
+//                    binding.accessmenu.setAdapter(accessAdapter)
+
+
+//                    initialise()
+                }
+                is Resource.Error -> {
+                    baseActivity.hideProgressDialog()
+                    baseActivity.showErrorSnackMessage(it.message!!)
+                }
+                is Resource.Loading -> {
+                    baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
+                }
+            }
+        })
         viewModel.access.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
                     baseActivity.showToast("Success")
+                    viewModel.getTeacherModelFromServer()
+//                    initialise()
+//                    liveDataObservers()
+
                     baseActivity.hideProgressDialog()
                 }
                 is Resource.Error -> {
@@ -187,11 +222,14 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
         TeacherRepository(DatabaseDetto.getInstance(requireContext().applicationContext).classroomDAO)
 
     override fun addAccess(access: String, sem: String) {
-        viewModel.addAccess(access, sem)
 
+        Log.d("PPW","222")
+        viewModel.addAccess(access,sem)
+        addAccessDialog.dismiss()
     }
 
     private fun changeAccess(access: String, sem: String) {
         viewModel.changeAccess(access, sem)
     }
+
 }

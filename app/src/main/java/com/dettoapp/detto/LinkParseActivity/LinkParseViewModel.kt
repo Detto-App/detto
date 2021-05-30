@@ -80,31 +80,39 @@ class LinkParseViewModel(private val repository: LinkParserRepository, private v
     private suspend fun getProject(type: String, id: String, role: Int) {
         Log.d("WSX", "JJHg")
 
-        val project =
-            repository.getSingleProjectDetails(id).body() ?: throw Exception("Unable to Find This Project room")
-        tempClassroom = repository.getClassroom(project.cid)
-        if (role == Constants.STUDENT) {
-            val susn = repository.getSusn()
-            val studentModel = repository.getStudentModel(susn)
-            tempProject = project
-            if (project.cid in studentModel.classrooms && susn in project.studentList) {
-                if (!(project.pid in studentModel.projects)) {
-                    val projectDeatils = "Project Name" + project.title + "\nDescription: " + project.desc
-                    _linkParse.postValue(Resource.Confirm(type + role, projectDeatils))
+        val project=repository.getSingleProjectDetails(id).body()?:
+                throw Exception("Unable to Find This Project room")
+
+        tempClassroom=repository.getClassroom(project.cid)
+        if(role==Constants.STUDENT) {
+            val localProject = repository.getLocalProject(project.cid)
+            if (!(localProject == null)) throw Exception("Sorry You can Only Join One Project For One Class")
+            else {
+                val susn = repository.getSusn()
+                val studentModel = repository.getStudentModel(susn)
+                tempProject = project
+                if (project.cid in studentModel.classrooms && susn in project.studentList) {
+                    if (!(project.pid in studentModel.projects)) {
+                        val projectDeatils =
+                            "Project Name" + project.title + "\nDescription: " + project.desc
+                        _linkParse.postValue(Resource.Confirm(type + role, projectDeatils))
+                    } else {
+                        _linkParse.postValue(Resource.Error(message = "you have Already Joined the group"))
+                    }
+
+                } else if (susn in project.studentList) {
+                    val classroom =
+                        RetrofitInstance.createClassroomAPI.getClassroom(project.cid, Utility.TOKEN)
+                            .body()
+                            ?: throw Exception("Class Not Found")
+                    val classRoomDetails =
+                        "Classroom Name: " + classroom.classroomname + "\nCreated by: " + classroom.teacher.name + "\nSection: " + classroom.section + "\nSem: " + classroom.sem
+                    _linkParse.postValue(Resource.Confirm("10$role", classRoomDetails))
+
                 } else {
-                    _linkParse.postValue(Resource.Error(message = "you have Already Joined the group"))
+                    _linkParse.postValue(Resource.Error(message = "Sorry ,You Are Not Authorized to Join This Group"))
+
                 }
-
-            } else if (susn in project.studentList) {
-                val classroom = RetrofitInstance.createClassroomAPI.getClassroom(project.cid, Utility.TOKEN).body()
-                    ?: throw Exception("Class Not Found")
-                val classRoomDetails =
-                    "Classroom Name: " + classroom.classroomname + "\nCreated by: " + classroom.teacher.name + "\nSection: " + classroom.section + "\nSem: " + classroom.sem
-                _linkParse.postValue(Resource.Confirm("10$role", classRoomDetails))
-
-            } else {
-                _linkParse.postValue(Resource.Error(message = "Sorry ,You Are Not Authorized to Join This Group"))
-
             }
         } else if (role == Constants.TEACHER) {
             val projectDeatils = "Project Name" + project.title + "\nDescription: " + project.desc

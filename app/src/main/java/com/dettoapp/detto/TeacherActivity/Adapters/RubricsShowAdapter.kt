@@ -23,6 +23,7 @@ class RubricsShowAdapter :
 
     }
 
+
     val differ = AsyncListDiffer(this, diffCallBack)
 
 

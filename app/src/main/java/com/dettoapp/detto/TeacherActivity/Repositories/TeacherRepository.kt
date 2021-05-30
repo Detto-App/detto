@@ -31,6 +31,9 @@ class TeacherRepository(private val dao: ClassroomDAO) : BaseRepository() {
     fun getTeacherModel(): TeacherModel {
         return Utility.TEACHER
     }
+    suspend fun getTeacherModelFromServer(tid: String):TeacherModel{
+        return RetrofitInstance.createClassroomAPI.getTeacherModel(tid,Utility.TOKEN)
+    }
 
     fun getClassroomSettingsModel(teamSize: String, projectType: String, groupType: String): ClassroomSettingsModel {
         return ClassroomSettingsModel(teamSize, projectType, groupType)
@@ -41,7 +44,7 @@ class TeacherRepository(private val dao: ClassroomDAO) : BaseRepository() {
         dao.deleteClassroom(classroom)
     }
 
-    suspend fun addAccess(context: Context, accessModel: AccessModel, tid: String): ResponseBody {
+    suspend fun addAccess(context: Context,accessModel:AccessModel,tid:String){
         val sharedPreference = context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
             ?: throw Exception("Data Storage Exception")
         with(sharedPreference.edit())
@@ -49,11 +52,10 @@ class TeacherRepository(private val dao: ClassroomDAO) : BaseRepository() {
             putString(Constants.ACCESS, accessModel.type + " " + accessModel.sem)
             apply()
         }
-        Log.d("QQA", "1")
 
-        return RetrofitInstance.createClassroomAPI.addAccess(accessModel, tid, Utility.TOKEN).body() ?: throw Exception(
-            "Unable to Add Access"
-        )
+        Log.d("QQA","ghg")
+
+        RetrofitInstance.createClassroomAPI.addAccess(accessModel,tid,Utility.TOKEN)
 
     }
 }
