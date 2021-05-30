@@ -67,7 +67,7 @@ class RoomConverters {
 
     @TypeConverter
     fun fromHashMap(map: HashMap<String, String>): String {
-        return Gson().toJson(map.values)
+        return Gson().toJson(map)
     }
 
     @TypeConverter

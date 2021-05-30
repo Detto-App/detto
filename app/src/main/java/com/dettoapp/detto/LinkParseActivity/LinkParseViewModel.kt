@@ -131,9 +131,9 @@ class LinkParseViewModel(private val repository: LinkParserRepository, private v
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 if (role == "1") {
-                    repository.insertClassroom(tempClassroom)
                     val studentModel = Utility.getStudentModel(context)
                     repository.regStudentToClassroom(studentModel, tempClassroom.classroomuid)
+                    repository.insertClassroom(tempClassroom)
                     _linkParse.postValue(Resource.Success("STUDENT"))
                 } else {
                     _linkParseTeacher.postValue(Resource.Success(tempClassroom))

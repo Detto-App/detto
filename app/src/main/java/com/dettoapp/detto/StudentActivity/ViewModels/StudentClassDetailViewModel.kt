@@ -2,6 +2,7 @@ package com.dettoapp.detto.StudentActivity.ViewModels
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -19,8 +20,8 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("StaticFieldLeak")
 class StudentClassDetailViewModel(
-    private val repository: StudentRepository,
-    private val context: Context
+        private val repository: StudentRepository,
+        private val context: Context
 ) : BaseViewModel() {
 
     private val _stuProjectCreation = MutableLiveData<Resource<ProjectModel>>()
@@ -49,11 +50,11 @@ class StudentClassDetailViewModel(
     }
 
     fun storeProject(
-        title: String,
-        description: String,
-        usnMap: HashMap<Int, String>,
-        classroom: Classroom,
-        arrayList: ArrayList<String>
+            title: String,
+            description: String,
+            usnMap: HashMap<Int, String>,
+            classroom: Classroom,
+            arrayList: ArrayList<String>
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -61,9 +62,9 @@ class StudentClassDetailViewModel(
                 val usnMapSet = usnMap.toHashSet()
 
                 validate(title, description, usnMap, arrayList, usnMapSet)
-                val student=Utility.STUDENT
-                val projectStudentList=HashMap<String,String>()
-                projectStudentList[student.susn]=student.name
+                val student = Utility.STUDENT
+                val projectStudentList = HashMap<String, String>()
+                projectStudentList[student.susn] = student.name
 
                 val projectModel = ProjectModel(
 
@@ -73,7 +74,7 @@ class StudentClassDetailViewModel(
                         usnMapSet,
                         classroom.teacher.uid,
                         classroom.classroomuid,
-                    projectStudentList = projectStudentList
+                        projectStudentList = projectStudentList
                 )
                 repository.insertProject(projectModel)
                 repository.insertProjectToServer(projectModel)
@@ -85,11 +86,11 @@ class StudentClassDetailViewModel(
     }
 
     private fun validate(
-        title: String,
-        description: String,
-        usnMap: HashMap<Int, String>,
-        arrayList: ArrayList<String>,
-        usnMapSet: Set<String>
+            title: String,
+            description: String,
+            usnMap: HashMap<Int, String>,
+            arrayList: ArrayList<String>,
+            usnMapSet: Set<String>
     ) {
         if (title.trim().isEmpty() || usnMapIsEmpty(usnMap))
             throw Exception("Title not Present")
@@ -154,7 +155,7 @@ class StudentClassDetailViewModel(
     }
 
     fun getProjectFromSharedPref(cid: String) =
-        repository.getProjectFromSharedPref(cid, context)
+            repository.getProjectFromSharedPref(cid, context)
 
 
 }
