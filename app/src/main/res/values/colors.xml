@@ -9,8 +9,11 @@
     <color name="white">#FFFFFFFF</color>
     <color name="redColor">#F44336</color>
 
-
+    <color name="darkpurple">#7b1fa2</color>
     <color name="cus_white">#FAFAFA</color>
     <color name="cus_black">#212121</color>
     <color name="cus_light_white">#EEEEEE</color>
+
+    <color name="deepPurpleLight">#d1c4e9</color>
+    <color name="deepPurple">#512da8</color>
 </resources>

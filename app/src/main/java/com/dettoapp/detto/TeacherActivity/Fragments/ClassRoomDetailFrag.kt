@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.dettoapp.detto.Chat.ChatFragment
 import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.R
+import com.dettoapp.detto.TeacherActivity.Adapters.ClassDetailOptionsAdapter
 import com.dettoapp.detto.TeacherActivity.Adapters.ClassRoomDetailFragViewPagerAdapter
 import com.dettoapp.detto.TeacherActivity.DataBaseOperations
 import com.dettoapp.detto.TeacherActivity.Repositories.ClassroomDetailRepository
@@ -21,12 +23,13 @@ import com.dettoapp.detto.databinding.FragmentClassRoomDetailBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.messaging.FirebaseMessaging
 import java.util.*
+import kotlin.collections.ArrayList
 
 class ClassRoomDetailFrag(
     private val classroom: Classroom,
     private val dataBaseOperations: DataBaseOperations
 ) : BaseFragment<ClassRoomDetailViewModel, FragmentClassRoomDetailBinding, ClassroomDetailRepository>(),
-    ClassRoomDetailModal.ClassRoomDetailModalClickListener, ClassroomDetailOperations {
+    ClassRoomDetailModal.ClassRoomDetailModalClickListener, ClassroomDetailOperations, ClassDetailOptionsAdapter.ClassDetailOptionsInterface {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -63,6 +66,13 @@ class ClassRoomDetailFrag(
                 "chat"
             )
 
+        }
+
+        val list = arrayListOf("Students","Deadlines","Rubrics")
+
+        binding.classDetailOptionsRV.apply {
+            layoutManager = LinearLayoutManager(this.context,LinearLayoutManager.HORIZONTAL,false)
+            adapter = ClassDetailOptionsAdapter(list,this@ClassRoomDetailFrag)
         }
 
         binding.sendNotification.setOnClickListener {
@@ -158,6 +168,15 @@ class ClassRoomDetailFrag(
 
     override fun getRepository(): ClassroomDetailRepository {
         return ClassroomDetailRepository(DatabaseDetto.getInstance(requireContext().applicationContext).rubricsDAO)
+    }
+
+    override fun onOptionClicked(type: String) {
+        when(type)
+        {
+            "Students" -> Utility.navigateFragment(requireActivity().supportFragmentManager,R.id.teacherHomeContainer,StudentsInClassFragment(this),"students")
+            "Deadlines" -> Utility.navigateFragment(requireActivity().supportFragmentManager,R.id.teacherHomeContainer,DeadlineFragment(this),"Deadlines")
+            "Rubrics" -> Utility.navigateFragment(requireActivity().supportFragmentManager,R.id.teacherHomeContainer,RubricsFragment(this),"rubrics")
+        }
     }
 
 

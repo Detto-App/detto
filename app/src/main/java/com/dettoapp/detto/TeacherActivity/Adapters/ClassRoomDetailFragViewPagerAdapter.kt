@@ -12,7 +12,7 @@ class ClassRoomDetailFragViewPagerAdapter(
 ) : FragmentStateAdapter(fa) {
 
     @Suppress("PrivatePropertyName")
-    private val NUM_OF_PAGES = 4
+    private val NUM_OF_PAGES = 1
     override fun getItemCount() = NUM_OF_PAGES
 
     override fun createFragment(position: Int): Fragment {

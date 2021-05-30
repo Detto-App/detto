@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cus_light_white"
+    android:background="@color/white"
     tools:context=".TeacherActivity.Fragments.ClassRoomDetailFrag">
 
     <Button
@@ -24,9 +24,12 @@
         android:id="@+id/tabLayoutClassroomDetailFrag"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"/>
+        app:layout_constraintTop_toBottomOf="@+id/textView16"
+        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPagerClassroomDetailFrag"
@@ -35,24 +38,42 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tabLayoutClassroomDetailFrag" >
+        app:layout_constraintTop_toBottomOf="@+id/tabLayoutClassroomDetailFrag">
 
     </androidx.viewpager2.widget.ViewPager2>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/cus_white"
+        android:layout_height="250dp"
+        android:background="@drawable/teacher_home_frag_back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/search_view_backgroud"
+            android:drawableStart="@drawable/ic_baseline_search_24"
+            android:hint="Search Projects ..."
+            android:inputType="textWebEmailAddress"
+            android:textColor="@color/cus_black"
+            android:textColorHint="#757575"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/classRoomDetailMenu"
+            app:layout_constraintStart_toStartOf="@+id/classRoomDetailTeacherName"
+            app:layout_constraintTop_toBottomOf="@+id/classRoomDetailTeacherName"
+            app:layout_constraintVertical_bias="0.0"
+            app:startIconDrawable="@drawable/ic_baseline_email_24" />
 
         <Button
             android:id="@+id/sendNotification"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="SEND"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/classRoomDetailMenu"
             app:layout_constraintStart_toEndOf="@+id/classRoomDetailName"
@@ -64,9 +85,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:text="ClassRoom Name"
-            android:textColor="@color/cus_black"
+            android:textColor="@color/deepPurple"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/classRoomDetailMenu"
@@ -90,9 +111,9 @@
             android:id="@+id/classRoomDetailTeacherName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="64dp"
             android:text="Teacher Name"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="#757575"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/classRoomDetailName"
             app:layout_constraintTop_toBottomOf="@+id/classRoomDetailName"
@@ -104,9 +125,34 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Chat"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/sendNotification"
             app:layout_constraintStart_toStartOf="@+id/sendNotification"
             app:layout_constraintTop_toBottomOf="@+id/sendNotification" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/classDetailOptionsRV"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="200dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Student Projects"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/classDetailOptionsRV" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
