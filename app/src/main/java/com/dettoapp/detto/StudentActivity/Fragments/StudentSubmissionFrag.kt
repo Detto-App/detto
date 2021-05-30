@@ -11,10 +11,13 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.dettoapp.detto.Db.DatabaseDetto
+import com.dettoapp.detto.StudentActivity.Adapters.StudentClassroomAdapter
+import com.dettoapp.detto.StudentActivity.Adapters.SubmissionAdapter
 import com.dettoapp.detto.StudentActivity.Dialog.UploadFileSelectionDialog
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.StudentActivity.ViewModels.StudentSubmissionViewModel
@@ -26,6 +29,7 @@ import java.util.*
 class StudentSubmissionFrag :
     BaseFragment<StudentSubmissionViewModel, FragmentStudentSubmissionBinding, StudentRepository>(),
     UploadFileSelectionDialog.UploadFileSelectionInterface {
+    private lateinit var submissionAdapter: SubmissionAdapter
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private lateinit var fileUploadDialog: UploadFileSelectionDialog
 
@@ -127,6 +131,11 @@ class StudentSubmissionFrag :
     private fun initialise() {
         binding.enableStoragePermission.setOnClickListener {
             readStoragePermissionResult.launch()
+        }
+        submissionAdapter = SubmissionAdapter()
+        binding.submissionRecyclerview.apply {
+            adapter = submissionAdapter
+            layoutManager = LinearLayoutManager(requireContext())
         }
 
         binding.fileChooser.setOnClickListener {
