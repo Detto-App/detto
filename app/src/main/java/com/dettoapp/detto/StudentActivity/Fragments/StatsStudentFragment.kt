@@ -22,7 +22,7 @@ class StatsStudentFragment(private val studentOperations: StudentOperations? = n
         BaseFragment<StatsStudentViewModel, FragmentStatsStudentBinding, BaseRepository>() {
 
     private lateinit var projectModel: ProjectModel
-    private var githublink: String = ""
+    private var githublink: String = projectModel.githublink
     private lateinit var statsAdapter: StatsAdapter
 
     override fun getBaseOnCreate() {
@@ -76,6 +76,7 @@ class StatsStudentFragment(private val studentOperations: StudentOperations? = n
             binding.githubAddLinkGroup.visibility = View.VISIBLE
         else {
             binding.githubAddLinkGroup.visibility = View.GONE
+            viewModel.collectData()
         }
 
         statsAdapter = StatsAdapter()
@@ -86,11 +87,12 @@ class StatsStudentFragment(private val studentOperations: StudentOperations? = n
         }
 
         binding.githubAddButton.setOnClickListener {
-            addGitHubLink("" + binding.githubLink.editText?.text.toString())
+            addGitHubLink("" + binding.githubLink.editText?.text.toString().trim())
         }
     }
 
-    private fun addGitHubLink(githubLink: String) {
-        viewModel.addGithubLink(githubLink)
+    private fun addGitHubLink(githubLinkLocal: String) {
+        projectModel.githublink = githubLinkLocal
+        viewModel.addGithubLink(githubLinkLocal,projectModel)
     }
 }

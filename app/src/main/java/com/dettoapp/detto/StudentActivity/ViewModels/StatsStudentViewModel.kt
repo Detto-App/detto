@@ -7,10 +7,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.anychart.chart.common.dataentry.DataEntry
 import com.anychart.chart.common.dataentry.ValueDataEntry
+import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.Models.githubModels.GithubAllModel
 import com.dettoapp.detto.Models.githubModels.GithubCommitDistributionModel
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.RetrofitInstance
+import com.dettoapp.detto.UtilityClasses.Utility
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,10 +33,11 @@ class StatsStudentViewModel : ViewModel() {
     private lateinit var owner: String
     private lateinit var repo: String
 
-    fun addGithubLink(link: String) {
+    fun addGithubLink(link: String, projectModel: ProjectModel) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 validateLink(link)
+                RetrofitInstance.projectAPI.updateProject(projectModel, projectModel.pid, Utility.TOKEN)
                 _githubLink.postValue(Resource.Success(data = link))
             } catch (e: Exception) {
                 _githubLink.postValue(Resource.Error(message = "" + e.localizedMessage))
@@ -69,26 +72,25 @@ class StatsStudentViewModel : ViewModel() {
                 //Log.d("DDFF", "" + totalHistory.body())
 
 
-                val dataCommitHistory = ArrayList<Pair<String,ArrayList<DataEntry>>>()
+                val dataCommitHistory = ArrayList<Pair<String, ArrayList<DataEntry>>>()
 
                 commitHistory?.forEach {
                     val listData = ArrayList<DataEntry>()
 
-                    it.weeks.forEach {week ->
-                        if(week.c!=0)
-                        {
-                            listData.add(ValueDataEntry((week.w*1000L).formatLongDateToFormat("MMM dd"),week.c))
+                    it.weeks.forEach { week ->
+                        if (week.c != 0) {
+                            listData.add(ValueDataEntry((week.w * 1000L).formatLongDateToFormat("MMM dd"), week.c))
                         }
                     }
 
-                    dataCommitHistory.add(Pair(it.author.login,listData))
+                    dataCommitHistory.add(Pair(it.author.login, listData))
                 }
 
 
                 val dataEntries = ArrayList<DataEntry>()
                 var totalCommits = 0
                 contributors?.forEach { model ->
-                    totalCommits+= model.contributions
+                    totalCommits += model.contributions
                     dataEntries.add(ValueDataEntry(model.login, model.contributions))
                 }
                 val githubCommitDistributionModel = GithubCommitDistributionModel(dataEntries, totalCommits)
@@ -96,9 +98,8 @@ class StatsStudentViewModel : ViewModel() {
 
                 val totalCommitHistory = ArrayList<DataEntry>()
                 totalHistory.body()?.forEach {
-                    if (it.total!=0)
-                    {
-                       totalCommitHistory.add(ValueDataEntry((it.week*1000).formatLongDateToFormat("MMM dd"),it.total))
+                    if (it.total != 0) {
+                        totalCommitHistory.add(ValueDataEntry((it.week * 1000).formatLongDateToFormat("MMM dd"), it.total))
                     }
                 }
 
@@ -117,7 +118,7 @@ class StatsStudentViewModel : ViewModel() {
 }
 
 
-fun Long.formatLongDateToFormat(dateFormat: String=""): String {
+fun Long.formatLongDateToFormat(dateFormat: String = ""): String {
     val date = Date(this)
     return SimpleDateFormat(dateFormat, Locale.US).format(date)
 }

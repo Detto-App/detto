@@ -25,5 +25,7 @@ data class ProjectModel(
     @ColumnInfo(name = "studentNameList")
     val studentNameList: ArrayList<String> = ArrayList(),
     @ColumnInfo(name = "projectStudentList")
-    val projectStudentList: HashMap<String, String> = HashMap()
+    val projectStudentList: HashMap<String, String> = HashMap(),
+    @ColumnInfo(name = "githublink")
+    var githublink :String =""
 )
