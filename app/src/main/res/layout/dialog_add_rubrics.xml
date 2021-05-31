@@ -6,16 +6,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:background="@drawable/teacher_home_frag_back"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageButton
         android:id="@+id/minusProjectUsn2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:background="@color/purple_700"
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/addProjectUsn2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/addProjectUsn2"
         app:layout_constraintTop_toTopOf="@+id/addProjectUsn2"
         app:srcCompat="@drawable/ic_baseline_minus_24" />
 
@@ -24,9 +32,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:background="@color/purple_700"
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/add_rubrics"
+        app:layout_constraintEnd_toStartOf="@+id/minusProjectUsn2"
+        app:layout_constraintHorizontal_bias="0.97"
         app:layout_constraintStart_toEndOf="@+id/add_rubrics"
         app:layout_constraintTop_toTopOf="@+id/add_rubrics"
         app:layout_constraintVertical_bias="0.0"
@@ -34,13 +45,14 @@
 
     <TextView
         android:id="@+id/add_rubrics"
-        android:layout_width="236dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
         android:gravity="center"
         android:text="Add Rubrics"
-        android:textColor="@color/cus_black"
-        android:textSize="18sp"
+        android:textColor="@color/deepPurple"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,22 +60,31 @@
         android:id="@+id/Rubrics"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         android:maxHeight="350dp"
         app:layout_constraintBottom_toTopOf="@+id/done"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_rubrics"
-        app:layout_constraintVertical_bias="0.07999998" />
+        app:layout_constraintTop_toBottomOf="@+id/addProjectUsn2" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/done"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="124dp"
-        android:text="Button"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Done"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/deepPurple"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_rubrics"
+        app:layout_constraintVertical_bias="1.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

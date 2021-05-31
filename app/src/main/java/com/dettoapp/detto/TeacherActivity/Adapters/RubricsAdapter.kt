@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.dettoapp.detto.R
 import com.dettoapp.detto.UtilityClasses.Utility.toLowerAndTrim
+import com.dettoapp.detto.databinding.RubricsViewholderBinding
 import com.google.android.material.textfield.TextInputLayout
 
 class RubricsAdapter() : RecyclerView.Adapter<RubricsAdapter.addRubrics>() {
@@ -31,9 +32,8 @@ class RubricsAdapter() : RecyclerView.Adapter<RubricsAdapter.addRubrics>() {
     val differ = AsyncListDiffer(this, diffUtil)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): addRubrics {
-        return addRubrics(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.rubrics_viewholder, parent, false)
+        return addRubrics(RubricsViewholderBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false)
         )
     }
 
@@ -46,13 +46,13 @@ class RubricsAdapter() : RecyclerView.Adapter<RubricsAdapter.addRubrics>() {
 
     }
 
-    inner class addRubrics(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class addRubrics(private val binding: RubricsViewholderBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(value: String, position: Int) {
             val title = itemView.findViewById<TextInputLayout>(R.id.rubrics_title)
             val marks = itemView.findViewById<TextInputLayout>(R.id.rubrics_marks)
-            val slno = itemView.findViewById<TextInputLayout>(R.id.slno)
+            //val slno = itemView.findViewById<TextInputLayout>(R.id.slno)
             val convert = itemView.findViewById<TextInputLayout>(R.id.convertTo)
-            slno.hint = "$value"
+            binding.slno.text = "$value"
             title.editText?.setText("")
             marks.editText?.setText("")
             title.editText?.doAfterTextChanged {
@@ -60,10 +60,12 @@ class RubricsAdapter() : RecyclerView.Adapter<RubricsAdapter.addRubrics>() {
 
             }
             marks.editText?.doAfterTextChanged {
-                marksHashMap[position] = marks.editText?.text.toString().toInt()
+                if (marks.editText?.text.toString().isNotEmpty())
+                    marksHashMap[position] = marks.editText?.text.toString().toInt()
             }
             convert.editText?.doAfterTextChanged {
-                convertHashMap[position] = convert.editText?.text.toString().toInt()
+                if (marks.editText?.text.toString().isNotEmpty())
+                    convertHashMap[position] = convert.editText?.text.toString().toInt()
             }
         }
     }
