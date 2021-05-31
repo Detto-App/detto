@@ -59,8 +59,8 @@ class ProjectRubricsShowAdapter : RecyclerView.Adapter<ProjectRubricsShowAdapter
             val convertTo = itemView.findViewById<TextView>(R.id.project_rubrics_converto)
             val marks = itemView.findViewById<TextInputLayout>(R.id.project_rubrics_marks)
             title.setText(marksModel.title)
-            maxMarks.setText(marksModel.maxMarks.toString())
-            convertTo.setText(marksModel.convertTo.toString())
+            maxMarks.setText("Max Marks "+marksModel.maxMarks.toString())
+            convertTo.setText("Convert To "+marksModel.convertTo.toString())
             marks.editText!!.setText("" + marksModel.marks.toString())
             var newMarksModel: MarksModel = marksModel
             marksHashMap[marksModel.title] = marksModel.marks!!
