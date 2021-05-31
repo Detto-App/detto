@@ -68,10 +68,17 @@ class ProjectAdapterClassroomDetail(
         fun initialise(projectModel: ProjectModel) {
             val accept = itemView.findViewById<TextView>(R.id.acceptProjectClassroom)
             val reject = itemView.findViewById<TextView>(R.id.rejectProjectClassroom)
-            val projectName = itemView.findViewById<TextView>(R.id.message)
-            val projectDesc = itemView.findViewById<TextView>(R.id.tcdpv_project_desc)
-            projectName.text = projectModel.title
-            projectDesc.text = projectModel.desc
+            val projectName = itemView.findViewById<TextView>(R.id.projectName)
+            val projectDesc = itemView.findViewById<TextView>(R.id.projectDesc)
+            val members=itemView.findViewById<TextView>(R.id.tcdpv_members)
+            var names=""
+            projectName.text = projectModel.desc
+            projectDesc.text = projectModel.title
+            val memberslist=projectModel.projectStudentList
+            for (i in memberslist)
+                names+=i.value.capitalize()+"\n"
+            members.text=names.trim()
+
 
             if (projectModel.status == Constants.PROJECT_REJECTED)
                 changeViewOnClick(Constants.PROJECT_REJECTED, Color.RED)

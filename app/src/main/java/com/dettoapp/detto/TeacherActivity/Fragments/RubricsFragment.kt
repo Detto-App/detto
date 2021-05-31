@@ -56,7 +56,8 @@ class RubricsFragment(private val operations: ClassroomDetailOperations) :
                     binding.btnRubrics.visibility = View.GONE
                 }
                 is Resource.Error -> {
-                    baseActivity.showErrorSnackMessage(it.message!!)
+//                    baseActivity.showErrorSnackMessage(it.message!!)
+                    binding.norubrics.visibility=View.VISIBLE
                 }
                 is Resource.Loading -> {
 //                    baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
@@ -81,7 +82,8 @@ class RubricsFragment(private val operations: ClassroomDetailOperations) :
 
                 }
                 is Resource.Error -> {
-                    baseActivity.showErrorSnackMessage(it.message!!)
+//                    baseActivity.showErrorSnackMessage(it.message!!)
+                    binding.norubrics.visibility=View.VISIBLE
                 }
                 is Resource.Loading -> {
 //                    baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)

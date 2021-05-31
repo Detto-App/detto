@@ -52,13 +52,16 @@ class ProjectHomeFragment(
                     projectRubricsAdapter.differ.submitList(it.data)
                 }
                 is Resource.Error -> {
-                    baseActivity.showErrorSnackMessage(it.message!!)
+//                    baseActivity.showErrorSnackMessage(it.message!!)
+                    binding.noevaluation.visibility=View.VISIBLE
+
                 }
                 is Resource.Loading -> {
                     baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
                 }
                 is Resource.Confirm -> {
                     baseActivity.hideProgressDialog()
+
                 }
                 else -> {
                 }
