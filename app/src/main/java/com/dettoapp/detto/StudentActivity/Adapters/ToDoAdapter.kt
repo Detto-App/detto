@@ -25,11 +25,11 @@ class ToDoAdapter(private val todoOperation: TodoOperation) : RecyclerView
 
     private val diffCallBack = object : DiffUtil.ItemCallback<Todo>() {
         override fun areItemsTheSame(oldItem: Todo, newItem: Todo): Boolean {
-            return oldItem.toid == newItem.toid
+            return oldItem.toid==newItem.toid
         }
 
         override fun areContentsTheSame(oldItem: Todo, newItem: Todo): Boolean {
-            return oldItem == newItem
+            return oldItem==newItem
         }
     }
     val differ = AsyncListDiffer(this, diffCallBack)
@@ -64,7 +64,11 @@ class ToDoAdapter(private val todoOperation: TodoOperation) : RecyclerView
 
             if (todo.status == 0) {
                 itemView.findViewById<ConstraintLayout>(R.id.todolayout).setBackgroundColor(Color.GREEN)
-                itemView.findViewById<ImageButton>(R.id.todostatus).visibility=View.INVISIBLE
+                itemView.findViewById<ImageButton>(R.id.todostatus).visibility=View.GONE
+            }
+            else{
+                itemView.findViewById<ConstraintLayout>(R.id.todolayout).setBackgroundColor(Color.WHITE)
+                itemView.findViewById<ImageButton>(R.id.todostatus).visibility=View.VISIBLE
             }
 
             tododelete.setOnClickListener {

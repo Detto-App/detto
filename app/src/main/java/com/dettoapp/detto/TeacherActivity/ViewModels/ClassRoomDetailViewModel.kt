@@ -375,9 +375,14 @@ class ClassRoomDetailViewModel(
         }
     }
 
-    fun getReport()
-    {
-
+    fun getReport() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                repository.getReport()
+            } catch (e: Exception) {
+                _autoProject.postValue(Resource.Error(message = "" + e.localizedMessage))
+            }
+        }
     }
 }
 

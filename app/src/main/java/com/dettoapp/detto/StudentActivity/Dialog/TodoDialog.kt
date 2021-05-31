@@ -30,7 +30,7 @@ class TodoDialog(
             todoDialogListener.createTodo(
                 binding.todoTitle.editText?.text.toString(),
                 binding.todoCategory.editText?.text.toString(),
-                binding.assignedDialog.textAlignment.toString(), Constants.NOTDONE
+                binding.assignedDialog.text.toString(), Constants.NOTDONE
             )
 
         }

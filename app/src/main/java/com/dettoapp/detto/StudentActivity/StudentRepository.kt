@@ -153,7 +153,7 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
 
     suspend fun getRoles(pid: String): List<String> {
         Log.d("cvb", "vi")
-        return projectDao.getProjectUsingPid(pid)!!.studentList.toList()
+        return projectDao.getProjectUsingPid(pid)!!.projectStudentList.values.toList()
     }
 
     suspend fun deleteTodo(pid: String, toid: String): ResponseBody {
