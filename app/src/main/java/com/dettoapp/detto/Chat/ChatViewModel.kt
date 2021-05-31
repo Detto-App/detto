@@ -42,11 +42,11 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
     private lateinit var name: String
     private lateinit var userID: String
 
-    fun initialise(localClassroom: Classroom, name: String, userID: String) {
+    fun initialise(localClassroom: Classroom, name: String, userID: String,chatRoomid:String) {
         classroom = localClassroom
         this.name = name
         this.userID = userID
-        chatRoomID.value = classroom.classroomuid
+        chatRoomID.value = chatRoomid
         subscribeToSocketEvents()
         Log.d("DDFF", "chat is " + localClassroom.classroomuid)
     }

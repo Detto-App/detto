@@ -62,7 +62,7 @@ class ClassRoomDetailFrag(
             Utility.navigateFragment(
                 requireActivity().supportFragmentManager,
                 R.id.teacherHomeContainer,
-                ChatFragment(classroom, Utility.TEACHER.name + " - Teacher", Utility.TEACHER.uid),
+                ChatFragment(classroom, Utility.TEACHER.name + " - Teacher", Utility.TEACHER.uid,""),
                 "chat"
             )
 

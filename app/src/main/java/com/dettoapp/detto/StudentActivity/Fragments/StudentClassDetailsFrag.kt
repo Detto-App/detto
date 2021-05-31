@@ -34,10 +34,10 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 
 class StudentClassDetailsFrag(private val classroom: Classroom) :
-    BaseFragment<StudentClassDetailViewModel, FragmentStudentClassDetailsBinding, StudentRepository>(),
-    ProjectDetailsDialog.ProjectDialogClickListener,
-    ProjectEditDialog.ProjectEditDialogClickListner,
-    StudentOperations,ClassDetailOptionsAdapter.ClassDetailOptionsInterface {
+        BaseFragment<StudentClassDetailViewModel, FragmentStudentClassDetailsBinding, StudentRepository>(),
+        ProjectDetailsDialog.ProjectDialogClickListener,
+        ProjectEditDialog.ProjectEditDialogClickListner,
+        StudentOperations, ClassDetailOptionsAdapter.ClassDetailOptionsInterface {
     private lateinit var projectModel: ProjectModel
     private lateinit var pDialog: ProjectDetailsDialog
     private lateinit var projectEditDialog: ProjectEditDialog
@@ -72,14 +72,15 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
 
         binding.chat.setOnClickListener {
             Utility.navigateFragment(
-                requireActivity().supportFragmentManager,
-                R.id.StudentFragContainer,
-                ChatFragment(
-                    classroom,
-                    Utility.STUDENT.name + " - " + Utility.STUDENT.susn,
-                    Utility.STUDENT.uid
-                ),
-                "chat"
+                    requireActivity().supportFragmentManager,
+                    R.id.StudentFragContainer,
+                    ChatFragment(
+                            classroom,
+                            Utility.STUDENT.name + " - " + Utility.STUDENT.susn,
+                            Utility.STUDENT.uid,
+                            viewModel.tempProject.pid
+                    ),
+                    "chat"
             )
         }
 
@@ -89,35 +90,34 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
         }
 
         val viewPagerAdapter = StudentHomeViewPagerAdapter(
-            requireActivity(), classroom
-            , this
+                requireActivity(), classroom, this
         )
 
         binding.studentinclassviewpager.adapter = viewPagerAdapter
 
         TabLayoutMediator(
-            binding.tabLayoutStudentClassDetail,
-            binding.studentinclassviewpager
+                binding.tabLayoutStudentClassDetail,
+                binding.studentinclassviewpager
         ) { tab, position ->
             tab.text = Constants.studentClassDetailFragTabNames[position]
             binding.studentinclassviewpager.setCurrentItem(tab.position, true)
         }.attach()
 
 
-        val list = arrayListOf("Deadlines","Todo","Stats","Timeline")
+        val list = arrayListOf("Deadlines", "Todo", "Stats", "Timeline")
 
         binding.studentOptions.apply {
-            layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL,false)
-            adapter = ClassDetailOptionsAdapter(list,this@StudentClassDetailsFrag)
+            layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = ClassDetailOptionsAdapter(list, this@StudentClassDetailsFrag)
         }
 
     }
 
     override fun onProjectCreate(
-        title: String,
-        description: String,
-        usnMap: HashMap<Int, String>,
-        arrayList: ArrayList<String>
+            title: String,
+            description: String,
+            usnMap: HashMap<Int, String>,
+            arrayList: ArrayList<String>
     ) {
 
         viewModel.storeProject(title, description, usnMap, classroom, arrayList)
@@ -179,7 +179,7 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
     }
 
     private fun setUpProjectDisplayContent(projectModelLocal: ProjectModel) {
-        showHideProjectContent(classroom.settingsModel.groupType, isShowingProjectContent = true,)
+        showHideProjectContent(classroom.settingsModel.groupType, isShowingProjectContent = true)
         projectModel = projectModelLocal
         setUpProjectDetails()
     }
@@ -214,26 +214,26 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
 
         binding.shareProjectLink.setOnClickListener {
             ShareCompat.IntentBuilder.from(requireActivity())
-                .setText(shareLink).setType("text/plain")
-                .setChooserTitle("Game Details")
-                .startChooser()
+                    .setText(shareLink).setType("text/plain")
+                    .setChooserTitle("Game Details")
+                    .startChooser()
         }
     }
 
     override fun getViewModelClass(): Class<StudentClassDetailViewModel> =
-        StudentClassDetailViewModel::class.java
+            StudentClassDetailViewModel::class.java
 
     override fun getFragmentBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
+            inflater: LayoutInflater,
+            container: ViewGroup?
     ): FragmentStudentClassDetailsBinding {
 
         return FragmentStudentClassDetailsBinding.inflate(inflater, container, false)
     }
 
     override fun getRepository(): StudentRepository = StudentRepository(
-        DatabaseDetto.getInstance(requireContext().applicationContext).classroomDAO,
-        DatabaseDetto.getInstance(requireContext().applicationContext).projectDAO
+            DatabaseDetto.getInstance(requireContext().applicationContext).classroomDAO,
+            DatabaseDetto.getInstance(requireContext().applicationContext).projectDAO
     )
 
     override fun getViewModelOwner(): ViewModelStoreOwner {
@@ -242,12 +242,11 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
 
     override fun getProjectModel() = projectModel
     override fun onOptionClicked(type: String) {
-        when(type)
-        {
-            "Todo" -> Utility.navigateFragment(requireActivity().supportFragmentManager,R.id.StudentFragContainer,TodoFrag( classroom.classroomuid,this),"students")
-            "Deadlines" -> Utility.navigateFragment(requireActivity().supportFragmentManager,R.id.StudentFragContainer, StudentDeadlineFrag(classroom, this),"stuDead")
-            "Stats" -> Utility.navigateFragment(requireActivity().supportFragmentManager,R.id.StudentFragContainer, StatsStudentFragment(this),"stats")
-            "Timeline" ->  Utility.navigateFragment(requireActivity().supportFragmentManager,R.id.StudentFragContainer, TimelineFrag(classroom.classroomuid, this),"timeLine")
+        when (type) {
+            "Todo" -> Utility.navigateFragment(requireActivity().supportFragmentManager, R.id.StudentFragContainer, TodoFrag(classroom.classroomuid, this), "students")
+            "Deadlines" -> Utility.navigateFragment(requireActivity().supportFragmentManager, R.id.StudentFragContainer, StudentDeadlineFrag(classroom, this), "stuDead")
+            "Stats" -> Utility.navigateFragment(requireActivity().supportFragmentManager, R.id.StudentFragContainer, StatsStudentFragment(this), "stats")
+            "Timeline" -> Utility.navigateFragment(requireActivity().supportFragmentManager, R.id.StudentFragContainer, TimelineFrag(classroom.classroomuid, this), "timeLine")
         }
     }
 }

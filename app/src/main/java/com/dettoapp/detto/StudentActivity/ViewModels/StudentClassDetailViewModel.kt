@@ -37,6 +37,7 @@ class StudentClassDetailViewModel(
     val studentDeadline: LiveData<Resource<List<DeadlineModel>>>
         get() = _studentDeadline
 
+    lateinit var tempProject :ProjectModel
 
     fun getProject(cid: String) {
         operateWithLiveData(_project, mainFunction = {
@@ -45,6 +46,7 @@ class StudentClassDetailViewModel(
                 it.postValue(Resource.Error(message = "Not Found"))
             else {
                 writeToSharedPreferences(projectModel.cid,projectModel.pid)
+                tempProject = projectModel
                 //repository.storeProjectIdinSharedPref(projectModel.cid, projectModel.pid, context)
                 it.postValue(Resource.Success(data = projectModel))
             }

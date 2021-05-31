@@ -14,13 +14,13 @@ import com.dettoapp.detto.databinding.FragmentChatBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class ChatFragment(private val classroom: Classroom, private val name: String, private val userID: String) :
+class ChatFragment(private val classroom: Classroom, private val name: String, private val userID: String,private val chatRoomID:String) :
     BaseFragment<ChatViewModel, FragmentChatBinding, ChatRepository>() {
 
     private lateinit var chatAdapter: ChatAdapter
 
     override fun getBaseOnCreate() {
-        viewModel.initialise(classroom, name, userID)
+        viewModel.initialise(classroom, name, userID,chatRoomID)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
