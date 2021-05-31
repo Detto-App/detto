@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isInvisible
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -51,7 +53,7 @@ class ToDoAdapter(private val todoOperation: TodoOperation) : RecyclerView
         fun bind(todo: Todo) {
             val tittle = itemView.findViewById<TextView>(R.id.TodoTitle)
             val category = itemView.findViewById<TextView>(R.id.category)
-            val assigned = itemView.findViewById<TextView>(R.id.role)
+            val assigned = itemView.findViewById<TextView>(R.id.todoassigned)
             val tododelete = itemView.findViewById<ImageButton>(R.id.tododelete)
             val todostatus = itemView.findViewById<ImageButton>(R.id.todostatus)
 
@@ -60,8 +62,10 @@ class ToDoAdapter(private val todoOperation: TodoOperation) : RecyclerView
             category.text = todo.category
             assigned.text = todo.assigned_to
 
-            if (todo.status == 0)
-                itemView.setBackgroundColor(Color.GREEN)
+            if (todo.status == 0) {
+                itemView.findViewById<ConstraintLayout>(R.id.todolayout).setBackgroundColor(Color.GREEN)
+                itemView.findViewById<ImageButton>(R.id.todostatus).visibility=View.INVISIBLE
+            }
 
             tododelete.setOnClickListener {
                 todoOperation.reload()
@@ -70,8 +74,9 @@ class ToDoAdapter(private val todoOperation: TodoOperation) : RecyclerView
 
             todostatus.setOnClickListener {
                 todoOperation.changeStatus(todo.toid)
-                itemView.setBackgroundColor(Color.GREEN)
+                itemView.findViewById<ConstraintLayout>(R.id.todolayout).setBackgroundColor(Color.GREEN)
                 todostatus.isEnabled = false
+                itemView.findViewById<ImageButton>(R.id.todostatus).visibility=View.INVISIBLE
             }
 
         }

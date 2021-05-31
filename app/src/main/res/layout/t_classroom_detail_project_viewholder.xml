@@ -11,7 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#29b6fc">
+        android:background="@color/cus_white">
 
         <TextView
             android:id="@+id/message"
@@ -97,5 +97,15 @@
             app:layout_constraintStart_toEndOf="@+id/acceptProjectClassroom"
             app:layout_constraintTop_toTopOf="@+id/acceptProjectClassroom" />
 
+        <LinearLayout
+            android:layout_width="10dp"
+            android:layout_height="0dp"
+            android:background="#7B1FA2"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/tcdpv_members"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.cardview.widget.CardView>

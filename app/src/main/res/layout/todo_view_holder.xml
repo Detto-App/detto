@@ -6,25 +6,26 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardBackgroundColor="#2196f3"
-    app:cardCornerRadius="8dp"
+    app:cardBackgroundColor="#F3E5F5"
+    app:cardCornerRadius="16dp"
     tools:context=".StudentActivity.Fragments.TodoFrag">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/todolayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/cus_white">
 
         <TextView
             android:id="@+id/category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="4dp"
             android:layout_marginBottom="16dp"
             android:text="category"
-            android:textSize="16sp"
+            android:textColor="#757575"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/TodoTitle"
-            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@+id/TodoTitle"
             app:layout_constraintTop_toBottomOf="@+id/TodoTitle"
             app:layout_constraintVertical_bias="0.0" />
@@ -33,47 +34,66 @@
             android:id="@+id/TodoTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:text="title"
+            android:textColor="@color/cus_black"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias=".15"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/linearLayout"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias=".3" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
-            android:id="@+id/role"
+            android:id="@+id/todoassigned"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="40dp"
             android:text="assiged"
+            android:textColor="#2196F3"
             app:layout_constraintBottom_toBottomOf="@+id/category"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias=".65"
+            app:layout_constraintEnd_toStartOf="@+id/tododelete"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/category"
-            app:layout_constraintTop_toTopOf="@+id/TodoTitle" />
+            app:layout_constraintTop_toTopOf="@+id/category" />
 
         <ImageButton
             android:id="@+id/tododelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@android:color/transparent"
+            android:padding="4dp"
             android:src="@drawable/ic_baseline_delete_forever_24"
-            app:layout_constraintBottom_toBottomOf="@+id/category"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias=".95"
-            app:layout_constraintStart_toEndOf="@+id/category"
             app:layout_constraintTop_toTopOf="@+id/category" />
 
         <ImageButton
             android:id="@+id/todostatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:background="@android:color/transparent"
+            android:padding="4dp"
             android:src="@drawable/ic_baseline_check_24"
-            app:layout_constraintBottom_toBottomOf="@+id/TodoTitle"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias=".95"
-            app:layout_constraintStart_toEndOf="@+id/TodoTitle"
             app:layout_constraintTop_toTopOf="@+id/TodoTitle" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="10dp"
+            android:layout_height="0dp"
+            android:background="#7B1FA2"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

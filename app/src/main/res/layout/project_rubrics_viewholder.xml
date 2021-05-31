@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp">
 
     <TextView
         android:id="@+id/project_rubrics_maxmarks"
@@ -53,5 +54,14 @@
             android:hint="Enter Marks"
             android:inputType="numberDecimal" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="10dp"
+        android:layout_height="0dp"
+        android:background="#7B1FA2"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
