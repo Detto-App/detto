@@ -42,6 +42,9 @@ class ClassRoomDetailFrag(
 
         FirebaseMessaging.getInstance().subscribeToTopic(classroom.classroomuid)
 
+        binding.getReport.setOnClickListener {
+            viewModel.getReport()
+        }
 
         binding.classRoomDetailName.text = classroom.classroomname.capitalize(Locale.ROOT)
         binding.classRoomDetailTeacherName.text =

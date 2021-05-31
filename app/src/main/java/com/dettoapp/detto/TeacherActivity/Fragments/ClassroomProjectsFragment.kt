@@ -96,6 +96,4 @@ class ClassroomProjectsFragment(private val operations: ClassroomDetailOperation
         )
 
     }
-
-
 }

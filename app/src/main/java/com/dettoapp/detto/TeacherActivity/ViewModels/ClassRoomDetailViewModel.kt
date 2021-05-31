@@ -374,5 +374,10 @@ class ClassRoomDetailViewModel(
 
         }
     }
+
+    fun getReport()
+    {
+
+    }
 }
 
