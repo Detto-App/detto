@@ -8,19 +8,19 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.dettoapp.detto.Models.MarksModel
 import com.dettoapp.detto.R
+import com.dettoapp.detto.databinding.RubricsViewholderBinding
 import com.google.android.material.textfield.TextInputLayout
+import java.util.*
 
 class RubricsShowAdapter :
-    RecyclerView.Adapter<RubricsShowAdapter.RubricsViewHolder>() {
+        RecyclerView.Adapter<RubricsShowAdapter.RubricsViewHolder>() {
     private val diffCallBack = object : DiffUtil.ItemCallback<MarksModel>() {
         override fun areItemsTheSame(oldItem: MarksModel, newItem: MarksModel): Boolean {
             return oldItem == newItem
         }
 
         override fun areContentsTheSame(oldItem: MarksModel, newItem: MarksModel): Boolean =
-            oldItem == newItem
-
-
+                oldItem == newItem
     }
 
 
@@ -28,8 +28,8 @@ class RubricsShowAdapter :
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RubricsViewHolder {
-        return RubricsViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.rubrics_viewholder, parent, false)
+        return RubricsViewHolder(RubricsViewholderBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false)
         )
     }
 
@@ -41,23 +41,23 @@ class RubricsShowAdapter :
         return differ.currentList.size
     }
 
-    inner class RubricsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class RubricsViewHolder(private val binding: RubricsViewholderBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(marksModel: MarksModel) {
             val title = itemView.findViewById<TextInputLayout>(R.id.rubrics_title)
             val marks = itemView.findViewById<TextInputLayout>(R.id.rubrics_marks)
-            val slno = itemView.findViewById<TextInputLayout>(R.id.slno)
+            //val slno = itemView.findViewById<TextInputLayout>(R.id.slno)
             val convertTo = itemView.findViewById<TextInputLayout>(R.id.convertTo)
-            title.isEnabled = false
-            marks.isEnabled = false
-            convertTo.isEnabled = false
-            slno.isEnabled = false
+            title.editText?.isFocusable = false
+            marks.editText?.isFocusable = false
+            convertTo.editText?.isFocusable = false
+            binding.slno.isFocusable = false
 
 
 
-            title.editText?.setText(marksModel.title.toString())
+            title.editText?.setText(marksModel.title.capitalize(Locale.ROOT))
             marks.editText?.setText(marksModel.maxMarks.toString())
             convertTo.editText?.setText(marksModel.convertTo.toString())
-            slno.editText?.setText((adapterPosition + 1).toString())
+            binding.slno.setText((adapterPosition + 1).toString())
         }
     }
 }

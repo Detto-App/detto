@@ -54,4 +54,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fileChooser" />
+
+    <TextView
+        android:id="@+id/noSub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Submitted Files"
+        android:textSize="24sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/submission_recyclerview"
+        app:layout_constraintEnd_toEndOf="@+id/submission_recyclerview"
+        app:layout_constraintStart_toStartOf="@+id/submission_recyclerview"
+        app:layout_constraintTop_toTopOf="@+id/submission_recyclerview" />
 </androidx.constraintlayout.widget.ConstraintLayout>

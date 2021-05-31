@@ -31,7 +31,7 @@ object Constants {
 
     val classDetailFragTabNames = arrayOf("Projects", "Students", "Deadlines", "Rubrics")
     val studentClassDetailFragTabNames = arrayOf("Deadlines", "Submission", "Todo", "Stats", "Timeline")
-    val projectHomeFragTabNames= arrayOf("Submissions","Stats","Evaluation","Chat")
+    val projectHomeFragTabNames= arrayOf("Evaluation","Submissions","Stats","Chat")
 
 
     const val PROJECT_CREATED = 0

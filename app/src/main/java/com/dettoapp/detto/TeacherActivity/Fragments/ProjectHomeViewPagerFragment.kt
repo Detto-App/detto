@@ -37,7 +37,7 @@ class ProjectHomeViewPagerFragment(projectModel: ProjectModel): BaseFragment<Cla
                 binding.projecthometablayout,
                 binding.projecthomeviewpager
         ) { tab, position ->
-            tab.text = Constants.classDetailFragTabNames[position]
+            tab.text = Constants.projectHomeFragTabNames[position]
             binding.projecthomeviewpager.setCurrentItem(tab.position, true)
         }.attach()
 
