@@ -66,7 +66,9 @@ class TodoFrag(private val cid: String, private val studentOperations: StudentOp
                     todoAdapter.differ.submitList(it.data)
                 }
                 is Resource.Error -> {
-                    baseActivity.showErrorSnackMessage(it.message!!)
+//                    baseActivity.showErrorSnackMessage(it.message!!)
+                    binding.notodo.visibility=View.VISIBLE
+                    binding.todoprogressBar.visibility=View.GONE
                 }
                 else -> {
                 }

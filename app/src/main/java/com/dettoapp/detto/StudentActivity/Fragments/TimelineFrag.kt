@@ -41,7 +41,9 @@ class TimelineFrag(private val cid: String, private val studentOperations: Stude
                     timelineAdapter.differ.submitList(it.data)
                 }
                 is Resource.Error -> {
-                    baseActivity.showErrorSnackMessage(it.message!!)
+//                    baseActivity.showErrorSnackMessage(it.message!!)
+                    binding.progressBar.visibility=View.GONE
+                    binding.notimeline.visibility=View.VISIBLE
                 }
                 else -> {
                 }

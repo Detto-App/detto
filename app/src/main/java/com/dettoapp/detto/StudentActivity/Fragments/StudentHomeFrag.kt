@@ -1,5 +1,6 @@
 package com.dettoapp.detto.StudentActivity.Fragments
 
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -61,8 +62,10 @@ class StudentHomeFrag : BaseFragment<StudentHomeFragViewModel, FragmentStudentHo
             baseActivity.hideProgressDialog()
             baseActivity.showToast("Successfully fetched all data")
         }, onError = {
-            baseActivity.showErrorSnackMessage(it)
+//            baseActivity.showErrorSnackMessage(it)
+            binding.noclass.visibility=View.VISIBLE
             baseActivity.hideProgressDialog()
+
         })
     }
 
