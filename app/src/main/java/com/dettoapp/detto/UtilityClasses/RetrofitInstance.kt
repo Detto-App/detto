@@ -56,6 +56,10 @@ class RetrofitInstance {
         val githubAPI:GithubAPI by lazy {
             githubRetrofit.create(GithubAPI::class.java)
         }
+
+        val submissionAPI:SubmissionAPI by lazy {
+            retrofit.create(SubmissionAPI::class.java)
+        }
     }
 
 }

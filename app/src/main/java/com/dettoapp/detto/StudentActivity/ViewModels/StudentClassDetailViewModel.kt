@@ -11,6 +11,7 @@ import com.dettoapp.detto.Models.DeadlineModel
 import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.UtilityClasses.BaseViewModel
+import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.UtilityClasses.Utility.toHashSet
@@ -43,7 +44,8 @@ class StudentClassDetailViewModel(
             if (projectModel == null)
                 it.postValue(Resource.Error(message = "Not Found"))
             else {
-                repository.storeProjectIdinSharedPref(projectModel.cid, projectModel.pid, context)
+                writeToSharedPreferences(projectModel.cid,projectModel.pid)
+                //repository.storeProjectIdinSharedPref(projectModel.cid, projectModel.pid, context)
                 it.postValue(Resource.Success(data = projectModel))
             }
         })
@@ -157,6 +159,17 @@ class StudentClassDetailViewModel(
     fun getProjectFromSharedPref(cid: String) =
             repository.getProjectFromSharedPref(cid, context)
 
+    private fun writeToSharedPreferences(cid: String, pid: String)
+    {
+        val sharedPreference =
+                context.getSharedPreferences(Constants.CLASS_PROJECT, Context.MODE_PRIVATE)
+                        ?: throw Exception("Data Storage Exception")
 
+        with(sharedPreference.edit())
+        {
+            putString(cid, pid)
+            apply()
+        }
+    }
 }
 

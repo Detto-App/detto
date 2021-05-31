@@ -7,9 +7,12 @@ import android.provider.OpenableColumns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.dettoapp.detto.Models.githubModels.SubmissionModel
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.UtilityClasses.BaseViewModel
+import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
+import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
@@ -18,12 +21,14 @@ import java.util.*
 @Suppress("BlockingMethodInNonBlockingContext")
 @SuppressLint("StaticFieldLeak")
 class StudentSubmissionViewModel(
-    private val repository: StudentRepository,
-    private val applicationContext: Context
+        private val repository: StudentRepository,
+        private val applicationContext: Context
 ) :
-    BaseViewModel() {
+        BaseViewModel() {
 
     var gDriveToken: String = "nothing"
+
+    lateinit var pid: String
 
     private lateinit var tempURI: Uri
 
@@ -31,8 +36,25 @@ class StudentSubmissionViewModel(
     val submissionFragEvent: LiveData<Resource<String>>
         get() = _submissionFragEvent
 
+    private val _uploadFiles = MutableLiveData<Resource<List<SubmissionModel>>>()
+    val uploadFiles: LiveData<Resource<List<SubmissionModel>>>
+        get() = _uploadFiles
+
     init {
         getGDriveToken()
+    }
+
+    fun getUploadedFiles() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                _uploadFiles.postValue(Resource.Loading())
+                val list = RetrofitInstance.submissionAPI.getUploadedFiles(pid).body()
+                        ?: throw Exception("Unknown Error")
+                _uploadFiles.postValue(Resource.Success(data = list))
+            } catch (e: Exception) {
+                _uploadFiles.postValue(Resource.Error(message = "" + e.localizedMessage))
+            }
+        }
     }
 
     fun getGDriveToken() {
@@ -60,6 +82,12 @@ class StudentSubmissionViewModel(
         return name
     }
 
+    fun getPID(cid: String, context: Context) {
+        val sharedPreference =
+                context.getSharedPreferences(Constants.CLASS_PROJECT, Context.MODE_PRIVATE)
+                        ?: throw Exception("Data Storage Exception")
+        pid = sharedPreference.getString(cid, "")!!
+    }
 
     fun getFileURI() = tempURI
 

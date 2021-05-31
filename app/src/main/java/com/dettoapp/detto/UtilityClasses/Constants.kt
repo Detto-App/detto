@@ -13,6 +13,8 @@ object Constants {
 
     const val USER_DETAILS_FILE = "uFile"
     const val PROJECT_CLASS_FILE = "pcFile"
+
+    const val CLASS_PROJECT ="classProj"
     const val USER_USN_KEY = "usn"
     const val USER_NAME_KEY = "name"
     const val TEACHER = 0

@@ -145,10 +145,10 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
 
     fun getProjectFromSharedPrefForTodo(cid: String, context: Context): String {
         val sharedPreference =
-            context.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
+            context.getSharedPreferences(Constants.CLASS_PROJECT, Context.MODE_PRIVATE)
                 ?: throw Exception("Data Storage Exception")
 
-        return sharedPreference.getString(cid, null)!!
+        return sharedPreference.getString(cid, "")!!
     }
 
     suspend fun getRoles(pid: String): List<String> {

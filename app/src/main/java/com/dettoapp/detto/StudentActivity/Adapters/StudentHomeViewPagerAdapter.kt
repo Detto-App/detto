@@ -21,7 +21,7 @@ class StudentHomeViewPagerAdapter(
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> StudentDeadlineFrag(classroom, studentOperations)
-            1 -> StudentSubmissionFrag()
+            1 -> StudentSubmissionFrag(classroom.classroomuid)
             2 -> TodoFrag( classroom.classroomuid,studentOperations)
             3 -> StatsStudentFragment(studentOperations)
             4 -> TimelineFrag(classroom.classroomuid, studentOperations)
