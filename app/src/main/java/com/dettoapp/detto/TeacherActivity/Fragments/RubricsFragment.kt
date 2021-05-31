@@ -52,7 +52,7 @@ class RubricsFragment(private val operations: ClassroomDetailOperations) :
                 is Resource.Success -> {
                     baseActivity.hideProgressDialog()
 //                    binding.re.isRefreshing = false
-                    baseActivity.showToast("done")
+//                    baseActivity.showToast("done")
                     binding.btnRubrics.visibility = View.GONE
                 }
                 is Resource.Error -> {
@@ -74,7 +74,7 @@ class RubricsFragment(private val operations: ClassroomDetailOperations) :
                 is Resource.Success -> {
                     baseActivity.hideProgressDialog()
 //                    binding.re.isRefreshing = false
-                    baseActivity.showToast("done")
+//                    baseActivity.showToast("done")
                     binding.btnRubrics.visibility = View.GONE
 
 
@@ -133,6 +133,7 @@ class RubricsFragment(private val operations: ClassroomDetailOperations) :
         convertMap: HashMap<Int, Int>
     ) {
         viewModel.storeRubrics(titleMap, marksMap, convertMap, operations.getClassroom())
+        initialise()
         liveDataObservers()
         rDialog.dismiss()
 

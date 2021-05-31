@@ -53,6 +53,9 @@ class ClassRoomDetailViewModel(
     private val _marks = MutableLiveData<Resource<ArrayList<MarksModel>>>()
     val marks: LiveData<Resource<ArrayList<MarksModel>>>
         get() = _marks
+    private val _update = MutableLiveData<Resource<ArrayList<MarksModel>>>()
+    val update: LiveData<Resource<ArrayList<MarksModel>>>
+        get() = _update
     private val _projectRubrics = MutableLiveData<Resource<ArrayList<ProjectRubricsModel>>>()
     val projectRubrics: LiveData<Resource<ArrayList<ProjectRubricsModel>>>
         get() = _projectRubrics
@@ -281,9 +284,9 @@ class ClassRoomDetailViewModel(
                     rubricsModel.cid,
                     projectModel.pid
                 )
-                _marks.postValue(Resource.Confirm(message = "done"))
+                _update.postValue(Resource.Confirm(message = "done"))
             } catch (e: Exception) {
-                _marks.postValue(Resource.Error(message = "" + e.localizedMessage))
+                _update.postValue(Resource.Error(message = "" + e.localizedMessage))
             }
 
         }

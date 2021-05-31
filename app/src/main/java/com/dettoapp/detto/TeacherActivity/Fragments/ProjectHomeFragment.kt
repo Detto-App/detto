@@ -39,6 +39,7 @@ class ProjectHomeFragment(
         binding.root.setOnClickListener {
 
         }
+
         viewModel.getRubricsForProject(projectModel)
     }
 
@@ -48,7 +49,7 @@ class ProjectHomeFragment(
                 is Resource.Success -> {
                     baseActivity.hideProgressDialog()
 //                    binding.re.isRefreshing = false
-                    baseActivity.showToast("done")
+//                    baseActivity.showToast("done")
                     projectRubricsAdapter.differ.submitList(it.data)
                 }
                 is Resource.Error -> {
@@ -67,7 +68,25 @@ class ProjectHomeFragment(
                 }
             }
         })
-    }
+
+        viewModel.update.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is Resource.Success -> {
+                    baseActivity.hideProgressDialog()
+//                    binding.re.isRefreshing = false
+                    baseActivity.showToast("done")
+                    requireActivity().onBackPressed()
+                }
+                is Resource.Error -> {
+//                    baseActivity.showErrorSnackMessage(it.message!!)
+                    binding.noevaluation.visibility=View.VISIBLE
+
+                }
+                else -> {
+                }
+    }})
+        }
+
 
 
     override fun getViewModelClass(): Class<ClassRoomDetailViewModel> {

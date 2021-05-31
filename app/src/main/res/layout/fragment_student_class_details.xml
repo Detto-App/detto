@@ -150,7 +150,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/checkStatus"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:includeFontPadding="false"
@@ -158,20 +158,24 @@
             android:textColor="@color/deepPurple"
             app:backgroundTint="@color/white"
             app:layout_constraintEnd_toEndOf="@+id/statusDisplay1"
+            app:layout_constraintHorizontal_bias="0.07"
             app:layout_constraintStart_toStartOf="@+id/statusDisplay1"
             app:layout_constraintTop_toBottomOf="@+id/statusDisplay1" />
 
         <Button
             android:id="@+id/edit"
-            android:layout_width="161dp"
-            android:layout_height="43dp"
-            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="64dp"
+            android:backgroundTint="@color/white"
             android:text="Edit"
-            android:visibility="gone"
+            android:textColor="@color/deepPurple"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/checkStatus"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/statusDisplay1"
-            app:layout_constraintTop_toBottomOf="@+id/checkStatus" />
+            app:layout_constraintHorizontal_bias="0.829"
+            app:layout_constraintStart_toEndOf="@+id/checkStatus"
+            app:layout_constraintTop_toBottomOf="@+id/statusDisplay1" />
 
         <ImageButton
             android:id="@+id/chat"
@@ -190,7 +194,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
