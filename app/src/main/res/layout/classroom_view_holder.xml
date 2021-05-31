@@ -10,20 +10,21 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#42A5F5">
+        android:background="@color/white">
 
         <TextView
             android:id="@+id/classroomnameview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:text="ClassroomName"
-            android:textColor="@color/cus_light_white"
+            android:textColor="@color/deepPurple"
             android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@+id/classLink"
-            app:layout_constraintHorizontal_bias="0.076"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/linearLayout4"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -32,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="teacher name"
-            android:textColor="@color/cus_black"
+            android:textColor="#757575"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/classroomnameview"
             app:layout_constraintHorizontal_bias="0.0"
@@ -64,6 +65,16 @@
             app:layout_constraintTop_toBottomOf="@+id/classLink"
             app:layout_constraintVertical_bias="0.0"
             app:srcCompat="@drawable/ic_baseline_share_24" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout4"
+            android:layout_width="10dp"
+            android:layout_height="0dp"
+            android:background="@color/deepPurple"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
