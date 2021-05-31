@@ -7,19 +7,6 @@
     android:background="@color/white"
     tools:context=".TeacherActivity.Fragments.ClassRoomDetailFrag">
 
-    <Button
-        android:id="@+id/form_teams"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Form Teams"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.78"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.19" />
-
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayoutClassroomDetailFrag"
         android:layout_width="0dp"
@@ -142,6 +129,20 @@
             app:layout_constraintEnd_toEndOf="@+id/editText"
             app:layout_constraintStart_toStartOf="@+id/classRoomDetailTeacherName"
             app:layout_constraintTop_toBottomOf="@+id/classRoomDetailTeacherName" />
+
+        <Button
+            android:id="@+id/form_teams"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:backgroundTint="@color/white"
+            android:text="Form Teams"
+            android:textColor="@color/deepPurple"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.896"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editText" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -149,7 +150,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="220dp"
+        android:layout_marginTop="240dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
