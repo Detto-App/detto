@@ -134,7 +134,7 @@ class ClassRoomDetailViewModel(
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val x = Notification("Trial", "Trial Message")
-                Firebase.messaging.unsubscribeFromTopic("/topics/${classroom.classroomuid}")
+                //Firebase.messaging.unsubscribeFromTopic("/topics/${classroom.classroomuid}")
                 val response = RetrofitInstance.notificationAPI.postNotification(
                     PushNotification(
                         x,
@@ -149,6 +149,7 @@ class ClassRoomDetailViewModel(
 
     fun getDeadline(
         classroomUid: String,
+        classroom: Classroom,
         dateRangePicker: MaterialDatePicker<Pair<Long, Long>>,
         reason: String
     ) {
@@ -165,6 +166,7 @@ class ClassRoomDetailViewModel(
                     dateRangePicker.selection!!.second.toString()
                 )
                 repository.createDeadline(deadlineModel, classroomUid)
+                //sendNotification(classroom,"DeadLine Posted","${classroom.classroomname.capitalize()} Has a new DeadLine please check")
             } catch (e: Exception) {
                 _deadline.postValue(Resource.Error(message = "" + e.localizedMessage))
             }
@@ -375,10 +377,10 @@ class ClassRoomDetailViewModel(
         }
     }
 
-    fun getReport() {
+    fun getReport(classroom: Classroom) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                repository.getReport()
+                repository.getReport(classroom)
             } catch (e: Exception) {
                 _autoProject.postValue(Resource.Error(message = "" + e.localizedMessage))
             }

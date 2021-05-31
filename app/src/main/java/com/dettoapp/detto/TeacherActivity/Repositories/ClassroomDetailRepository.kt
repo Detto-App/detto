@@ -81,8 +81,8 @@ class ClassroomDetailRepository(private val dao: RubricsDAO) : BaseRepository() 
         RetrofitInstance.projectAPI.createProjects(projectModelList, cid, Utility.TOKEN)
 
     }
-    suspend fun getReport():ResponseBody{
-        return RetrofitInstance.projectAPI.getReport(Utility.TEACHER.email,Utility.TOKEN).body()?: throw Exception("Could not send email")
+    suspend fun getReport(classroom: Classroom):ResponseBody{
+        return RetrofitInstance.projectAPI.getReport(Utility.TEACHER.email,classroom,Utility.TOKEN).body()?: throw Exception("Could not send email")
 
     }
 

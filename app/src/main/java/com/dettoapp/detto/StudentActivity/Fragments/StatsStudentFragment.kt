@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dettoapp.detto.Models.ProjectModel
 import androidx.fragment.app.Fragment
+import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.R
 import com.dettoapp.detto.StudentActivity.Adapters.StatsAdapter
 import com.dettoapp.detto.StudentActivity.StudentOperations
@@ -22,12 +23,13 @@ class StatsStudentFragment(private val studentOperations: StudentOperations? = n
         BaseFragment<StatsStudentViewModel, FragmentStatsStudentBinding, BaseRepository>() {
 
     private lateinit var projectModel: ProjectModel
-    private var githublink: String = projectModel.githublink
+    private lateinit var githublink: String
     private lateinit var statsAdapter: StatsAdapter
 
     override fun getBaseOnCreate() {
         super.getBaseOnCreate()
         projectModel = studentOperations?.getProjectModel() ?: nullProjectModel!!
+        githublink = projectModel.githublink
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,6 +43,9 @@ class StatsStudentFragment(private val studentOperations: StudentOperations? = n
         if (githublink.isEmpty()) {
             viewModel.githubLink.observe(viewLifecycleOwner, Observer {
                 when (it) {
+                    is Resource.Loading -> {
+
+                    }
                     is Resource.Success -> {
                         githublink = it.data!!
                         binding.githubAddLinkGroup.visibility = View.GONE
@@ -51,9 +56,12 @@ class StatsStudentFragment(private val studentOperations: StudentOperations? = n
             })
         }
 
-        observeWithLiveData(viewModel.allGithub, onSuccess = {
+        observeWithLiveData(viewModel.allGithub, onLoading = {
+            binding.statsPB.visibility = View.VISIBLE
+        }, onSuccess = {
             statsAdapter.differ.submitList(it)
-            baseActivity.showToast("Submitted")
+            baseActivity.showToast("Analysing")
+            binding.statsPB.visibility = View.GONE
         })
 
 
@@ -76,7 +84,7 @@ class StatsStudentFragment(private val studentOperations: StudentOperations? = n
             binding.githubAddLinkGroup.visibility = View.VISIBLE
         else {
             binding.githubAddLinkGroup.visibility = View.GONE
-            viewModel.collectData()
+            viewModel.validateLink(projectModel.githublink)
         }
 
         statsAdapter = StatsAdapter()
@@ -93,6 +101,6 @@ class StatsStudentFragment(private val studentOperations: StudentOperations? = n
 
     private fun addGitHubLink(githubLinkLocal: String) {
         projectModel.githublink = githubLinkLocal
-        viewModel.addGithubLink(githubLinkLocal,projectModel)
+        viewModel.addGithubLink(githubLinkLocal, projectModel, DatabaseDetto.getInstance(requireContext()).projectDAO)
     }
 }

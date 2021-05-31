@@ -122,9 +122,10 @@ interface ProjectAPI {
             @Header("Authorization") token: String
     ): Response<StudentModel>
 
-    @GET("/report/{email}")
+    @POST("/report/{email}")
     suspend fun getReport(
             @Path(value = "email")email:String,
+            @Body classroom: Classroom,
             @Header("Authorization")token: String
     ):Response<ResponseBody>
 }

@@ -11,6 +11,8 @@ interface ProjectDAO {
     @Insert
     suspend fun insertProject(projectModel: ProjectModel)
 
+
+
     @Insert
     suspend fun insertProject(listOfProjectModel: List<ProjectModel>)
 

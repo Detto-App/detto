@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.anychart.chart.common.dataentry.DataEntry
 import com.anychart.chart.common.dataentry.ValueDataEntry
+import com.dettoapp.detto.Db.ProjectDAO
 import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.Models.githubModels.GithubAllModel
 import com.dettoapp.detto.Models.githubModels.GithubCommitDistributionModel
@@ -33,10 +34,11 @@ class StatsStudentViewModel : ViewModel() {
     private lateinit var owner: String
     private lateinit var repo: String
 
-    fun addGithubLink(link: String, projectModel: ProjectModel) {
+    fun addGithubLink(link: String, projectModel: ProjectModel,projectDoa:ProjectDAO) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 validateLink(link)
+                projectDoa.updateProject(projectModel)
                 RetrofitInstance.projectAPI.updateProject(projectModel, projectModel.pid, Utility.TOKEN)
                 _githubLink.postValue(Resource.Success(data = link))
             } catch (e: Exception) {
@@ -45,7 +47,7 @@ class StatsStudentViewModel : ViewModel() {
         }
     }
 
-    private fun validateLink(linkGithub: String) {
+     fun validateLink(linkGithub: String) {
         var link = linkGithub
         link = link.replace("https://github.com/", "")
         link = link.replace(".git", "")
@@ -63,6 +65,7 @@ class StatsStudentViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO)
         {
             try {
+                _allGithub.postValue(Resource.Loading())
                 val contributors = RetrofitInstance.githubAPI.getContributors(owner, repo).body()
                 //Log.d("DDFF",""+contributors.body())
                 val commitHistory = RetrofitInstance.githubAPI.getContributorsCommitHistory(owner, repo).body()

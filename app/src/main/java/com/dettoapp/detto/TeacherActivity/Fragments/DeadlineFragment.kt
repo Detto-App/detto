@@ -79,7 +79,7 @@ class DeadlineFragment(private val operations: ClassroomDetailOperations) :
 
 
     override fun getDeadline(dateRangePicker: MaterialDatePicker<Pair<Long, Long>>, reason: String) {
-        viewModel.getDeadline(operations.getClassroom(), dateRangePicker, reason)
+        viewModel.getDeadline(operations.getClassroom(), operations.getClassroomModel(),dateRangePicker, reason)
         dDialog.dismiss()
     }
 
