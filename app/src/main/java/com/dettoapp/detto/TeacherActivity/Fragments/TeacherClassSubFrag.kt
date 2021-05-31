@@ -15,14 +15,14 @@ import com.dettoapp.detto.UtilityClasses.BaseFragment
 import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.databinding.FragmentStudentSubmissionBinding
 
-class TeacherClassSubFrag(private val cid: String) : BaseFragment<StudentSubmissionViewModel, FragmentStudentSubmissionBinding,
+class TeacherClassSubFrag(private val pid: String) : BaseFragment<StudentSubmissionViewModel, FragmentStudentSubmissionBinding,
         StudentRepository>() {
 
     private lateinit var submissionAdapter: SubmissionAdapter
 
     override fun getBaseOnCreate() {
         super.getBaseOnCreate()
-        viewModel.getPID(cid, requireContext())
+        viewModel.setPIDForTeacher(pid)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -33,10 +33,19 @@ class TeacherClassSubFrag(private val cid: String) : BaseFragment<StudentSubmiss
     private fun liveDataObservers() {
         viewModel.uploadFiles.observe(viewLifecycleOwner, Observer {
             when (it) {
+                is Resource.Loading -> {
+                    binding.pbSub.visibility = View.VISIBLE
+                }
                 is Resource.Success -> {
+                    binding.pbSub.visibility = View.GONE
+
                     submissionAdapter.differ.submitList(it.data!!)
                     if (it.data.isEmpty())
                         binding.noSub.visibility = View.VISIBLE
+                }
+                is Resource.Error -> {
+                    binding.pbSub.visibility = View.GONE
+
                 }
 
                 else -> {

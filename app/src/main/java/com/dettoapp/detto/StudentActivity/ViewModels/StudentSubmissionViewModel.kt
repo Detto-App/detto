@@ -49,10 +49,12 @@ class StudentSubmissionViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _uploadFiles.postValue(Resource.Loading())
+                Log.d("FFDD",pid)
                 val list = RetrofitInstance.submissionAPI.getUploadedFiles(pid).body()
                         ?: throw Exception("Unknown Error")
                 _uploadFiles.postValue(Resource.Success(data = list))
             } catch (e: Exception) {
+                Log.d("FFDD","ERROR "+e.localizedMessage)
                 _uploadFiles.postValue(Resource.Error(message = "" + e.localizedMessage))
             }
         }
@@ -103,5 +105,10 @@ class StudentSubmissionViewModel(
                 _submissionFragEvent.postValue(Resource.Error(message = "" + e.localizedMessage, data = "dialog"))
             }
         }
+    }
+
+    fun setPIDForTeacher(pidLocal:String)
+    {
+        pid = pidLocal
     }
 }

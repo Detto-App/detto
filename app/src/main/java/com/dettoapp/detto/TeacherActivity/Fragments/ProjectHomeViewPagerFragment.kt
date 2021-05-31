@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dettoapp.detto.Db.DatabaseDetto
+import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.TeacherActivity.Adapters.ClassRoomDetailFragViewPagerAdapter
 import com.dettoapp.detto.TeacherActivity.Adapters.ProjectAdapterClassroomDetail
@@ -19,18 +20,19 @@ import com.dettoapp.detto.databinding.FragmentClassroomProjectsBinding
 import com.dettoapp.detto.databinding.FragmentProjectHomeViewpagerBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
-class ProjectHomeViewPagerFragment(projectModel: ProjectModel): BaseFragment<ClassRoomDetailViewModel, FragmentProjectHomeViewpagerBinding, ClassroomDetailRepository>() {
+class ProjectHomeViewPagerFragment(private val projectModel: ProjectModel, private val classroom: Classroom) : BaseFragment<ClassRoomDetailViewModel, FragmentProjectHomeViewpagerBinding, ClassroomDetailRepository>() {
 
-    private val projectModel=projectModel
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initialise()
     }
+
     private fun initialise() {
         liveDataObservers()
     }
+
     fun liveDataObservers() {
-        val viewPagerAdapter = ProjectHomeFragViewPagerAdapter(requireActivity(),projectModel)
+        val viewPagerAdapter = ProjectHomeFragViewPagerAdapter(requireActivity(), projectModel, classroom)
         binding.projecthomeviewpager.adapter = viewPagerAdapter
 
         TabLayoutMediator(
@@ -43,7 +45,7 @@ class ProjectHomeViewPagerFragment(projectModel: ProjectModel): BaseFragment<Cla
 
     }
 
-        override fun getViewModelClass(): Class<ClassRoomDetailViewModel> {
+    override fun getViewModelClass(): Class<ClassRoomDetailViewModel> {
         return ClassRoomDetailViewModel::class.java
     }
 
