@@ -39,6 +39,7 @@ class ClassroomProjectsFragment(private val operations: ClassroomDetailOperation
         }
         operations.getProjects()
         liveDataObservers()
+
     }
 
     fun liveDataObservers() {
@@ -91,7 +92,7 @@ class ClassroomProjectsFragment(private val operations: ClassroomDetailOperation
         Utility.navigateFragment(
             requireActivity().supportFragmentManager,
             R.id.teacherHomeContainer,
-            ProjectHomeFragment(projectModel),
+            ProjectHomeViewPagerFragment(projectModel),
             "detailClassRoom"
         )
 

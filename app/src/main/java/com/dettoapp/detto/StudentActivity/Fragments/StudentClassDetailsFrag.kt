@@ -168,6 +168,7 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
                         binding.statusDisplay1.text = Constants.PROJECT_PENDING
                         binding.checkStatus.visibility = View.VISIBLE
                         binding.edit.visibility = View.GONE
+                        binding.edit.visibility=View.VISIBLE
 
                     }
                 }
