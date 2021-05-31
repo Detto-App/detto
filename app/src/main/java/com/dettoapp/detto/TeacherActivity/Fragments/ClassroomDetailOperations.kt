@@ -1,6 +1,7 @@
 package com.dettoapp.detto.TeacherActivity.Fragments
 
 import androidx.lifecycle.ViewModelStoreOwner
+import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.TeacherActivity.ViewModels.ClassRoomDetailViewModel
 
 interface ClassroomDetailOperations {
@@ -13,6 +14,8 @@ interface ClassroomDetailOperations {
     fun getViewModelStoreOwner(): ViewModelStoreOwner
 
     fun getClassroom(): String
+
+    fun getClassroomModel() :Classroom
 
     fun getDeadlineFromServer()
 }

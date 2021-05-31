@@ -145,6 +145,10 @@ class ClassRoomDetailFrag(
         return classroom.classroomuid
     }
 
+    override fun getClassroomModel(): Classroom {
+        return classroom
+    }
+
     override fun getDeadlineFromServer() {
         viewModel.getDeadlineFromServer(classroom.classroomuid)
     }

@@ -92,7 +92,7 @@ class ClassroomProjectsFragment(private val operations: ClassroomDetailOperation
         Utility.navigateFragment(
             requireActivity().supportFragmentManager,
             R.id.teacherHomeContainer,
-            ProjectHomeViewPagerFragment(projectModel),
+            ProjectHomeViewPagerFragment(projectModel,operations.getClassroomModel()),
             "detailClassRoom"
         )
 

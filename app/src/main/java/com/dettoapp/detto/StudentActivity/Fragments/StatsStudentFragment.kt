@@ -18,16 +18,16 @@ import com.dettoapp.detto.UtilityClasses.Resource
 import com.dettoapp.detto.databinding.FragmentStatsStudentBinding
 import com.google.common.math.Stats
 
-class StatsStudentFragment(private val studentOperations: StudentOperations) :
+class StatsStudentFragment(private val studentOperations: StudentOperations? = null, private val nullProjectModel: ProjectModel? = null) :
         BaseFragment<StatsStudentViewModel, FragmentStatsStudentBinding, BaseRepository>() {
 
     private lateinit var projectModel: ProjectModel
     private var githublink: String = ""
-    private lateinit var statsAdapter : StatsAdapter
+    private lateinit var statsAdapter: StatsAdapter
 
     override fun getBaseOnCreate() {
         super.getBaseOnCreate()
-        projectModel = studentOperations.getProjectModel()
+        projectModel = studentOperations?.getProjectModel() ?: nullProjectModel!!
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,7 +51,7 @@ class StatsStudentFragment(private val studentOperations: StudentOperations) :
             })
         }
 
-        observeWithLiveData(viewModel.allGithub,onSuccess = {
+        observeWithLiveData(viewModel.allGithub, onSuccess = {
             statsAdapter.differ.submitList(it)
             baseActivity.showToast("Submitted")
         })
