@@ -69,7 +69,6 @@ class StudentClassDetailViewModel(
                 projectStudentList[student.susn] = student.name
 
                 val projectModel = ProjectModel(
-
                         Utility.createID(),
                         title.toLowerAndTrim(),
                         description.toLowerAndTrim(),

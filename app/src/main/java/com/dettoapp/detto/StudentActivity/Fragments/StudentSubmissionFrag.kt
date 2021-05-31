@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ShareCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.Data
@@ -148,7 +149,9 @@ class StudentSubmissionFrag(private val cid: String) :
         binding.enableStoragePermission.setOnClickListener {
             readStoragePermissionResult.launch()
         }
-        submissionAdapter = SubmissionAdapter()
+        submissionAdapter = SubmissionAdapter(onShare = {
+            onClassLinkShare(it)
+        })
         binding.submissionRecyclerview.apply {
             adapter = submissionAdapter
             layoutManager = LinearLayoutManager(requireContext())
@@ -190,12 +193,12 @@ class StudentSubmissionFrag(private val cid: String) :
             binding.enableStoragePermission.visibility = View.GONE
 
             binding.fileChooser.visibility = View.VISIBLE
-            binding.fileName.visibility = View.VISIBLE
+            //binding.fileName.visibility = View.VISIBLE
         } else {
             binding.enableStoragePermission.visibility = View.VISIBLE
 
             binding.fileChooser.visibility = View.GONE
-            binding.fileName.visibility = View.GONE
+            //binding.fileName.visibility = View.GONE
         }
     }
 
@@ -209,5 +212,13 @@ class StudentSubmissionFrag(private val cid: String) :
     override fun onUploadButton(modifiedFileName: String) {
         baseActivity.closeKeyBoard(fileUploadDialog.getView())
         viewModel.validate(modifiedFileName)
+    }
+
+        fun onClassLinkShare(link: String) {
+        ShareCompat.IntentBuilder.from(requireActivity())
+                .setText(link)
+                .setType("text/plain")
+                .setChooserTitle("Game Details")
+                .startChooser()
     }
 }

@@ -10,16 +10,16 @@
         android:id="@+id/nestedScrollView"
         android:maxHeight="150dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/projectDescriptionPC"
-        app:layout_constraintStart_toStartOf="@+id/projectDescriptionPC"
-        app:layout_constraintTop_toBottomOf="@+id/projectDescriptionPC"
+        app:layout_constraintEnd_toEndOf="@+id/projectTitlePC"
+        app:layout_constraintStart_toStartOf="@+id/projectTitlePC"
+        app:layout_constraintTop_toBottomOf="@+id/projectTitlePC"
         app:layout_constraintVertical_bias=".05"
         android:layout_width="0dp"
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputLayout
 
-            android:id="@+id/projectTitlePC"
+            android:id="@+id/projectDescriptionPC"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/projectDescriptionPC"
+        android:id="@+id/projectTitlePC"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

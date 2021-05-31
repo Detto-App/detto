@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.app.ShareCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.dettoapp.detto.Chat.ChatFragment
 import com.dettoapp.detto.Db.DatabaseDetto
 import com.dettoapp.detto.Models.Classroom
@@ -20,6 +21,10 @@ import com.dettoapp.detto.StudentActivity.Dialog.ProjectEditDialog
 import com.dettoapp.detto.StudentActivity.StudentOperations
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.StudentActivity.ViewModels.StudentClassDetailViewModel
+import com.dettoapp.detto.TeacherActivity.Adapters.ClassDetailOptionsAdapter
+import com.dettoapp.detto.TeacherActivity.Fragments.DeadlineFragment
+import com.dettoapp.detto.TeacherActivity.Fragments.RubricsFragment
+import com.dettoapp.detto.TeacherActivity.Fragments.StudentsInClassFragment
 import com.dettoapp.detto.UtilityClasses.BaseFragment
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.Resource
@@ -32,7 +37,7 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
     BaseFragment<StudentClassDetailViewModel, FragmentStudentClassDetailsBinding, StudentRepository>(),
     ProjectDetailsDialog.ProjectDialogClickListener,
     ProjectEditDialog.ProjectEditDialogClickListner,
-    StudentOperations {
+    StudentOperations,ClassDetailOptionsAdapter.ClassDetailOptionsInterface {
     private lateinit var projectModel: ProjectModel
     private lateinit var pDialog: ProjectDetailsDialog
     private lateinit var projectEditDialog: ProjectEditDialog
@@ -97,6 +102,14 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
             tab.text = Constants.studentClassDetailFragTabNames[position]
             binding.studentinclassviewpager.setCurrentItem(tab.position, true)
         }.attach()
+
+
+        val list = arrayListOf("Deadlines","Todo","Stats","Timeline")
+
+        binding.studentOptions.apply {
+            layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL,false)
+            adapter = ClassDetailOptionsAdapter(list,this@StudentClassDetailsFrag)
+        }
 
     }
 
@@ -194,8 +207,8 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
     }
 
     private fun setUpProjectDetails() {
-        binding.pNameStudentClass.text = projectModel.title
-        binding.pDescStudentClass.text = projectModel.desc
+        binding.pNameStudentClass.text = projectModel.desc
+        binding.pDescStudentClass.text = projectModel.title
 
         val shareLink = "https://detto.uk.to/pid/" + projectModel.pid
 
@@ -228,4 +241,13 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
     }
 
     override fun getProjectModel() = projectModel
+    override fun onOptionClicked(type: String) {
+        when(type)
+        {
+            "Todo" -> Utility.navigateFragment(requireActivity().supportFragmentManager,R.id.StudentFragContainer,TodoFrag( classroom.classroomuid,this),"students")
+            "Deadlines" -> Utility.navigateFragment(requireActivity().supportFragmentManager,R.id.StudentFragContainer, StudentDeadlineFrag(classroom, this),"stuDead")
+            "Stats" -> Utility.navigateFragment(requireActivity().supportFragmentManager,R.id.StudentFragContainer, StatsStudentFragment(this),"stats")
+            "Timeline" ->  Utility.navigateFragment(requireActivity().supportFragmentManager,R.id.StudentFragContainer, TimelineFrag(classroom.classroomuid, this),"timeLine")
+        }
+    }
 }

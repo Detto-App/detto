@@ -5,13 +5,16 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.app.ShareCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.dettoapp.detto.Models.githubModels.CommitActivity
 import com.dettoapp.detto.Models.githubModels.SubmissionModel
 import com.dettoapp.detto.databinding.SubmissionViewHolderBinding
 
-class SubmissionAdapter() : RecyclerView.Adapter<SubmissionAdapter.SubmissionRecyclerViewHolder>() {
+class SubmissionAdapter(private val onShare : (String)->Unit) : RecyclerView.Adapter<SubmissionAdapter.SubmissionRecyclerViewHolder>() {
 
     private val diffUtil = object : DiffUtil.ItemCallback<SubmissionModel>() {
         override fun areItemsTheSame(oldItem: SubmissionModel, newItem: SubmissionModel): Boolean {
@@ -46,10 +49,18 @@ class SubmissionAdapter() : RecyclerView.Adapter<SubmissionAdapter.SubmissionRec
             binding.submissionlink.text = submissionModel.filelink
 
             binding.submissionlinkshare.setOnClickListener {
-                it.context.copyToClipboard(submissionModel.filelink)
+               onShare(submissionModel.filelink)
             }
         }
     }
+
+//    fun onClassLinkShare(link: String,activity: CommitActivity) {
+//        ShareCompat.IntentBuilder.from(requ)
+//                .setText(link)
+//                .setType("text/plain")
+//                .setChooserTitle("Game Details")
+//                .startChooser()
+//    }
 
     fun Context.copyToClipboard(text: CharSequence) {
         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
