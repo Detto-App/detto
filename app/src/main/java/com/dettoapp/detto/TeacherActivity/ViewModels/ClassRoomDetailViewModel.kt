@@ -264,6 +264,7 @@ class ClassRoomDetailViewModel(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                _update.postValue(Resource.Loading())
                 Log.d("WXX", studentHashMap.toString())
                 val rubricsModel = repository.getRubrics(projectModel.cid)
                 Log.d("WQQ", "djhjgf")

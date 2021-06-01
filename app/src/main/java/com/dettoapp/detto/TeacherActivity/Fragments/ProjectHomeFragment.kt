@@ -51,6 +51,14 @@ class ProjectHomeFragment(
 //                    binding.re.isRefreshing = false
 //                    baseActivity.showToast("done")
                     projectRubricsAdapter.differ.submitList(it.data)
+                    if(projectRubricsAdapter.differ.currentList.isEmpty())
+                    {
+                        binding.noevaluation.visibility = View.VISIBLE
+                    }
+                    else
+                    {
+                        binding.noevaluation.visibility = View.GONE
+                    }
                 }
                 is Resource.Error -> {
 //                    baseActivity.showErrorSnackMessage(it.message!!)
@@ -71,13 +79,23 @@ class ProjectHomeFragment(
 
         viewModel.update.observe(viewLifecycleOwner, Observer {
             when (it) {
+                is Resource.Loading -> {
+                    baseActivity.showProgressDialog("Loading...")
+                }
+                is Resource.Confirm -> {
+                    binding.noevaluation.visibility = View.GONE
+                    baseActivity.hideProgressDialog()
+//                    binding.re.isRefreshing = false
+                    baseActivity.showToast("done")
+                }
                 is Resource.Success -> {
                     baseActivity.hideProgressDialog()
 //                    binding.re.isRefreshing = false
                     baseActivity.showToast("done")
-                    requireActivity().onBackPressed()
+                    //requireActivity().onBackPressed()
                 }
                 is Resource.Error -> {
+                    baseActivity.hideProgressDialog()
 //                    baseActivity.showErrorSnackMessage(it.message!!)
                     binding.noevaluation.visibility=View.VISIBLE
 
