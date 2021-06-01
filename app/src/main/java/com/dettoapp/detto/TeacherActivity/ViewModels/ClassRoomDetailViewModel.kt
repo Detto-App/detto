@@ -321,13 +321,18 @@ class ClassRoomDetailViewModel(
 
                     }
                     Log.d("WRR", "enf3")
+                    val studentusn=ArrayList(studenUsnList)
+                    var projectStudentList=HashMap<String,String>()
+                    for(i in 0 until  studenUsnList.size)
+                        projectStudentList[studentusn[i]]=studentNameList[i]
 
                     val projectModel = Mapper.mapProjectModel(
                         Utility.createID(),
                         studentUsnlist = studenUsnList,
                         tid = classroom.teacher.uid,
                         cid = classroom.classroomuid,
-                        studentNameList = studentNameList
+                        studentNameList = studentNameList,
+                            projectStudentList = projectStudentList
                     )
                     projectModelList.add(projectModel)
                 } else {
@@ -343,12 +348,17 @@ class ClassRoomDetailViewModel(
                             Log.d("WRR", j.toString())
                             j += 1
                         }
+                        val studentusn=ArrayList(studenUsnList)
+                        var projectStudentList=HashMap<String,String>()
+                        for(i in 0 until  studenUsnList.size)
+                            projectStudentList[studentusn[i]]=studentNameList[i]
                         val projectModel = Mapper.mapProjectModel(
                             Utility.createID(),
                             studentUsnlist = studenUsnList,
                             tid = classroom.teacher.uid,
                             cid = classroom.classroomuid,
-                            studentNameList = studentNameList
+                            studentNameList = studentNameList,
+                                projectStudentList = projectStudentList
                         )
                         projectModelList.add(projectModel)
                         i += j
@@ -361,12 +371,17 @@ class ClassRoomDetailViewModel(
                         val studentNameList = ArrayList<String>()
                         studenUsnList.add(studentsModels[i].susn)
                         studentNameList.add(studentsModels[i].name)
+                        val studentusn=ArrayList(studenUsnList)
+                        var projectStudentList=HashMap<String,String>()
+                        for(i in 0 until  studenUsnList.size)
+                            projectStudentList[studentusn[i]]=studentNameList[i]
                         val projectModel = Mapper.mapProjectModel(
                             Utility.createID(),
                             studentUsnlist = studenUsnList,
                             tid = classroom.teacher.uid,
                             cid = classroom.classroomuid,
-                            studentNameList = studentNameList
+                            studentNameList = studentNameList,
+                                projectStudentList = projectStudentList
                         )
                         projectModelList.add(projectModel)
                         i += 1
