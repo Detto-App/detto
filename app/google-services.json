@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "479563752288",
+    "project_id": "detto-c965e",
+    "storage_bucket": "detto-c965e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:479563752288:android:3fc64b0f0ae088fb58b405",
+        "android_client_info": {
+          "package_name": "com.dettoapp.detto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "479563752288-q1e0dcumnck7ka9kp297k4flheqi7f4u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnuO_76lz8bVon7GfJTidOFyrF-jk5iSA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "479563752288-q1e0dcumnck7ka9kp297k4flheqi7f4u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cus_light_white"
+    tools:context=".StudentActivity.Fragments.StatsStudentFragment">
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/githubLink"
+        style="@style/Detto.TextInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+
+        android:ems="10"
+        android:hint="Github Link"
+        android:inputType="textEmailAddress"
+        android:maxLines="1"
+        android:textColor="@color/cus_white"
+        android:textColorHint="@android:color/darker_gray"
+        app:endIconMode="clear_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:startIconDrawable="@drawable/ic_baseline_add_link_24">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="textMultiLine"
+            android:textColor="@color/cus_black"
+            android:textColorHint="@android:color/darker_gray" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/githubAddButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Add Link"
+        app:layout_constraintEnd_toEndOf="@+id/githubLink"
+        app:layout_constraintStart_toStartOf="@+id/githubLink"
+        app:layout_constraintTop_toBottomOf="@+id/githubLink" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/githubAddLinkGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="githubLink,githubAddButton" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/statsRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/githubAddButton" />
+
+    <ProgressBar
+        android:id="@+id/statsPB"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/statsRecyclerView"
+        app:layout_constraintEnd_toEndOf="@+id/statsRecyclerView"
+        app:layout_constraintStart_toStartOf="@+id/statsRecyclerView"
+        app:layout_constraintTop_toBottomOf="@+id/githubAddButton" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
