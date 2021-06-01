@@ -170,6 +170,11 @@ class StudentRepository(private val dao: ClassroomDAO, private val projectDao: P
         return RetrofitInstance.projectAPI.getStudentNameList(usnMapSet, Utility.TOKEN).body()
             ?: throw  Exception("Illegal USN")
     }
+    suspend fun getAutoProject(cid: String,susn:String):ProjectModel{
+        val projectModel= RetrofitInstance.projectAPI.getAutoProject(cid,susn).body() ?:throw Exception("no Project")
+        insertProject(projectModel)
+        return projectModel
+    }
 
 
 }

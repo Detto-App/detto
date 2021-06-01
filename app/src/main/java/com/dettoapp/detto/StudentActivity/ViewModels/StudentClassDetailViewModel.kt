@@ -27,6 +27,10 @@ class StudentClassDetailViewModel(
     val stuProjectCreation: LiveData<Resource<ProjectModel>>
         get() = _stuProjectCreation
 
+    private val _autoGroup = MutableLiveData<Resource<ProjectModel>>()
+    val autoGroup: LiveData<Resource<ProjectModel>>
+        get() = _autoGroup
+
     private val _project = MutableLiveData<Resource<ProjectModel>>()
     val project: LiveData<Resource<ProjectModel>>
         get() = _project
@@ -128,6 +132,18 @@ class StudentClassDetailViewModel(
 
         }
     }
+    fun getAutoProject(cid: String,susn:String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                _autoGroup.postValue(Resource.Loading())
+                val projectModel = repository.getAutoProject(cid, susn)
+                _autoGroup.postValue(Resource.Success(projectModel))
+            } catch (e: Exception) {
+                _autoGroup.postValue(Resource.Error(message = "" + e.localizedMessage))
+            }
+        }
+    }
+
 
     fun storeEditedProject(cid: String, title: String, description: String) {
         viewModelScope.launch(Dispatchers.IO) {

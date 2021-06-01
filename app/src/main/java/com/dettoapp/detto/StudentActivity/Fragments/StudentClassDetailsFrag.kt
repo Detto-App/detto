@@ -25,10 +25,7 @@ import com.dettoapp.detto.TeacherActivity.Adapters.ClassDetailOptionsAdapter
 import com.dettoapp.detto.TeacherActivity.Fragments.DeadlineFragment
 import com.dettoapp.detto.TeacherActivity.Fragments.RubricsFragment
 import com.dettoapp.detto.TeacherActivity.Fragments.StudentsInClassFragment
-import com.dettoapp.detto.UtilityClasses.BaseFragment
-import com.dettoapp.detto.UtilityClasses.Constants
-import com.dettoapp.detto.UtilityClasses.Resource
-import com.dettoapp.detto.UtilityClasses.Utility
+import com.dettoapp.detto.UtilityClasses.*
 import com.dettoapp.detto.databinding.FragmentStudentClassDetailsBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -69,6 +66,10 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
 
         binding.checkStatus.setOnClickListener {
             viewModel.checkProjectStatus(projectModel.pid)
+        }
+        binding.tryFetch.setOnClickListener{
+            viewModel.getAutoProject(classroom.classroomuid,Utility.STUDENT.susn)
+
         }
 
         binding.chat.setOnClickListener {
@@ -173,6 +174,27 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
                     }
                 }
                 is Resource.Error -> showHideProjectContent(classroom.settingsModel.groupType)
+                else -> {
+                }
+            }
+        })
+
+
+        viewModel.autoGroup.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is Resource.Success -> {
+
+                baseActivity.hideProgressDialog()
+                    requireActivity().onBackPressed()
+                    baseActivity.showToast("Project Has Been Created")
+
+                }
+                is Resource.Loading->{
+                    baseActivity.showProgressDialog("Loading")
+                }
+                is Resource.Error -> {showHideProjectContent(classroom.settingsModel.groupType)
+                baseActivity.hideProgressDialog()
+                }
                 else -> {
                 }
             }
