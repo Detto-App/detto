@@ -208,8 +208,8 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
     }
 
     private fun setUpProjectDetails() {
-        binding.pNameStudentClass.text = projectModel.desc
-        binding.pDescStudentClass.text = projectModel.title
+        binding.pNameStudentClass.text = projectModel.title.capitalize()
+        binding.pDescStudentClass.text = projectModel.desc.capitalize()
 
         val shareLink = "https://detto.uk.to/pid/" + projectModel.pid
 

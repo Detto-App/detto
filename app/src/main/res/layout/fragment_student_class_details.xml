@@ -91,7 +91,7 @@
 
         <TextView
             android:id="@+id/pNameStudentClass"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
@@ -106,7 +106,7 @@
 
         <TextView
             android:id="@+id/pDescStudentClass"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
@@ -157,9 +157,11 @@
             android:includeFontPadding="false"
             android:text="Check Status"
             android:textColor="@color/deepPurple"
+            android:visibility="visible"
             app:backgroundTint="@color/white"
             app:layout_constraintStart_toStartOf="@+id/statusDisplay1"
-            app:layout_constraintTop_toBottomOf="@+id/statusDisplay1" />
+            app:layout_constraintTop_toBottomOf="@+id/statusDisplay1"
+            app:layout_goneMarginBottom="48dp" />
 
         <Button
             android:id="@+id/edit"
@@ -194,7 +196,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/checkStatus"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_goneMarginTop="48dp" />
 
         <TextView
             android:id="@+id/textView19"

@@ -11,6 +11,8 @@ import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.UtilityClasses.*
 import com.dettoapp.detto.UtilityClasses.Utility.toHashSet
 import com.dettoapp.detto.UtilityClasses.Utility.toLowerAndTrim
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -43,6 +45,7 @@ class StudentClassDetailViewModel(
             else {
                 writeToSharedPreferences(projectModel.cid, projectModel.pid)
                 tempProject = projectModel
+                Firebase.messaging.subscribeToTopic("/topics/${tempProject.pid}")
                 //repository.storeProjectIdinSharedPref(projectModel.cid, projectModel.pid, context)
                 it.postValue(Resource.Success(data = projectModel))
             }

@@ -13,6 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dettoapp.detto.Models.ProjectModel
 import com.dettoapp.detto.R
 import com.dettoapp.detto.UtilityClasses.Constants
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class ProjectAdapterClassroomDetail(
     private val classroomProjectOperation: ClassroomProjectOperation,
@@ -62,6 +67,10 @@ class ProjectAdapterClassroomDetail(
             initialise(projectModel)
             itemView.setOnClickListener {
                 projectAdapterClickListener.OnProjectClicked(projectModel)
+            }
+
+            GlobalScope.launch(Dispatchers.IO) {
+                Firebase.messaging.subscribeToTopic("/topics/${projectModel.pid}")
             }
         }
 

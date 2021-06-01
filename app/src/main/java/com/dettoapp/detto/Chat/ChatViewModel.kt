@@ -5,9 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.dettoapp.detto.Models.ChatMessage
-import com.dettoapp.detto.Models.ChatMessageLocalStoreModel
-import com.dettoapp.detto.Models.Classroom
+import com.dettoapp.detto.Models.*
 import com.dettoapp.detto.UtilityClasses.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -139,7 +137,7 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
                 )
 
                 repository.sendMessage(chatRoomID.value, chatMessage)
-
+                sendNotification(chatRoomID.value,"You have a New Message","Message in ${classroom.classroomname}")
                 _chatMessageEvent.postValue(Resource.Success(""))
             } catch (e: Exception) {
                 _chatMessageEvent.postValue(Resource.Error(message = "" + e.localizedMessage))
@@ -167,6 +165,23 @@ class ChatViewModel(private val repository: ChatRepository) : BaseViewModel() {
     fun reconnect() {
         viewModelScope.launch {
             reconnectToServer()
+        }
+    }
+
+    fun sendNotification(endPoint:String,title:String,message:String) {
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val x = Notification(title, message)
+                //Firebase.messaging.unsubscribeFromTopic("/topics/${classroom.classroomuid}")
+                val response = RetrofitInstance.notificationAPI.postNotification(
+                        PushNotification(
+                                x,
+                                "/topics/${endPoint}"
+                        )
+                )
+            } catch (e: Exception) {
+                //Log.d(TAG, e.toString())
+            }
         }
     }
 }
