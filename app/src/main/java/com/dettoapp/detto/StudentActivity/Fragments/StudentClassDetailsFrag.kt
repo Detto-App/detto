@@ -62,6 +62,7 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
         view.setOnClickListener { }
 
         if (viewModel.getProjectFromSharedPref(classroom.classroomuid) == Constants.PROJECT_NOT_CREATED)
+        if (viewModel.getProjectFromSharedPref(classroom.classroomuid) == Constants.PROJECT_NOT_CREATED)
             binding.noProjectContent.visibility = View.VISIBLE
         else
             binding.yesProjectContent.visibility = View.VISIBLE
@@ -169,7 +170,6 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
                         binding.checkStatus.visibility = View.VISIBLE
                         binding.edit.visibility = View.GONE
                         binding.edit.visibility=View.VISIBLE
-
                     }
                 }
                 is Resource.Error -> showHideProjectContent(classroom.settingsModel.groupType)
@@ -191,19 +191,20 @@ class StudentClassDetailsFrag(private val classroom: Classroom) :
             binding.noProjectContent.visibility = View.GONE
             binding.yesProjectContent.visibility = View.VISIBLE
             binding.stuClassDetailsbutton.visibility = View.GONE
+            binding.tryFetch.visibility = View.GONE
 
         } else if (projectType == Constants.MANUAL) {
             binding.noProjectContent.visibility = View.VISIBLE
             binding.yesProjectContent.visibility = View.GONE
             binding.stuClassDetailsbutton.visibility = View.VISIBLE
+            binding.tryFetch.visibility = View.GONE
 
         } else {
             binding.noProjectContent.visibility = View.VISIBLE
             binding.yesProjectContent.visibility = View.GONE
             binding.stuClassDetailsbutton.visibility = View.GONE
             binding.details.text = "Please Wait For Teacher To Allot You To A Project Group"
-
-
+            binding.tryFetch.visibility = View.VISIBLE
         }
     }
 

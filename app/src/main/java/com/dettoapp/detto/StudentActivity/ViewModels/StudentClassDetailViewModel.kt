@@ -67,7 +67,7 @@ class StudentClassDetailViewModel(
                 validate(title, description, usnMap, arrayList, usnMapSet)
                 val student = Utility.STUDENT
                 val projectStudentList = HashMap<String, String>()
-                projectStudentList[student.susn] = student.name
+                projectStudentList.put(student.susn , student.name)
 
                 val projectModel = ProjectModel(
                         Utility.createID(),

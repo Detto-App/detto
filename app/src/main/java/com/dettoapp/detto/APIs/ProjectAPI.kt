@@ -128,4 +128,11 @@ interface ProjectAPI {
             @Body classroom: Classroom,
             @Header("Authorization")token: String
     ):Response<ResponseBody>
+
+    @GET("/getAutoProject/{cid}/{susn}")
+            suspend fun getAutoProject(
+            @Path(value = "cid") cid: String,
+            @Path(value = "susn")susn: String,
+            @Header("Authorization") token: String
+    ): Response<List<ProjectModel>>
 }
