@@ -54,10 +54,12 @@ class DeadlineFragment(private val operations: ClassroomDetailOperations) :
 //                    binding.re.isRefreshing = false
                     baseActivity.hideProgressDialog()
 
-                    deadlineAdapter.differ.submitList(it.data)
+                    val list = ArrayList(it.data)
+                    deadlineAdapter.differ.submitList(list)
 
                 }
                 is Resource.Error -> {
+                    baseActivity.hideProgressDialog()
                     binding.prgressBarDeadline.visibility = View.GONE
                     binding.noDeadlines.visibility = View.VISIBLE
                     binding.noDeadlines.text = "There are no Deadlines"

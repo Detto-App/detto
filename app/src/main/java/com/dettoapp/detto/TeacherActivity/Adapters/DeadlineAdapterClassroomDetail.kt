@@ -61,7 +61,7 @@ class DeadlineAdapterClassroomDetail :
 
             reason.text = deadlineModel.description
             val temp = deadlineModel.fromdate.toLong()
-            date.text = Date(temp).toFormattedString("MMM dd YYYY")
+            date.text = Date(temp).toFormattedString("MMM dd YYYY") + " - "+ Date(deadlineModel.todate.toLong()).toFormattedString("MMM dd YYYY")
 //           temp
             val currentDate = System.currentTimeMillis()
             if (currentDate > temp)
