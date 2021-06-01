@@ -86,7 +86,8 @@
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tabLayoutStudentClassDetail" />
+            app:layout_constraintTop_toBottomOf="@+id/tabLayoutStudentClassDetail"
+            app:layout_constraintVertical_bias="1.0" />
 
         <TextView
             android:id="@+id/pNameStudentClass"
@@ -152,30 +153,24 @@
             android:id="@+id/checkStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:includeFontPadding="false"
             android:text="Check Status"
             android:textColor="@color/deepPurple"
             app:backgroundTint="@color/white"
-            app:layout_constraintEnd_toEndOf="@+id/statusDisplay1"
-            app:layout_constraintHorizontal_bias="0.07"
             app:layout_constraintStart_toStartOf="@+id/statusDisplay1"
             app:layout_constraintTop_toBottomOf="@+id/statusDisplay1" />
 
         <Button
             android:id="@+id/edit"
             android:layout_width="wrap_content"
-            android:layout_marginTop="28dp"
-            android:layout_marginEnd="64dp"
+            android:layout_height="wrap_content"
             android:backgroundTint="@color/white"
             android:text="Edit"
             android:textColor="@color/deepPurple"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="@+id/checkStatus"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.829"
-            app:layout_constraintStart_toEndOf="@+id/checkStatus"
-            app:layout_constraintTop_toBottomOf="@+id/statusDisplay1" />
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/statusDisplay1"
+            app:layout_constraintTop_toTopOf="@+id/checkStatus" />
 
         <ImageButton
             android:id="@+id/chat"
