@@ -138,7 +138,7 @@
             android:backgroundTint="@color/white"
             android:text="Form Teams"
             android:textColor="@color/deepPurple"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.896"
             app:layout_constraintStart_toStartOf="parent"
