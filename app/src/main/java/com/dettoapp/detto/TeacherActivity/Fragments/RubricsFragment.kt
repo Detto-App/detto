@@ -33,6 +33,8 @@ class RubricsFragment(private val operations: ClassroomDetailOperations) :
     }
 
     private fun initialise() {
+        viewModel.getRubrics(operations.getClassroom())
+
         rubricsShowAdapter = RubricsShowAdapter()
         binding.rubricsShow.apply {
             adapter = rubricsShowAdapter
@@ -43,7 +45,6 @@ class RubricsFragment(private val operations: ClassroomDetailOperations) :
             rDialog = RubricsDialog(this)
             rDialog.show(requireActivity().supportFragmentManager, "dhsa")
         }
-        viewModel.getRubrics(operations.getClassroom())
     }
 
     fun liveDataObservers() {

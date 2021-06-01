@@ -57,9 +57,9 @@ class ClassroomDetailRepository(private val dao: RubricsDAO) : BaseRepository() 
 
     suspend fun getRubrics(classID: String): RubricsModel {
 
-        val rubricsModel = dao.getRubrics(classID)
+        var rubricsModel=dao.getRubrics(classID)
         if (rubricsModel == null) {
-            RetrofitInstance.createClassroomAPI.getRubrics(classID, Utility.TOKEN).body()
+            rubricsModel=RetrofitInstance.createClassroomAPI.getRubrics(classID, Utility.TOKEN).body()
                 ?: throw Exception("Unable to Fetch Rubrics")
             dao.insertRubrics(rubricsModel)
         }

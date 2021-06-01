@@ -213,7 +213,7 @@ class ClassRoomDetailViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
 //                _rubrics.postValue(Resource.Loading())
-                val rubricsModel = repository.getRubricsFromDAO(cid)
+                val rubricsModel = repository.getRubrics(cid)
                 val titleMarksList = rubricsModel.titleMarksList
 
                 _marks.postValue(Resource.Success(data = titleMarksList!!))
