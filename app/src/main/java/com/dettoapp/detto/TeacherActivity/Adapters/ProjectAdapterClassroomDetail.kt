@@ -72,8 +72,8 @@ class ProjectAdapterClassroomDetail(
             val projectDesc = itemView.findViewById<TextView>(R.id.projectDesc)
             val members=itemView.findViewById<TextView>(R.id.tcdpv_members)
             var names=""
-            projectName.text = projectModel.desc
-            projectDesc.text = projectModel.title
+            projectName.text = projectModel.title
+            projectDesc.text = projectModel.desc
             val memberslist=projectModel.projectStudentList
             for (i in memberslist)
                 names+=i.value.capitalize()+"\n"
