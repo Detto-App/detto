@@ -3,6 +3,7 @@ package com.dettoapp.detto.UtilityClasses
 import com.dettoapp.detto.Models.*
 import com.dettoapp.detto.UtilityClasses.Constants.toFormattedString
 import java.util.*
+import kotlin.collections.HashMap
 
 object Mapper {
 
@@ -59,8 +60,9 @@ object Mapper {
         studentUsnlist: HashSet<String>,
         tid: String,
         cid: String,
-        studentNameList: ArrayList<String>
+        studentNameList: ArrayList<String>,
+        projectStudentList:HashMap<String,String>
     ): ProjectModel {
-        return ProjectModel(pid, title!!, desc!!, studentUsnlist, tid, cid, studentNameList = studentNameList)
+        return ProjectModel(pid, title!!, desc!!, studentUsnlist, tid, cid, studentNameList = studentNameList,projectStudentList = projectStudentList)
     }
 }
