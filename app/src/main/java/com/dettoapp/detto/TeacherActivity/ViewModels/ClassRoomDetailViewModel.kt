@@ -88,6 +88,7 @@ class ClassRoomDetailViewModel(
     fun getDeadlineFromServer(cid: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                _deadline.postValue(Resource.Loading())
                 val deadline = repository.getDeadline(cid)
 
                 val customComparator = Comparator<DeadlineModel> { a, b ->
@@ -101,7 +102,7 @@ class ClassRoomDetailViewModel(
 //                val deadlineModel=DeadlineModel(";dsj","sfddxc","dscx","fdstyre")
 //                val list=ArrayList<DeadlineModel>()
 //                list.add(deadlineModel)
-                _deadline.postValue(Resource.Success(data = deadline))
+                _deadline.postValue(Resource.Success(data = list))
             } catch (e: Exception) {
                 _deadline.postValue(Resource.Error(message = "" + e.localizedMessage))
             }
@@ -133,10 +134,10 @@ class ClassRoomDetailViewModel(
         }
     }
 
-    fun sendNotification(classroom: Classroom) {
+    fun sendNotification(classroom: Classroom,title:String,message:String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val x = Notification("Trial", "Trial Message")
+                val x = Notification(title, message)
                 //Firebase.messaging.unsubscribeFromTopic("/topics/${classroom.classroomuid}")
                 val response = RetrofitInstance.notificationAPI.postNotification(
                     PushNotification(
@@ -158,6 +159,7 @@ class ClassRoomDetailViewModel(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                _deadline.postValue(Resource.Loading())
                 if (dateRangePicker.selection == null)
                     _deadline.postValue(Resource.Error(message = "Date not selected"))
                 if (reason == "")
@@ -169,7 +171,7 @@ class ClassRoomDetailViewModel(
                     dateRangePicker.selection!!.second.toString()
                 )
                 repository.createDeadline(deadlineModel, classroomUid)
-                //sendNotification(classroom,"DeadLine Posted","${classroom.classroomname.capitalize()} Has a new DeadLine please check")
+                sendNotification(classroom,"DeadLine Posted","${classroom.classroomname.capitalize()} Has a new DeadLine please check")
             } catch (e: Exception) {
                 _deadline.postValue(Resource.Error(message = "" + e.localizedMessage))
             }

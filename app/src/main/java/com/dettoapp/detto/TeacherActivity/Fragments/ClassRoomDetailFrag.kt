@@ -79,7 +79,7 @@ class ClassRoomDetailFrag(
         }
 
         binding.sendNotification.setOnClickListener {
-            viewModel.sendNotification(classroom)
+            viewModel.sendNotification(classroom,"","")
         }
         binding.formTeams.setOnClickListener {
 

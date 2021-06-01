@@ -64,7 +64,6 @@ class DeadlineFragment(private val operations: ClassroomDetailOperations) :
                 }
                 is Resource.Loading -> {
                     binding.prgressBarDeadline.visibility = View.VISIBLE
-
                     baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
                 }
                 is Resource.Confirm -> {
@@ -81,6 +80,7 @@ class DeadlineFragment(private val operations: ClassroomDetailOperations) :
     override fun getDeadline(dateRangePicker: MaterialDatePicker<Pair<Long, Long>>, reason: String) {
         viewModel.getDeadline(operations.getClassroom(), operations.getClassroomModel(),dateRangePicker, reason)
         dDialog.dismiss()
+        viewModel.getDeadlineFromServer(operations.getClassroom())
     }
 
 
