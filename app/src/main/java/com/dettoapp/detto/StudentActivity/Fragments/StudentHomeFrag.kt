@@ -1,8 +1,6 @@
 package com.dettoapp.detto.StudentActivity.Fragments
 
-import android.opengl.Visibility
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,11 +42,6 @@ class StudentHomeFrag : BaseFragment<StudentHomeFragViewModel, FragmentStudentHo
             studentClassroomAdapter.differ.submitList(it)
         })
 
-//        viewModel.allClassRooms.observe(viewLifecycleOwner, Observer {
-//
-//        })
-
-
         observeWithLiveData(viewModel.project1, onLoading = {
             baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
         }, onConfirm = {
@@ -70,10 +63,10 @@ class StudentHomeFrag : BaseFragment<StudentHomeFragViewModel, FragmentStudentHo
     }
 
 
-    override fun onViewHolderClick(classroom: Classroom) {
+    override fun onStudentClassroomClicked(classroom: Classroom) {
         Utility.navigateFragment(
             requireActivity().supportFragmentManager, R.id.StudentFragContainer,
-            StudentClassDetailsFrag(classroom), "abcd", true
+            StudentClassDetailsFrag(classroom), "stuClassFrag", true
         )
 
     }
@@ -89,20 +82,3 @@ class StudentHomeFrag : BaseFragment<StudentHomeFragViewModel, FragmentStudentHo
             DatabaseDetto.getInstance(requireContext()).projectDAO
         )
 }
-
-//        viewModel.project1.observe(viewLifecycleOwner, Observer {
-//            when (it) {
-//                is Resource.Loading -> {
-//
-//                }
-//                is Resource.Confirm -> {
-//
-//                }
-//                is Resource.Success -> {
-//
-//                }
-//                is Resource.Error -> {
-//
-//                }
-//            }
-//        })

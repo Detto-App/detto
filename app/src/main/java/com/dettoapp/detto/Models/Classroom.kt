@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "classroom_table")
 data class Classroom(
     @ColumnInfo(name = "classroom_name")
-    val classroomname: String,
+    var classroomname: String,
     @ColumnInfo(name = "sem")
     val sem: String,
     @ColumnInfo(name = "section")

@@ -73,7 +73,7 @@ class StudentDeadlineFrag(private val classroom: Classroom, private val studentO
         })
     }
 
-    override fun onViewHolderClick(classroom: Classroom) {
+    override fun onStudentClassroomClicked(classroom: Classroom) {
         Utility.navigateFragment(
             requireActivity().supportFragmentManager, R.id.StudentFragContainer,
             StudentClassDetailsFrag(classroom), "abcd", true

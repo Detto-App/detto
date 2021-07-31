@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardCornerRadius="16dp">
+    app:cardCornerRadius="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
         android:background="@color/cus_white">
 
         <TextView
-            android:id="@+id/message"
+            android:id="@+id/studentClassroomName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ClassroomName"
@@ -35,14 +35,14 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.913"
-            app:layout_constraintStart_toStartOf="@+id/message"
-            app:layout_constraintTop_toBottomOf="@+id/message"
+            app:layout_constraintStart_toStartOf="@+id/studentClassroomName"
+            app:layout_constraintTop_toBottomOf="@+id/studentClassroomName"
             app:layout_constraintVertical_bias="0.949" />
 
         <LinearLayout
             android:layout_width="10dp"
             android:layout_height="0dp"
-            android:background="#7B1FA2"
+            android:background="@color/deepPurple"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

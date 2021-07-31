@@ -9,6 +9,7 @@ import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.StudentActivity.StudentRepository
 import com.dettoapp.detto.UtilityClasses.BaseViewModel
 import com.dettoapp.detto.UtilityClasses.Resource
+import com.dettoapp.detto.UtilityClasses.Utility.capitalizeWords
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
 import kotlinx.coroutines.Dispatchers
@@ -33,8 +34,10 @@ class StudentHomeFragViewModel(private val repository: StudentRepository, privat
     private fun getAllClassRooms() {
         operateWithLiveData(_allClassRooms, mainFunction = {
             val list = repository.getClassRoomList()
-            list.forEach {
-                Firebase.messaging.subscribeToTopic("/topics/${it.classroomuid}")
+            list.forEach { classroom ->
+                Firebase.messaging.subscribeToTopic("/topics/${classroom.classroomuid}")
+                classroom.classroomname = classroom.classroomname.capitalizeWords()
+                classroom.teacher.name = classroom.teacher.name.capitalizeWords()
             }
             it.postValue(Resource.Success(data = list))
         })

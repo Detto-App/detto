@@ -123,6 +123,7 @@ object Utility {
     }
 
     fun String.toLowerAndTrim() = this.trim().toLowerCase(Locale.ROOT)
+    fun String.capitalizeWords(): String = split(" ").joinToString(" ") { it.capitalize(Locale.ROOT) }
 
     fun Editable?.toStringLowerTrim() = this.toString().toLowerAndTrim()
 
