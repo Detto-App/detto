@@ -1,7 +1,6 @@
 package com.dettoapp.detto.TeacherActivity.Fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,15 +26,15 @@ import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentTeacherHomeBinding
 
 
+@Suppress("EXPERIMENTAL_API_USAGE")
 class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHomeBinding, TeacherRepository>(),
-    ClassroomCreateFragment.ClassroomCreateFragmentOnClickListener, ClassroomAdapter.ClassRoomAdapterClickListener,
-    DataBaseOperations, AddAccessDialog.AddAccessDialogListener {
+        ClassroomCreateFragment.ClassroomCreateFragmentOnClickListener, ClassroomAdapter.ClassRoomAdapterClickListener,
+        DataBaseOperations, AddAccessDialog.AddAccessDialogListener {
 
     private lateinit var classroomAdapter: ClassroomAdapter
     private lateinit var classroomCreateFragment: ClassroomCreateFragment
     private lateinit var addAccessDialog: AddAccessDialog
-    var list=ArrayList<AccessModel>()
-    var accesLevels = ArrayList<String>()
+    var list = ArrayList<AccessModel>()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,31 +44,17 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
     }
 
     private fun initialise() {
-        if(!("Teacher" in accesLevels))
-            accesLevels.add("Teacher")
 
-        Log.d("PPW","fdhjdh")
-        viewModel.getTeacherModelFromServer()
-        if(list !=null)
-            for(i in list)
-                accesLevels.add(i.type+" "+i.sem)
-        val accessAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, accesLevels)
-        binding.accessmenu.setAdapter(accessAdapter)
-
-        binding.accessmenu.setOnItemClickListener { _, _, position, value ->
-            Log.d("EER",accesLevels.toString())
-
-            val selected = accesLevels[position]
-            val access = selected.subSequence(0, selected.length - 2)
-            val sem = selected.last()
-            changeAccess(access.toString(), sem.toString())
+        binding.accessmenu.setOnItemClickListener { _, _, position, _ ->
+            viewModel.onAccessLevelChange(position)
         }
+
         binding.btnfab.setOnClickListener {
             Utility.navigateFragment(
-                requireActivity().supportFragmentManager,
-                R.id.teacherHomeContainer,
-                ClassroomCreateFragment(this),
-                "ddd"
+                    requireActivity().supportFragmentManager,
+                    R.id.teacherHomeContainer,
+                    ClassroomCreateFragment(this),
+                    "ddd"
             )
         }
         classroomAdapter = ClassroomAdapter(viewModel.getTeacherName(), this)
@@ -103,7 +88,7 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
                     baseActivity.hideProgressDialog()
                     baseActivity.showErrorSnackMessage(it.message!!, classroomCreateFragment.getViewDialog())
                     Toast.makeText(requireContext().applicationContext, "Please Select All Fields", Toast.LENGTH_LONG)
-                        .show()
+                            .show()
                 }
                 is Resource.Loading -> {
                     baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
@@ -129,41 +114,12 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
                 }
             }
         })
-        viewModel.getTeacherModel.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is Resource.Success -> {
-                    baseActivity.hideProgressDialog()
-                    list=it.data!!.accessmodelist
-                    accesLevels =ArrayList<String>()
-                    accesLevels.add("Teacher")
-                    if(list !=null)
-                        for(i in list)
-                            accesLevels.add(i.type+" "+i.sem)
-                    val accessAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, accesLevels)
-                    binding.accessmenu.setAdapter(accessAdapter)
-//                    binding.accessmenu.setAdapter(accessAdapter)
-
-
-//                    initialise()
-                }
-                is Resource.Error -> {
-                    baseActivity.hideProgressDialog()
-                    baseActivity.showErrorSnackMessage(it.message!!)
-                }
-                is Resource.Loading -> {
-                    baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
-                }
-            }
-        })
         viewModel.access.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
                     baseActivity.showToast("Success")
-                    viewModel.getTeacherModelFromServer()
-//                    initialise()
-//                    liveDataObservers()
-
                     baseActivity.hideProgressDialog()
+                    viewModel.initialiseAccessLevel()
                 }
                 is Resource.Error -> {
                     baseActivity.hideProgressDialog()
@@ -171,6 +127,8 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
                 }
                 is Resource.Loading -> {
                     baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
+                }
+                else -> {
                 }
             }
         })
@@ -180,9 +138,6 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
                 is Resource.Success -> {
                     baseActivity.showToast("Success")
                     classroomAdapter.differ.submitList(it.data)
-//                    initialise()
-//                    liveDataObservers()
-
                     baseActivity.hideProgressDialog()
                 }
                 is Resource.Error -> {
@@ -192,21 +147,29 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
                 is Resource.Loading -> {
                     baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
                 }
+                else -> {
+                }
             }
         })
 
         viewModel.allClassRooms.observe(viewLifecycleOwner, Observer {
             classroomAdapter.differ.submitList(it)
         })
+
+        observeWithLiveData(viewModel.accessLevels, onSuccess = {
+            val accessAdapter = ArrayAdapter(requireContext(),
+                    android.R.layout.simple_spinner_dropdown_item, it)
+            binding.accessmenu.setAdapter(accessAdapter)
+        })
     }
 
     override fun onClassCreated(
-        classname: String,
-        sem: String,
-        sec: String,
-        teamSize: String,
-        projectType: String,
-        groupType: String
+            classname: String,
+            sem: String,
+            sec: String,
+            teamSize: String,
+            projectType: String,
+            groupType: String
     ) {
         viewModel.classRoomData(classname, sem, sec, teamSize, projectType, groupType)
         activity?.supportFragmentManager?.popBackStack()
@@ -215,19 +178,19 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
 
     override fun onClassRoomClicked(classroom: Classroom) {
         Utility.navigateFragment(
-            requireActivity().supportFragmentManager,
-            R.id.teacherHomeContainer,
-            ClassRoomDetailFrag(classroom, this),
-            "detailClassRoom"
+                requireActivity().supportFragmentManager,
+                R.id.teacherHomeContainer,
+                ClassRoomDetailFrag(classroom, this),
+                "detailClassRoom"
         )
     }
 
     override fun onClassLinkShare(link: String) {
         ShareCompat.IntentBuilder.from(requireActivity())
-            .setText(link)
-            .setType("text/plain")
-            .setChooserTitle("Game Details")
-            .startChooser()
+                .setText(link)
+                .setType("text/plain")
+                .setChooserTitle("Game Details")
+                .startChooser()
     }
 
     override fun onClassRoomDelete(classroom: Classroom) {
@@ -238,23 +201,52 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
     override fun getViewModelClass(): Class<TeacherHomeFragViewModel> = TeacherHomeFragViewModel::class.java
 
     override fun getFragmentBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
+            inflater: LayoutInflater,
+            container: ViewGroup?
     ): FragmentTeacherHomeBinding = FragmentTeacherHomeBinding.inflate(inflater, container, false)
 
     override fun getRepository(): TeacherRepository =
-        TeacherRepository(DatabaseDetto.getInstance(requireContext().applicationContext).classroomDAO)
+            TeacherRepository(DatabaseDetto.getInstance(requireContext().applicationContext).classroomDAO)
 
     override fun addAccess(access: String, sem: String) {
-
-        Log.d("PPW","222")
-        viewModel.addAccess(access,sem)
+        viewModel.addAccess(access, sem)
         addAccessDialog.dismiss()
     }
 
-    private fun changeAccess(access: String, sem: String) {
-
-        viewModel.changeAccess(access, sem)
-    }
-
 }
+
+
+//        viewModel.getTeacherModel.observe(viewLifecycleOwner, Observer {
+//            when (it) {
+//                is Resource.Success -> {
+//                    baseActivity.hideProgressDialog()
+//                    list = it.data!!.accessmodelist
+//                    accesLevels = ArrayList<String>()
+//                    accesLevels.add("Teacher")
+//                    if (list != null)
+//                        for (i in list)
+//                            accesLevels.add(i.type + " " + i.sem)
+//                    val accessAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, accesLevels)
+//                    binding.accessmenu.setAdapter(accessAdapter)
+////                    binding.accessmenu.setAdapter(accessAdapter)
+//
+//
+////                    initialise()
+//                }
+//                is Resource.Error -> {
+//                    baseActivity.hideProgressDialog()
+//                    baseActivity.showErrorSnackMessage(it.message!!)
+//                }
+//                is Resource.Loading -> {
+//                    baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
+//                }
+//            }
+//        })
+
+//        viewModel.getTeacherModelFromServer()
+//        if(list !=null)
+//            for(i in list)
+//                accesLevels.add(i.type+" "+i.sem)
+//        val accessAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, accesLevels)
+//        binding.accessmenu.setAdapter(accessAdapter)
+

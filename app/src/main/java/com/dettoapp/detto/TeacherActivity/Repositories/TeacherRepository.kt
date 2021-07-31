@@ -1,7 +1,6 @@
 package com.dettoapp.detto.TeacherActivity.Repositories
 
 import android.content.Context
-import android.util.Log
 import com.dettoapp.detto.Db.ClassroomDAO
 import com.dettoapp.detto.Models.AccessModel
 import com.dettoapp.detto.Models.Classroom
@@ -11,7 +10,7 @@ import com.dettoapp.detto.UtilityClasses.BaseRepository
 import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 import com.dettoapp.detto.UtilityClasses.Utility
-import okhttp3.ResponseBody
+import com.dettoapp.detto.UtilityClasses.Utility.toLowerAndTrim
 
 class TeacherRepository(private val dao: ClassroomDAO) : BaseRepository() {
     suspend fun createClassroom(classroom: Classroom) {
@@ -53,17 +52,14 @@ class TeacherRepository(private val dao: ClassroomDAO) : BaseRepository() {
             apply()
         }
 
-        Log.d("QQA","ghg")
-
         RetrofitInstance.createClassroomAPI.addAccess(accessModel,tid,Utility.TOKEN)
 
     }
 
     suspend fun changeAccess(access:String,sem:String):ArrayList<Classroom>{
-        if(access=="Teach")
-            return ArrayList(dao.getAllClassRoomList())
+        return if(access.toLowerAndTrim()=="teacher")
+            dao.getAllClassRoomList() as ArrayList
         else
-        return RetrofitInstance.createClassroomAPI.getAccessClassRooms(access,sem,Utility.TOKEN)
-
+            RetrofitInstance.createClassroomAPI.getAccessClassRooms(access,sem,Utility.TOKEN)
     }
 }
