@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.R
+import com.dettoapp.detto.UtilityClasses.setSafeOnClickListener
 import java.util.*
 
 class ClassroomAdapter(
@@ -25,7 +26,6 @@ class ClassroomAdapter(
         fun onClassRoomClicked(classroom: Classroom)
         fun onClassLinkShare(link: String)
     }
-
 
     private val diffCallBack = object : DiffUtil.ItemCallback<Classroom>() {
         override fun areItemsTheSame(oldItem: Classroom, newItem: Classroom): Boolean {
@@ -77,7 +77,7 @@ class ClassroomAdapter(
                 classRoomAdapterClickListener.onClassLinkShare("https://detto.uk.to/cid/" + classroom.classroomuid)
             }
 
-            itemView.setOnClickListener {
+            itemView.setSafeOnClickListener {
                 classRoomAdapterClickListener.onClassRoomClicked(classroom)
             }
         }

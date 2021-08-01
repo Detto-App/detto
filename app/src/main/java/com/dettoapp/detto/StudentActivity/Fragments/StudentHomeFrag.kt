@@ -68,7 +68,6 @@ class StudentHomeFrag : BaseFragment<StudentHomeFragViewModel, FragmentStudentHo
             requireActivity().supportFragmentManager, R.id.StudentFragContainer,
             StudentClassDetailsFrag(classroom), "stuClassFrag", true
         )
-
     }
 
     override fun getViewModelClass(): Class<StudentHomeFragViewModel> = StudentHomeFragViewModel::class.java

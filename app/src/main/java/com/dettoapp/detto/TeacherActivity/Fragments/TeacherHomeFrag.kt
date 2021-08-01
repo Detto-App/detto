@@ -36,7 +36,6 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
     private lateinit var addAccessDialog: AddAccessDialog
     var list = ArrayList<AccessModel>()
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initialise()
@@ -178,10 +177,10 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
 
     override fun onClassRoomClicked(classroom: Classroom) {
         Utility.navigateFragment(
-                requireActivity().supportFragmentManager,
-                R.id.teacherHomeContainer,
-                ClassRoomDetailFrag(classroom, this),
-                "detailClassRoom"
+            requireActivity().supportFragmentManager,
+            R.id.teacherHomeContainer,
+            ClassRoomDetailFrag(classroom, this),
+            "detailClassRoom"
         )
     }
 

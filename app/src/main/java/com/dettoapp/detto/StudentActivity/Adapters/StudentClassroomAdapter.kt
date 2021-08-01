@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.dettoapp.detto.Models.Classroom
 import com.dettoapp.detto.R
+import com.dettoapp.detto.UtilityClasses.setSafeOnClickListener
 import com.dettoapp.detto.databinding.StudentclassroomViewHolderBinding
 
 class StudentClassroomAdapter(
@@ -55,7 +56,7 @@ class StudentClassroomAdapter(
                 studentClassroomName.text = classroom.classroomname
                 teachername.text = classroom.teacher.name
 
-                root.setOnClickListener {
+                root.setSafeOnClickListener {
                     studentClassroomAdapterCLickListener.onStudentClassroomClicked(classroom)
                 }
             }

@@ -3,6 +3,7 @@ package com.dettoapp.detto.UtilityClasses
 import android.content.Context
 import android.content.Intent
 import android.text.Editable
+import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -78,15 +79,18 @@ object Utility {
         isAdding: Boolean = true
     ) {
 
-        val transaction = if (isAdding)
-            fragManager.beginTransaction().add(containerID, fragment.applyTransaction())
+        val trans  = fragManager.beginTransaction()
+
+        if (isAdding)
+            trans.add(containerID, fragment.applyTransaction())
         else
-            fragManager.beginTransaction().replace(containerID, fragment.applyTransaction())
+            trans.replace(containerID, fragment.applyTransaction())
+
 
         if (addToBackStack)
-            transaction.addToBackStack(tag)
+            trans.addToBackStack(tag)
 
-        transaction.commit()
+        trans.commit()
 
     }
 
