@@ -23,14 +23,16 @@
 
         <service
             android:name=".UtilityClasses.FirebaseService"
-            android:permission="com.google.android.c2dm.permission.SEND">
+            android:permission="com.google.android.c2dm.permission.SEND"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
 
-        <activity android:name=".LinkParseActivity.LinkParseActivity">
+        <activity android:name=".LinkParseActivity.LinkParseActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -59,7 +61,8 @@
         <activity android:name=".StudentActivity.StudentActivity" />
         <activity android:name=".TeacherActivity.TeacherActivity" />
         <activity android:name=".UtilityClasses.BaseActivity" />
-        <activity android:name=".LoginSignUpActivity.LoginSignUpActivity">
+        <activity android:name=".LoginSignUpActivity.LoginSignUpActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
