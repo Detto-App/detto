@@ -11,6 +11,8 @@ import com.dettoapp.detto.UtilityClasses.Constants
 import com.dettoapp.detto.UtilityClasses.RetrofitInstance
 import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.UtilityClasses.Utility.toLowerAndTrim
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class TeacherRepository(private val dao: ClassroomDAO) : BaseRepository() {
     suspend fun createClassroom(classroom: Classroom) {
@@ -32,6 +34,16 @@ class TeacherRepository(private val dao: ClassroomDAO) : BaseRepository() {
     }
     suspend fun getTeacherModelFromServer(tid: String):TeacherModel{
         return RetrofitInstance.createClassroomAPI.getTeacherModel(tid,Utility.TOKEN)
+    }
+
+    suspend fun getTeacherModelFromSharedPreferences(appContext:Context) : TeacherModel
+    {
+        val sharedPreference = appContext.getSharedPreferences(Constants.USER_DETAILS_FILE, Context.MODE_PRIVATE)
+                ?: throw Exception("Data Storage Exception")
+        val dataInString = sharedPreference.getString(Constants.ENTIRE_MODEL_KEY, "")!!
+
+        val type = object : TypeToken<TeacherModel>() {}.type
+        return Gson().fromJson(dataInString, type)
     }
 
     fun getClassroomSettingsModel(teamSize: String, projectType: String, groupType: String): ClassroomSettingsModel {

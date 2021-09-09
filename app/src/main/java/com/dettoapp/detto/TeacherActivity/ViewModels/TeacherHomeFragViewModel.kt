@@ -140,6 +140,10 @@ class TeacherHomeFragViewModel(
 
     private suspend fun getTeacherModelFromServer2() = repository.getTeacherModelFromServer(Utility.getUID(context))
 
+    private suspend fun getTeacherModelFromSharedPreferences() :TeacherModel {
+        return repository.getTeacherModelFromSharedPreferences(context)
+    }
+
     private fun changeAccess(access: String, sem: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -165,11 +169,11 @@ class TeacherHomeFragViewModel(
             throw Exception("Please Enter all Fields")
     }
 
-     fun initialiseAccessLevel() {
+    fun initialiseAccessLevel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 resetAccessLevelList()
-                val teacherModel = getTeacherModelFromServer2()
+                val teacherModel = getTeacherModelFromSharedPreferences()
                 var tempString: String
                 teacherModel.accessmodelist.forEach {
                     tempString = it.type + " "
@@ -190,15 +194,14 @@ class TeacherHomeFragViewModel(
     fun onAccessLevelChange(arrayListPosition: Int) {
         val selectedString = accessLevelsList[arrayListPosition]
 
-        val splitArray =  selectedString.split(" ")
+        val splitArray = selectedString.split(" ")
         val access = splitArray[0]
         val sem = if (splitArray.size > 1) splitArray[1] else "0"
 
         changeAccess(access, sem)
     }
 
-    private fun resetAccessLevelList()
-    {
+    private fun resetAccessLevelList() {
         accessLevelsList.clear()
         accessLevelsList.add("Teacher")
     }

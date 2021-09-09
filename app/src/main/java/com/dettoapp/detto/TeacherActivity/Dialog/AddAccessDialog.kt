@@ -44,7 +44,7 @@ class AddAccessDialog(private val addAccessDialogListener: AddAccessDialogListen
     }
 
     override fun getTheme(): Int {
-        return R.style.ThemeOverlay_MaterialComponents
+        return R.style.CustomDialog
     }
 
 }

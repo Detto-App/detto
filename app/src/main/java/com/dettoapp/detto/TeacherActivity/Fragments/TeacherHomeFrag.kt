@@ -26,7 +26,7 @@ import com.dettoapp.detto.UtilityClasses.Utility
 import com.dettoapp.detto.databinding.FragmentTeacherHomeBinding
 
 
-@Suppress("EXPERIMENTAL_API_USAGE")
+@Suppress("EXPERIMENTAL_API_USAGE", "RedundantSamConstructor")
 class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHomeBinding, TeacherRepository>(),
         ClassroomCreateFragment.ClassroomCreateFragmentOnClickListener, ClassroomAdapter.ClassRoomAdapterClickListener,
         DataBaseOperations, AddAccessDialog.AddAccessDialogListener {
@@ -111,6 +111,7 @@ class TeacherHomeFrag : BaseFragment<TeacherHomeFragViewModel, FragmentTeacherHo
                 is Resource.Loading -> {
                     baseActivity.showProgressDialog(Constants.MESSAGE_LOADING)
                 }
+                else -> {}
             }
         })
         viewModel.access.observe(viewLifecycleOwner, Observer {
