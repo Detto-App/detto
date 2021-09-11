@@ -47,4 +47,5 @@
         <item>Manual</item>
         <item>Auto</item>
     </string-array>
+    <string name="title_activity_login_sign_up_compose">LoginSignUpActivityCompose</string>
 </resources>

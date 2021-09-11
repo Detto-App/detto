@@ -49,4 +49,13 @@
         <item name="android:windowExitAnimation">@anim/slide_out_right</item>
     </style>
 
+    <style name="Theme.Detto.NoActionBar.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Detto.NoActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Detto.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 </resources>
