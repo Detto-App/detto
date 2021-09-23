@@ -119,7 +119,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging-ktx:21.0.1'
     implementation 'com.google.firebase:firebase-analytics-ktx:18.0.3'
 
-    //Workmanaget Support
+    //Workmanager Support
     def work_version = "2.6.0"
     implementation "androidx.work:work-runtime-ktx:$work_version"
 
@@ -156,5 +156,7 @@ dependencies {
     implementation "androidx.compose.ui:ui:1.0.2"
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
+
+    implementation "androidx.compose.material:material-icons-extended:1.0.1"
 }
 

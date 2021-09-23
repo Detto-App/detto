@@ -20,7 +20,13 @@
             android:name=".clean_architecture.presentation.loginSignUpActivityCompose.LoginSignUpActivityCompose"
             android:exported="true"
             android:label="@string/title_activity_login_sign_up_compose"
-            android:theme="@style/Theme.Detto.NoActionBar.NoActionBar" />
+            android:theme="@style/Theme.Detto.NoActionBar.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <service
             android:name=".UtilityClasses.FirebaseService"

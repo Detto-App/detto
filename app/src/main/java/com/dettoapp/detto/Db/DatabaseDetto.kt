@@ -13,7 +13,8 @@ import com.dettoapp.detto.Models.RubricsModel
 
 @Database(
     entities = [Classroom::class, ProjectModel::class, ChatMessageLocalStoreModel::class, RubricsModel::class],
-    version = 1
+    version = 1,
+    exportSchema = false
 )
 @TypeConverters(RoomConverters::class)
 abstract class DatabaseDetto : RoomDatabase() {
