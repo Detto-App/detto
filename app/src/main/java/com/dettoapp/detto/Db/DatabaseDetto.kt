@@ -25,6 +25,7 @@ abstract class DatabaseDetto : RoomDatabase() {
     abstract val rubricsDAO: RubricsDAO
 
     companion object {
+        const val DATABASE_NAME = "classroom_data_database"
         private var INSTANCE: DatabaseDetto? = null
         fun getInstance(context: Context): DatabaseDetto {
             synchronized(this) {

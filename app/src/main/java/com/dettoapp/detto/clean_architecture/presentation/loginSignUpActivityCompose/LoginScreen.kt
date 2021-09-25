@@ -1,8 +1,10 @@
 package com.dettoapp.detto.clean_architecture.presentation.loginSignUpActivityCompose
 
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -10,11 +12,14 @@ import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -25,24 +30,26 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.dettoapp.detto.R
+import com.dettoapp.detto.UtilityClasses.Resource
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(viewModel: LoginSignUpActivityComposeViewModel = hiltViewModel(), scaffoldState: ScaffoldState) {
 
-    var name by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
     var passwordVisibility by remember { mutableStateOf(false) }
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
+    val userRole = remember { mutableStateOf("") }
+    var showDialog by remember { mutableStateOf(false) }
 
-    ) {
+    val loginUsersState = remember { viewModel.loginUsersState }
 
-    }
     Column(
         modifier = Modifier
             .fillMaxSize()
-
     )
     {
         Spacer(
@@ -64,8 +71,8 @@ fun LoginScreen() {
                 .fillMaxHeight(0.15f)
         )
         OutlinedTextField(
-            value = name,
-            onValueChange = { name = it },
+            value = email,
+            onValueChange = { email = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 32.dp, end = 32.dp, bottom = 16.dp),
@@ -78,8 +85,8 @@ fun LoginScreen() {
             }
         )
         OutlinedTextField(
-            value = name,
-            onValueChange = { name = it },
+            value = password,
+            onValueChange = { password = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 32.dp, end = 32.dp, bottom = 16.dp),
@@ -105,13 +112,15 @@ fun LoginScreen() {
                 }
             }
         )
-        CustomDropDownMenu(hint = "Select Role", listOfOptions = arrayListOf("Student", "Teacher"))
+        CustomDropDownMenu(hint = "Select Role", listOfOptions = arrayListOf("Student", "Teacher"), userRole)
         Spacer(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.2f)
         )
-        Button(modifier = Modifier.align(CenterHorizontally), onClick = { /*TODO*/ }) {
+        Button(
+            modifier = Modifier.align(CenterHorizontally),
+            onClick = { viewModel.loginUsers(userRole.value, email, password) }) {
             Text(text = "Login")
         }
         Row(
@@ -123,6 +132,43 @@ fun LoginScreen() {
             Text(text = "Sign up", color = Color.Blue, style = TextStyle(textDecoration = TextDecoration.Underline))
         }
     }
+    if (showDialog) {
+        Dialog(
+            onDismissRequest = { showDialog = false },
+            DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false)
+        ) {
+            Box(
+                contentAlignment= Center,
+                modifier = Modifier
+                    .size(100.dp)
+                    .background(White, shape = RoundedCornerShape(8.dp))
+            ) {
+                Column(verticalArrangement = Arrangement.Center) {
+                    CircularProgressIndicator(modifier = Modifier.align(CenterHorizontally))
+                    Spacer(modifier = Modifier.fillMaxHeight(0.2f))
+                    Text(text = "Loading...")
+                }
+                
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = loginUsersState.value)
+    {
+        when (loginUsersState.value) {
+
+            is Resource.Error -> {
+                showDialog = false
+                scaffoldState.snackbarHostState.showSnackbar(loginUsersState.value.message + "")
+            }
+            is Resource.Loading -> {
+                showDialog = true
+            }
+            else -> {
+
+            }
+        }
+    }
 
 }
 
@@ -130,13 +176,12 @@ fun LoginScreen() {
 @Preview
 @Composable
 fun LoginPreview() {
-    LoginScreen()
+    LoginScreen(scaffoldState = rememberScaffoldState())
 }
 
 @Composable
-fun CustomDropDownMenu(hint: String, listOfOptions: ArrayList<String>) {
+fun CustomDropDownMenu(hint: String, listOfOptions: ArrayList<String>, userRole: MutableState<String>) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf("") }
     var dropDownWidth by remember { mutableStateOf(0) }
     val focusRequester = remember { FocusRequester() }
 
@@ -149,8 +194,8 @@ fun CustomDropDownMenu(hint: String, listOfOptions: ArrayList<String>) {
     Column {
         Box {
             OutlinedTextField(
-                value = selectedText,
-                onValueChange = { selectedText = it },
+                value = userRole.value,
+                onValueChange = { userRole.value = it },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 32.dp, end = 32.dp)
@@ -183,7 +228,7 @@ fun CustomDropDownMenu(hint: String, listOfOptions: ArrayList<String>) {
         ) {
             listOfOptions.forEach { label ->
                 DropdownMenuItem(onClick = {
-                    selectedText = label
+                    userRole.value = label
                     expanded = !expanded
                 }) {
                     Text(text = label)

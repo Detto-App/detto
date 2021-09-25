@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -22,18 +24,21 @@ class LoginSignUpActivityCompose : ComponentActivity() {
         setContent {
             DettoTheme {
                 val navController = rememberNavController()
-                NavHost(
-                    navController = navController,
-                    startDestination = Screen.SplashScreen.route
-                )
-                {
-                    composable(route = Screen.SplashScreen.route)
+                val scaffoldState = rememberScaffoldState()
+                Scaffold(scaffoldState = scaffoldState) {
+                    NavHost(
+                        navController = navController,
+                        startDestination = Screen.SplashScreen.route
+                    )
                     {
-                        SplashScreen(navController = navController)
-                    }
-                    composable(route= Screen.LoginScreen.route)
-                    {
-                        LoginScreen()
+                        composable(route = Screen.SplashScreen.route)
+                        {
+                            SplashScreen(navController = navController)
+                        }
+                        composable(route = Screen.LoginScreen.route)
+                        {
+                            LoginScreen(scaffoldState = scaffoldState)
+                        }
                     }
                 }
             }
