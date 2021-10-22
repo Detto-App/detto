@@ -1,7 +1,5 @@
 package com.dettoapp.detto.clean_architecture.presentation.loginSignUpActivityCompose
 
-import android.util.Log
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -26,9 +24,6 @@ class LoginSignUpActivityComposeViewModel @Inject constructor(
 
     private val _userRoleState = mutableStateOf(-1)
     val userRoleState: State<Int> = _userRoleState
-
-//    private val _loginUsersState : MutableState<Resource<Int>> = mutableStateOf(Resource.Confirm(message = ""))
-//    val loginUsersState : State<Resource<Int>> = _loginUsersState
 
     var loginUsersState = mutableStateOf<Resource<Int>>(Resource.Confirm(message = ""))
 
